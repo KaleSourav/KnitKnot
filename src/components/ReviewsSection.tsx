@@ -52,17 +52,17 @@ const REVIEWS: Review[] = [
 
 export const ReviewsSection: React.FC = () => {
   return (
-    <section className="w-full bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8 border-t border-stone-200">
+    <section className="w-full bg-white py-12 sm:py-16 md:py-24 px-3.5 sm:px-6 lg:px-8 border-t border-stone-200 select-none">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Row */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-5">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-pink-600 font-semibold text-xs uppercase tracking-widest mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-pink-600 font-semibold text-xs uppercase tracking-widest mb-2.5">
               <Heart className="w-3.5 h-3.5 fill-pink-500 text-pink-500" />
               <span>Community Love</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight font-serif">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight font-serif">
               Loved By Thousands of Gifters
             </h2>
             <p className="text-sm sm:text-base text-stone-500 mt-2 max-w-xl">

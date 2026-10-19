@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface WantedItem {
   id: string;
@@ -71,15 +71,15 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const total = MOST_WANTED_ITEMS.length;
-  const slideMargin = 30; // 15px on left + 15px on right
+  const slideMargin = 20;
 
   useEffect(() => {
     const updateWidth = () => {
       if (typeof window === 'undefined') return;
       if (window.innerWidth < 640) {
-        setSlideWidth(Math.min(window.innerWidth - 64, 340));
+        setSlideWidth(Math.min(window.innerWidth - 48, 330));
       } else if (window.innerWidth < 1024) {
-        setSlideWidth(540);
+        setSlideWidth(520);
       } else {
         setSlideWidth(720);
       }
@@ -107,7 +107,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev]);
 
-  // Touch and mouse drag handlers for buttery smooth gestures
+  // Touch and mouse drag handlers
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
     setIsDragging(true);
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
@@ -125,25 +125,25 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
   const handleTouchEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragOffset > 60) {
+    if (dragOffset > 50) {
       handlePrev();
-    } else if (dragOffset < -60) {
+    } else if (dragOffset < -50) {
       handleNext();
     }
     setDragOffset(0);
   };
 
   const itemStep = slideWidth + slideMargin;
-  const trackTranslate = `calc(50vw - ${slideWidth / 2}px - 15px - ${currentIndex * itemStep}px + ${dragOffset}px)`;
+  const trackTranslate = `calc(50vw - ${slideWidth / 2}px - 10px - ${currentIndex * itemStep}px + ${dragOffset}px)`;
 
   return (
-    <section id="most-wanted-section" className="w-full bg-[#fdfdfd] text-black py-20 sm:py-28 overflow-hidden select-none relative font-['DM_Sans',sans-serif]">
-      {/* SECTION HEADER (MATCHING REFERENCE IMAGE) */}
-      <div className="max-w-4xl mx-auto px-4 text-center mb-12 sm:mb-16">
-        <h2 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-black uppercase mb-4 sm:mb-5 leading-[0.95]">
+    <section id="most-wanted-section" className="w-full bg-[#fdfdfd] text-black py-16 sm:py-24 overflow-hidden select-none relative font-['DM_Sans',sans-serif]">
+      {/* SECTION HEADER */}
+      <div className="max-w-4xl mx-auto px-4 text-center mb-10 sm:mb-14">
+        <h2 className="text-4xl sm:text-7xl md:text-8xl font-black tracking-tight text-black uppercase mb-3 sm:mb-4 leading-[0.95]">
           MOST<br />WANTED
         </h2>
-        <p className="text-sm sm:text-base text-stone-600 font-medium max-w-md mx-auto leading-relaxed">
+        <p className="text-xs sm:text-base text-stone-600 font-medium max-w-md mx-auto leading-relaxed px-2">
           The pieces you'll wear on repeat.<br />
           Clean design, effortless styling,<br />
           and lasting quality for every season.
@@ -153,7 +153,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
       {/* CAROUSEL SHOWCASE WITH SMOOTH MOVING TRACK */}
       <div 
         ref={containerRef}
-        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing pb-8"
+        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing pb-4"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -167,9 +167,9 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
           }
         }}
       >
-        {/* NAVIGATION CURVED PARENTHESES '(' & ')' ON SIDES OF CENTER IMAGE */}
+        {/* DESKTOP/TABLET NAVIGATION PARENTHESES ON SIDES OF CENTER IMAGE */}
         <div 
-          className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 z-30 flex items-center justify-between"
+          className="hidden sm:flex pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 z-30 items-center justify-between"
           style={{ width: `${slideWidth + 80}px`, maxWidth: '98vw' }}
         >
           {/* LEFT CURVED PARENTHESIS '(' BUTTON */}
@@ -182,7 +182,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
             className="pointer-events-auto p-1 text-black hover:text-stone-700 active:scale-95 transition-all transform hover:-translate-x-1 cursor-pointer focus:outline-none drop-shadow-sm"
           >
             <svg
-              className="w-7 h-18 sm:w-10 sm:h-28 stroke-current fill-none"
+              className="w-8 h-20 sm:w-10 sm:h-28 stroke-current fill-none"
               viewBox="0 0 32 80"
               strokeWidth="4.5"
               strokeLinecap="round"
@@ -201,7 +201,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
             className="pointer-events-auto p-1 text-black hover:text-stone-700 active:scale-95 transition-all transform hover:translate-x-1 cursor-pointer focus:outline-none drop-shadow-sm"
           >
             <svg
-              className="w-7 h-18 sm:w-10 sm:h-28 stroke-current fill-none"
+              className="w-8 h-20 sm:w-10 sm:h-28 stroke-current fill-none"
               viewBox="0 0 32 80"
               strokeWidth="4.5"
               strokeLinecap="round"
@@ -218,7 +218,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
             transform: `translateX(${trackTranslate})`,
             transition: isDragging
               ? 'none'
-              : 'transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2)', // Same buttery smooth easing as nav bubble selector!
+              : 'transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2)',
           }}
         >
           {MOST_WANTED_ITEMS.map((item, idx) => {
@@ -234,16 +234,16 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
                   }
                 }}
                 style={{ width: `${slideWidth}px` }}
-                className={`shrink-0 mx-[15px] transition-all duration-500 ease-[cubic-bezier(0.2,0.9,0.3,1.2)] ${
+                className={`shrink-0 mx-[10px] transition-all duration-500 ease-[cubic-bezier(0.2,0.9,0.3,1.2)] ${
                   isActive
                     ? 'opacity-100 scale-100 cursor-pointer'
                     : 'opacity-70 hover:opacity-90 scale-[0.96] cursor-pointer'
                 }`}
               >
-                {/* LABELS ABOVE EACH PHOTO (MATCHING REFERENCE IMAGE) */}
-                <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-black mb-2.5 px-0.5 tracking-tight">
+                {/* LABELS ABOVE EACH PHOTO */}
+                <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-black mb-2 px-1 tracking-tight">
                   <span className="truncate pr-2">{item.title}</span>
-                  <span className="shrink-0 text-stone-700">{item.tag}</span>
+                  <span className="shrink-0 text-stone-600 text-[11px] sm:text-xs">{item.tag}</span>
                 </div>
 
                 {/* IMAGE FRAME */}
@@ -256,7 +256,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
                   />
                   {/* Subtle price tag pill on active image */}
                   {isActive && (
-                    <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 text-xs font-bold text-black border border-black/10 shadow-sm">
+                    <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 bg-white/95 backdrop-blur-md px-2.5 py-1 text-xs font-bold text-black border border-black/10 shadow-sm">
                       {item.price}
                     </div>
                   )}
@@ -267,7 +267,39 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
         </div>
       </div>
 
-      {/* BOTTOM "Browse All ->" LINK (MATCHING REFERENCE IMAGE) */}
+      {/* MOBILE CONTROLS & PAGINATION DOTS */}
+      <div className="flex items-center justify-center gap-4 sm:hidden mt-4">
+        <button
+          onClick={handlePrev}
+          aria-label="Previous slide"
+          className="w-8 h-8 rounded-full border border-stone-300 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:scale-95 transition-all"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center gap-1.5">
+          {MOST_WANTED_ITEMS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === currentIndex ? 'w-6 bg-black' : 'w-1.5 bg-stone-300'
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={handleNext}
+          aria-label="Next slide"
+          className="w-8 h-8 rounded-full border border-stone-300 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:scale-95 transition-all"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* BOTTOM "Browse All ->" LINK */}
       <div className="w-full text-center mt-6 sm:mt-10">
         <button
           onClick={onBrowseAll}

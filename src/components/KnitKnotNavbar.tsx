@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Search, User, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Search, User, ShoppingBag, ArrowRight, Menu, X, Sparkles } from 'lucide-react';
 
 export interface NavItem {
   id: string;
@@ -37,6 +37,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   onShopNowClick,
 }) => {
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navContainerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -78,7 +79,6 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
 
   useEffect(() => {
     updatePosition();
-    // Also recompute after fonts load and on resize
     if (document.fonts) {
       document.fonts.ready.then(updatePosition);
     }
@@ -90,35 +90,55 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleMobileNavClick = (id: string) => {
+    onTabChange(id);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 w-full select-none transition-all duration-300 ${
-        isScrolled
-          ? 'backdrop-blur-md bg-[#0a080f]/90 border-b border-white/10 shadow-lg py-2.5'
-          : 'bg-transparent border-none py-3.5 sm:py-4'
+        isScrolled || isMobileMenuOpen
+          ? 'backdrop-blur-xl bg-[#0a080f]/95 border-b border-white/10 shadow-lg py-2.5 sm:py-3'
+          : 'bg-transparent border-none py-3 sm:py-4'
       }`}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-6">
+      <div className="w-full max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-6">
         
         {/* 1. LEFT LOGO & TAGLINE */}
         <div 
-          onClick={() => onTabChange('Home')}
-          className="flex flex-col items-start cursor-pointer shrink-0 transition-opacity hover:opacity-90"
+          onClick={() => {
+            onTabChange('Home');
+            setIsMobileMenuOpen(false);
+          }}
+          className="flex flex-col items-start cursor-pointer shrink-0 transition-opacity hover:opacity-90 min-w-0"
         >
           <div className="flex items-center">
-            <span className="text-[28px] sm:text-[34px] font-extrabold tracking-tight text-white font-['Nunito',sans-serif] leading-none drop-shadow-sm">
+            <span className="text-2xl sm:text-[30px] lg:text-[34px] font-extrabold tracking-tight text-white font-['Nunito',sans-serif] leading-none drop-shadow-sm">
               KnitKnot
             </span>
             {/* Handcrafted Heart Loop Doodle with Sparkle */}
             <span className="inline-flex items-center ml-1 text-white relative">
               <svg
-                className="w-6 h-6 sm:w-7 sm:h-7 fill-none stroke-current"
+                className="w-5 h-5 sm:w-6 sm:h-6 fill-none stroke-current"
                 viewBox="0 0 24 24"
                 strokeWidth="2.2"
                 strokeLinecap="round"
@@ -129,16 +149,16 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             </span>
           </div>
-          <span className="text-[9.5px] sm:text-[11px] font-semibold tracking-[0.18em] uppercase text-white/95 mt-1 pl-0.5">
-            -WE'AVE MADE IT WITH LOVE
+          <span className="text-[8px] sm:text-[10px] lg:text-[11px] font-semibold tracking-[0.14em] sm:tracking-[0.18em] uppercase text-white/90 mt-0.5 pl-0.5 truncate max-w-[180px] sm:max-w-none">
+            -WE'VE MADE IT WITH LOVE
           </span>
         </div>
 
-        {/* 2. CENTER MENU ITEMS WITH SMOOTH MOVING OVAL INDICATOR */}
+        {/* 2. CENTER DESKTOP MENU (HIDDEN ON MOBILE/TABLET, SHOWN ON LG SCREENS) */}
         <nav
           ref={navContainerRef}
           onMouseLeave={() => setHoveredTab(null)}
-          className="flex items-center relative py-1 px-1 overflow-x-auto no-scrollbar scroll-smooth"
+          className="hidden lg:flex items-center relative py-1 px-1 overflow-x-auto no-scrollbar scroll-smooth"
         >
           {/* THE SMOOTH MOVING OVAL HIGHLIGHT */}
           <div
@@ -157,7 +177,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
           />
 
           {/* ALL 8 NAV MENU BUTTONS */}
-          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 md:gap-2 lg:gap-3 shrink-0">
             {NAV_ITEMS.map((item) => {
               const isSelected = activeTab === item.id;
               const isHovered = hoveredTab === item.id;
@@ -169,10 +189,10 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                   }}
                   onMouseEnter={() => setHoveredTab(item.id)}
                   onClick={() => onTabChange(item.id)}
-                  className={`relative z-10 px-3 sm:px-3.5 md:px-4 py-2 text-[13.5px] sm:text-[14.5px] md:text-[15.5px] font-semibold text-white whitespace-nowrap rounded-full transition-colors duration-200 cursor-pointer focus-visible:outline-none ${
+                  className={`relative z-10 px-3 py-1.5 text-[14px] lg:text-[15px] font-semibold text-white whitespace-nowrap rounded-full transition-colors duration-200 cursor-pointer focus-visible:outline-none ${
                     isSelected || isHovered
                       ? 'text-white'
-                      : 'text-white/90 hover:text-white'
+                      : 'text-white/85 hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -182,52 +202,139 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
           </div>
         </nav>
 
-        {/* 3. RIGHT ICONS & SHOP NOW BUTTON */}
-        <div className="flex items-center gap-3 sm:gap-4 md:gap-5 shrink-0">
+        {/* 3. RIGHT ICONS & MOBILE HAMBURGER TOGGLE */}
+        <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 shrink-0">
           {/* Search Icon */}
           <button
             onClick={onSearchClick}
-            className="p-1.5 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10"
+            className="p-1.5 sm:p-2 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10"
             title="Search"
             aria-label="Search"
           >
             <Search className="w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[2.2]" />
           </button>
 
-          {/* User Account Icon */}
+          {/* User Account Icon (hidden on extra small screens, accessible via mobile drawer) */}
           <button
             onClick={onUserClick}
-            className="p-1.5 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10"
+            className="hidden sm:flex p-1.5 sm:p-2 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10"
             title="Account"
             aria-label="Account"
           >
             <User className="w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[2.2]" />
           </button>
 
-          {/* Shopping Bag Icon with '0' badge */}
+          {/* Shopping Bag Icon with badge */}
           <button
             onClick={onCartClick}
-            className="p-1.5 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10 relative"
+            className="p-1.5 sm:p-2 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10 relative"
             title="Shopping Cart"
             aria-label="Shopping Cart"
           >
             <ShoppingBag className="w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[2.2]" />
-            <span className="absolute -top-1 -right-1 bg-white text-[#4a044e] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+            <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 bg-[#edd2f7] text-[#4a044e] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
               {cartCount}
             </span>
           </button>
 
-          {/* SHOP NOW -> Pill Button */}
+          {/* SHOP NOW -> Pill Button (Desktop only) */}
           <button
             onClick={onShopNowClick}
-            className="bg-[#edd2f7] hover:bg-[#e4c2f1] active:scale-95 transition-all text-[#4a044e] font-extrabold text-xs sm:text-[13px] tracking-wider uppercase px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-1.5 shadow-md cursor-pointer shrink-0"
+            className="hidden md:flex bg-[#edd2f7] hover:bg-[#e4c2f1] active:scale-95 transition-all text-[#4a044e] font-extrabold text-xs sm:text-[13px] tracking-wider uppercase px-4 lg:px-5 py-2 sm:py-2.5 rounded-full items-center gap-1.5 shadow-md cursor-pointer shrink-0"
           >
             <span>SHOP NOW</span>
             <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
           </button>
+
+          {/* Mobile Hamburger Menu Toggle Button (Visible on < lg) */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden p-1.5 sm:p-2 text-white hover:text-white/80 transition-colors cursor-pointer rounded-full hover:bg-white/10 ml-0.5"
+            aria-label={isMobileMenuOpen ? 'Close Menu' : 'Open Menu'}
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6 stroke-[2.4] text-[#edd2f7]" />
+            ) : (
+              <Menu className="w-6 h-6 stroke-[2.4]" />
+            )}
+          </button>
         </div>
 
       </div>
+
+      {/* 4. EXPANDABLE MOBILE MENU DRAWER / MODAL */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-[54px] sm:top-[64px] bottom-0 bg-[#0a080f]/98 backdrop-blur-2xl border-t border-white/10 z-40 overflow-y-auto flex flex-col justify-between p-5 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-semibold text-purple-300 pb-2 border-b border-white/10">
+              <span className="flex items-center gap-1.5 uppercase tracking-widest text-[11px]">
+                <Sparkles className="w-3.5 h-3.5" />
+                Browse Collections
+              </span>
+              <span>8 Categories</span>
+            </div>
+
+            {/* Menu Items Grid */}
+            <div className="grid grid-cols-2 gap-2.5 pt-1">
+              {NAV_ITEMS.map((item) => {
+                const isSelected = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleMobileNavClick(item.id)}
+                    className={`flex items-center justify-between p-3.5 rounded-2xl text-sm font-bold transition-all text-left ${
+                      isSelected
+                        ? 'bg-[#edd2f7] text-[#4a044e] shadow-md font-extrabold'
+                        : 'bg-white/5 hover:bg-white/10 text-white border border-white/5'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#4a044e]" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Mobile Bottom Quick Actions */}
+          <div className="pt-6 border-t border-white/10 space-y-3 mt-6">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onUserClick?.();
+                }}
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs"
+              >
+                <User className="w-4 h-4 text-purple-300" />
+                <span>My Account / VIP</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onSearchClick?.();
+                }}
+                className="flex items-center justify-center p-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white"
+                title="Search"
+              >
+                <Search className="w-4 h-4 text-purple-300" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onShopNowClick?.();
+              }}
+              className="w-full bg-[#edd2f7] hover:bg-[#e4c2f1] text-[#4a044e] font-extrabold text-sm py-3.5 rounded-2xl flex items-center justify-center gap-2 shadow-xl"
+            >
+              <span>EXPLORE ALL COLLECTIONS</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

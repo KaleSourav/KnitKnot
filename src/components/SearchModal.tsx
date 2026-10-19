@@ -31,10 +31,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24 bg-black/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-3 sm:p-4 pt-12 sm:pt-24 bg-black/85 backdrop-blur-md">
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-2xl bg-[#130f1c] border border-purple-500/20 rounded-3xl p-5 sm:p-6 shadow-2xl z-10 text-white animate-in fade-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-2xl bg-[#130f1c] border border-purple-500/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl z-10 text-white animate-in fade-in zoom-in-95 duration-150">
         {/* SEARCH INPUT BAR */}
         <div className="relative flex items-center mb-4">
           <Search className="w-5 h-5 text-purple-400 absolute left-4 pointer-events-none" />

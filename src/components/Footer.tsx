@@ -19,28 +19,28 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
   };
 
   return (
-    <footer className="w-full bg-white px-4 sm:px-6 lg:px-10 pb-8 sm:pb-12 pt-4">
+    <footer className="w-full bg-white px-3 sm:px-6 lg:px-10 pb-6 sm:pb-12 pt-2 sm:pt-4 overflow-hidden">
       {/* Outer Luxury Light Pink Card Container (#edd2f7) with Rounded Corners */}
-      <div className="max-w-[1360px] mx-auto bg-gradient-to-br from-[#f8eafc] via-[#edd2f7] to-[#e4c2f1] text-[#4a044e] rounded-[32px] sm:rounded-[44px] md:rounded-[56px] overflow-hidden p-8 sm:p-12 md:p-16 lg:p-20 relative select-none flex flex-col justify-between min-h-[580px] md:min-h-[660px] shadow-[0_25px_65px_-15px_rgba(237,210,247,0.7)] border border-[#deb6ed]/60">
+      <div className="max-w-[1360px] mx-auto bg-gradient-to-br from-[#f8eafc] via-[#edd2f7] to-[#e4c2f1] text-[#4a044e] rounded-3xl sm:rounded-[44px] md:rounded-[56px] overflow-hidden p-5 sm:p-10 md:p-16 lg:p-20 relative select-none flex flex-col justify-between min-h-[500px] md:min-h-[660px] shadow-[0_20px_55px_-15px_rgba(237,210,247,0.7)] border border-[#deb6ed]/60">
         
         {/* Top Section: Heading + Newsletter & 4 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 md:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 pb-10 sm:pb-16 md:pb-24">
           
           {/* Left Column: Heading & Newsletter */}
           <div className="lg:col-span-5 flex flex-col justify-start pr-0 lg:pr-8">
             <h3 
-              className="text-[#4a044e] font-serif text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight leading-[1.15] mb-4"
+              className="text-[#4a044e] font-serif text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight leading-[1.2] mb-3 sm:mb-4"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Level Up Your World with KnitKnot
             </h3>
-            <p className="text-[#5e1f66] text-xs sm:text-sm leading-relaxed max-w-md mb-8 font-medium">
+            <p className="text-[#5e1f66] text-xs sm:text-sm leading-relaxed max-w-md mb-6 sm:mb-8 font-medium">
               Subscribe to our newsletter for news, exclusive offers, and community events. Don't miss updates!
             </p>
 
-            {/* Newsletter input matching reference */}
+            {/* Newsletter input */}
             {subscribed ? (
-              <div className="p-3.5 rounded-2xl bg-white/70 border border-purple-300 text-[#4a044e] text-xs sm:text-sm font-semibold flex items-center gap-2.5 max-w-md shadow-sm">
+              <div className="p-3 sm:p-3.5 rounded-2xl bg-white/70 border border-purple-300 text-[#4a044e] text-xs sm:text-sm font-semibold flex items-center gap-2 max-w-md shadow-sm">
                 <Check className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Thank you! Welcome to the KnitKnot family.</span>
               </div>
@@ -49,14 +49,14 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
                 <input
                   type="email"
                   required
-                  placeholder="Enter your email address..."
+                  placeholder="Enter your email..."
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white/85 hover:bg-white focus:bg-white border border-[#dab0ea] focus:border-[#4a044e]/50 rounded-full px-5 py-3.5 pr-28 text-xs sm:text-sm text-[#4a044e] placeholder-[#9c61ab] focus:outline-none transition-all shadow-sm"
+                  className="w-full bg-white/90 hover:bg-white focus:bg-white border border-[#dab0ea] focus:border-[#4a044e]/50 rounded-full px-4 py-3 sm:px-5 sm:py-3.5 pr-24 sm:pr-28 text-xs sm:text-sm text-[#4a044e] placeholder-[#9c61ab] focus:outline-none transition-all shadow-sm"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1.5 top-1.5 bottom-1.5 px-4 sm:px-5 bg-[#4a044e] text-white font-bold text-xs sm:text-sm rounded-full hover:bg-[#350239] active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                  className="absolute right-1 top-1 bottom-1 px-3.5 sm:px-5 bg-[#4a044e] text-white font-bold text-xs sm:text-sm rounded-full hover:bg-[#350239] active:scale-95 transition-all flex items-center gap-1 cursor-pointer shadow-md"
                 >
                   <span>Subscribe</span>
                 </button>
@@ -64,15 +64,15 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             )}
           </div>
 
-          {/* Right Columns: 4 Navigation Columns exactly as in reference */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {/* Right Columns: 4 Navigation Columns */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
             
             {/* 1. Product (All categories) */}
             <div>
-              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-4 sm:mb-5">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-3 sm:mb-5">
                 Product
               </h4>
-              <ul className="space-y-3 text-xs sm:text-sm text-[#5e1f66]">
+              <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-[#5e1f66]">
                 {[
                   { name: 'Accessories', tab: 'Accessories' },
                   { name: 'Flowers', tab: 'Flowers' },
@@ -96,10 +96,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
 
             {/* 2. Support */}
             <div>
-              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-4 sm:mb-5">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-3 sm:mb-5">
                 Support
               </h4>
-              <ul className="space-y-3 text-xs sm:text-sm text-[#5e1f66]">
+              <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-[#5e1f66]">
                 <li><a href="#support" className="hover:text-[#230226] font-medium transition-colors">Support Center</a></li>
                 <li><a href="#faq" className="hover:text-[#230226] font-medium transition-colors">FAQs</a></li>
                 <li><a href="#troubleshooting" className="hover:text-[#230226] font-medium transition-colors">Troubleshooting</a></li>
@@ -109,10 +109,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
 
             {/* 3. Company */}
             <div>
-              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-4 sm:mb-5">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-3 sm:mb-5">
                 Company
               </h4>
-              <ul className="space-y-3 text-xs sm:text-sm text-[#5e1f66]">
+              <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-[#5e1f66]">
                 <li><a href="#about" className="hover:text-[#230226] font-medium transition-colors">About Us</a></li>
                 <li><a href="#careers" className="hover:text-[#230226] font-medium transition-colors">Careers</a></li>
                 <li><a href="#blog" className="hover:text-[#230226] font-medium transition-colors">Blog</a></li>
@@ -122,10 +122,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
 
             {/* 4. Legal */}
             <div>
-              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-4 sm:mb-5">
+              <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4a044e] mb-3 sm:mb-5">
                 Legal
               </h4>
-              <ul className="space-y-3 text-xs sm:text-sm text-[#5e1f66]">
+              <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-[#5e1f66]">
                 <li><a href="#privacy" className="hover:text-[#230226] font-medium transition-colors">Privacy Policy</a></li>
                 <li><a href="#terms" className="hover:text-[#230226] font-medium transition-colors">Terms of Service</a></li>
                 <li><a href="#cookies" className="hover:text-[#230226] font-medium transition-colors">Cookie Policy</a></li>
@@ -138,13 +138,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
         </div>
 
         {/* Bottom Giant Brand Typography Spanning Full Width (White KnitKnot©) */}
-        <div className="w-full pt-8 border-t border-[#4a044e]/15 flex items-center justify-between">
+        <div className="w-full pt-6 sm:pt-8 border-t border-[#4a044e]/15 flex items-center justify-between overflow-hidden">
           <div className="w-full overflow-hidden">
             <h1 
-              className="text-white font-serif leading-none tracking-tight font-normal select-none whitespace-nowrap text-left sm:text-left drop-shadow-[0_2px_12px_rgba(74,4,78,0.12)]"
+              className="text-white font-serif leading-none tracking-tight font-normal select-none whitespace-nowrap text-left drop-shadow-[0_2px_12px_rgba(74,4,78,0.12)] max-w-full"
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: 'clamp(4.2rem, 16.5vw, 17.5rem)',
+                fontSize: 'clamp(2.35rem, 13vw, 17.5rem)',
               }}
             >
               KnitKnot©

@@ -22,10 +22,10 @@ export const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md">
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-md bg-[#130f1c] border border-purple-500/20 rounded-3xl p-6 shadow-2xl z-10 text-white animate-in fade-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto bg-[#130f1c] border border-purple-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl z-10 text-white animate-in fade-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-pink-300">
