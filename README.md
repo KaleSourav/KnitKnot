@@ -1,4 +1,4 @@
-# KnitKnot 🧶
+# Knotsnco 🧶
 
 An artisanal crochet & handcrafted knitwear e-commerce storefront web application built with React 19, TypeScript, Vite, and Tailwind CSS.
 

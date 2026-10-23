@@ -230,14 +230,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Mobile Vertical 9:16 Artwork (Fully visible, centered, zero letters cropped!) */}
         <img
           src={landingImageMobile || '/knitknot-landing-mobile.jpg'}
-          alt="KnitKnot - Crocheted Gifts for a Brighter and Warmer Tomorrow"
+          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
           className="sm:hidden w-full h-full object-cover object-top pointer-events-none select-none"
         />
         
         {/* Desktop Landscape 16:9 Artwork */}
         <img
-          src={landingImage || '/knitknot-landing.png'}
-          alt="KnitKnot - Crocheted Gifts for a Brighter and Warmer Tomorrow"
+          src={landingImage || '/knotsnco-landing.png'}
+          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
           className="hidden sm:block w-full h-full object-cover object-center pointer-events-none select-none"
         />
 

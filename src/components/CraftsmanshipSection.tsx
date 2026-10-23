@@ -36,7 +36,7 @@ export const CraftsmanshipSection: React.FC = () => {
           Handmade Happiness in Every Loop
         </h2>
         <p className="text-sm sm:text-base text-stone-400 mt-2">
-          KnitKnot started as a humble dream: to replace temporary disposable gifts with timeless, huggable pieces of art that warm your home.
+          Knotsnco started as a humble dream: to replace temporary disposable gifts with timeless, huggable pieces of art that warm your home.
         </p>
       </div>
 

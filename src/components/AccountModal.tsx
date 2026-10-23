@@ -31,7 +31,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) =
             <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-pink-300">
               <User className="w-4 h-4" />
             </div>
-            <h3 className="text-base sm:text-lg font-bold">KnitKnot VIP Club</h3>
+            <h3 className="text-base sm:text-lg font-bold">Knotsnco VIP Club</h3>
           </div>
           <button
             onClick={onClose}
@@ -48,7 +48,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) =
             </div>
             <h4 className="text-lg font-bold text-white mb-1">Welcome back, {email.split('@')[0]}!</h4>
             <p className="text-xs text-stone-400 mb-6">
-              You have 150 KnitKnot Yarn Points (₹150 value) ready to use on your next order.
+              You have 150 Knotsnco Yarn Points (₹150 value) ready to use on your next order.
             </p>
 
             <div className="grid grid-cols-2 gap-3 text-left mb-6">
@@ -128,7 +128,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) =
                 type="submit"
                 className="w-full mt-2 bg-[#edd2f7] hover:bg-[#e4c2f1] text-[#4a044e] font-extrabold text-xs py-2.5 rounded-full shadow-lg transition-all flex items-center justify-center gap-1.5"
               >
-                <span>{tab === 'signin' ? 'Sign In to KnitKnot' : 'Join VIP Club (+100 Pts)'}</span>
+                <span>{tab === 'signin' ? 'Sign In to Knotsnco' : 'Join VIP Club (+100 Pts)'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </form>

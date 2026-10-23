@@ -134,7 +134,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
         >
           <div className="flex items-center">
             <span className="text-2xl sm:text-[30px] lg:text-[34px] font-extrabold tracking-tight text-white font-['Nunito',sans-serif] leading-none drop-shadow-sm">
-              KnitKnot
+              Knotsnco
             </span>
             {/* Handcrafted Heart Loop Doodle with Sparkle */}
             <span className="inline-flex items-center ml-1 text-white relative">

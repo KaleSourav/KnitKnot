@@ -71,7 +71,7 @@ export const FeaturedEditorialSection: React.FC<FeaturedEditorialSectionProps> =
 
           <div className="flex items-center gap-1.5 sm:gap-2 text-white/90 text-[11px] sm:text-sm font-medium tracking-wide">
             <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-            <span>KnitKnot Studio</span>
+            <span>Knotsnco Studio</span>
           </div>
         </div>
 

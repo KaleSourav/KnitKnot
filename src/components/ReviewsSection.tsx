@@ -66,7 +66,7 @@ export const ReviewsSection: React.FC = () => {
               Loved By Thousands of Gifters
             </h2>
             <p className="text-sm sm:text-base text-stone-500 mt-2 max-w-xl">
-              Real photos and genuine love notes from happy KnitKnot homes around the globe. Every stitch made with love.
+              Real photos and genuine love notes from happy Knotsnco homes around the globe. Every stitch made with love.
             </p>
           </div>
 

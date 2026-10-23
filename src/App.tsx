@@ -146,7 +146,7 @@ export default function App() {
   return (
     <div className="min-h-screen w-full bg-[#0a080f] text-white flex flex-col justify-start relative overflow-x-hidden selection:bg-[#edd2f7] selection:text-[#4a044e]">
       
-      {/* 1. STICKY KNITKNOT NAVBAR WITH LOGO & ALL CONTROLS */}
+      {/* 1. STICKY KNOTSNCO NAVBAR WITH LOGO & ALL CONTROLS */}
       <KnitKnotNavbar
         activeTab={activeTab}
         onTabChange={handleTabChange}
@@ -157,7 +157,7 @@ export default function App() {
         onShopNowClick={() => handleTabChange('All Products')}
       />
 
-      {/* 2. FULL LANDING PAGE HERO WITH THE KNITKNOT LANDING IMAGE */}
+      {/* 2. FULL LANDING PAGE HERO WITH THE KNOTSNCO LANDING IMAGE */}
       <HeroSection
         onExploreClick={() => {
           const el = document.getElementById('most-wanted-section');

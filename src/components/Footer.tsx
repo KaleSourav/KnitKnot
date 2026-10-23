@@ -32,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
               className="text-[#4a044e] font-serif text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight leading-[1.2] mb-3 sm:mb-4"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              Level Up Your World with KnitKnot
+              Level Up Your World with Knotsnco
             </h3>
             <p className="text-[#5e1f66] text-xs sm:text-sm leading-relaxed max-w-md mb-6 sm:mb-8 font-medium">
               Subscribe to our newsletter for news, exclusive offers, and community events. Don't miss updates!
@@ -42,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             {subscribed ? (
               <div className="p-3 sm:p-3.5 rounded-2xl bg-white/70 border border-purple-300 text-[#4a044e] text-xs sm:text-sm font-semibold flex items-center gap-2 max-w-md shadow-sm">
                 <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Thank you! Welcome to the KnitKnot family.</span>
+                <span>Thank you! Welcome to the Knotsnco family.</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="relative max-w-md w-full">
@@ -137,7 +137,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
 
         </div>
 
-        {/* Bottom Giant Brand Typography Spanning Full Width (White KnitKnot©) */}
+        {/* Bottom Giant Brand Typography Spanning Full Width (White Knotsnco©) */}
         <div className="w-full pt-6 sm:pt-8 border-t border-[#4a044e]/15 flex items-center justify-between overflow-hidden">
           <div className="w-full overflow-hidden">
             <h1 
@@ -147,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
                 fontSize: 'clamp(2.35rem, 13vw, 17.5rem)',
               }}
             >
-              KnitKnot©
+              Knotsnco©
             </h1>
           </div>
         </div>
