@@ -12,6 +12,8 @@ export interface Product {
   details: string[];
   inStock: boolean;
   featuredInHero?: boolean;
+  variantId?: string;
+  shopifyId?: string;
 }
 
 export const PRODUCTS: Product[] = [

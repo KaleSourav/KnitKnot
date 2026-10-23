@@ -9,6 +9,7 @@ interface CartDrawerProps {
   onUpdateQuantity: (productId: string, quantity: number) => void;
   onRemoveItem: (productId: string) => void;
   onCheckout: () => void;
+  isCheckingOut?: boolean;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -18,6 +19,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onUpdateQuantity,
   onRemoveItem,
   onCheckout,
+  isCheckingOut = false,
 }) => {
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
@@ -231,10 +233,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               {/* CHECKOUT BUTTON */}
               <button
                 onClick={onCheckout}
-                className="w-full bg-[#edd2f7] hover:bg-[#e4c2f1] active:scale-95 text-[#4a044e] font-extrabold text-sm py-3 rounded-full flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                disabled={isCheckingOut}
+                className="w-full bg-[#edd2f7] hover:bg-[#e4c2f1] active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed text-[#4a044e] font-extrabold text-sm py-3 rounded-full flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
               >
-                <span>Proceed to Checkout</span>
-                <ArrowRight className="w-4 h-4" />
+                {isCheckingOut ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-[#4a044e] border-t-transparent rounded-full animate-spin" />
+                    <span>Connecting to Shopify Checkout...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Proceed to Checkout</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           )}

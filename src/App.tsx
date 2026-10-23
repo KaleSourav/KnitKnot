@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { KnitKnotNavbar } from './components/KnitKnotNavbar';
 import { HeroSection } from './components/HeroSection';
 import { ProductCatalog } from './components/ProductCatalog';
@@ -19,9 +19,13 @@ import { AccountModal } from './components/AccountModal';
 import { QuickViewModal } from './components/QuickViewModal';
 import { PRODUCTS, Product, CartItem } from './data/products';
 import { Heart, Check } from 'lucide-react';
+import { fetchShopifyProducts, createShopifyCheckout } from './services/shopify';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [isLiveShopify, setIsLiveShopify] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       product: PRODUCTS[0], // Everlasting White Lily Bouquet pre-loaded in cart as sample
@@ -82,10 +86,38 @@ export default function App() {
     setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
   };
 
-  const handleCheckout = () => {
-    setIsCartOpen(false);
-    showToast('🎉 Thank you! Order placed successfully. Happy crocheted memories!');
-    setCartItems([]);
+  useEffect(() => {
+    fetchShopifyProducts().then((res) => {
+      if (res.isLiveShopify && res.products.length > 0) {
+        setProducts(res.products);
+        setIsLiveShopify(true);
+        showToast(`✨ Connected to Shopify! Loaded ${res.products.length} live products.`);
+      }
+    });
+  }, []);
+
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) return;
+
+    setIsCheckingOut(true);
+    showToast('Connecting to secure Shopify checkout...');
+
+    try {
+      const checkoutUrl = await createShopifyCheckout(cartItems);
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+        return;
+      }
+    } catch (err) {
+      console.warn('Shopify checkout notice:', err);
+      // Fallback if products in cart are mock items before publishing in Shopify
+      showToast('🛍️ Shopify store connected! Add products in Shopify Admin to enable live checkout.');
+      setTimeout(() => {
+        setIsCartOpen(false);
+      }, 2500);
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   // Tab & Category navigation
@@ -105,7 +137,7 @@ export default function App() {
   };
 
   const heroProductsMap: { [key: string]: Product } = {};
-  PRODUCTS.forEach((p) => {
+  products.forEach((p) => {
     heroProductsMap[p.id] = p;
   });
 
@@ -139,11 +171,11 @@ export default function App() {
       <MostWantedCarousel
         onBrowseAll={() => setIsCartOpen(true)}
         onSelectItem={(item) => {
-          const match = PRODUCTS.find((p) => p.name.toLowerCase().includes(item.title.toLowerCase()) || item.title.toLowerCase().includes(p.name.toLowerCase()));
+          const match = products.find((p) => p.name.toLowerCase().includes(item.title.toLowerCase()) || item.title.toLowerCase().includes(p.name.toLowerCase()));
           if (match) {
             setQuickViewProduct(match);
           } else {
-            setQuickViewProduct(PRODUCTS[0]);
+            setQuickViewProduct(products[0]);
           }
         }}
       />
@@ -164,7 +196,7 @@ export default function App() {
 
       {/* 6. HANDMADE COLLECTIONS SHOWCASE (WHITE BACKGROUND) */}
       <ProductCatalog
-        products={PRODUCTS}
+        products={products}
         selectedCategory={activeTab}
         onSelectCategory={handleTabChange}
         onAddToCart={handleAddToCart}
@@ -191,12 +223,13 @@ export default function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
+        isCheckingOut={isCheckingOut}
       />
 
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        products={PRODUCTS}
+        products={products}
         onSelectProduct={(p) => setQuickViewProduct(p)}
         onAddToCart={handleAddToCart}
       />
