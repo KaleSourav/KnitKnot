@@ -17,6 +17,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AccountModal } from './components/AccountModal';
 import { QuickViewModal } from './components/QuickViewModal';
+import { CategoryNavDrawer } from './components/CategoryNavDrawer';
 import { PRODUCTS, Product, CartItem } from './data/products';
 import { Heart, Check } from 'lucide-react';
 import { fetchShopifyProducts, createShopifyCheckout } from './services/shopify';
@@ -26,6 +27,7 @@ export default function App() {
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const [isLiveShopify, setIsLiveShopify] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       product: PRODUCTS[0], // Everlasting White Lily Bouquet pre-loaded in cart as sample
@@ -201,6 +203,7 @@ export default function App() {
         onSelectCategory={handleTabChange}
         onAddToCart={handleAddToCart}
         onQuickView={(p) => setQuickViewProduct(p)}
+        onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
       />
 
       {/* 7. FEATURED EDITORIAL HERO BANNER (MATCHING REFERENCE IMAGE WITH CROCHET RESORT SET) */}
@@ -216,6 +219,14 @@ export default function App() {
       <Footer onSelectCategory={handleTabChange} />
 
       {/* 8. MODALS & DRAWERS */}
+      <CategoryNavDrawer
+        isOpen={isCategoryDrawerOpen}
+        onClose={() => setIsCategoryDrawerOpen(false)}
+        selectedCategory={activeTab}
+        onSelectCategory={handleTabChange}
+        totalProductsCount={products.length}
+      />
+
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}

@@ -1,20 +1,21 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Search, User, ShoppingBag, ArrowRight, Menu, X, Sparkles } from 'lucide-react';
+import { Search, User, ShoppingBag, ArrowRight, Menu, X, Sparkles, Layers } from 'lucide-react';
+import { CATEGORIES_DATA } from '../data/categories';
 
 export interface NavItem {
   id: string;
   label: string;
+  emoji?: string;
 }
 
 export const NAV_ITEMS: NavItem[] = [
   { id: 'Home', label: 'Home' },
-  { id: 'Flowers', label: 'Flowers' },
-  { id: 'Amigurumi', label: 'Amigurumi' },
-  { id: 'Accessories', label: 'Accessories' },
-  { id: 'Clothing', label: 'Clothing' },
-  { id: 'Utility', label: 'Utility' },
-  { id: 'BYOB', label: 'BYOB' },
-  { id: 'All Products', label: 'All Products' },
+  { id: 'Flowers', label: 'Flowers (61)', emoji: '🌸' },
+  { id: 'Keychains', label: 'Keychains (40)', emoji: '🔑' },
+  { id: 'Flower Pots', label: 'Pots (21)', emoji: '🪴' },
+  { id: 'Bags', label: 'Bags (19)', emoji: '👜' },
+  { id: 'Vases', label: 'Vases (19)', emoji: '🏺' },
+  { id: 'All Products', label: 'All 252 Items', emoji: '🧶' },
 ];
 
 interface KnitKnotNavbarProps {
@@ -269,27 +270,47 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
             <div className="flex items-center justify-between text-xs font-semibold text-purple-300 pb-2 border-b border-white/10">
               <span className="flex items-center gap-1.5 uppercase tracking-widest text-[11px]">
                 <Sparkles className="w-3.5 h-3.5" />
-                Browse Collections
+                Browse 13 Categories (252 Items)
               </span>
-              <span>8 Categories</span>
+              <span className="text-purple-200 font-extrabold">252 Items</span>
             </div>
 
-            {/* Menu Items Grid */}
-            <div className="grid grid-cols-2 gap-2.5 pt-1">
-              {NAV_ITEMS.map((item) => {
-                const isSelected = activeTab === item.id;
+            {/* All 13 Categories Grid */}
+            <div className="grid grid-cols-2 gap-2 pt-1 max-h-[50vh] overflow-y-auto pr-1">
+              <button
+                onClick={() => handleMobileNavClick('All Products')}
+                className={`flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all text-left col-span-2 ${
+                  activeTab === 'All Products'
+                    ? 'bg-[#edd2f7] text-[#4a044e] shadow-md font-extrabold'
+                    : 'bg-purple-900/20 hover:bg-purple-900/30 text-white border border-purple-500/30'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>🧶</span>
+                  <span>All 252 Products</span>
+                </div>
+                <span className="px-2 py-0.5 rounded-full bg-black/20 text-[10px]">252 items</span>
+              </button>
+
+              {CATEGORIES_DATA.map((cat) => {
+                const isSelected = activeTab.toLowerCase() === cat.name.toLowerCase();
                 return (
                   <button
-                    key={item.id}
-                    onClick={() => handleMobileNavClick(item.id)}
-                    className={`flex items-center justify-between p-3.5 rounded-2xl text-sm font-bold transition-all text-left ${
+                    key={cat.id}
+                    onClick={() => handleMobileNavClick(cat.name)}
+                    className={`flex items-center justify-between p-2.5 rounded-2xl text-xs font-bold transition-all text-left ${
                       isSelected
                         ? 'bg-[#edd2f7] text-[#4a044e] shadow-md font-extrabold'
                         : 'bg-white/5 hover:bg-white/10 text-white border border-white/5'
                     }`}
                   >
-                    <span>{item.label}</span>
-                    {isSelected && <span className="w-2 h-2 rounded-full bg-[#4a044e]" />}
+                    <div className="flex items-center gap-1.5 truncate">
+                      <span className="select-none">{cat.emoji}</span>
+                      <span className="truncate">{cat.name}</span>
+                    </div>
+                    <span className="text-[10px] text-stone-400 font-normal shrink-0">
+                      {cat.count}
+                    </span>
                   </button>
                 );
               })}

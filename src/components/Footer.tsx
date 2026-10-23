@@ -74,12 +74,12 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
               </h4>
               <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-[#5e1f66]">
                 {[
-                  { name: 'Accessories', tab: 'Accessories' },
-                  { name: 'Flowers', tab: 'Flowers' },
-                  { name: 'Amigurumi', tab: 'Amigurumi' },
-                  { name: 'Clothing', tab: 'Clothing' },
-                  { name: 'Utility & Decor', tab: 'Utility' },
-                  { name: 'BYOB Studio', tab: 'BYOB' },
+                  { name: 'Flowers (61)', tab: 'Flowers' },
+                  { name: 'Keychains (40)', tab: 'Keychains' },
+                  { name: 'Flower Pots (21)', tab: 'Flower Pots' },
+                  { name: 'Bags & Totes (19)', tab: 'Bags' },
+                  { name: 'Vases (19)', tab: 'Vases' },
+                  { name: 'All 252 Products', tab: 'All Products' },
                 ].map((item) => (
                   <li key={item.name}>
                     <button
