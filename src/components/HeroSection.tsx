@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Sparkles, Heart, ArrowDown, ShoppingBag, Eye, Star, ShieldCheck } from 'lucide-react';
 import { Product } from '../data/products';
-import landingImage from '../assets/knitknot-landing.png';
-import landingImageMobile from '../assets/knitknot-landing-mobile.jpg';
+import landingImage from '../assets/knotsnco-landing.png';
+import landingImageMobile from '../assets/knotsnco-landing-mobile.jpg';
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -72,30 +72,21 @@ const HERO_HOTSPOTS_DESKTOP: Hotspot[] = [
 
 const HERO_HOTSPOTS_MOBILE: Hotspot[] = [
   {
-    id: 'hs-m-bouquet',
-    productId: 'p-bouquet-01',
-    title: 'Everlasting Bouquet',
-    price: 1499,
-    xPercent: 20,
-    yPercent: 57,
-    category: 'Flowers',
+    id: 'hs-m-bunny',
+    productId: 'p-amigurumi-01',
+    title: 'Lilac Bunny Companion',
+    price: 899,
+    xPercent: 30,
+    yPercent: 66,
+    category: 'Amigurumi',
   },
   {
     id: 'hs-m-chick',
     productId: 'p-amigurumi-01',
     title: 'Happy Chick Set',
     price: 899,
-    xPercent: 20,
-    yPercent: 79,
-    category: 'Amigurumi',
-  },
-  {
-    id: 'hs-m-bunny',
-    productId: 'p-amigurumi-01',
-    title: 'Lilac Bunny Companion',
-    price: 899,
-    xPercent: 39,
-    yPercent: 75,
+    xPercent: 48,
+    yPercent: 68,
     category: 'Amigurumi',
   },
   {
@@ -103,8 +94,8 @@ const HERO_HOTSPOTS_MOBILE: Hotspot[] = [
     productId: 'p-flower-03',
     title: 'Sunbeam Sunflower',
     price: 399,
-    xPercent: 62,
-    yPercent: 78,
+    xPercent: 60,
+    yPercent: 72,
     category: 'Flowers',
   },
   {
@@ -112,8 +103,8 @@ const HERO_HOTSPOTS_MOBILE: Hotspot[] = [
     productId: 'p-tote-01',
     title: 'Daisy Granny Square Tote',
     price: 1599,
-    xPercent: 82,
-    yPercent: 68,
+    xPercent: 79,
+    yPercent: 65,
     category: 'Accessories',
   },
 ];
@@ -225,12 +216,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className="relative w-full h-[100svh] min-h-[100svh] max-h-[100svh] sm:h-[100dvh] sm:min-h-[100dvh] sm:max-h-none flex flex-col justify-between overflow-hidden select-none">
-      {/* 1. FULL-BLEED BACKGROUND IMAGE (RESPONSIVE FOR ALL DEVICES WITH NEW KNOTSNCO ARTWORK) */}
+      {/* 1. FULL-BLEED BACKGROUND IMAGE (RESPONSIVE: DEDICATED PORTRAIT FOR MOBILE, LANDSCAPE FOR DESKTOP) */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+        {/* Mobile Vertical 9:16 Artwork (Brand name 'Knotsnco' fully visible, centered, zero letters cropped!) */}
+        <img
+          src={landingImageMobile}
+          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
+          className="sm:hidden w-full h-full object-cover object-top pointer-events-none select-none"
+        />
+
+        {/* Desktop Landscape 16:9 Artwork */}
         <img
           src={landingImage}
           alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
-          className="w-full h-full object-cover object-center pointer-events-none select-none"
+          className="hidden sm:block w-full h-full object-cover object-center pointer-events-none select-none"
         />
 
         {/* Subtle cinematic gradient only at the bottom for floating glass pill */}
@@ -264,7 +263,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* 5. BOTTOM AREA: FLOATING FROSTED GLASS PILL BAR (COMPACT & FITS 100% IN MOBILE VIEWPORT) */}
-      <div className="w-full px-3 sm:px-6 lg:px-8 pb-3 sm:pb-6 z-20 shrink-0">
+      <div className="w-full px-3 sm:px-6 lg:px-8 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-6 z-20 shrink-0">
         <div className="w-full max-w-6xl mx-auto rounded-2xl sm:rounded-3xl lg:rounded-full bg-white/35 hover:bg-white/40 backdrop-blur-xl border border-white/45 shadow-2xl px-3 sm:px-8 lg:px-10 py-2 sm:py-3.5 transition-all">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 items-center">
             
