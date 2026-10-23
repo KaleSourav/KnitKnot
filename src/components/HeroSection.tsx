@@ -225,24 +225,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className="relative w-full h-[100svh] min-h-[100svh] max-h-[100svh] sm:h-[100dvh] sm:min-h-[100dvh] sm:max-h-none flex flex-col justify-between overflow-hidden select-none">
-      {/* 1. FULL-BLEED BACKGROUND IMAGE (RESPONSIVE FOR MOBILE PORTRAIT AND DESKTOP LANDSCAPE) */}
+      {/* 1. FULL-BLEED BACKGROUND IMAGE (RESPONSIVE FOR ALL DEVICES WITH NEW KNOTSNCO ARTWORK) */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        {/* Mobile Vertical 9:16 Artwork (Fully visible, centered, zero letters cropped!) */}
         <img
-          src={landingImageMobile || '/knitknot-landing-mobile.jpg'}
+          src={landingImage}
           alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
-          className="sm:hidden w-full h-full object-cover object-top pointer-events-none select-none"
-        />
-        
-        {/* Desktop Landscape 16:9 Artwork */}
-        <img
-          src={landingImage || '/knotsnco-landing.png'}
-          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
-          className="hidden sm:block w-full h-full object-cover object-center pointer-events-none select-none"
+          className="w-full h-full object-cover object-center pointer-events-none select-none"
         />
 
         {/* Subtle cinematic gradient only at the bottom for floating glass pill */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/15 pointer-events-none" />
       </div>
 
       {/* 2. TOP SPACING (NAVBAR OVERHEAD) */}
