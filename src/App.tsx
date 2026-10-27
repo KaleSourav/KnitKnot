@@ -6,21 +6,22 @@
 import React, { useState, useEffect } from 'react';
 import { KnitKnotNavbar } from './components/KnitKnotNavbar';
 import { HeroSection } from './components/HeroSection';
-import { ProductCatalog } from './components/ProductCatalog';
-import { ReviewsSection } from './components/ReviewsSection';
-import { Footer } from './components/Footer';
-import { MostWantedCarousel } from './components/MostWantedCarousel';
 import { HangingYarnShowcase } from './components/HangingYarnShowcase';
-import { FullscreenVideoSection } from './components/FullscreenVideoSection';
-import { ShopByCategory } from './components/ShopByCategory';
-import { FeaturedEditorialSection } from './components/FeaturedEditorialSection';
+import { AutoBannerSlideshow } from './components/AutoBannerSlideshow';
+import { BestSellerSection } from './components/BestSellerSection';
+import { InstaReelsSection } from './components/InstaReelsSection';
+import { MoodwiseDecksSection } from './components/MoodwiseDecksSection';
+import { ReviewsSection } from './components/ReviewsSection';
+import { FaqSection } from './components/FaqSection';
+import { ProductCatalog } from './components/ProductCatalog';
+import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AccountModal } from './components/AccountModal';
 import { QuickViewModal } from './components/QuickViewModal';
 import { CategoryNavDrawer } from './components/CategoryNavDrawer';
 import { PRODUCTS, Product, CartItem } from './data/products';
-import { Heart, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { fetchShopifyProducts, createShopifyCheckout } from './services/shopify';
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
-      product: PRODUCTS[0], // Everlasting White Lily Bouquet pre-loaded in cart as sample
+      product: PRODUCTS[0], // Sample item in cart
       quantity: 1,
     },
   ]);
@@ -113,7 +114,6 @@ export default function App() {
       }
     } catch (err) {
       console.warn('Shopify checkout notice:', err);
-      // Fallback if products in cart are mock items before publishing in Shopify
       showToast('🛍️ Shopify store connected! Add products in Shopify Admin to enable live checkout.');
       setTimeout(() => {
         setIsCartOpen(false);
@@ -133,7 +133,7 @@ export default function App() {
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       } else {
-        const fallback = document.getElementById('shop-by-category-section');
+        const fallback = document.getElementById('bestseller-section');
         fallback?.scrollIntoView({ behavior: 'smooth' });
       }
     }
@@ -168,7 +168,7 @@ export default function App() {
       {/* 2. FULL LANDING PAGE HERO WITH THE KNOTSNCO LANDING IMAGE */}
       <HeroSection
         onExploreClick={() => {
-          const el = document.getElementById('hanging-shelf-section') || document.getElementById('catalog-section');
+          const el = document.getElementById('hanging-shelf-section') || document.getElementById('bestseller-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
         onSelectCategory={handleTabChange}
@@ -177,7 +177,7 @@ export default function App() {
         heroProducts={heroProductsMap}
       />
 
-      {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING USER REFERENCE IMAGE) */}
+      {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING REFERENCE WITH CLIPS & ROTATING TICKER) */}
       <HangingYarnShowcase
         products={products}
         onAddToCart={handleAddToCart}
@@ -188,21 +188,46 @@ export default function App() {
         }}
       />
 
-      {/* 4. FULLSCREEN HIGH-QUALITY AUTO-PLAYING LOOP VIDEO SHOWCASE */}
-      <FullscreenVideoSection />
-
-      {/* 5. OUR CATEGORIES BENTO GRID (MATCHING REFERENCE IMAGE) */}
-      <ShopByCategory
-        onSelectCategory={(categoryTab) => {
-          setActiveTab(categoryTab);
-          const el = document.getElementById('catalog-section');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
+      {/* AUTOMATIC SLIDESHOW BANNER BEFORE STEP 3 (USING /banners/1.png, 3.png, 4.png, 5.png) */}
+      <AutoBannerSlideshow
+        onBannerClick={() => {
+          const el = document.getElementById('bestseller-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
       />
 
-      {/* 6. HANDMADE COLLECTIONS SHOWCASE (WHITE BACKGROUND) */}
+      {/* 3) BEST SELLER SECTION */}
+      <BestSellerSection
+        products={products}
+        onAddToCart={handleAddToCart}
+        onQuickView={(p) => setQuickViewProduct(p)}
+        onBrowseAll={() => {
+          const el = document.getElementById('catalog-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
+
+      {/* 4) INSTA REELS SECTION ("WATCH & BUY") */}
+      <InstaReelsSection
+        products={products}
+        onAddToCart={handleAddToCart}
+        onQuickView={(p) => setQuickViewProduct(p)}
+      />
+
+      {/* 5) CARDWISE / MOODWISE DECKS ROW & 6) 20 PRODUCTS FOR THE ABOVE */}
+      <MoodwiseDecksSection
+        products={products}
+        onAddToCart={handleAddToCart}
+        onQuickView={(p) => setQuickViewProduct(p)}
+      />
+
+      {/* 7) REVIEWS SECTION */}
+      <ReviewsSection />
+
+      {/* 8) FAQS SECTION */}
+      <FaqSection />
+
+      {/* FULL CATALOG (COLLAPSIBLE / ACCESSIBLE VIA TABS & DRAWER) */}
       <ProductCatalog
         products={products}
         selectedCategory={activeTab}
@@ -212,19 +237,10 @@ export default function App() {
         onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
       />
 
-      {/* 7. FEATURED EDITORIAL HERO BANNER (MATCHING REFERENCE IMAGE WITH CROCHET RESORT SET) */}
-      <FeaturedEditorialSection
-        onQuickView={(p) => setQuickViewProduct(p)}
-        onAddToCart={handleAddToCart}
-      />
-
-      {/* 8. COMMUNITY LOVE REVIEWS SECTION */}
-      <ReviewsSection />
-
-      {/* 9. EDITORIAL LUXURY FOOTER (MATCHING REFERENCE WITH ALL CATEGORIES & GIANT BRAND TYPOGRAPHY) */}
+      {/* EDITORIAL LUXURY FOOTER */}
       <Footer onSelectCategory={handleTabChange} />
 
-      {/* 8. MODALS & DRAWERS */}
+      {/* MODALS & DRAWERS */}
       <CategoryNavDrawer
         isOpen={isCategoryDrawerOpen}
         onClose={() => setIsCategoryDrawerOpen(false)}
@@ -262,7 +278,7 @@ export default function App() {
         onAddToCart={handleAddToCart}
       />
 
-      {/* 9. FLOATING TOAST NOTIFICATION */}
+      {/* FLOATING TOAST NOTIFICATION */}
       {toast.show && (
         <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 bg-[#841724] border border-[#5c0f19] rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-200">
           <div className="w-7 h-7 rounded-full bg-[#faedd3]/20 text-[#faedd3] flex items-center justify-center shrink-0">
