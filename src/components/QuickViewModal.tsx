@@ -47,7 +47,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
               </span>
             )}
             {discountPct > 0 && (
-              <span className="absolute top-3 right-12 sm:right-3 bg-[#c8102e] text-white text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full shadow-sm">
+              <span className="absolute top-3 right-12 sm:right-3 bg-[#841724] text-[#faedd3] text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full shadow-sm border border-[#5c0f19]/30">
                 {discountPct}% OFF
               </span>
             )}

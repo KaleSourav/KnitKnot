@@ -803,7 +803,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                             className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
                               isJustAdded
                                 ? 'bg-emerald-700 text-white scale-110 shadow-emerald-900/30'
-                                : 'bg-[#2b0b12] hover:bg-[#841724] active:scale-95 text-[#faedd3]'
+                                : 'bg-[#841724] hover:bg-[#5c0f19] active:scale-95 text-[#faedd3]'
                             }`}
                             title="Quick add to shopping bag"
                             aria-label={`Add ${product.name} to bag`}

@@ -115,7 +115,7 @@ export const ModernProductCard: React.FC<ModernProductCardProps> = ({
         {/* Bottom-Left Floating Rating Badge Inside Image (Matching Bla Bli Blu Reference) */}
         <div className="absolute bottom-2.5 left-2.5 z-10">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md sm:rounded-lg bg-white/95 backdrop-blur-md shadow-sm border border-stone-200/60 text-[#2b0b12] text-[11px] sm:text-xs font-black">
-            <Star className="w-3.5 h-3.5 fill-[#c8102e] text-[#c8102e]" />
+            <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
             <span>{product.rating || 4.8}</span>
             <span className="text-stone-500 font-semibold">({product.reviewsCount || 370})</span>
           </div>
@@ -164,7 +164,7 @@ export const ModernProductCard: React.FC<ModernProductCardProps> = ({
               </span>
             )}
             {discountPct > 0 && (
-              <span className="text-xs sm:text-sm font-black text-[#c8102e]">
+              <span className="text-xs sm:text-sm font-black text-[#841724]">
                 {discountPct}% OFF
               </span>
             )}
@@ -183,16 +183,16 @@ export const ModernProductCard: React.FC<ModernProductCardProps> = ({
           </div>
         </div>
 
-        {/* 3. BOLD, FULL-WIDTH ADD TO CART BUTTON (MATCHING BLA BLI BLU & PHOOLJHADI) */}
+        {/* 3. BOLD, FULL-WIDTH ADD TO CART BUTTON (MAROON THEME PALETTE #841724) */}
         <div className="pt-3.5 mt-2">
           <button
             type="button"
             onClick={handleAdd}
             aria-label={`Add ${product.name} to cart`}
-            className={`w-full py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-98 ${
+            className={`w-full py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-98 cursor-pointer ${
               isAdded
-                ? 'bg-emerald-600 text-white scale-102'
-                : 'bg-[#c8102e] hover:bg-[#a60b24] text-white hover:shadow-md'
+                ? 'bg-emerald-700 text-white scale-102'
+                : 'bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] hover:shadow-md'
             }`}
           >
             {isAdded ? (
