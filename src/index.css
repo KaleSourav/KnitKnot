@@ -42,20 +42,25 @@
   }
 }
 
-/* Custom scrollbar and utilities for artisanal aesthetic */
+/* Modern overlay scrollbar with transparent track - NO visible gutter/gap */
+html {
+  scrollbar-color: rgba(132, 23, 36, 0.3) transparent;
+  scrollbar-width: thin;
+}
+
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #faedd3;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #841724;
+  background: rgba(132, 23, 36, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #5c0f19;
+  background: rgba(132, 23, 36, 0.55);
 }
 
 /* Hide scrollbar for clean horizontal scrolls */

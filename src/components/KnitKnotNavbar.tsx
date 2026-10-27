@@ -228,7 +228,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full max-w-full select-none shadow-sm bg-[#faf4e8]">
+    <header className="sticky top-0 z-50 w-full max-w-full select-none shadow-sm">
       {/* 1. TOP ANNOUNCEMENT BAR (Rich Burgundy #841724 with soft cream text) */}
       <div className="bg-[#841724] text-[#faedd3] py-2 px-3 sm:px-6 relative flex items-center justify-center border-b border-[#5c0f19] w-full">
         <button
