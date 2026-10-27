@@ -25,44 +25,90 @@ interface ShelfCategory {
   filter: (p: Product) => boolean;
 }
 
-// 4 Selected Categories: Artisan Picks, Keychains, Accessories, and Bags
+// Strictly partitioned categories from Shopify catalog (zero overlap)
 const SHELF_CATEGORIES: ShelfCategory[] = [
   {
     id: 'picks',
     name: 'All Products',
     label: 'Artisan Picks',
     icon: '🌸',
-    filter: (p) => Boolean(p.featuredInHero) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller',
-  },
-  {
-    id: 'keychains',
-    name: 'Keychains & Bag Charms',
-    label: 'Keychains & Charms',
-    icon: '🎀',
-    filter: (p) => 
-      (p.category === 'Keychains' || p.category === 'Bag Charms' || p.group === 'Keychains & Charms') && 
-      p.category !== 'Bags',
-  },
-  {
-    id: 'accessories',
-    name: 'Accessories',
-    label: 'Hair Accessories',
-    icon: '✨',
-    filter: (p) => 
-      (p.category === 'Hair Accessories' || p.category === 'Bandanas' || p.category === 'Earrings') && 
-      p.category !== 'Bags' && 
-      p.category !== 'Keychains' && 
-      p.category !== 'Bag Charms',
+    filter: (p) => Boolean(p.featuredInHero) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller' || p.badge === 'Best Seller',
   },
   {
     id: 'bags',
     name: 'Bags',
     label: 'Bags & Totes',
     icon: '👜',
-    filter: (p) => 
-      p.category === 'Bags' && 
-      p.category !== 'Bag Charms' && 
-      !p.name.toLowerCase().includes('charm'),
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        (c === 'bags' || n.includes('tote') || n.includes('potli') || (n.includes('bag') && !n.includes('charm'))) &&
+        c !== 'bag charms' &&
+        !n.includes('charm') &&
+        c !== 'hair accessories' &&
+        c !== 'bandanas' &&
+        c !== 'earrings' &&
+        c !== 'standees' &&
+        c !== 'characters'
+      );
+    },
+  },
+  {
+    id: 'toys',
+    name: 'Toys',
+    label: 'Toys & Standees',
+    icon: '🧸',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        (c === 'standees' || c === 'characters' || n.includes('standee') || n.includes('plushie')) &&
+        c !== 'bags' &&
+        c !== 'keychains' &&
+        c !== 'hair accessories' &&
+        c !== 'bandanas'
+      );
+    },
+  },
+  {
+    id: 'keychains',
+    name: 'Keychains & Bag Charms',
+    label: 'Keychains & Charms',
+    icon: '🎀',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        (c === 'keychains' || c === 'bag charms' || n.includes('keychain') || n.includes('charm')) &&
+        c !== 'bags' &&
+        !n.includes('tote') &&
+        !n.includes('potli') &&
+        c !== 'standees' &&
+        c !== 'characters' &&
+        c !== 'hair accessories' &&
+        c !== 'bandanas'
+      );
+    },
+  },
+  {
+    id: 'accessories',
+    name: 'Accessories',
+    label: 'Hair Accessories',
+    icon: '✨',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        (c === 'hair accessories' || c === 'bandanas' || c === 'earrings' || n.includes('clip') || n.includes('gajra') || n.includes('bandana')) &&
+        c !== 'bags' &&
+        c !== 'keychains' &&
+        c !== 'bag charms' &&
+        c !== 'standees' &&
+        c !== 'characters' &&
+        !n.includes('charm')
+      );
+    },
   },
 ];
 
