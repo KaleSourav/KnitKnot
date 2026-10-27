@@ -5,11 +5,8 @@ import {
   ChevronRight, 
   Plus, 
   Check, 
-  Star, 
   Sparkles, 
-  ShoppingBag,
-  Eye,
-  Heart
+  Eye
 } from 'lucide-react';
 import { Product } from '../data/products';
 
@@ -138,6 +135,15 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
   },
 ];
 
+// Natural variation values for authentic hand-hung clothesline look
+const NATURAL_TILTS = [-3.2, 2.8, -1.9, 3.5, -2.5, 2.1, -3.1, 2.4, -2.0, 3.0, -1.8, 2.6];
+const NATURAL_STAGGERS = [2, 14, -2, 16, 4, -4, 12, 0, 10, -3, 14, 2];
+
+// Card layout constants
+const CARD_WIDTH = 280; // px
+const CARD_GAP = 28; // px
+const LEFT_PAD = 48; // px
+
 export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   products,
   onAddToCart,
@@ -148,13 +154,25 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   const [selectedShelfId, setSelectedShelfId] = useState<string>('picks');
   const [justAddedId, setJustAddedId] = useState<string | null>(null);
 
-  // Drag & Sway Physics State
+  // Drag & Scroll refs
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollStart, setScrollStart] = useState(0);
-  const [swayAngle, setSwayAngle] = useState(0);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Interactive physics state held in refs for 60fps / 120fps direct DOM manipulation
+  const physicsRef = useRef({
+    angle: 0,            // current spring pendulum angle in degrees
+    angularVelocity: 0,  // current angular velocity in deg/sec
+    targetAngle: 0,      // target angle during drag
+    isDragging: false,
+    startX: 0,
+    scrollStart: 0,
+    lastPointerX: 0,
+    lastPointerTime: 0,
+    dragVelocityX: 0,
+    hoveredIndex: null as number | null,
+    hoverNudge: 0,
+  });
 
   // Filter products by selected shelf
   const selectedShelf = useMemo(
@@ -176,7 +194,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return counts;
   }, [products]);
 
-  // Update scroll progress (0 to 1) for the custom bottom slider
+  // Track scroll progress for bottom progress bar
   const updateScrollProgress = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -196,70 +214,171 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return () => el.removeEventListener('scroll', updateScrollProgress);
   }, [updateScrollProgress, shelfProducts]);
 
-  // Smooth scroll left/right arrows
+  // -------------------------------------------------------------
+  // HIGH-PERFORMANCE PHYSICAL PENDULUM SWAY SIMULATION
+  // -------------------------------------------------------------
+  useEffect(() => {
+    let animId: number;
+    let lastTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const dt = Math.min(0.04, (currentTime - lastTime) / 1000); // capped delta time in seconds
+      lastTime = currentTime;
+
+      const p = physicsRef.current;
+
+      if (p.isDragging) {
+        // While dragging: spring towards the target drag tilt
+        const diff = p.targetAngle - p.angle;
+        p.angle += diff * Math.min(1, 14 * dt);
+        p.angularVelocity = diff * 8;
+      } else {
+        // Released or idle: damped harmonic spring oscillator
+        // a = -k * angle - damping * velocity
+        const kSpring = 42; // spring stiffness
+        const kDamping = 4.8; // air resistance damping
+        const acc = -kSpring * p.angle - kDamping * p.angularVelocity;
+        p.angularVelocity += acc * dt;
+        p.angle += p.angularVelocity * dt;
+      }
+
+      // Update each hanging card's transformation
+      const timeSec = currentTime / 1000;
+      cardRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const baseTilt = NATURAL_TILTS[index % NATURAL_TILTS.length];
+        const staggerY = NATURAL_STAGGERS[index % NATURAL_STAGGERS.length];
+        
+        // Gentle ambient breeze sway (each card has its own slightly out-of-phase frequency)
+        const phase = index * 0.78;
+        const ambient = Math.sin(timeSec * 1.5 + phase) * 1.15;
+
+        // Wave ripple factor: cards further along the line swing with a tiny delay
+        const waveFactor = Math.cos((p.angle * 0.1) + (index * 0.3));
+        const dynamicSway = p.angle * (0.9 + 0.15 * waveFactor);
+
+        // Hover effect if this specific card is hovered
+        const isHovered = p.hoveredIndex === index;
+        const hoverLift = isHovered ? -8 : 0;
+        const hoverTilt = isHovered ? p.hoverNudge : 0;
+
+        const totalAngle = baseTilt + dynamicSway + ambient + hoverTilt;
+        const totalY = staggerY + hoverLift;
+
+        el.style.transform = `rotate(${totalAngle.toFixed(2)}deg) translateY(${totalY.toFixed(1)}px)`;
+        el.style.transformOrigin = '50% 0px'; // Pivot from top wooden peg
+      });
+
+      animId = requestAnimationFrame(animate);
+    };
+
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, [shelfProducts]);
+
+  // Impart an impulse (sway swing) down the clothesline
+  const impartImpulse = (velocityImpulse: number) => {
+    const p = physicsRef.current;
+    p.angularVelocity += velocityImpulse;
+  };
+
+  // Smooth scroll left/right arrows with dynamic physical swing impulse
   const handleScrollBy = (direction: 'left' | 'right') => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const cardWidth = 320;
-    const scrollAmount = direction === 'left' ? -cardWidth * 1.5 : cardWidth * 1.5;
+    const cardStep = CARD_WIDTH + CARD_GAP;
+    const scrollAmount = direction === 'left' ? -cardStep * 1.6 : cardStep * 1.6;
     el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+
+    // Physical card sway reaction to arrow push
+    // Moving content right -> cards lag left (negative angle)
+    // Moving content left -> cards lag right (positive angle)
+    impartImpulse(direction === 'right' ? -14 : 14);
   };
 
-  // Drag-to-scroll via mouse pointer
+  // Drag-to-scroll via mouse pointer with fluid physics
   const handleMouseDown = (e: React.MouseEvent) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    setIsDragging(true);
-    setStartX(e.pageX - el.offsetLeft);
-    setScrollStart(el.scrollLeft);
+    const p = physicsRef.current;
+    p.isDragging = true;
+    p.startX = e.pageX - el.offsetLeft;
+    p.scrollStart = el.scrollLeft;
+    p.lastPointerX = e.pageX;
+    p.lastPointerTime = performance.now();
+    p.dragVelocityX = 0;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
+    const p = physicsRef.current;
+    if (!p.isDragging) return;
     e.preventDefault();
     const el = scrollContainerRef.current;
     if (!el) return;
 
-    const x = e.pageX - el.offsetLeft;
-    const walk = (x - startX) * 1.4;
-    el.scrollLeft = scrollStart - walk;
+    const currentX = e.pageX;
+    const currentTime = performance.now();
+    const dt = Math.max(1, currentTime - p.lastPointerTime);
+    const dx = currentX - p.lastPointerX;
+    
+    // Calculate drag velocity (px/ms)
+    p.dragVelocityX = dx / dt;
+    p.lastPointerX = currentX;
+    p.lastPointerTime = currentTime;
 
-    // Calculate dynamic sway angle based on drag velocity
-    const velocity = (x - startX);
-    const clampedAngle = Math.max(-4, Math.min(4, -velocity * 0.08));
-    setSwayAngle(clampedAngle);
+    // Scroll the track
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - p.startX) * 1.4;
+    el.scrollLeft = p.scrollStart - walk;
+
+    // Dynamic tilt based on drag motion
+    // Moving hand right -> cards tilt left (negative)
+    // Moving hand left -> cards tilt right (positive)
+    const clampedVelocity = Math.max(-12, Math.min(12, -p.dragVelocityX * 8));
+    p.targetAngle = clampedVelocity;
   };
 
   const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-    // Smoothly settle sway back to 0
-    setTimeout(() => {
-      setSwayAngle(0);
-    }, 150);
+    const p = physicsRef.current;
+    if (!p.isDragging) return;
+    p.isDragging = false;
+    // Release velocity kicks off harmonic pendulum oscillation
+    p.angularVelocity += Math.max(-20, Math.min(20, -p.dragVelocityX * 16));
+    p.targetAngle = 0;
   };
 
   // Touch swipe support for mobile/tablet
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchScrollStart, setTouchScrollStart] = useState(0);
-
   const handleTouchStart = (e: React.TouchEvent) => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    setTouchStartX(e.touches[0].pageX);
-    setTouchScrollStart(el.scrollLeft);
+    const p = physicsRef.current;
+    p.isDragging = true;
+    p.lastPointerX = e.touches[0].pageX;
+    p.lastPointerTime = performance.now();
+    p.dragVelocityX = 0;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
+    const p = physicsRef.current;
+    if (!p.isDragging) return;
     const currentX = e.touches[0].pageX;
-    const diff = (currentX - touchStartX);
-    const clampedAngle = Math.max(-3, Math.min(3, -diff * 0.06));
-    setSwayAngle(clampedAngle);
+    const currentTime = performance.now();
+    const dt = Math.max(1, currentTime - p.lastPointerTime);
+    const dx = currentX - p.lastPointerX;
+
+    p.dragVelocityX = dx / dt;
+    p.lastPointerX = currentX;
+    p.lastPointerTime = currentTime;
+
+    const clampedVelocity = Math.max(-10, Math.min(10, -p.dragVelocityX * 7));
+    p.targetAngle = clampedVelocity;
   };
 
   const handleTouchEnd = () => {
-    setTimeout(() => setSwayAngle(0), 180);
+    const p = physicsRef.current;
+    p.isDragging = false;
+    p.angularVelocity += Math.max(-18, Math.min(18, -p.dragVelocityX * 14));
+    p.targetAngle = 0;
   };
 
   // Add to cart with feedback
@@ -279,8 +398,56 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     const clickX = e.clientX - rect.left;
     const ratio = Math.max(0, Math.min(1, clickX / rect.width));
     const targetScroll = ratio * (el.scrollWidth - el.clientWidth);
+    const scrollDelta = targetScroll - el.scrollLeft;
     el.scrollTo({ left: targetScroll, behavior: 'smooth' });
+
+    // Impart physical swing based on direction of jump
+    impartImpulse(scrollDelta > 0 ? -12 : 12);
   };
+
+  // -------------------------------------------------------------
+  // COMPUTE DYNAMIC SAGGING ROPE SVG PATH CONNECTING EVERY CARD PEG
+  // -------------------------------------------------------------
+  const ropeSvgData = useMemo(() => {
+    const count = shelfProducts.length;
+    const totalWidth = LEFT_PAD + count * (CARD_WIDTH + CARD_GAP) + 160;
+
+    // Build the SVG path connecting peg coordinates with natural catenary sag arcs
+    const pegCoords: { x: number; y: number }[] = [];
+    for (let i = 0; i < count; i++) {
+      const x = LEFT_PAD + i * (CARD_WIDTH + CARD_GAP) + CARD_WIDTH / 2;
+      const stagger = NATURAL_STAGGERS[i % NATURAL_STAGGERS.length];
+      const y = 34 + stagger; // height where the clothespin peg clamps the rope
+      pegCoords.push({ x, y });
+    }
+
+    if (pegCoords.length === 0) return { pathD: '', totalWidth, pegCoords: [] };
+
+    // Start slightly off-screen on the left
+    let d = `M 0,26 `;
+    // First lead-in segment to Peg 0
+    const first = pegCoords[0];
+    d += `C ${first.x * 0.3},28 ${first.x * 0.7},${first.y + 12} ${first.x},${first.y} `;
+
+    // Sagging catenary curves between each peg
+    for (let i = 0; i < pegCoords.length - 1; i++) {
+      const p1 = pegCoords[i];
+      const p2 = pegCoords[i + 1];
+      const dx = p2.x - p1.x;
+      const sag = 20; // Natural catenary drape depth (sag)
+      const cp1x = p1.x + dx * 0.35;
+      const cp1y = p1.y + sag;
+      const cp2x = p2.x - dx * 0.35;
+      const cp2y = p2.y + sag;
+      d += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y} `;
+    }
+
+    // Lead-out segment past the last peg
+    const last = pegCoords[pegCoords.length - 1];
+    d += `C ${last.x + 50},${last.y + 14} ${totalWidth - 30},24 ${totalWidth},20`;
+
+    return { pathD: d, totalWidth, pegCoords };
+  }, [shelfProducts.length]);
 
   return (
     <section 
@@ -331,7 +498,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       onClick={() => {
                         setSelectedShelfId(shelf.id);
                         if (onSelectCategory && shelf.name !== 'All Products') {
-                          // keep category in sync if needed
+                          onSelectCategory(shelf.name);
                         }
                       }}
                       className={`w-full py-2.5 px-3.5 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
@@ -377,53 +544,10 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
             </button>
           </div>
 
-          {/* RIGHT COLUMN: The Interactive Hanging Clothesline / Yarn Rope Gallery */}
-          <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-start relative pt-4 sm:pt-6">
+          {/* RIGHT COLUMN: The Interactive Hanging Clothesline with Natural Sagging Rope & Dynamic Motion */}
+          <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-start relative pt-2">
             
-            {/* 1. ARTISAN BRAIDED YARN ROPE WITH GENTLE SAG & YARN BALL ILLUSTRATION */}
-            <div className="relative w-full mb-[-24px] pointer-events-none z-20">
-              
-              {/* Handcrafted Stitched Yarn Chain Line */}
-              <svg 
-                viewBox="0 0 1000 48" 
-                className="w-full h-8 sm:h-12 overflow-visible stroke-[#841724]/45 fill-none"
-                preserveAspectRatio="none"
-              >
-                {/* Twisted 2-ply yarn effect */}
-                <path 
-                  d="M0,18 Q250,34 500,26 T1000,18" 
-                  strokeWidth="3.5" 
-                  strokeLinecap="round" 
-                  strokeDasharray="6,4"
-                  className="stroke-[#9c3b46]"
-                />
-                <path 
-                  d="M0,19 Q250,35 500,27 T1000,19" 
-                  strokeWidth="1.5" 
-                  strokeLinecap="round" 
-                  className="stroke-[#faedd3]"
-                />
-
-                {/* Decorative Yarn Stitches along the line */}
-                {[80, 240, 410, 590, 760, 920].map((cx, i) => (
-                  <circle key={i} cx={cx} cy={20 + (i % 2 === 0 ? 4 : 2)} r="2.5" fill="#841724" />
-                ))}
-              </svg>
-
-              {/* Whimsical Yarn Ball Outline (Matching Reference Sketch Background) */}
-              <div className="absolute -top-10 right-16 opacity-25 w-28 h-28 pointer-events-none hidden md:block">
-                <svg viewBox="0 0 100 100" fill="none" stroke="#841724" strokeWidth="1.6">
-                  <circle cx="50" cy="50" r="38" />
-                  <path d="M22,35 C38,18 68,22 80,45" />
-                  <path d="M15,55 C30,75 72,78 85,50" />
-                  <path d="M35,18 C48,40 54,65 48,85" />
-                  <path d="M65,16 C55,42 45,68 62,84" />
-                  <path d="M28,78 C52,70 75,58 92,72" />
-                </svg>
-              </div>
-            </div>
-
-            {/* 2. SCROLLABLE / DRAGGABLE CARDS TRACK */}
+            {/* HORIZONTALLY SCROLLABLE / DRAGGABLE CLOTHESLINE TRACK */}
             <div
               ref={scrollContainerRef}
               onMouseDown={handleMouseDown}
@@ -433,125 +557,204 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              className={`w-full overflow-x-auto no-scrollbar pt-6 pb-8 px-2 flex gap-5 sm:gap-6 items-start cursor-grab active:cursor-grabbing select-none relative z-10 transition-transform ${
-                isDragging ? 'cursor-grabbing' : ''
-              }`}
+              className="w-full overflow-x-auto no-scrollbar pt-6 pb-12 px-2 cursor-grab active:cursor-grabbing select-none relative z-10"
               style={{
-                scrollBehavior: isDragging ? 'auto' : 'smooth',
                 WebkitOverflowScrolling: 'touch',
               }}
             >
-              {shelfProducts.map((product, index) => {
-                const isJustAdded = justAddedId === product.id;
-                // Alternate natural static tilt for whimsical clothesline feel
-                const baseTilt = index % 3 === 0 ? -1.2 : index % 3 === 1 ? 1.0 : -0.4;
-                const totalRotation = baseTilt + swayAngle;
+              {/* INNER TRACK CONTAINER: Holds the Sagging Rope SVG and Cards in exact unified coordinates */}
+              <div 
+                className="relative flex items-start"
+                style={{ 
+                  width: `${ropeSvgData.totalWidth}px`,
+                  minHeight: '480px',
+                  paddingLeft: `${LEFT_PAD}px`,
+                  gap: `${CARD_GAP}px`,
+                }}
+              >
+                {/* 1. SAGGING JUTE ROPE SVG: Flows continuously through every wooden peg coordinate */}
+                <svg
+                  className="absolute top-0 left-0 pointer-events-none z-20 overflow-visible"
+                  style={{ width: `${ropeSvgData.totalWidth}px`, height: '120px' }}
+                >
+                  {/* Rope Ambient Cast Shadow */}
+                  <path
+                    d={ropeSvgData.pathD}
+                    fill="none"
+                    stroke="rgba(43, 11, 18, 0.12)"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    className="translate-y-2 blur-[2px]"
+                  />
 
-                return (
-                  <div
-                    key={product.id}
-                    onClick={() => {
-                      if (!isDragging) {
-                        onQuickView(product);
-                      }
-                    }}
-                    style={{
-                      transform: `rotate(${totalRotation}deg)`,
-                      transition: isDragging ? 'none' : 'transform 300ms cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 300ms ease',
-                    }}
-                    className="shrink-0 w-[240px] sm:w-[270px] md:w-[290px] group/card relative pt-4 cursor-pointer"
-                  >
-                    {/* REALISTIC WOODEN CLOTHESPIN PEG CLAMPING THE CARD */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none drop-shadow-sm group-hover/card:-translate-y-0.5 transition-transform">
-                      {/* Top pin head */}
-                      <div className="w-3.5 h-7 rounded-sm bg-gradient-to-b from-[#d4a373] via-[#b68250] to-[#8d5b2d] border border-[#6b421a]/30 shadow-xs relative">
-                        {/* Metal spring clamp wire */}
-                        <div className="absolute top-3 left-[-2px] right-[-2px] h-1.5 bg-[#5c4033] rounded-full border border-black/30" />
-                        {/* Wooden groove */}
-                        <div className="absolute inset-y-1 left-1.5 w-0.5 bg-black/15" />
-                      </div>
-                    </div>
+                  {/* Main Rustic Braided Twine Body */}
+                  <path
+                    d={ropeSvgData.pathD}
+                    fill="none"
+                    stroke="#8b3a2b"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
 
-                    {/* POLAROID ARTISAN KEEPSAKE CARD */}
-                    <div className="bg-[#faf7f2] rounded-2xl sm:rounded-[22px] p-3 sm:p-3.5 pb-4 border border-[#841724]/12 shadow-[0_14px_35px_-10px_rgba(43,11,18,0.14)] hover:shadow-[0_22px_45px_-8px_rgba(132,23,36,0.22)] transition-all duration-300 flex flex-col justify-between">
-                      
-                      {/* PHOTO WRAPPER WITH NATURAL ASPECT */}
-                      <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-[#f0e6d6] mb-3">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          draggable={false}
-                          loading="lazy"
-                          className="w-full h-full object-cover group-hover/card:scale-106 transition-transform duration-500 pointer-events-none select-none"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/products/bouquet.jpg';
-                          }}
-                        />
+                  {/* Braided Cream Yarn Twist Overlay */}
+                  <path
+                    d={ropeSvgData.pathD}
+                    fill="none"
+                    stroke="#faedd3"
+                    strokeWidth="1.8"
+                    strokeDasharray="6 5"
+                    strokeLinecap="round"
+                  />
 
-                        {/* Top corner badge if any */}
-                        {product.badge && (
-                          <span className="absolute top-2 left-2 bg-[#841724] text-[#faedd3] text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
-                            {product.badge}
-                          </span>
-                        )}
+                  {/* Deep Shadow Accent Thread */}
+                  <path
+                    d={ropeSvgData.pathD}
+                    fill="none"
+                    stroke="#3b151a"
+                    strokeWidth="1"
+                    strokeDasharray="2 7"
+                    strokeLinecap="round"
+                  />
 
-                        {/* Hover Quick View Preview Pill */}
-                        <div className="hidden group-hover/card:flex absolute inset-0 bg-[#2b0b12]/30 backdrop-blur-[1.5px] items-center justify-center transition-opacity duration-200">
-                          <span className="bg-[#faedd3] text-[#841724] font-bold text-[11px] px-3 py-1 rounded-full shadow-md flex items-center gap-1.5 transform scale-95 group-hover/card:scale-100 transition-transform">
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>Quick View</span>
-                          </span>
+                  {/* Little stitched knot accents at each peg contact point */}
+                  {ropeSvgData.pegCoords.map((coord, idx) => (
+                    <g key={idx} transform={`translate(${coord.x}, ${coord.y})`}>
+                      <circle r="3.5" fill="#8b3a2b" stroke="#faedd3" strokeWidth="1" />
+                    </g>
+                  ))}
+                </svg>
+
+                {/* 2. HANGING POLAROID CARDS (SUSPENDED BY REALISTIC WOODEN CLOTHESPINS) */}
+                {shelfProducts.map((product, index) => {
+                  const isJustAdded = justAddedId === product.id;
+
+                  return (
+                    <div
+                      key={product.id}
+                      ref={(el) => {
+                        cardRefs.current[index] = el;
+                      }}
+                      onClick={() => {
+                        if (!physicsRef.current.isDragging) {
+                          onQuickView(product);
+                        }
+                      }}
+                      onMouseEnter={() => {
+                        const p = physicsRef.current;
+                        p.hoveredIndex = index;
+                        // Nudge slightly based on natural tilt
+                        p.hoverNudge = index % 2 === 0 ? -2.2 : 2.2;
+                      }}
+                      onMouseLeave={() => {
+                        const p = physicsRef.current;
+                        if (p.hoveredIndex === index) {
+                          p.hoveredIndex = null;
+                          p.hoverNudge = 0;
+                        }
+                      }}
+                      style={{
+                        width: `${CARD_WIDTH}px`,
+                        willChange: 'transform',
+                      }}
+                      className="shrink-0 relative pt-7 group/card cursor-pointer"
+                    >
+                      {/* REALISTIC WOODEN CLOTHESPIN PEG CLAMPING THE ROPE & CARD TOP */}
+                      <div className="absolute top-1 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center drop-shadow-md">
+                        {/* Upper Peg Pinch Handles (sticking up past the rope) */}
+                        <div className="w-4 h-9 rounded-[3px] bg-gradient-to-b from-[#e3b88a] via-[#c9955e] to-[#9c6a3b] border border-[#6b421a]/30 relative shadow-sm flex flex-col justify-between items-center py-1">
+                          
+                          {/* Center vertical wood grain slit */}
+                          <div className="absolute inset-y-1 left-1/2 -translate-x-1/2 w-0.5 bg-[#4a2810]/40 rounded-full" />
+                          
+                          {/* Metal Spring Wire Ring Clamping the Peg Center */}
+                          <div className="w-[18px] h-2 bg-gradient-to-r from-[#422c1d] via-[#75553e] to-[#422c1d] rounded-sm border border-black/40 shadow-xs z-10 -my-0.5" />
+                          
+                          {/* Lower clamping jaws shadow cast directly onto the polaroid card */}
+                          <div className="w-3.5 h-1.5 bg-[#3a1d0d]/30 rounded-full blur-[0.5px]" />
                         </div>
                       </div>
 
-                      {/* CARD DETAILS ROW: Title, Price & The Round Dark Plus Button */}
-                      <div className="flex items-end justify-between gap-2 px-1">
-                        <div className="flex-1 min-w-0 pr-1">
-                          <h4 className="text-xs sm:text-sm font-bold text-[#2b0b12] group-hover/card:text-[#841724] transition-colors line-clamp-1 leading-snug">
-                            {product.name}
-                          </h4>
+                      {/* AUTHENTIC TALL POLAROID KEEPSAKE CARD (MATCHING REFERENCE PHOTO) */}
+                      <div className="bg-[#faf7f2] rounded-2xl p-3 pb-4 border border-[#841724]/12 shadow-[0_14px_35px_-8px_rgba(43,11,18,0.14)] group-hover/card:shadow-[0_24px_48px_-6px_rgba(132,23,36,0.22)] transition-shadow duration-300 flex flex-col justify-between">
+                        
+                        {/* PHOTO WRAPPER: Portrait Ratio (approx 3:4) with Smooth Rounded Corners */}
+                        <div className="relative w-full h-[270px] sm:h-[295px] rounded-xl overflow-hidden bg-[#f0e6d6] mb-3">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            draggable={false}
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover/card:scale-106 transition-transform duration-500 pointer-events-none select-none"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/products/bouquet.jpg';
+                            }}
+                          />
 
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <span className="text-sm sm:text-base font-black text-[#2b0b12]">
-                              ₹{product.price.toLocaleString('en-IN')}
+                          {/* Top Left Badge (e.g., Artisan Pick, Bestseller) */}
+                          {product.badge && (
+                            <span className="absolute top-2.5 left-2.5 bg-[#841724] text-[#faedd3] text-[9.5px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
+                              {product.badge}
                             </span>
-                            {product.originalPrice && (
-                              <span className="text-[11px] text-[#7c5c62] line-through font-medium">
-                                ₹{product.originalPrice}
-                              </span>
-                            )}
+                          )}
+
+                          {/* Hover Quick View Eye Pill */}
+                          <div className="opacity-0 group-hover/card:opacity-100 absolute inset-0 bg-[#2b0b12]/30 backdrop-blur-[1px] flex items-center justify-center transition-opacity duration-200">
+                            <span className="bg-[#faedd3] text-[#841724] font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>Quick View</span>
+                            </span>
                           </div>
                         </div>
 
-                        {/* Round Dark Plus Action Button (Exact Match to Reference Image!) */}
-                        <button
-                          onClick={(e) => handleQuickAdd(e, product)}
-                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
-                            isJustAdded
-                              ? 'bg-emerald-700 text-white scale-110 shadow-emerald-900/30'
-                              : 'bg-[#2b0b12] hover:bg-[#841724] active:scale-95 text-[#faedd3]'
-                          }`}
-                          title="Quick add to shopping bag"
-                          aria-label={`Add ${product.name} to bag`}
-                        >
-                          {isJustAdded ? (
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          ) : (
-                            <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.4]" />
-                          )}
-                        </button>
-                      </div>
+                        {/* CARD DETAILS ROW: Title, Price & Signature Round Black Action Button */}
+                        <div className="flex items-end justify-between gap-2 px-1">
+                          <div className="flex-1 min-w-0 pr-1">
+                            <h4 className="text-sm sm:text-[15px] font-bold text-[#2b0b12] group-hover/card:text-[#841724] transition-colors line-clamp-1 leading-snug">
+                              {product.name}
+                            </h4>
 
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="text-sm sm:text-base font-black text-[#2b0b12]">
+                                ₹{product.price.toLocaleString('en-IN')}
+                              </span>
+                              {product.originalPrice && (
+                                <span className="text-[11px] text-[#7c5c62] line-through font-medium">
+                                  ₹{product.originalPrice}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Signature Round Black Plus Action Button (Exact Match to Reference Photo) */}
+                          <button
+                            onClick={(e) => handleQuickAdd(e, product)}
+                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
+                              isJustAdded
+                                ? 'bg-emerald-700 text-white scale-110 shadow-emerald-900/30'
+                                : 'bg-[#2b0b12] hover:bg-[#841724] active:scale-95 text-[#faedd3]'
+                            }`}
+                            title="Quick add to shopping bag"
+                            aria-label={`Add ${product.name} to bag`}
+                          >
+                            {isJustAdded ? (
+                              <Check className="w-4 h-4 stroke-[3]" />
+                            ) : (
+                              <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.4]" />
+                            )}
+                          </button>
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
             {/* 3. BOTTOM SLIDER CONTROLS: Arrow Left + Draggable Progress Line + Arrow Right */}
             <div className="flex items-center justify-end gap-3 sm:gap-4 max-w-sm ml-auto px-4 mt-2">
               
-              {/* Prev Button */}
+              {/* Prev Button with Physical Swing Kick */}
               <button
                 onClick={() => handleScrollBy('left')}
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
@@ -572,7 +775,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                 />
               </div>
 
-              {/* Next Button */}
+              {/* Next Button with Physical Swing Kick */}
               <button
                 onClick={() => handleScrollBy('right')}
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
