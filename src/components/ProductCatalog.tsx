@@ -7,6 +7,7 @@ import React, { useState, useMemo } from 'react';
 import { Star, ShoppingBag, Eye, Sparkles, Filter, SlidersHorizontal, ArrowUpDown, Search, ChevronDown, Check } from 'lucide-react';
 import { Product } from '../data/products';
 import { CATEGORIES_DATA } from '../data/categories';
+import { ModernProductCard } from './ModernProductCard';
 
 interface ProductCatalogProps {
   products: Product[];
@@ -147,7 +148,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   return (
     <section 
       id="catalog-section" 
-      className="w-full bg-[#faf4e8] text-[#2b0b12] py-12 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 select-none relative font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
+      className="w-full bg-transparent text-[#2b0b12] py-12 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 select-none relative font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
     >
       <div className="max-w-[1540px] mx-auto">
         
@@ -339,121 +340,13 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         {visibleProducts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
             {visibleProducts.map((product) => (
-              <div
+              <ModernProductCard
                 key={product.id}
-                className="group relative bg-[#faedd3] rounded-2xl sm:rounded-[26px] p-2.5 sm:p-4 border border-[#841724]/15 hover:border-[#841724]/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                {/* IMAGE WRAPPER */}
-                <div 
-                  onClick={() => onQuickView(product)}
-                  className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-[#f8f0dc] mb-2.5 sm:mb-3.5 cursor-pointer"
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                    onError={(e) => {
-                      // Fallback if image fails to load
-                      (e.target as HTMLImageElement).src = '/products/bouquet.jpg';
-                    }}
-                  />
-
-                  {/* BADGE */}
-                  {product.badge && (
-                    <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 bg-[#841724] text-[#faedd3] text-[8px] sm:text-[10px] font-black px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
-                      {product.badge}
-                    </span>
-                  )}
-
-                  {/* DESKTOP HOVER OVERLAY */}
-                  <div className="hidden sm:flex absolute inset-0 bg-[#2b0b12]/35 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center gap-2.5">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onQuickView(product);
-                      }}
-                      className="p-2.5 rounded-full bg-[#faedd3] text-[#841724] hover:bg-[#841724] hover:text-[#faedd3] transition-all transform hover:scale-110 shadow-lg cursor-pointer"
-                      title="Quick View"
-                      aria-label={`Quick View ${product.name}`}
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onAddToCart(product);
-                      }}
-                      className="p-2.5 rounded-full bg-[#841724] text-[#faedd3] hover:bg-[#5c0f19] transition-all transform hover:scale-110 shadow-lg cursor-pointer"
-                      title="Add to Cart"
-                      aria-label={`Add ${product.name} to Cart`}
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* MOBILE QUICK ADD / VIEW BUTTON */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onQuickView(product);
-                    }}
-                    className="sm:hidden absolute bottom-2 right-2 p-1.5 rounded-full bg-[#841724]/80 backdrop-blur-md text-[#faedd3] border border-[#faedd3]/20 shadow-md"
-                    aria-label="Quick View"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* DETAILS */}
-                <div className="flex flex-col flex-1 justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[9px] sm:text-[11px] font-extrabold text-[#841724] uppercase tracking-wider truncate">
-                        {product.category}
-                      </span>
-                      <div className="flex items-center gap-0.5 text-[10px] sm:text-xs text-amber-600 font-bold shrink-0">
-                        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                        <span>{product.rating}</span>
-                      </div>
-                    </div>
-
-                    <h3 
-                      onClick={() => onQuickView(product)}
-                      className="text-xs sm:text-base font-bold text-[#2b0b12] group-hover:text-[#841724] transition-colors line-clamp-1 leading-snug cursor-pointer"
-                    >
-                      {product.name}
-                    </h3>
-
-                    <p className="hidden sm:block text-[11px] text-[#7c5c62] font-medium line-clamp-2 mt-1 leading-relaxed">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  {/* PRICE & ADD BUTTON */}
-                  <div className="flex items-center justify-between pt-2.5 sm:pt-3 mt-2 sm:mt-3 border-t border-[#841724]/10">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-sm sm:text-lg font-black text-[#2b0b12]">
-                        ₹{product.price}
-                      </span>
-                      {product.originalPrice && (
-                        <span className="text-[10px] sm:text-xs text-[#7c5c62]/70 line-through font-semibold">
-                          ₹{product.originalPrice}
-                        </span>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() => onAddToCart(product)}
-                      className="bg-[#841724] hover:bg-[#5c0f19] active:scale-95 text-[#faedd3] font-extrabold text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1 transition-all cursor-pointer shadow-sm"
-                      aria-label={`Add ${product.name} to Cart`}
-                    >
-                      <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                      <span className="hidden xs:inline">Add</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+                product={product}
+                badgeText={product.badge}
+                onAddToCart={onAddToCart}
+                onQuickView={onQuickView}
+              />
             ))}
           </div>
         ) : (

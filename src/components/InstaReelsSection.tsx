@@ -142,7 +142,7 @@ export const InstaReelsSection: React.FC<InstaReelsSectionProps> = ({
   return (
     <section 
       id="watch-and-buy"
-      className="w-full bg-[#faedd3] py-12 sm:py-16 md:py-24 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
+      className="w-full bg-transparent py-12 sm:py-16 md:py-24 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
 

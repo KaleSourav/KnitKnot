@@ -104,7 +104,7 @@ export const AutoBannerSlideshow: React.FC<AutoBannerSlideshowProps> = ({ onBann
   return (
     <section 
       aria-label="Featured Knitknot Banner Showcase"
-      className="w-full bg-[#faf4e8] py-6 sm:py-10 px-3.5 sm:px-6 lg:px-8 select-none"
+      className="w-full bg-transparent py-6 sm:py-10 px-3.5 sm:px-6 lg:px-8 select-none"
     >
       <div className="max-w-7xl mx-auto">
         

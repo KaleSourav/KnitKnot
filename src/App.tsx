@@ -15,6 +15,7 @@ import { ReviewsSection } from './components/ReviewsSection';
 import { FaqSection } from './components/FaqSection';
 import { ProductCatalog } from './components/ProductCatalog';
 import { Footer } from './components/Footer';
+import { DynamicScrollBackground } from './components/DynamicScrollBackground';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AccountModal } from './components/AccountModal';
@@ -147,8 +148,11 @@ export default function App() {
   const [wishlistCount, setWishlistCount] = useState(0);
 
   return (
-    <div className="min-h-screen w-full bg-[#faf4e8] text-[#2b0b12] flex flex-col justify-start relative overflow-x-hidden selection:bg-[#841724] selection:text-[#faedd3]">
+    <div className="min-h-screen w-full bg-transparent text-[#2b0b12] flex flex-col justify-start relative overflow-x-hidden selection:bg-[#841724] selection:text-[#faedd3]">
       
+      {/* DYNAMIC SCROLL REACTIVE LIGHT-THEME BACKGROUND WITH GLOW ORBS */}
+      <DynamicScrollBackground />
+
       {/* 1. STICKY KNOTSNCO NAVBAR WITH LOGO & ALL CONTROLS */}
       <KnitKnotNavbar
         activeTab={activeTab}

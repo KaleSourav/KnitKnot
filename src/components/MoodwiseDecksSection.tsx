@@ -5,7 +5,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { Product } from '../data/products';
-import { Heart, Eye, ShoppingBag, Check, Sparkles, Layers, ArrowUpRight, Star } from 'lucide-react';
+import { Sparkles, Layers, ArrowUpRight } from 'lucide-react';
+import { ModernProductCard } from './ModernProductCard';
 
 interface MoodDeck {
   id: string;
@@ -380,7 +381,7 @@ export const MoodwiseDecksSection: React.FC<MoodwiseDecksSectionProps> = ({
   return (
     <section 
       id="mood-decks-section"
-      className="w-full bg-[#faf4e8] py-12 sm:py-16 md:py-24 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
+      className="w-full bg-transparent py-12 sm:py-16 md:py-24 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
 
@@ -490,139 +491,15 @@ export const MoodwiseDecksSection: React.FC<MoodwiseDecksSectionProps> = ({
 
           {/* 20 Products Grid (2 cols mobile, 3 cols sm, 4 cols lg) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
-            {displayedProducts.map((product) => {
-              const isWishlisted = wishlistedIds.has(product.id);
-              const isRecentlyAdded = recentlyAddedId === product.id;
-              const originalPrice = product.originalPrice || Math.round(product.price * 1.3);
-              const discountPct = Math.round(((originalPrice - product.price) / originalPrice) * 100);
-
-              return (
-                <div
-                  key={product.id}
-                  className="bg-[#faedd3] rounded-3xl p-3 sm:p-4 border border-[#841724]/15 hover:border-[#841724]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative"
-                >
-                  {/* Image Container */}
-                  <div
-                    className="relative w-full aspect-square rounded-2xl overflow-hidden bg-white/70 mb-3 cursor-pointer"
-                    onClick={() => onQuickView(product)}
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out"
-                    />
-
-                    {/* Top Left Badge */}
-                    {product.badge && (
-                      <div className="absolute top-2 left-2 z-10">
-                        <span className="px-2 py-0.5 rounded-full bg-[#841724] text-[#faedd3] text-[9px] sm:text-[10px] font-black uppercase tracking-wider shadow-sm">
-                          {product.badge}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Top Right Wishlist & QuickView */}
-                    <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleWishlist(product.id);
-                        }}
-                        aria-label="Wishlist"
-                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center backdrop-blur-md shadow-sm transition-colors ${
-                          isWishlisted
-                            ? 'bg-[#841724] text-[#faedd3]'
-                            : 'bg-white/80 hover:bg-white text-[#2b0b12]'
-                        }`}
-                      >
-                        <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-[#faedd3]' : ''}`} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onQuickView(product);
-                        }}
-                        aria-label="Preview"
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/80 hover:bg-white text-[#2b0b12] flex items-center justify-center backdrop-blur-md shadow-sm transition-colors"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    {/* Discount Tag */}
-                    {discountPct > 0 && (
-                      <div className="absolute bottom-2 left-2 z-10">
-                        <span className="px-1.5 py-0.5 rounded-md bg-[#2b0b12]/80 text-[#faedd3] text-[9px] font-bold backdrop-blur-xs">
-                          {discountPct}% OFF
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex flex-col flex-1 justify-between">
-                    <div>
-                      {/* Rating */}
-                      <div className="flex items-center gap-1 text-[11px] text-[#7c5c62] mb-1">
-                        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                        <span className="font-bold text-[#2b0b12]">{product.rating || 4.9}</span>
-                        <span>({product.reviewsCount || 45})</span>
-                      </div>
-
-                      <h4
-                        onClick={() => onQuickView(product)}
-                        className="font-bold text-xs sm:text-sm text-[#2b0b12] hover:text-[#841724] transition-colors cursor-pointer line-clamp-2 leading-snug"
-                        title={product.name}
-                      >
-                        {product.name}
-                      </h4>
-                    </div>
-
-                    {/* Price & Add to Bag */}
-                    <div className="flex items-center justify-between pt-3 mt-2 border-t border-[#841724]/10">
-                      <div>
-                        <span className="text-sm sm:text-base font-black text-[#841724]">
-                          ₹{product.price}
-                        </span>
-                        {originalPrice > product.price && (
-                          <span className="text-[11px] text-stone-400 line-through ml-1 font-medium">
-                            ₹{originalPrice}
-                          </span>
-                        )}
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleAdd(product)}
-                        aria-label={`Add ${product.name} to bag`}
-                        className={`px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transition-all duration-300 shadow-sm ${
-                          isRecentlyAdded
-                            ? 'bg-emerald-600 text-white scale-105'
-                            : 'bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] hover:shadow-md active:scale-95'
-                        }`}
-                      >
-                        {isRecentlyAdded ? (
-                          <>
-                            <Check className="w-3 h-3 stroke-[3]" />
-                            <span className="hidden sm:inline">Added!</span>
-                          </>
-                        ) : (
-                          <>
-                            <ShoppingBag className="w-3 h-3" />
-                            <span>Add</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-
-                  </div>
-
-                </div>
-              );
-            })}
+            {displayedProducts.map((product) => (
+              <ModernProductCard
+                key={product.id}
+                product={product}
+                badgeText={product.badge}
+                onAddToCart={onAddToCart}
+                onQuickView={onQuickView}
+              />
+            ))}
           </div>
 
         </div>

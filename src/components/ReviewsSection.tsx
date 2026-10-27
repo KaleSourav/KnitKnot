@@ -99,7 +99,7 @@ export const ReviewsSection: React.FC = () => {
   return (
     <section 
       id="reviews-section"
-      className="w-full bg-[#faf4e8] py-14 sm:py-20 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
+      className="w-full bg-transparent py-14 sm:py-20 px-3.5 sm:px-6 lg:px-8 border-t border-[#841724]/10 select-none overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
 
