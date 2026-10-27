@@ -90,27 +90,41 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   onShopNowClick,
 }) => {
   const [announcementIndex, setAnnouncementIndex] = useState(0);
+  const [announcementVisible, setAnnouncementVisible] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedMobileGroup, setExpandedMobileGroup] = useState<string | null>('floral');
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto rotate announcement every 4 seconds
+  // Smooth slow fade out -> update text -> slow fade in
+  const transitionAnnouncement = (nextIndex: number) => {
+    setAnnouncementVisible(false);
+    setTimeout(() => {
+      setAnnouncementIndex(nextIndex);
+      setAnnouncementVisible(true);
+    }, 450); // 450ms fade-out duration
+  };
+
+  // Auto rotate announcement every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setAnnouncementIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
-    }, 4200);
+      setAnnouncementVisible(false);
+      setTimeout(() => {
+        setAnnouncementIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
+        setAnnouncementVisible(true);
+      }, 450);
+    }, 5200);
     return () => clearInterval(timer);
   }, []);
 
   const handlePrevAnnouncement = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setAnnouncementIndex((prev) => (prev - 1 + ANNOUNCEMENTS.length) % ANNOUNCEMENTS.length);
+    transitionAnnouncement((announcementIndex - 1 + ANNOUNCEMENTS.length) % ANNOUNCEMENTS.length);
   };
 
   const handleNextAnnouncement = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setAnnouncementIndex((prev) => (prev + 1) % ANNOUNCEMENTS.length);
+    transitionAnnouncement((announcementIndex + 1) % ANNOUNCEMENTS.length);
   };
 
   const handleMouseEnter = (groupId: string) => {
@@ -133,7 +147,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full select-none shadow-sm">
+    <header className="sticky top-0 left-0 right-0 z-50 w-full select-none shadow-sm">
       {/* 1. TOP ANNOUNCEMENT BAR (Rich Burgundy #841724 with soft cream text) */}
       <div className="bg-[#841724] text-[#faedd3] py-2 px-3 sm:px-6 relative flex items-center justify-center border-b border-[#5c0f19]">
         <button
@@ -144,10 +158,13 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
           <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />
         </button>
 
-        <div className="overflow-hidden h-4 sm:h-5 flex items-center justify-center">
+        <div className="overflow-hidden h-5 sm:h-6 flex items-center justify-center px-8">
           <span 
-            key={announcementIndex}
-            className="text-[11px] sm:text-xs font-serif tracking-widest text-center uppercase animate-in fade-in duration-300"
+            className={`text-[11px] sm:text-xs font-serif tracking-widest text-center uppercase transition-all duration-500 ease-in-out ${
+              announcementVisible 
+                ? 'opacity-100 translate-y-0 filter-none' 
+                : 'opacity-0 -translate-y-1 blur-[1px]'
+            }`}
           >
             {ANNOUNCEMENTS[announcementIndex]}
           </span>
