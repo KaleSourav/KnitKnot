@@ -32,62 +32,37 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     name: 'All Products',
     label: 'Artisan Picks',
     icon: '🌸',
-    filter: (p) => (p.featuredInHero ?? false) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller' || p.rating >= 4.85,
+    filter: (p) => Boolean(p.featuredInHero) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller',
   },
   {
     id: 'keychains',
     name: 'Keychains & Bag Charms',
     label: 'Keychains & Charms',
     icon: '🎀',
-    filter: (p) => {
-      const c = (p.category || '').toLowerCase();
-      const n = (p.name || '').toLowerCase();
-      const g = (p.group || '').toLowerCase();
-      return (
-        c === 'keychains' ||
-        c === 'bag charms' ||
-        g.includes('keychain') ||
-        g.includes('charm') ||
-        c.includes('charm') ||
-        n.includes('keychain') ||
-        n.includes('charm') ||
-        n.includes('turtle')
-      );
-    },
+    filter: (p) => 
+      (p.category === 'Keychains' || p.category === 'Bag Charms' || p.group === 'Keychains & Charms') && 
+      p.category !== 'Bags',
   },
   {
     id: 'accessories',
     name: 'Accessories',
     label: 'Hair Accessories',
     icon: '✨',
-    filter: (p) => {
-      const c = (p.category || '').toLowerCase();
-      const n = (p.name || '').toLowerCase();
-      const g = (p.group || '').toLowerCase();
-      return (
-        c === 'hair accessories' ||
-        c === 'bandanas' ||
-        c === 'earrings' ||
-        c === 'accessories' ||
-        g.includes('accessories') ||
-        n.includes('clip') ||
-        n.includes('gajra') ||
-        n.includes('bandana') ||
-        n.includes('scrunchie')
-      );
-    },
+    filter: (p) => 
+      (p.category === 'Hair Accessories' || p.category === 'Bandanas' || p.category === 'Earrings') && 
+      p.category !== 'Bags' && 
+      p.category !== 'Keychains' && 
+      p.category !== 'Bag Charms',
   },
   {
     id: 'bags',
     name: 'Bags',
     label: 'Bags & Totes',
     icon: '👜',
-    filter: (p) => {
-      const c = (p.category || '').toLowerCase();
-      const n = (p.name || '').toLowerCase();
-      const g = (p.group || '').toLowerCase();
-      return c === 'bags' || g.includes('bag') || n.includes('bag') || n.includes('tote');
-    },
+    filter: (p) => 
+      p.category === 'Bags' && 
+      p.category !== 'Bag Charms' && 
+      !p.name.toLowerCase().includes('charm'),
   },
 ];
 
