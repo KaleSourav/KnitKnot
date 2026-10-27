@@ -147,21 +147,21 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   return (
     <section 
       id="catalog-section" 
-      className="w-full bg-[#fcfbfa] text-stone-900 py-12 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 select-none relative font-['DM_Sans',sans-serif] border-t border-stone-200/50"
+      className="w-full bg-[#faf4e8] text-[#2b0b12] py-12 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 select-none relative font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
     >
       <div className="max-w-[1540px] mx-auto">
         
         {/* SECTION TITLE & STATS */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4 pb-5 border-b border-stone-200/70">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4 pb-5 border-b border-[#841724]/15">
           <div>
-            <div className="flex items-center gap-2 text-purple-700 font-extrabold text-xs uppercase tracking-widest mb-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <div className="flex items-center gap-2 text-[#841724] font-extrabold text-xs uppercase tracking-widest mb-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#841724]" />
               <span>{products.length} Handcrafted Creations</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#2b0b12] tracking-tight">
               Treasures Stitched With Love
             </h2>
-            <p className="text-xs sm:text-sm text-stone-600 font-medium mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#7c5c62] font-medium mt-1 max-w-2xl leading-relaxed">
               Explore 13 artisanal categories crafted by our artisans in Surat with combed cotton yarns.
             </p>
           </div>
@@ -170,9 +170,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           {onOpenCategoryDrawer && (
             <button
               onClick={onOpenCategoryDrawer}
-              className="inline-flex items-center gap-2 self-start md:self-auto bg-stone-900 hover:bg-stone-800 text-white px-4 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-2 self-start md:self-auto bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] px-4 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm cursor-pointer"
             >
-              <Filter className="w-3.5 h-3.5 text-[#edd2f7]" />
+              <Filter className="w-3.5 h-3.5 text-[#faedd3]" />
               <span>Browse All 13 Categories</span>
               <span className="w-5 h-5 rounded-full bg-white/20 text-[10px] flex items-center justify-center font-extrabold">
                 13
@@ -188,8 +188,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             onClick={() => handleCategorySwitch('All Products')}
             className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 shadow-sm ${
               selectedCategory === 'All Products' || selectedCategory === 'Home'
-                ? 'bg-[#edd2f7] text-[#4a044e] border border-purple-400 scale-105 shadow-md'
-                : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200'
+                ? 'bg-[#841724] text-[#faedd3] border border-[#5c0f19] scale-105 shadow-md'
+                : 'bg-[#faedd3] hover:bg-[#f6ebd4] text-[#2b0b12] border border-[#841724]/15'
             }`}
           >
             <span>🧶</span>
@@ -209,8 +209,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 onClick={() => handleCategorySwitch(cat.name)}
                 className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 shadow-sm ${
                   isSelected
-                    ? 'bg-[#edd2f7] text-[#4a044e] border border-purple-400 scale-105 shadow-md'
-                    : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200'
+                    ? 'bg-[#841724] text-[#faedd3] border border-[#5c0f19] scale-105 shadow-md'
+                    : 'bg-[#faedd3] hover:bg-[#f6ebd4] text-[#2b0b12] border border-[#841724]/15'
                 }`}
               >
                 <span>{cat.emoji}</span>
@@ -253,22 +253,22 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         )}
 
         {/* 3. FILTER & SORT CONTROLS BAR */}
-        <div className="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-stone-200/80 shadow-sm">
+        <div className="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#faedd3] p-3 rounded-2xl border border-[#841724]/15 shadow-sm">
           
           {/* Search within current category */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#841724]/60 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder={`Search in ${selectedCategory === 'Home' || selectedCategory === 'All Products' ? 'all 252 products' : selectedCategory}...`}
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              className="w-full bg-stone-50 border border-stone-200 rounded-xl pl-9 pr-3 py-2 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:border-purple-500"
+              className="w-full bg-[#f8f0dc] border border-[#841724]/20 rounded-xl pl-9 pr-3 py-2 text-xs text-[#2b0b12] placeholder-[#841724]/40 focus:outline-none focus:border-[#841724]"
             />
             {searchFilter && (
               <button
                 onClick={() => setSearchFilter('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-stone-400 hover:text-stone-700"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#841724]/60 hover:text-[#841724]"
               >
                 ✕
               </button>
@@ -288,8 +288,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 onClick={() => setPriceRange(p.id as typeof priceRange)}
                 className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                   priceRange === p.id
-                    ? 'bg-stone-900 text-white font-extrabold shadow-sm'
-                    : 'bg-stone-100 hover:bg-stone-200/80 text-stone-600'
+                    ? 'bg-[#841724] text-[#faedd3] font-extrabold shadow-sm'
+                    : 'bg-[#f8f0dc] hover:bg-[#f3e5c9] text-[#2b0b12] border border-[#841724]/10'
                 }`}
               >
                 {p.label}
@@ -303,23 +303,23 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="appearance-none bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-800 text-xs font-bold rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-purple-500 cursor-pointer"
+                className="appearance-none bg-[#f8f0dc] hover:bg-[#f3e5c9] border border-[#841724]/20 text-[#2b0b12] text-xs font-bold rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-[#841724] cursor-pointer"
               >
                 <option value="featured">Sort: Featured</option>
                 <option value="priceAsc">Price: Low to High</option>
                 <option value="priceDesc">Price: High to Low</option>
                 <option value="rating">Top Rated</option>
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-stone-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#841724]/60 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
         </div>
 
         {/* 4. PRODUCTS COUNT SUMMARY */}
-        <div className="flex items-center justify-between mb-4 text-xs font-semibold text-stone-500">
+        <div className="flex items-center justify-between mb-4 text-xs font-semibold text-[#7c5c62]">
           <span>
-            Showing <strong className="text-stone-900">{visibleProducts.length}</strong> of{' '}
-            <strong className="text-stone-900">{filteredProducts.length}</strong> products
+            Showing <strong className="text-[#2b0b12]">{visibleProducts.length}</strong> of{' '}
+            <strong className="text-[#2b0b12]">{filteredProducts.length}</strong> products
           </span>
           {filteredProducts.length !== products.length && (
             <button
@@ -328,7 +328,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 setSearchFilter('');
                 setPriceRange('all');
               }}
-              className="text-purple-700 hover:text-purple-900 font-bold"
+              className="text-[#841724] hover:text-[#5c0f19] font-bold"
             >
               Clear filters
             </button>
@@ -341,12 +341,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             {visibleProducts.map((product) => (
               <div
                 key={product.id}
-                className="group relative bg-white rounded-2xl sm:rounded-[26px] p-2.5 sm:p-4 border border-stone-200/80 hover:border-purple-300 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                className="group relative bg-[#faedd3] rounded-2xl sm:rounded-[26px] p-2.5 sm:p-4 border border-[#841724]/15 hover:border-[#841724]/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
               >
                 {/* IMAGE WRAPPER */}
                 <div 
                   onClick={() => onQuickView(product)}
-                  className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 mb-2.5 sm:mb-3.5 cursor-pointer"
+                  className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-[#f8f0dc] mb-2.5 sm:mb-3.5 cursor-pointer"
                 >
                   <img
                     src={product.image}
@@ -361,19 +361,19 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                   {/* BADGE */}
                   {product.badge && (
-                    <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 bg-white/95 backdrop-blur-md text-[#4a044e] border border-purple-200 text-[8px] sm:text-[10px] font-black px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                    <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 bg-[#841724] text-[#faedd3] text-[8px] sm:text-[10px] font-black px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
                       {product.badge}
                     </span>
                   )}
 
                   {/* DESKTOP HOVER OVERLAY */}
-                  <div className="hidden sm:flex absolute inset-0 bg-black/35 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center gap-2.5">
+                  <div className="hidden sm:flex absolute inset-0 bg-[#2b0b12]/35 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center gap-2.5">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onQuickView(product);
                       }}
-                      className="p-2.5 rounded-full bg-white text-stone-900 hover:bg-[#edd2f7] hover:text-[#4a044e] transition-all transform hover:scale-110 shadow-lg cursor-pointer"
+                      className="p-2.5 rounded-full bg-[#faedd3] text-[#841724] hover:bg-[#841724] hover:text-[#faedd3] transition-all transform hover:scale-110 shadow-lg cursor-pointer"
                       title="Quick View"
                       aria-label={`Quick View ${product.name}`}
                     >
@@ -384,7 +384,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         e.stopPropagation();
                         onAddToCart(product);
                       }}
-                      className="p-2.5 rounded-full bg-[#edd2f7] text-[#4a044e] hover:bg-white transition-all transform hover:scale-110 shadow-lg cursor-pointer"
+                      className="p-2.5 rounded-full bg-[#841724] text-[#faedd3] hover:bg-[#5c0f19] transition-all transform hover:scale-110 shadow-lg cursor-pointer"
                       title="Add to Cart"
                       aria-label={`Add ${product.name} to Cart`}
                     >
@@ -398,7 +398,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       e.stopPropagation();
                       onQuickView(product);
                     }}
-                    className="sm:hidden absolute bottom-2 right-2 p-1.5 rounded-full bg-black/60 backdrop-blur-md text-white border border-white/20 shadow-md"
+                    className="sm:hidden absolute bottom-2 right-2 p-1.5 rounded-full bg-[#841724]/80 backdrop-blur-md text-[#faedd3] border border-[#faedd3]/20 shadow-md"
                     aria-label="Quick View"
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -409,35 +409,35 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 <div className="flex flex-col flex-1 justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[9px] sm:text-[11px] font-extrabold text-purple-700 uppercase tracking-wider truncate">
+                      <span className="text-[9px] sm:text-[11px] font-extrabold text-[#841724] uppercase tracking-wider truncate">
                         {product.category}
                       </span>
-                      <div className="flex items-center gap-0.5 text-[10px] sm:text-xs text-amber-500 font-bold shrink-0">
-                        <Star className="w-3 h-3 fill-amber-500" />
+                      <div className="flex items-center gap-0.5 text-[10px] sm:text-xs text-amber-600 font-bold shrink-0">
+                        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                         <span>{product.rating}</span>
                       </div>
                     </div>
 
                     <h3 
                       onClick={() => onQuickView(product)}
-                      className="text-xs sm:text-base font-bold text-stone-900 group-hover:text-purple-900 transition-colors line-clamp-1 leading-snug cursor-pointer"
+                      className="text-xs sm:text-base font-bold text-[#2b0b12] group-hover:text-[#841724] transition-colors line-clamp-1 leading-snug cursor-pointer"
                     >
                       {product.name}
                     </h3>
 
-                    <p className="hidden sm:block text-[11px] text-stone-500 font-medium line-clamp-2 mt-1 leading-relaxed">
+                    <p className="hidden sm:block text-[11px] text-[#7c5c62] font-medium line-clamp-2 mt-1 leading-relaxed">
                       {product.description}
                     </p>
                   </div>
 
                   {/* PRICE & ADD BUTTON */}
-                  <div className="flex items-center justify-between pt-2.5 sm:pt-3 mt-2 sm:mt-3 border-t border-stone-100">
+                  <div className="flex items-center justify-between pt-2.5 sm:pt-3 mt-2 sm:mt-3 border-t border-[#841724]/10">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-sm sm:text-lg font-black text-stone-950">
+                      <span className="text-sm sm:text-lg font-black text-[#2b0b12]">
                         ₹{product.price}
                       </span>
                       {product.originalPrice && (
-                        <span className="text-[10px] sm:text-xs text-stone-400 line-through font-semibold">
+                        <span className="text-[10px] sm:text-xs text-[#7c5c62]/70 line-through font-semibold">
                           ₹{product.originalPrice}
                         </span>
                       )}
@@ -445,7 +445,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                     <button
                       onClick={() => onAddToCart(product)}
-                      className="bg-[#edd2f7] hover:bg-[#e4c2f1] active:scale-95 text-[#4a044e] font-extrabold text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1 transition-all cursor-pointer shadow-sm"
+                      className="bg-[#841724] hover:bg-[#5c0f19] active:scale-95 text-[#faedd3] font-extrabold text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1 transition-all cursor-pointer shadow-sm"
                       aria-label={`Add ${product.name} to Cart`}
                     >
                       <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -457,10 +457,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-stone-300 p-8">
+          <div className="text-center py-16 bg-[#faedd3] rounded-3xl border border-dashed border-[#841724]/30 p-8">
             <span className="text-4xl">🧶</span>
-            <h3 className="text-lg font-bold text-stone-900 mt-2">No matching products found</h3>
-            <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto">
+            <h3 className="text-lg font-bold text-[#2b0b12] mt-2">No matching products found</h3>
+            <p className="text-xs text-[#7c5c62] mt-1 max-w-sm mx-auto">
               We couldn&apos;t find any items matching your current filters. Try resetting your search or price range.
             </p>
             <button
@@ -469,7 +469,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 setSearchFilter('');
                 setPriceRange('all');
               }}
-              className="mt-4 px-4 py-2 bg-stone-900 text-white rounded-full text-xs font-bold"
+              className="mt-4 px-4 py-2 bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] rounded-full text-xs font-bold"
             >
               Reset Filters
             </button>
@@ -479,26 +479,26 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         {/* 6. PAGINATION / LOAD MORE (MOBILE PERFORMANCE ENHANCER) */}
         {visibleProducts.length < filteredProducts.length && (
           <div className="mt-10 sm:mt-14 flex flex-col items-center justify-center gap-3">
-            <div className="w-48 h-1.5 bg-stone-200 rounded-full overflow-hidden">
+            <div className="w-48 h-1.5 bg-[#841724]/15 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-purple-600 rounded-full transition-all duration-300"
+                className="h-full bg-[#841724] rounded-full transition-all duration-300"
                 style={{ width: `${(visibleProducts.length / filteredProducts.length) * 100}%` }}
               />
             </div>
-            <p className="text-xs text-stone-500 font-medium">
+            <p className="text-xs text-[#7c5c62] font-medium">
               Showing {visibleProducts.length} of {filteredProducts.length} items
             </p>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handleLoadMore}
-                className="px-6 py-2.5 bg-stone-900 hover:bg-stone-800 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95"
+                className="px-6 py-2.5 bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] font-extrabold text-xs sm:text-sm rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95"
               >
                 Load More (+24 items)
               </button>
               <button
                 onClick={handleShowAll}
-                className="px-5 py-2.5 bg-white hover:bg-stone-100 text-stone-700 border border-stone-200 font-bold text-xs sm:text-sm rounded-full transition-all cursor-pointer"
+                className="px-5 py-2.5 bg-[#faedd3] hover:bg-[#f6ebd4] text-[#841724] border border-[#841724]/20 font-bold text-xs sm:text-sm rounded-full transition-all cursor-pointer"
               >
                 View All ({filteredProducts.length})
               </button>

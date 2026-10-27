@@ -137,13 +137,13 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
   const trackTranslate = `calc(50vw - ${slideWidth / 2}px - 8px - ${currentIndex * itemStep}px + ${dragOffset}px)`;
 
   return (
-    <section id="most-wanted-section" className="w-full bg-[#fdfdfd] text-black py-8 sm:py-24 overflow-hidden select-none relative font-['DM_Sans',sans-serif]">
+    <section id="most-wanted-section" className="w-full bg-[#faf4e8] text-[#2b0b12] py-8 sm:py-24 overflow-hidden select-none relative font-['DM_Sans',sans-serif]">
       {/* SECTION HEADER */}
       <div className="max-w-4xl mx-auto px-4 text-center mb-5 sm:mb-14">
-        <h2 className="text-3xl sm:text-7xl md:text-8xl font-black tracking-tight text-black uppercase mb-2 sm:mb-4 leading-[0.95]">
+        <h2 className="text-3xl sm:text-7xl md:text-8xl font-black tracking-tight text-[#2b0b12] uppercase mb-2 sm:mb-4 leading-[0.95]">
           MOST<br className="hidden sm:inline" /> WANTED
         </h2>
-        <p className="text-xs sm:text-base text-stone-600 font-medium max-w-md mx-auto leading-relaxed px-2">
+        <p className="text-xs sm:text-base text-[#7c5c62] font-medium max-w-md mx-auto leading-relaxed px-2">
           The pieces you'll wear on repeat. Clean design, effortless styling, and lasting quality for every season.
         </p>
       </div>
@@ -239,13 +239,13 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
                 }`}
               >
                 {/* LABELS ABOVE EACH PHOTO */}
-                <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-black mb-1.5 px-0.5 tracking-tight">
+                <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-[#2b0b12] mb-1.5 px-0.5 tracking-tight">
                   <span className="truncate pr-2 font-bold">{item.title}</span>
-                  <span className="shrink-0 text-stone-600 text-[10px] sm:text-xs">{item.tag}</span>
+                  <span className="shrink-0 text-[#7c5c62] text-[10px] sm:text-xs">{item.tag}</span>
                 </div>
 
                 {/* IMAGE FRAME */}
-                <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] bg-stone-100 rounded-xl sm:rounded-none overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] bg-[#faedd3] rounded-xl sm:rounded-none overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <img
                     src={item.image}
                     alt={item.title}
@@ -254,7 +254,7 @@ export const MostWantedCarousel: React.FC<MostWantedCarouselProps> = ({
                   />
                   {/* Subtle price tag pill on active image */}
                   {isActive && (
-                    <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 bg-white/95 backdrop-blur-md px-2.5 py-1 text-xs font-bold text-black border border-black/10 rounded-md sm:rounded-none shadow-sm">
+                    <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 bg-[#841724] text-[#faedd3] backdrop-blur-md px-2.5 py-1 text-xs font-bold border border-[#841724]/20 rounded-md sm:rounded-none shadow-sm">
                       {item.price}
                     </div>
                   )}

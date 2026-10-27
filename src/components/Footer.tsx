@@ -19,7 +19,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
   };
 
   return (
-    <footer className="w-full bg-white px-3 sm:px-6 lg:px-10 pb-6 sm:pb-12 pt-2 sm:pt-4 overflow-hidden">
+    <footer className="w-full bg-[#faf4e8] px-3 sm:px-6 lg:px-10 pb-6 sm:pb-12 pt-2 sm:pt-4 overflow-hidden">
       {/* Outer Luxury Light Pink Card Container (#edd2f7) with Rounded Corners */}
       <div className="max-w-[1360px] mx-auto bg-gradient-to-br from-[#f8eafc] via-[#edd2f7] to-[#e4c2f1] text-[#4a044e] rounded-3xl sm:rounded-[44px] md:rounded-[56px] overflow-hidden p-5 sm:p-10 md:p-16 lg:p-20 relative select-none flex flex-col justify-between min-h-[500px] md:min-h-[660px] shadow-[0_20px_55px_-15px_rgba(237,210,247,0.7)] border border-[#deb6ed]/60">
         

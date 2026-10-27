@@ -48,7 +48,7 @@ export const FeaturedEditorialSection: React.FC<FeaturedEditorialSectionProps> =
   };
 
   return (
-    <section className="w-full bg-white py-12 md:py-24 px-3 sm:px-6 lg:px-12 flex justify-center overflow-hidden">
+    <section className="w-full bg-[#faf4e8] py-12 md:py-24 px-3 sm:px-6 lg:px-12 flex justify-center overflow-hidden">
       {/* Outer Banner Card with Warm Golden Gradient */}
       <div className="max-w-[1320px] w-full relative rounded-[28px] sm:rounded-[48px] md:rounded-[60px] overflow-hidden bg-gradient-to-br from-[#f8bc37] via-[#eb9d1b] to-[#d6850e] shadow-[0_25px_70px_-15px_rgba(235,157,27,0.4)] p-4 sm:p-10 md:p-14 lg:p-16 select-none flex flex-col justify-between min-h-[580px] sm:min-h-[760px] md:min-h-[880px] lg:min-h-[960px]">
         

@@ -260,8 +260,8 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
         </button>
       </div>
 
-      {/* 2. MAIN HEADER NAVBAR (Warm Cream/White #fffdfa background, Burgundy text/logo) */}
-      <div className="bg-[#fffdfa]/95 backdrop-blur-md border-b border-[#841724]/10 transition-all duration-200">
+      {/* 2. MAIN HEADER NAVBAR (Light Cream #faedd3 background, Burgundy text/logo) */}
+      <div className="bg-[#faedd3] border-b border-[#841724]/15 transition-all duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* TOP ROW: Search on left, Logo in center, Icons on right */}
@@ -396,10 +396,10 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                       onMouseEnter={() => handleMouseEnter(cat.id)}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <div className="bg-[#fffdfa] rounded-2xl shadow-2xl border border-[#841724]/15 p-4 xl:p-5 overflow-hidden">
+                      <div className="bg-[#faedd3] rounded-2xl shadow-2xl border border-[#841724]/20 p-4 xl:p-5 overflow-hidden">
                         
                         {/* Dropdown Header */}
-                        <div className="flex items-center justify-between pb-3 border-b border-[#841724]/10">
+                        <div className="flex items-center justify-between pb-3 border-b border-[#841724]/12">
                           <div className="flex items-center gap-2">
                             <span className="text-xl">{cat.emoji}</span>
                             <div>
@@ -426,10 +426,10 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                                 setActiveDropdown(null);
                                 onQuickView?.(product);
                               }}
-                              className="group flex flex-col bg-[#faf4e8]/60 hover:bg-[#faf4e8] p-2 rounded-xl border border-[#841724]/10 transition-all hover:shadow-md cursor-pointer text-left"
+                              className="group flex flex-col bg-[#f8f0dc] hover:bg-[#f3e5c9] p-2 rounded-xl border border-[#841724]/10 transition-all hover:shadow-md cursor-pointer text-left"
                             >
                               {/* Embedded Shopify Image */}
-                              <div className="w-full aspect-square rounded-lg overflow-hidden bg-white mb-2 relative">
+                              <div className="w-full aspect-square rounded-lg overflow-hidden bg-[#f8f0dc] mb-2 relative">
                                 <img
                                   src={product.image}
                                   alt={product.name}
@@ -518,7 +518,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
           />
 
           {/* Drawer content */}
-          <div className="fixed inset-y-0 left-0 w-full max-w-sm bg-[#fffdfa] shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-200">
+          <div className="fixed inset-y-0 left-0 w-full max-w-sm bg-[#faedd3] shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-200">
             <div>
               {/* Header */}
               <div className="p-4 flex items-center justify-between border-b border-[#841724]/10">
@@ -574,7 +574,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                       </button>
 
                       {isExpanded && (
-                        <div className="p-2 space-y-2 bg-[#fffdfa] border-t border-[#841724]/10">
+                        <div className="p-2 space-y-2 bg-[#f8f0dc] border-t border-[#841724]/10">
                           {catProducts.slice(0, 3).map((product) => (
                             <div
                               key={product.id}
