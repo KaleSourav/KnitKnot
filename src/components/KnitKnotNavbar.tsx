@@ -15,7 +15,12 @@ import {
   Star,
   Truck,
   Gift,
-  Check
+  Check,
+  Ribbon,
+  Flower2,
+  Shapes,
+  Sprout,
+  KeyRound
 } from 'lucide-react';
 import { Product } from '../data/products';
 import logoImg from '../assets/logo-knotsnco.png';
@@ -24,7 +29,7 @@ export interface NavCategoryConfig {
   id: string;
   name: string;
   tagline: string;
-  emoji: string;
+  icon: React.ComponentType<{ className?: string }>;
   badge?: string;
   highlights: string[];
   filter: (p: Product) => boolean;
@@ -35,7 +40,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'bags',
     name: 'Bags',
     tagline: 'Handmade Daisy & Sunflower Carryalls',
-    emoji: '👜',
+    icon: ShoppingBag,
     badge: 'Trending Edit',
     highlights: ['Granny Square Totes', 'Resort Shoulder Bags', 'Mini Pastel Carryalls', 'Crochet Coin Purses'],
     filter: (p) => {
@@ -48,7 +53,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'accessories',
     name: 'Accessories',
     tagline: 'Floral Hair Clips, Gajras & Bandanas',
-    emoji: '🎀',
+    icon: Ribbon,
     badge: 'Artisan Picks',
     highlights: ['Floral Hair Clips', 'Coquette Bow Clips', 'Embroidered Bandanas', 'Handmade Gajras'],
     filter: (p) => {
@@ -69,7 +74,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'flowers',
     name: 'Flowers',
     tagline: 'Everlasting Roses, Lilies & Foliage',
-    emoji: '🌸',
+    icon: Flower2,
     badge: 'Top Bestseller',
     highlights: ['Everlasting Roses', 'White Lily Bouquets', 'Pastel Sunrise Tulips', 'Sunbeam Sunflowers'],
     filter: (p) => {
@@ -92,7 +97,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'home-decore',
     name: 'Home Decore',
     tagline: 'Character Standees, Vases & Magnets',
-    emoji: '🏺',
+    icon: Shapes,
     badge: 'Studio Favorites',
     highlights: ['Character Standees', 'Handmade Vases', 'Cute Fridge Magnets', 'Desk Ornaments'],
     filter: (p) => {
@@ -113,7 +118,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'flower-pots',
     name: 'Flower Pots',
     tagline: 'Desk Potted Plants & Illuminated Lilies',
-    emoji: '🪴',
+    icon: Sprout,
     badge: 'Everlasting Gift',
     highlights: ['Desk Potted Plants', 'Illuminated Lilies', 'Mini Succulents', 'Forever Blossoms'],
     filter: (p) => {
@@ -126,7 +131,7 @@ export const NAV_CATEGORIES: NavCategoryConfig[] = [
     id: 'keychains-bag-charms',
     name: 'Keychains & Bag Charms',
     tagline: 'Fruit Turtles, Pocket Pals & Charms',
-    emoji: '🔑',
+    icon: KeyRound,
     badge: 'Pocket Pals',
     highlights: ['Pocket Fruit Turtles', 'Coquette Bow Charms', 'Amigurumi Keychains', 'Bag Companions'],
     filter: (p) => {
@@ -239,18 +244,54 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
     }
   };
 
-  const handleMouseEnter = (catId: string) => {
+  // Precise hover tracking:
+  // 1. When hovering over a category tab: immediately clear timeout and open the dropdown
+  const handleTabMouseEnter = (catId: string) => {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
     }
     setActiveDropdown(catId);
   };
 
-  const handleMouseLeave = () => {
+  // 2. When hovering out from that category tab: close promptly if cursor does NOT enter floating window
+  const handleTabMouseLeave = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
     dropdownTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-    }, 240);
+    }, 120);
   };
+
+  // 3. When pointer enters or is on the floating window: cancel timeout so it does NOT disappear
+  const handleDropdownMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+  };
+
+  // 4. When pointer leaves the floating window: close it promptly
+  const handleDropdownMouseLeave = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 80);
+  };
+
+  // 5. Auto-dismiss floating window on page scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (activeDropdown) {
+        setActiveDropdown(null);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeDropdown]);
 
   const activeCatConfig = useMemo(() => {
     return NAV_CATEGORIES.find((c) => c.id === activeDropdown) || null;
@@ -394,18 +435,20 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
 
           {/* BOTTOM ROW: The 6 Exact Categories with Rich Mega Dropdown (Desktop) */}
           <div 
-            className="hidden lg:flex items-center justify-center gap-3 xl:gap-6 pb-2.5 pt-0 border-t border-[#841724]/10 relative"
-            onMouseLeave={handleMouseLeave}
+            className="hidden lg:flex items-center justify-center gap-2 xl:gap-5 pb-2.5 pt-0 border-t border-[#841724]/10 relative"
+            onMouseLeave={handleTabMouseLeave}
           >
             {NAV_CATEGORIES.map((cat) => {
               const isOpen = activeDropdown === cat.id;
               const isSelected = activeTab.toLowerCase() === cat.name.toLowerCase();
+              const CatIcon = cat.icon;
 
               return (
                 <div
                   key={cat.id}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(cat.id)}
+                  className="relative group"
+                  onMouseEnter={() => handleTabMouseEnter(cat.id)}
+                  onMouseLeave={handleTabMouseLeave}
                 >
                   <button
                     onClick={() => handleCategorySelect(cat.name)}
@@ -417,7 +460,9 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                         : 'text-[#4a121d] hover:text-[#841724] hover:bg-[#841724]/6'
                     }`}
                   >
-                    <span>{cat.emoji}</span>
+                    <CatIcon className={`w-3.5 h-3.5 xl:w-4 xl:h-4 stroke-[2.2] transition-colors ${
+                      isOpen || isSelected ? 'text-[#841724]' : 'text-[#841724]/75 group-hover:text-[#841724]'
+                    }`} />
                     <span>{cat.name}</span>
                     <ChevronDown
                       className={`w-3.5 h-3.5 transition-transform duration-300 stroke-[2.2] ${
@@ -444,19 +489,17 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
             {/* EXPANSIVE LUXURY MEGA DROPDOWN (CENTERED & NEAT) */}
             {activeDropdown && activeCatConfig && (
               <div
-                className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-[94vw] max-w-[1140px] pt-1.5 animate-in fade-in zoom-in-[0.99] slide-in-from-top-1 duration-200 pointer-events-auto"
-                onMouseEnter={() => {
-                  if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-                }}
-                onMouseLeave={handleMouseLeave}
+                className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-[94vw] max-w-[1140px] pt-1.5 pointer-events-auto before:absolute before:-top-3.5 before:left-0 before:right-0 before:h-3.5 before:content-[''] animate-in fade-in zoom-in-[0.99] slide-in-from-top-1 duration-150"
+                onMouseEnter={handleDropdownMouseEnter}
+                onMouseLeave={handleDropdownMouseLeave}
               >
                 <div className="bg-[#faedd3] rounded-3xl shadow-[0_25px_60px_-15px_rgba(132,23,36,0.22)] border border-[#841724]/20 p-5 xl:p-6 overflow-hidden backdrop-blur-md">
                   
                   {/* 1. TOP HEADER ROW */}
                   <div className="flex items-center justify-between pb-3.5 border-b border-[#841724]/12">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-2xl bg-[#f8f0dc] border border-[#841724]/20 flex items-center justify-center text-2xl shadow-sm shrink-0">
-                        {activeCatConfig.emoji}
+                      <div className="w-11 h-11 rounded-2xl bg-[#f8f0dc] border border-[#841724]/20 flex items-center justify-center text-[#841724] shadow-sm shrink-0">
+                        <activeCatConfig.icon className="w-5 h-5 stroke-[2.2]" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -710,8 +753,10 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                         onClick={() => setExpandedMobileCategory(isExpanded ? null : cat.id)}
                         className="w-full p-3 flex items-center justify-between text-left font-bold text-sm text-[#2d0a10] bg-[#faf4e8]/60 hover:bg-[#faf4e8]"
                       >
-                        <span className="flex items-center gap-2">
-                          <span>{cat.emoji}</span>
+                        <span className="flex items-center gap-2.5">
+                          <span className="w-6 h-6 rounded-md bg-[#841724]/10 flex items-center justify-center text-[#841724] shrink-0">
+                            <cat.icon className="w-3.5 h-3.5 stroke-[2.2]" />
+                          </span>
                           <span>{cat.name}</span>
                         </span>
                         <ChevronDown className={`w-4 h-4 text-[#841724] transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
