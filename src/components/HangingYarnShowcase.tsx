@@ -189,7 +189,10 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return counts;
   }, [products]);
 
-  // Track scroll progress for bottom progress bar
+  const lastScrollLeftRef = useRef(0);
+  const lastScrollTimeRef = useRef(performance.now());
+
+  // Track scroll progress for bottom progress bar & impart physics on mobile touch scroll
   const updateScrollProgress = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -198,6 +201,21 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
       setScrollProgress(0);
     } else {
       setScrollProgress(Math.min(1, Math.max(0, el.scrollLeft / maxScroll)));
+    }
+
+    // Dynamic swing impulse from finger swiping / touch scrolling on mobile
+    const currentScroll = el.scrollLeft;
+    const currentTime = performance.now();
+    const dt = Math.max(1, currentTime - lastScrollTimeRef.current);
+    const dx = currentScroll - lastScrollLeftRef.current;
+    const scrollVelocity = dx / dt;
+    lastScrollLeftRef.current = currentScroll;
+    lastScrollTimeRef.current = currentTime;
+
+    if (Math.abs(scrollVelocity) > 0.05) {
+      const clamped = Math.max(-14, Math.min(14, -scrollVelocity * 10));
+      physicsRef.current.targetAngle = clamped;
+      physicsRef.current.angularVelocity += -scrollVelocity * 6;
     }
   }, []);
 
@@ -361,6 +379,8 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     if (!el) return;
     const p = physicsRef.current;
     p.isDragging = true;
+    p.startX = e.touches[0].pageX - el.offsetLeft;
+    p.scrollStart = el.scrollLeft;
     p.lastPointerX = e.touches[0].pageX;
     p.lastPointerTime = performance.now();
     p.dragVelocityX = 0;
@@ -369,6 +389,9 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   const handleTouchMove = (e: React.TouchEvent) => {
     const p = physicsRef.current;
     if (!p.isDragging) return;
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
     const currentX = e.touches[0].pageX;
     const currentTime = performance.now();
     const dt = Math.max(1, currentTime - p.lastPointerTime);
@@ -378,14 +401,14 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     p.lastPointerX = currentX;
     p.lastPointerTime = currentTime;
 
-    const clampedVelocity = Math.max(-10, Math.min(10, -p.dragVelocityX * 7));
+    const clampedVelocity = Math.max(-14, Math.min(14, -p.dragVelocityX * 8.5));
     p.targetAngle = clampedVelocity;
   };
 
   const handleTouchEnd = () => {
     const p = physicsRef.current;
     p.isDragging = false;
-    p.angularVelocity += Math.max(-18, Math.min(18, -p.dragVelocityX * 14));
+    p.angularVelocity += Math.max(-20, Math.min(20, -p.dragVelocityX * 16));
     p.targetAngle = 0;
   };
 
@@ -503,8 +526,36 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                 Bespoke crochet totes, cuddly companions, and artisanal keepsakes. Glide along the clothesline to discover today's hand-hung pieces.
               </p>
 
-              {/* Category Shelves List: Luxury Vector Badges with Micro-Interactions (No Emojis!) */}
-              <div className="space-y-1 mb-4 max-w-sm">
+              {/* Mobile Category Pill Bar (Horizontal scroll with touch feedback for small screens) */}
+              <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-3 mb-4 no-scrollbar -mx-2 px-2">
+                {SHELF_CATEGORIES.map((shelf) => {
+                  const isSelected = selectedShelfId === shelf.id;
+                  const count = shelfCounts[shelf.id] || 0;
+                  return (
+                    <button
+                      key={shelf.id}
+                      onClick={() => handleCategorySwitch(shelf.id)}
+                      type="button"
+                      className={`px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-2 transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#841724] text-[#faedd3] shadow-md border border-[#841724] scale-102'
+                          : 'bg-white/80 text-[#2b0b12] border border-[#841724]/15 hover:bg-white'
+                      }`}
+                    >
+                      <span className="w-4 h-4">{shelf.icon}</span>
+                      <span>{shelf.label}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                        isSelected ? 'bg-white/20 text-[#faedd3]' : 'bg-[#841724]/10 text-[#841724]'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Category Shelves List: Luxury Vector Badges with Micro-Interactions */}
+              <div className="hidden lg:block space-y-1 mb-4 max-w-sm">
                 {SHELF_CATEGORIES.map((shelf) => {
                   const isSelected = selectedShelfId === shelf.id;
                   const count = shelfCounts[shelf.id] || 0;

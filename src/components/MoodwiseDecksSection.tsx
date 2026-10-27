@@ -415,8 +415,8 @@ export const MoodwiseDecksSection: React.FC<MoodwiseDecksSectionProps> = ({
           </div>
         </div>
 
-        {/* 5) 4-CARD DECKS ROW */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
+        {/* 5) 4-CARD DECKS ROW (2 cols on mobile, 4 on desktop) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-10 sm:mb-16">
           {MOOD_DECKS.map((deck) => {
             const isSelected = selectedMood === deck.id;
 
@@ -424,24 +424,24 @@ export const MoodwiseDecksSection: React.FC<MoodwiseDecksSectionProps> = ({
               <div
                 key={deck.id}
                 onClick={() => setSelectedMood(isSelected ? 'all' : deck.id)}
-                className={`relative rounded-3xl p-5 sm:p-6 cursor-pointer transition-all duration-400 border flex flex-col justify-between overflow-hidden group shadow-sm hover:shadow-xl ${
+                className={`relative rounded-2xl sm:rounded-3xl p-3 sm:p-6 cursor-pointer transition-all duration-300 border flex flex-col justify-between overflow-hidden group shadow-sm hover:shadow-xl ${
                   isSelected
                     ? 'border-[#841724] ring-2 ring-[#841724]/40 scale-[1.02] bg-[#faedd3]'
-                    : 'border-[#841724]/15 hover:border-[#841724]/40 bg-[#faedd3]/70 hover:bg-[#faedd3]'
+                    : 'border-[#841724]/15 hover:border-[#841724]/40 bg-white/80 hover:bg-white'
                 }`}
               >
                 {/* Top Badge & Count */}
-                <div className="flex items-center justify-between mb-4 z-10">
-                  <span className="px-2.5 py-1 rounded-full bg-white/90 text-[#841724] text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider backdrop-blur-sm border border-[#841724]/15 shadow-sm">
+                <div className="flex items-center justify-between mb-2 sm:mb-4 z-10">
+                  <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-white/90 text-[#841724] text-[9px] sm:text-[11px] font-black uppercase tracking-wider backdrop-blur-sm border border-[#841724]/15 shadow-sm">
                     {deck.badge}
                   </span>
-                  <span className="text-xs font-bold text-[#7c5c62]">
-                    {deck.count} Pieces
+                  <span className="text-[10px] sm:text-xs font-bold text-[#7c5c62]">
+                    {deck.count} Pcs
                   </span>
                 </div>
 
-                {/* Deck Visual Thumbnail in Circular / Rounded Frame */}
-                <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-white/80 mb-4 border border-[#841724]/10">
+                {/* Deck Visual Thumbnail in Rounded Frame */}
+                <div className="relative w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white/80 mb-2.5 sm:mb-4 border border-[#841724]/10">
                   <img
                     src={deck.image}
                     alt={deck.title}
@@ -454,16 +454,16 @@ export const MoodwiseDecksSection: React.FC<MoodwiseDecksSectionProps> = ({
                 {/* Content */}
                 <div className="z-10">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base sm:text-lg font-bold text-[#2b0b12] font-serif group-hover:text-[#841724] transition-colors">
+                    <h3 className="text-xs sm:text-base font-bold text-[#2b0b12] font-serif group-hover:text-[#841724] transition-colors line-clamp-1">
                       {deck.title}
                     </h3>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                    <div className={`w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
                       isSelected ? 'bg-[#841724] text-[#faedd3]' : 'bg-white/80 text-[#841724] group-hover:bg-[#841724] group-hover:text-[#faedd3]'
                     }`}>
-                      <ArrowUpRight className="w-4 h-4" />
+                      <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4" />
                     </div>
                   </div>
-                  <p className="text-xs text-[#7c5c62] mt-1 font-medium leading-relaxed">
+                  <p className="text-[10px] sm:text-xs text-[#7c5c62] mt-0.5 sm:mt-1 font-medium leading-tight sm:leading-relaxed line-clamp-2">
                     {deck.subtitle}
                   </p>
                 </div>

@@ -118,8 +118,8 @@ export const AutoBannerSlideshow: React.FC<AutoBannerSlideshowProps> = ({ onBann
           onTouchEnd={handleTouchEnd}
           onClick={() => onBannerClick?.(currentIndex)}
         >
-          {/* 2:1 Aspect Ratio container with responsive minimum heights */}
-          <div className="relative w-full aspect-[2/1] min-h-[200px] sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px] flex items-center justify-center overflow-hidden">
+          {/* 16:9 on mobile, 2:1 on desktop Aspect Ratio container with responsive minimum heights */}
+          <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] min-h-[210px] sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px] flex items-center justify-center overflow-hidden">
             {BANNERS.map((banner, index) => {
               const isActive = index === currentIndex;
               return (
@@ -145,8 +145,8 @@ export const AutoBannerSlideshow: React.FC<AutoBannerSlideshowProps> = ({ onBann
 
                   {/* Cute Badge on Top Right */}
                   {banner.badge && (
-                    <div className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-20">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/85 text-[#841724] backdrop-blur-md text-[11px] sm:text-xs font-bold shadow-md border border-white/50 tracking-wide uppercase">
+                    <div className="absolute top-2.5 right-2.5 sm:top-5 sm:right-5 z-20">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/85 text-[#841724] backdrop-blur-md text-[10px] sm:text-xs font-bold shadow-md border border-white/50 tracking-wide uppercase">
                         <Sparkles className="w-3 h-3 text-[#841724]" />
                         {banner.badge}
                       </span>
@@ -165,9 +165,9 @@ export const AutoBannerSlideshow: React.FC<AutoBannerSlideshowProps> = ({ onBann
               prevSlide();
             }}
             aria-label="Previous Banner Slide"
-            className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#faedd3]/85 hover:bg-[#841724] text-[#841724] hover:text-[#faedd3] backdrop-blur-md shadow-lg flex items-center justify-center transition-all duration-300 opacity-90 group-hover:opacity-100 hover:scale-105"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#faedd3]/85 hover:bg-[#841724] text-[#841724] hover:text-[#faedd3] backdrop-blur-md shadow-lg flex items-center justify-center transition-all duration-300 opacity-90 group-hover:opacity-100 hover:scale-105"
           >
-            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
           </button>
 
           {/* Right Arrow Button */}
@@ -178,9 +178,9 @@ export const AutoBannerSlideshow: React.FC<AutoBannerSlideshowProps> = ({ onBann
               nextSlide();
             }}
             aria-label="Next Banner Slide"
-            className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#faedd3]/85 hover:bg-[#841724] text-[#841724] hover:text-[#faedd3] backdrop-blur-md shadow-lg flex items-center justify-center transition-all duration-300 opacity-90 group-hover:opacity-100 hover:scale-105"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#faedd3]/85 hover:bg-[#841724] text-[#841724] hover:text-[#faedd3] backdrop-blur-md shadow-lg flex items-center justify-center transition-all duration-300 opacity-90 group-hover:opacity-100 hover:scale-105"
           >
-            <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
           </button>
 
           {/* Bottom Bar: Dots & Pause/Play Indicator */}

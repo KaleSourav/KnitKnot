@@ -228,19 +228,19 @@ export const InstaReelsSection: React.FC<InstaReelsSectionProps> = ({
                       e.stopPropagation();
                       handleBuyFromReel(reel);
                     }}
-                    className="mt-1 flex items-center justify-between p-2 rounded-2xl bg-[#faf4e8]/95 backdrop-blur-md border border-white/60 shadow-lg hover:bg-white transition-all duration-200"
+                    className="mt-1 flex items-center justify-between p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-[#faf4e8]/95 backdrop-blur-md border border-white/60 shadow-lg hover:bg-white transition-all duration-200"
                   >
-                    <div className="flex items-center gap-2 overflow-hidden pr-1">
+                    <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden pr-1">
                       <img
                         src={reel.product.image}
                         alt={reel.product.name}
-                        className="w-8 h-8 rounded-xl object-cover shrink-0 border border-[#841724]/20"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl object-cover shrink-0 border border-[#841724]/20"
                       />
                       <div className="overflow-hidden">
-                        <p className="text-[11px] font-bold text-[#2b0b12] truncate leading-tight">
+                        <p className="text-[10px] sm:text-[11px] font-bold text-[#2b0b12] truncate leading-tight">
                           {reel.product.name}
                         </p>
-                        <p className="text-[11px] font-black text-[#841724]">
+                        <p className="text-[10px] sm:text-[11px] font-black text-[#841724]">
                           ₹{reel.product.price}
                         </p>
                       </div>
@@ -249,13 +249,13 @@ export const InstaReelsSection: React.FC<InstaReelsSectionProps> = ({
                     <button
                       type="button"
                       aria-label="Add to bag"
-                      className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
                         isAdded 
                           ? 'bg-emerald-600 text-white' 
                           : 'bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3]'
                       }`}
                     >
-                      {isAdded ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+                      {isAdded ? <Check className="w-3 h-3 stroke-[3]" /> : <ShoppingBag className="w-3 h-3" />}
                     </button>
                   </div>
 
@@ -270,11 +270,11 @@ export const InstaReelsSection: React.FC<InstaReelsSectionProps> = ({
       {/* Interactive Reel Playback Modal */}
       {activeModalReel && (
         <div 
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-in fade-in duration-200"
           onClick={handleCloseModal}
         >
           <div 
-            className="relative w-full max-w-sm aspect-[9/16] max-h-[88vh] rounded-[32px] overflow-hidden bg-black shadow-2xl border border-white/20 flex flex-col justify-between"
+            className="relative w-full max-w-sm aspect-[9/16] max-h-[92svh] sm:max-h-[88vh] rounded-3xl sm:rounded-[32px] overflow-hidden bg-black shadow-2xl border border-white/20 flex flex-col justify-between"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}

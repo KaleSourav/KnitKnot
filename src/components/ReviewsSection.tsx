@@ -156,7 +156,7 @@ export const ReviewsSection: React.FC = () => {
           {REVIEWS.map((rev) => (
             <div
               key={rev.id}
-              className="w-[280px] sm:w-[340px] shrink-0 snap-start bg-[#faedd3] rounded-3xl p-5 sm:p-6 border border-[#841724]/15 hover:border-[#841724]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="w-[250px] sm:w-[320px] md:w-[360px] shrink-0 snap-start bg-[#faedd3] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-[#841724]/15 hover:border-[#841724]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 {/* Rating Stars & Quote Icon */}

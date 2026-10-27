@@ -165,7 +165,7 @@ export const BestSellerSection: React.FC<BestSellerSectionProps> = ({
             return (
               <div
                 key={product.id}
-                className="w-[270px] sm:w-[300px] md:w-[320px] shrink-0 snap-start"
+                className="w-[245px] sm:w-[280px] md:w-[320px] shrink-0 snap-start"
               >
                 <ModernProductCard
                   product={product}

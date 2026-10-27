@@ -216,7 +216,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               >
                 <span>{cat.emoji}</span>
                 <span>{cat.name}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-purple-900/20' : 'bg-stone-100'}`}>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-[#faedd3]' : 'bg-[#841724]/10 text-[#841724]'}`}>
                   {count}
                 </span>
               </button>
@@ -226,19 +226,19 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
         {/* 2. ACTIVE CATEGORY HERO BANNER (WHEN SPECIFIC CATEGORY IS SELECTED) */}
         {activeCategoryMeta && (
-          <div className="mb-6 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-900/10 via-pink-900/5 to-amber-900/10 border border-purple-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+          <div className="mb-6 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#faedd3] via-[#faf4e8] to-[#f8f0dc] border border-[#841724]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-3.5">
               <span className="text-3xl sm:text-4xl">{activeCategoryMeta.emoji}</span>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg sm:text-2xl font-black text-stone-900">
+                  <h3 className="text-lg sm:text-2xl font-black text-[#2b0b12] font-serif">
                     {activeCategoryMeta.name}
                   </h3>
-                  <span className={`px-2.5 py-0.5 rounded-full border text-[10px] font-extrabold ${activeCategoryMeta.accentBg}`}>
+                  <span className="px-2.5 py-0.5 rounded-full border border-[#841724]/20 bg-[#841724]/10 text-[#841724] text-[10px] font-extrabold">
                     {categoryCounts[activeCategoryMeta.name] || activeCategoryMeta.count} Products
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-stone-600 font-medium mt-0.5 max-w-xl">
+                <p className="text-xs sm:text-sm text-[#7c5c62] font-medium mt-0.5 max-w-xl">
                   {activeCategoryMeta.description}
                 </p>
               </div>
@@ -246,7 +246,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
             <button
               onClick={() => handleCategorySwitch('All Products')}
-              className="text-xs font-bold text-purple-700 hover:text-purple-900 underline underline-offset-4 self-end sm:self-auto cursor-pointer"
+              className="text-xs font-bold text-[#841724] hover:text-[#5c0f19] underline underline-offset-4 self-end sm:self-auto cursor-pointer"
             >
               Show All 252 Products
             </button>

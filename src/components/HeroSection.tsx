@@ -84,14 +84,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
 
   return (
-    <section className="relative w-full h-[calc(100vh-136px)] min-h-[480px] max-h-[880px] bg-[#faedd3] select-none flex flex-col justify-between overflow-hidden">
-      {/* 1. SINGLE STATIC HERO IMAGE (NO SLIDESHOW) - Spans 100% edge-to-edge */}
+    <section className="relative w-full h-[calc(100svh-110px)] sm:h-[calc(100vh-136px)] min-h-[400px] sm:min-h-[480px] max-h-[880px] bg-[#faedd3] select-none flex flex-col justify-between overflow-hidden">
+      {/* 1. RESPONSIVE HERO IMAGE (Mobile vertical vs Desktop widescreen) */}
       <div className="relative w-full flex-1 overflow-hidden flex items-center justify-center">
-        <img
-          src={landingHeroImage}
-          alt="Handmade Happiness Crochet Collection"
-          className="w-full h-full object-cover object-center"
-        />
+        <picture className="w-full h-full flex items-center justify-center">
+          <source media="(max-width: 640px)" srcSet="/knitknot-landing-mobile.jpg" />
+          <img
+            src={landingHeroImage}
+            alt="Handmade Happiness Crochet Collection"
+            className="w-full h-full object-cover object-center"
+          />
+        </picture>
 
         {/* Interactive Hotspot Pins on Products */}
         <div className="absolute inset-0 pointer-events-auto">
@@ -100,9 +103,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             const isHovered = activeHotspot?.id === spot.id;
 
             const alignmentClasses =
-              spot.xPercent < 25
+              spot.xPercent < 30
                 ? 'left-0 translate-x-0'
-                : spot.xPercent > 75
+                : spot.xPercent > 70
                 ? 'right-0 left-auto translate-x-0'
                 : 'left-1/2 -translate-x-1/2';
 
