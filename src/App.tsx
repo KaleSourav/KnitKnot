@@ -143,17 +143,21 @@ export default function App() {
     heroProductsMap[p.id] = p;
   });
 
+  const [wishlistCount, setWishlistCount] = useState(0);
+
   return (
-    <div className="min-h-screen w-full bg-[#0a080f] text-white flex flex-col justify-start relative overflow-x-hidden selection:bg-[#edd2f7] selection:text-[#4a044e]">
+    <div className="min-h-screen w-full bg-[#faf4e8] text-[#2b0b12] flex flex-col justify-start relative overflow-x-hidden selection:bg-[#841724] selection:text-[#faedd3]">
       
       {/* 1. STICKY KNOTSNCO NAVBAR WITH LOGO & ALL CONTROLS */}
       <KnitKnotNavbar
         activeTab={activeTab}
         onTabChange={handleTabChange}
         cartCount={totalCartCount}
+        wishlistCount={wishlistCount}
         onSearchClick={() => setIsSearchOpen(true)}
         onUserClick={() => setIsAccountOpen(true)}
         onCartClick={() => setIsCartOpen(true)}
+        onWishlistClick={() => showToast('♡ Added to your wishlist collection!')}
         onShopNowClick={() => handleTabChange('All Products')}
       />
 
@@ -258,11 +262,11 @@ export default function App() {
 
       {/* 9. FLOATING TOAST NOTIFICATION */}
       {toast.show && (
-        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 bg-[#1f192b]/95 border border-purple-400/40 rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-200">
-          <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 bg-[#841724] border border-[#5c0f19] rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-200">
+          <div className="w-7 h-7 rounded-full bg-[#faedd3]/20 text-[#faedd3] flex items-center justify-center shrink-0">
             <Check className="w-4 h-4 stroke-[2.5]" />
           </div>
-          <span className="text-xs sm:text-sm font-bold text-white">{toast.message}</span>
+          <span className="text-xs sm:text-sm font-bold text-[#faedd3]">{toast.message}</span>
         </div>
       )}
 

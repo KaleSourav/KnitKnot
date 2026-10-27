@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
-import { Sparkles, Heart, ArrowDown, ShoppingBag, Eye, Star, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Heart, 
+  ShoppingBag, 
+  Eye, 
+  ChevronLeft, 
+  ChevronRight, 
+  Pause, 
+  Play, 
+  Sparkles,
+  ArrowDown
+} from 'lucide-react';
 import { Product } from '../data/products';
-import landingImage from '../assets/knotsnco-landing.png';
-import landingImageMobile from '../assets/knotsnco-landing-mobile.jpg';
+import heroImage1 from '../assets/handmade-happiness-hero.png';
+import heroImage2 from '../assets/knitknot-landing.png';
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -22,14 +32,15 @@ interface Hotspot {
   category: string;
 }
 
-const HERO_HOTSPOTS_DESKTOP: Hotspot[] = [
+// Hotspots positioned specifically for "Handmade Happiness Crochet Collection.png"
+const HERO_HOTSPOTS: Hotspot[] = [
   {
     id: 'hs-bouquet',
     productId: 'p-bouquet-01',
     title: 'Everlasting White Lily Bouquet',
     price: 1499,
     xPercent: 18,
-    yPercent: 48,
+    yPercent: 52,
     category: 'Flowers',
   },
   {
@@ -37,8 +48,8 @@ const HERO_HOTSPOTS_DESKTOP: Hotspot[] = [
     productId: 'p-amigurumi-01',
     title: 'Lilac Bunny & Chick Set',
     price: 899,
-    xPercent: 35,
-    yPercent: 68,
+    xPercent: 37,
+    yPercent: 70,
     category: 'Amigurumi',
   },
   {
@@ -46,8 +57,8 @@ const HERO_HOTSPOTS_DESKTOP: Hotspot[] = [
     productId: 'p-flower-03',
     title: 'Sunbeam Sunflower Stem',
     price: 399,
-    xPercent: 52,
-    yPercent: 74,
+    xPercent: 53,
+    yPercent: 80,
     category: 'Flowers',
   },
   {
@@ -55,282 +66,250 @@ const HERO_HOTSPOTS_DESKTOP: Hotspot[] = [
     productId: 'p-tote-01',
     title: 'Daisy Granny Square Tote',
     price: 1599,
-    xPercent: 60,
-    yPercent: 62,
-    category: 'Accessories',
+    xPercent: 65,
+    yPercent: 68,
+    category: 'Bags',
   },
   {
     id: 'hs-accessories',
     productId: 'p-acc-01',
-    title: 'Lavender Headband & Bow',
+    title: 'Handmade Headband & Bow',
     price: 599,
-    xPercent: 76,
-    yPercent: 70,
-    category: 'Accessories',
-  },
-];
-
-const HERO_HOTSPOTS_MOBILE: Hotspot[] = [
-  {
-    id: 'hs-m-bunny',
-    productId: 'p-amigurumi-01',
-    title: 'Lilac Bunny Companion',
-    price: 899,
-    xPercent: 30,
-    yPercent: 66,
-    category: 'Amigurumi',
-  },
-  {
-    id: 'hs-m-chick',
-    productId: 'p-amigurumi-01',
-    title: 'Happy Chick Set',
-    price: 899,
-    xPercent: 48,
-    yPercent: 68,
-    category: 'Amigurumi',
-  },
-  {
-    id: 'hs-m-sunflower',
-    productId: 'p-flower-03',
-    title: 'Sunbeam Sunflower',
-    price: 399,
-    xPercent: 60,
-    yPercent: 72,
-    category: 'Flowers',
-  },
-  {
-    id: 'hs-m-tote',
-    productId: 'p-tote-01',
-    title: 'Daisy Granny Square Tote',
-    price: 1599,
-    xPercent: 79,
-    yPercent: 65,
-    category: 'Accessories',
+    xPercent: 82,
+    yPercent: 78,
+    category: 'Hair Accessories',
   },
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreClick,
+  onSelectCategory,
   onAddToCart,
   onQuickView,
   heroProducts,
 }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
 
-  const renderHotspots = (spots: Hotspot[]) => {
-    return spots.map((spot) => {
-      const product = heroProducts[spot.productId];
-      const isHovered = activeHotspot?.id === spot.id;
+  const slides = [
+    {
+      id: 'slide-handmade-happiness',
+      image: heroImage1,
+      title: 'Handmade Happiness Crochet Collection',
+      tagline: 'Flowers... but everlasting!! • Little yarn. Big stories ♡',
+    },
+    {
+      id: 'slide-knots-story',
+      image: heroImage2,
+      title: 'Artisan Knits & Everlasting Blooms',
+      tagline: 'Made slowly, lovingly & by hand',
+    },
+  ];
 
-      const alignmentClasses =
-        spot.xPercent < 30
-          ? 'left-0 translate-x-0'
-          : spot.xPercent > 70
-          ? 'right-0 left-auto translate-x-0'
-          : 'left-1/2 -translate-x-1/2';
+  // Auto carousel rotation
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isPlaying, slides.length]);
 
-      return (
-        <div
-          key={spot.id}
-          className="absolute pointer-events-auto z-20"
-          style={{
-            left: `${spot.xPercent}%`,
-            top: `${spot.yPercent}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          {/* Hotspot Pulsing Pin */}
-          <button
-            onMouseEnter={() => setActiveHotspot(spot)}
-            onMouseLeave={() => setActiveHotspot(null)}
-            onClick={() => {
-              if (activeHotspot?.id === spot.id) {
-                setActiveHotspot(null);
-              } else {
-                setActiveHotspot(spot);
-              }
-            }}
-            className="relative group/pin flex items-center justify-center p-1.5 sm:p-2 cursor-pointer focus:outline-none"
-            aria-label={`View ${spot.title}`}
-          >
-            <span className="absolute w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/40 animate-ping" />
-            <span className="relative flex items-center justify-center w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-white text-[#4a044e] font-bold shadow-lg border-2 border-[#edd2f7] hover:scale-110 active:scale-95 transition-transform">
-              <Heart className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-[#4a044e]" />
-            </span>
-          </button>
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
-          {/* Popover Card */}
-          {isHovered && product && (
-            <div 
-              onMouseEnter={() => setActiveHotspot(spot)}
-              onMouseLeave={() => setActiveHotspot(null)}
-              className={`absolute z-30 bottom-full mb-2 w-44 sm:w-60 bg-[#16121e]/95 border border-purple-400/30 rounded-2xl p-2.5 sm:p-3 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150 pointer-events-auto max-w-[calc(100vw-32px)] ${alignmentClasses}`}
-            >
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
-                <span className="text-[8.5px] sm:text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
-                  {spot.category}
-                </span>
-                <div className="flex items-center gap-0.5 text-amber-300 text-[11px] sm:text-xs ml-auto">
-                  <Star className="w-3 h-3 fill-amber-300" />
-                  <span>{product.rating}</span>
-                </div>
-              </div>
-
-              <h4 className="text-[11px] sm:text-sm font-bold text-white line-clamp-1 mb-1">
-                {product.name}
-              </h4>
-
-              <div className="flex items-center justify-between mt-1.5 pt-1.5 border-t border-white/10">
-                <span className="text-xs sm:text-sm font-extrabold text-[#edd2f7]">
-                  ₹{product.price}
-                </span>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onQuickView(product);
-                    }}
-                    className="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
-                    title="Quick View"
-                  >
-                    <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onAddToCart(product);
-                    }}
-                    className="px-2 py-0.5 sm:py-1 rounded-lg bg-[#edd2f7] hover:bg-[#e4c2f1] text-[#4a044e] font-bold text-[11px] sm:text-xs flex items-center gap-1 transition-all"
-                  >
-                    <ShoppingBag className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                    <span>Add</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    });
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
   return (
-    <section className="relative w-full h-[100svh] min-h-[100svh] max-h-[100svh] sm:h-[100dvh] sm:min-h-[100dvh] sm:max-h-none flex flex-col justify-between overflow-hidden select-none">
-      {/* 1. FULL-BLEED BACKGROUND IMAGE (RESPONSIVE: DEDICATED PORTRAIT FOR MOBILE, LANDSCAPE FOR DESKTOP) */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        {/* Mobile Vertical 9:16 Artwork (Brand name 'Knotsnco' fully visible, centered, zero letters cropped!) */}
-        <img
-          src={landingImageMobile}
-          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
-          className="sm:hidden w-full h-full object-cover object-top pointer-events-none select-none"
-        />
+    <section className="relative w-full pt-[104px] sm:pt-[118px] lg:pt-[130px] bg-[#faf4e8] select-none overflow-hidden">
+      {/* LANDING PAGE ENTRY BANNER CONTAINER */}
+      <div className="w-full relative">
+        <div className="relative w-full aspect-[16/9] max-h-[82vh] min-h-[380px] sm:min-h-[480px] lg:min-h-[580px] bg-[#841724]/5 overflow-hidden flex items-center justify-center">
+          
+          {/* Main Hero Image */}
+          <img
+            src={slides[currentSlide].image}
+            alt={slides[currentSlide].title}
+            className="w-full h-full object-cover object-center transition-all duration-700 ease-out"
+          />
 
-        {/* Desktop Landscape 16:9 Artwork */}
-        <img
-          src={landingImage}
-          alt="Knotsnco - Crocheted Gifts for a Brighter and Warmer Tomorrow"
-          className="hidden sm:block w-full h-full object-cover object-center pointer-events-none select-none"
-        />
+          {/* Interactive Hotspot Pins (Only on Slide 1 for "Handmade Happiness") */}
+          {currentSlide === 0 && (
+            <div className="absolute inset-0 pointer-events-none">
+              {HERO_HOTSPOTS.map((spot) => {
+                const product = heroProducts[spot.productId];
+                const isHovered = activeHotspot?.id === spot.id;
 
-        {/* Subtle cinematic gradient only at the bottom for floating glass pill */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/15 pointer-events-none" />
-      </div>
+                const alignmentClasses =
+                  spot.xPercent < 25
+                    ? 'left-0 translate-x-0'
+                    : spot.xPercent > 75
+                    ? 'right-0 left-auto translate-x-0'
+                    : 'left-1/2 -translate-x-1/2';
 
-      {/* 2. TOP SPACING (NAVBAR OVERHEAD) */}
-      <div className="w-full pt-14 sm:pt-20 lg:pt-24 shrink-0" />
+                return (
+                  <div
+                    key={spot.id}
+                    className="absolute pointer-events-auto z-20"
+                    style={{
+                      left: `${spot.xPercent}%`,
+                      top: `${spot.yPercent}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    {/* Pulsing Hotspot Pin */}
+                    <button
+                      onMouseEnter={() => setActiveHotspot(spot)}
+                      onMouseLeave={() => setActiveHotspot(null)}
+                      onClick={() => {
+                        setActiveHotspot(activeHotspot?.id === spot.id ? null : spot);
+                      }}
+                      className="relative group flex items-center justify-center p-2 cursor-pointer focus:outline-none"
+                      aria-label={`View ${spot.title}`}
+                    >
+                      <span className="absolute w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#841724]/40 animate-ping" />
+                      <span className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#841724] text-[#faedd3] font-bold shadow-lg border-2 border-[#fffdfa] hover:scale-110 active:scale-95 transition-transform">
+                        <Heart className="w-3 h-3 fill-[#faedd3]" />
+                      </span>
+                    </button>
 
-      {/* 3. INTERACTIVE HOTSPOTS OVER THE PRODUCTS IN THE ARTWORK */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Mobile Hotspots */}
-        <div className="sm:hidden">
-          {renderHotspots(HERO_HOTSPOTS_MOBILE)}
-        </div>
-        {/* Desktop Hotspots */}
-        <div className="hidden sm:block">
-          {renderHotspots(HERO_HOTSPOTS_DESKTOP)}
-        </div>
-      </div>
+                    {/* Interactive Hotspot Popup Card */}
+                    {isHovered && (
+                      <div
+                        onMouseEnter={() => setActiveHotspot(spot)}
+                        onMouseLeave={() => setActiveHotspot(null)}
+                        className={`absolute bottom-full mb-3 ${alignmentClasses} w-56 sm:w-64 bg-[#fffdfa] text-[#2d0a10] rounded-2xl shadow-2xl p-3 border border-[#841724]/20 z-30 animate-in fade-in zoom-in-95 duration-150`}
+                      >
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#841724] bg-[#841724]/10 px-2 py-0.5 rounded-full">
+                            {spot.category}
+                          </span>
+                          <span className="text-[10px] text-emerald-700 font-bold ml-auto">
+                            In Stock
+                          </span>
+                        </div>
 
-      {/* 4. CENTER AREA: EXPLORE COLLECTION PILL BUTTON */}
-      <div className="w-full flex flex-col items-center justify-center z-10 text-center py-2 sm:py-6 shrink-0">
-        <button
-          onClick={onExploreClick}
-          className="group px-5 sm:px-9 py-2.5 sm:py-3.5 rounded-full bg-[#fdeee4]/95 hover:bg-white text-stone-900 font-extrabold text-[11px] sm:text-sm tracking-wider sm:tracking-widest uppercase shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 backdrop-blur-md border border-white/60 flex items-center gap-1.5 sm:gap-2 cursor-pointer mt-1 sm:mt-8"
-        >
-          <span>EXPLORE COLLECTION</span>
-          <ArrowDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-y-0.5 transition-transform text-stone-800" />
-        </button>
-      </div>
+                        <h4 className="text-xs sm:text-sm font-bold text-[#2d0a10] line-clamp-1">
+                          {spot.title}
+                        </h4>
 
-      {/* 5. BOTTOM AREA: FLOATING FROSTED GLASS PILL BAR (COMPACT & FITS 100% IN MOBILE VIEWPORT) */}
-      <div className="w-full px-3 sm:px-6 lg:px-8 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-6 z-20 shrink-0">
-        <div className="w-full max-w-6xl mx-auto rounded-2xl sm:rounded-3xl lg:rounded-full bg-white/35 hover:bg-white/40 backdrop-blur-xl border border-white/45 shadow-2xl px-3 sm:px-8 lg:px-10 py-2 sm:py-3.5 transition-all">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 items-center">
-            
-            {/* Pillar 1 */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/50 border border-white/60 flex items-center justify-center text-stone-900 shrink-0 shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-900" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[9.5px] sm:text-xs font-black uppercase tracking-wider text-stone-950 truncate drop-shadow-sm">
-                  PREMIUM QUALITY
-                </h4>
-                <p className="text-[8.5px] sm:text-[11px] text-stone-800 font-semibold truncate">
-                  Finest cotton yarn
-                </p>
-              </div>
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#841724]/10">
+                          <span className="text-sm font-black text-[#841724]">
+                            ₹{spot.price.toLocaleString('en-IN')}
+                          </span>
+
+                          <div className="flex items-center gap-1.5">
+                            {product && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onQuickView(product);
+                                }}
+                                className="p-1.5 text-[#841724] hover:bg-[#841724]/10 rounded-lg transition-colors cursor-pointer"
+                                title="Quick Preview"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+
+                            {product && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onAddToCart(product);
+                                }}
+                                className="inline-flex items-center gap-1 bg-[#841724] hover:bg-[#5c0f19] text-[#faedd3] text-[11px] font-bold px-2.5 py-1 rounded-lg transition-colors shadow-sm cursor-pointer"
+                              >
+                                <ShoppingBag className="w-3 h-3" />
+                                <span>Add</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* BOTTOM SLIDER CONTROLS (Matching Reference Image: < ● ○ > ||) */}
+          <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 sm:gap-4 bg-[#fffdfa]/85 backdrop-blur-md px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border border-[#841724]/20 shadow-md">
+            {/* Prev arrow */}
+            <button
+              onClick={handlePrevSlide}
+              className="p-1 text-[#841724] hover:text-[#5c0f19] hover:bg-[#841724]/10 rounded-full transition-colors cursor-pointer"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-4 h-4 stroke-[2.2]" />
+            </button>
+
+            {/* Slider Dots */}
+            <div className="flex items-center gap-2">
+              {slides.map((s, index) => {
+                const isActive = currentSlide === index;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`transition-all rounded-full cursor-pointer ${
+                      isActive
+                        ? 'w-2.5 h-2.5 bg-[#841724]'
+                        : 'w-2 h-2 bg-[#841724]/30 hover:bg-[#841724]/60'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                );
+              })}
             </div>
 
-            {/* Pillar 2 */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/50 border border-white/60 flex items-center justify-center text-stone-900 shrink-0 shadow-sm">
-                <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-900" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[9.5px] sm:text-xs font-black uppercase tracking-wider text-stone-950 truncate drop-shadow-sm">
-                  TIMELESS DESIGN
-                </h4>
-                <p className="text-[8.5px] sm:text-[11px] text-stone-800 font-semibold truncate">
-                  Everlasting blooms
-                </p>
-              </div>
-            </div>
+            {/* Next arrow */}
+            <button
+              onClick={handleNextSlide}
+              className="p-1 text-[#841724] hover:text-[#5c0f19] hover:bg-[#841724]/10 rounded-full transition-colors cursor-pointer"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-4 h-4 stroke-[2.2]" />
+            </button>
 
-            {/* Pillar 3 */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/50 border border-white/60 flex items-center justify-center text-stone-900 shrink-0 shadow-sm">
-                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-900" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[9.5px] sm:text-xs font-black uppercase tracking-wider text-stone-950 truncate drop-shadow-sm">
-                  EXCLUSIVE DROPS
-                </h4>
-                <p className="text-[8.5px] sm:text-[11px] text-stone-800 font-semibold truncate">
-                  Handmade edition
-                </p>
-              </div>
-            </div>
+            {/* Divider */}
+            <span className="w-px h-3.5 bg-[#841724]/20" />
 
-            {/* Pillar 4 */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/50 border border-white/60 flex items-center justify-center text-stone-900 shrink-0 shadow-sm">
-                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-900" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[9.5px] sm:text-xs font-black uppercase tracking-wider text-stone-950 truncate drop-shadow-sm">
-                  SECURE & EASY
-                </h4>
-                <p className="text-[8.5px] sm:text-[11px] text-stone-800 font-semibold truncate">
-                  Gift wrap & delivery
-                </p>
-              </div>
-            </div>
-
+            {/* Pause / Play Toggle */}
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="p-1 text-[#841724] hover:text-[#5c0f19] hover:bg-[#841724]/10 rounded-full transition-colors cursor-pointer"
+              title={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
+              aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
+            >
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5 stroke-[2.2]" />
+              ) : (
+                <Play className="w-3.5 h-3.5 stroke-[2.2] fill-current" />
+              )}
+            </button>
           </div>
+
+        </div>
+
+        {/* SUBTLE BRAND TAGLINE STRIP UNDER HERO */}
+        <div className="w-full bg-[#faedd3] border-b border-[#841724]/15 py-3 px-4 text-center">
+          <p className="text-xs sm:text-sm font-serif italic text-[#841724] flex items-center justify-center gap-2">
+            <span>✨ Made slowly, lovingly & by hand</span>
+            <span className="text-[#841724]/40">•</span>
+            <span className="font-sans font-semibold text-[11px] sm:text-xs not-italic tracking-wider uppercase text-[#731b28]">
+              Everlasting Crochet Collections
+            </span>
+            <span className="text-[#841724]/40">•</span>
+            <span>Supporting Women Artisans across India ♡</span>
+          </p>
         </div>
       </div>
-
     </section>
   );
 };
