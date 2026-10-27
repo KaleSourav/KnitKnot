@@ -3,7 +3,8 @@ import {
   Heart, 
   ShoppingBag, 
   Eye, 
-  ChevronDown 
+  ChevronDown,
+  X
 } from 'lucide-react';
 import { Product } from '../data/products';
 import landingHeroImage from '../assets/handmade-happiness-hero.png';
@@ -84,17 +85,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
 
   return (
-    <section className="relative w-full h-[calc(100svh-110px)] sm:h-[calc(100vh-136px)] min-h-[400px] sm:min-h-[480px] max-h-[880px] bg-[#faedd3] select-none flex flex-col justify-between overflow-hidden">
-      {/* 1. RESPONSIVE HERO IMAGE (Mobile vertical vs Desktop widescreen) */}
-      <div className="relative w-full flex-1 overflow-hidden flex items-center justify-center">
-        <picture className="w-full h-full flex items-center justify-center">
-          <source media="(max-width: 640px)" srcSet="/knitknot-landing-mobile.jpg" />
-          <img
-            src={landingHeroImage}
-            alt="Handmade Happiness Crochet Collection"
-            className="w-full h-full object-cover object-center"
-          />
-        </picture>
+    <section className="relative w-full bg-[#faedd3] select-none flex flex-col justify-between overflow-hidden">
+      {/* 1. HERO IMAGE: Exclusively uses Handmade Happiness Crochet Collection.png for both Mobile & Desktop */}
+      <div 
+        className="relative w-full aspect-[1672/941] sm:aspect-auto sm:h-[calc(100vh-136px)] sm:min-h-[480px] sm:max-h-[880px] overflow-hidden flex items-center justify-center bg-[#faedd3]"
+        onClick={() => setActiveHotspot(null)}
+      >
+        <img
+          src={landingHeroImage}
+          alt="knotsnco. - Handmade Happiness Crochet Collection"
+          className="w-full h-full object-cover object-center"
+        />
 
         {/* Interactive Hotspot Pins on Products */}
         <div className="absolute inset-0 pointer-events-auto">
@@ -119,19 +120,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                {/* Pulsing Hotspot Pin */}
+                {/* Pulsing Hotspot Pin (Compact on mobile so brand name is never obstructed) */}
                 <button
                   onMouseEnter={() => setActiveHotspot(spot)}
                   onMouseLeave={() => setActiveHotspot(null)}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setActiveHotspot(activeHotspot?.id === spot.id ? null : spot);
                   }}
-                  className="relative group flex items-center justify-center p-1 sm:p-2 cursor-pointer focus:outline-none"
+                  className="relative group flex items-center justify-center p-0.5 sm:p-2 cursor-pointer focus:outline-none"
                   aria-label={`View ${spot.title}`}
                 >
-                  <span className="absolute w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-[#841724]/35 animate-ping" />
-                  <span className="relative flex items-center justify-center w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-[#841724] text-[#faedd3] font-bold shadow-lg border-2 border-[#faedd3] hover:scale-110 active:scale-95 transition-transform">
-                    <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-[#faedd3]" />
+                  <span className="absolute w-4 h-4 sm:w-8 sm:h-8 rounded-full bg-[#841724]/35 animate-ping" />
+                  <span className="relative flex items-center justify-center w-4 h-4 sm:w-7 sm:h-7 rounded-full bg-[#841724] text-[#faedd3] font-bold shadow-md border-[1.5px] sm:border-2 border-[#faedd3] hover:scale-110 active:scale-95 transition-transform">
+                    <Heart className="w-2 h-2 sm:w-3 sm:h-3 fill-[#faedd3]" />
                   </span>
                 </button>
 
@@ -140,15 +142,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <div
                     onMouseEnter={() => setActiveHotspot(spot)}
                     onMouseLeave={() => setActiveHotspot(null)}
-                    className={`absolute bottom-full mb-3 ${alignmentClasses} w-56 sm:w-64 bg-[#faedd3] text-[#2d0a10] rounded-2xl shadow-2xl p-3 border border-[#841724]/25 z-30 animate-in fade-in zoom-in-95 duration-200`}
+                    onClick={(e) => e.stopPropagation()}
+                    className={`absolute bottom-full mb-2 ${alignmentClasses} w-48 sm:w-64 max-w-[85vw] bg-[#faedd3] text-[#2d0a10] rounded-2xl shadow-2xl p-2.5 sm:p-3 border border-[#841724]/25 z-30 animate-in fade-in zoom-in-95 duration-200`}
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#841724] bg-[#841724]/10 px-2 py-0.5 rounded-full">
-                        {spot.category}
-                      </span>
-                      <span className="text-[10px] text-emerald-800 font-bold ml-auto">
-                        In Stock
-                      </span>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#841724] bg-[#841724]/10 px-2 py-0.5 rounded-full">
+                          {spot.category}
+                        </span>
+                        <span className="text-[10px] text-emerald-800 font-bold">
+                          In Stock
+                        </span>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveHotspot(null);
+                        }}
+                        className="text-[#7c5c62] hover:text-[#841724] p-0.5 rounded cursor-pointer"
+                        aria-label="Close details"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
                     </div>
 
                     <h4 className="text-xs sm:text-sm font-bold text-[#2d0a10] line-clamp-1">
