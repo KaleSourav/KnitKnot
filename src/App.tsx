@@ -10,6 +10,7 @@ import { ProductCatalog } from './components/ProductCatalog';
 import { ReviewsSection } from './components/ReviewsSection';
 import { Footer } from './components/Footer';
 import { MostWantedCarousel } from './components/MostWantedCarousel';
+import { HangingYarnShowcase } from './components/HangingYarnShowcase';
 import { FullscreenVideoSection } from './components/FullscreenVideoSection';
 import { ShopByCategory } from './components/ShopByCategory';
 import { FeaturedEditorialSection } from './components/FeaturedEditorialSection';
@@ -167,7 +168,7 @@ export default function App() {
       {/* 2. FULL LANDING PAGE HERO WITH THE KNOTSNCO LANDING IMAGE */}
       <HeroSection
         onExploreClick={() => {
-          const el = document.getElementById('most-wanted-section');
+          const el = document.getElementById('hanging-shelf-section') || document.getElementById('catalog-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
         onSelectCategory={handleTabChange}
@@ -176,17 +177,16 @@ export default function App() {
         heroProducts={heroProductsMap}
       />
 
-      {/* 3. MOST WANTED EDITORIAL SCROLLING SHOWCASE (MATCHING REFERENCE IMAGE) */}
-      <MostWantedCarousel
-        onBrowseAll={() => setIsCartOpen(true)}
-        onSelectItem={(item) => {
-          const match = products.find((p) => p.name.toLowerCase().includes(item.title.toLowerCase()) || item.title.toLowerCase().includes(p.name.toLowerCase()));
-          if (match) {
-            setQuickViewProduct(match);
-          } else {
-            setQuickViewProduct(products[0]);
-          }
+      {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING USER REFERENCE IMAGE) */}
+      <HangingYarnShowcase
+        products={products}
+        onAddToCart={handleAddToCart}
+        onQuickView={(p) => setQuickViewProduct(p)}
+        onBrowseAll={() => {
+          const el = document.getElementById('catalog-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+        onSelectCategory={handleTabChange}
       />
 
       {/* 4. FULLSCREEN HIGH-QUALITY AUTO-PLAYING LOOP VIDEO SHOWCASE */}
