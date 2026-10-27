@@ -15,7 +15,6 @@ interface HangingYarnShowcaseProps {
   onAddToCart: (product: Product) => void;
   onQuickView: (product: Product) => void;
   onBrowseAll: () => void;
-  onSelectCategory?: (category: string) => void;
 }
 
 interface ShelfCategory {
@@ -26,14 +25,14 @@ interface ShelfCategory {
   filter: (p: Product) => boolean;
 }
 
-// 4 Selected Categories as requested: Artisan Picks, Keychains, Accessories, and Bags
+// 4 Selected Categories: Artisan Picks, Keychains, Accessories, and Bags
 const SHELF_CATEGORIES: ShelfCategory[] = [
   {
     id: 'picks',
     name: 'All Products',
     label: 'Artisan Picks',
     icon: '🌸',
-    filter: (p) => p.rating >= 4.7 || p.badge === 'Bestseller' || p.badge === 'Artisan Pick' || (p.featuredInHero ?? false),
+    filter: (p) => (p.featuredInHero ?? false) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller' || p.rating >= 4.85,
   },
   {
     id: 'keychains',
@@ -43,9 +42,12 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
+      const g = (p.group || '').toLowerCase();
       return (
         c === 'keychains' ||
         c === 'bag charms' ||
+        g.includes('keychain') ||
+        g.includes('charm') ||
         c.includes('charm') ||
         n.includes('keychain') ||
         n.includes('charm') ||
@@ -61,14 +63,17 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
+      const g = (p.group || '').toLowerCase();
       return (
         c === 'hair accessories' ||
         c === 'bandanas' ||
         c === 'earrings' ||
         c === 'accessories' ||
+        g.includes('accessories') ||
         n.includes('clip') ||
         n.includes('gajra') ||
-        n.includes('bandana')
+        n.includes('bandana') ||
+        n.includes('scrunchie')
       );
     },
   },
@@ -80,14 +85,15 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
-      return c === 'bags' || n.includes('bag') || n.includes('tote');
+      const g = (p.group || '').toLowerCase();
+      return c === 'bags' || g.includes('bag') || n.includes('bag') || n.includes('tote');
     },
   },
 ];
 
 // Natural variation values for authentic hand-hung clothesline look
-const NATURAL_TILTS = [-3.2, 2.8, -1.9, 3.5, -2.5, 2.1, -3.1, 2.4, -2.0, 3.0, -1.8, 2.6];
-const NATURAL_STAGGERS = [2, 14, -2, 16, 4, -4, 12, 0, 10, -3, 14, 2];
+const NATURAL_TILTS = [-3.0, 2.6, -1.8, 3.2, -2.4, 2.0, -2.8, 2.2, -1.8, 2.8, -1.6, 2.4];
+const NATURAL_STAGGERS = [2, 12, -2, 14, 4, -4, 10, 0, 8, -2, 12, 2];
 
 // Card layout constants
 const CARD_WIDTH = 280; // px
@@ -99,7 +105,6 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   onAddToCart,
   onQuickView,
   onBrowseAll,
-  onSelectCategory,
 }) => {
   const [selectedShelfId, setSelectedShelfId] = useState<string>('picks');
   const [justAddedId, setJustAddedId] = useState<string | null>(null);
@@ -109,7 +114,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Timestamp when the current category was selected to drive cascading drop animation
+  // Timestamp when the current category was selected to drive smooth transition
   const categorySwitchTimeRef = useRef<number>(performance.now());
 
   // Interactive physics state held in refs for 60fps / 120fps direct DOM manipulation
@@ -167,26 +172,20 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return () => el.removeEventListener('scroll', updateScrollProgress);
   }, [updateScrollProgress, shelfProducts]);
 
-  // Category switch handler: triggers smooth scroll reset and cascading drop physics
+  // Internal shelf switcher: NO PAGE SCROLLING! Updates only the hanging cards and reset line scroll
   const handleCategorySwitch = (shelfId: string) => {
     if (selectedShelfId === shelfId) return;
     setSelectedShelfId(shelfId);
     categorySwitchTimeRef.current = performance.now();
-    
-    // Also notify parent if needed
-    const shelf = SHELF_CATEGORIES.find(s => s.id === shelfId);
-    if (shelf && onSelectCategory && shelf.name !== 'All Products') {
-      onSelectCategory(shelf.name);
-    }
 
-    // Reset horizontal scroll to beginning smoothly
+    // Smoothly reset horizontal track to start of the line
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
     }
   };
 
   // -------------------------------------------------------------
-  // HIGH-PERFORMANCE PHYSICAL PENDULUM SWAY & CASCADING DROP SIMULATION
+  // HIGH-PERFORMANCE PHYSICAL PENDULUM SWAY & GENTLE HANGING TRANSITION
   // -------------------------------------------------------------
   useEffect(() => {
     let animId: number;
@@ -216,7 +215,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
       const timeSinceSwitch = (currentTime - categorySwitchTimeRef.current) / 1000;
       const timeSec = currentTime / 1000;
 
-      // Update each hanging card's transformation and drop physics
+      // Update each hanging card's transformation
       cardRefs.current.forEach((el, index) => {
         if (!el) return;
         const baseTilt = NATURAL_TILTS[index % NATURAL_TILTS.length];
@@ -232,45 +231,36 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
 
         // Hover effect if this specific card is hovered
         const isHovered = p.hoveredIndex === index;
-        const hoverLift = isHovered ? -8 : 0;
+        const hoverLift = isHovered ? -6 : 0;
         const hoverTilt = isHovered ? p.hoverNudge : 0;
 
-        // CASCADING ENTRANCE / DROP FROM ABOVE PHYSICS
-        // Each card drops with a 65ms stagger
-        const cardDelay = index * 0.065;
+        // GENTLE HANGING ENTRANCE:
+        // Each card smoothly fades & settles directly on its clip (max 14px dip)
+        const cardDelay = index * 0.035;
         const cardElapsed = timeSinceSwitch - cardDelay;
 
-        let dropY = 0;
-        let dropOpacity = 1;
-        let dropScale = 1;
-        let dropSway = 0;
+        let settleY = 0;
+        let cardOpacity = 1;
+        let settleSway = 0;
 
         if (cardElapsed < 0) {
-          // Card has not yet started falling
-          dropY = -140;
-          dropOpacity = 0;
-          dropScale = 0.88;
-          dropSway = -8;
-        } else if (cardElapsed < 0.75) {
-          // Falling under gravity + catching the rope with spring bounce
-          // Damped harmonic bounce equation: 1 - e^(-6*t) * cos(14*t)
-          const decay = Math.exp(-6.5 * cardElapsed);
-          const bounce = Math.cos(15 * cardElapsed);
-          const dropProgress = 1 - decay * bounce;
-
-          dropY = -140 * (1 - dropProgress);
-          dropOpacity = Math.min(1, cardElapsed * 5);
-          dropScale = 0.88 + 0.12 * Math.min(1, cardElapsed * 4);
-          // Catching rope imparts dynamic swing oscillation
-          dropSway = Math.sin(cardElapsed * 14) * 9 * decay;
+          settleY = -12;
+          cardOpacity = 0.2;
+          settleSway = -3;
+        } else if (cardElapsed < 0.45) {
+          const t = cardElapsed / 0.45;
+          const decay = Math.exp(-5.5 * t);
+          settleY = -12 * decay * Math.cos(t * Math.PI * 2);
+          cardOpacity = Math.min(1, 0.2 + cardElapsed * 3.5);
+          settleSway = Math.sin(t * Math.PI * 2) * 3 * decay;
         }
 
-        const totalAngle = baseTilt + dynamicSway + ambient + dropSway + hoverTilt;
-        const totalY = staggerY + dropY + hoverLift;
+        const totalAngle = baseTilt + dynamicSway + ambient + settleSway + hoverTilt;
+        const totalY = staggerY + settleY + hoverLift;
 
-        el.style.transform = `translateY(${totalY.toFixed(1)}px) rotate(${totalAngle.toFixed(2)}deg) scale(${dropScale.toFixed(3)})`;
-        el.style.opacity = dropOpacity.toFixed(2);
-        el.style.transformOrigin = '50% 0px'; // Pivot from top wooden peg
+        el.style.transform = `translateY(${totalY.toFixed(1)}px) rotate(${totalAngle.toFixed(2)}deg)`;
+        el.style.opacity = cardOpacity.toFixed(2);
+        el.style.transformOrigin = '50% 0px'; // Pivot firmly from top wooden clip
       });
 
       animId = requestAnimationFrame(animate);
@@ -294,8 +284,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     const scrollAmount = direction === 'left' ? -cardStep * 1.6 : cardStep * 1.6;
     el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
 
-    // Physical card sway reaction to arrow push
-    impartImpulse(direction === 'right' ? -14 : 14);
+    impartImpulse(direction === 'right' ? -12 : 12);
   };
 
   // Drag-to-scroll via mouse pointer with fluid physics
@@ -323,12 +312,10 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     const dt = Math.max(1, currentTime - p.lastPointerTime);
     const dx = currentX - p.lastPointerX;
     
-    // Calculate drag velocity (px/ms)
     p.dragVelocityX = dx / dt;
     p.lastPointerX = currentX;
     p.lastPointerTime = currentTime;
 
-    // Scroll the track
     const x = e.pageX - el.offsetLeft;
     const walk = (x - p.startX) * 1.4;
     el.scrollLeft = p.scrollStart - walk;
@@ -413,21 +400,21 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     for (let i = 0; i < count; i++) {
       const x = LEFT_PAD + i * (CARD_WIDTH + CARD_GAP) + CARD_WIDTH / 2;
       const stagger = NATURAL_STAGGERS[i % NATURAL_STAGGERS.length];
-      const y = 34 + stagger;
+      const y = 32 + stagger; // exact height where the clothespin peg notch clamps the rope
       pegCoords.push({ x, y });
     }
 
     if (pegCoords.length === 0) return { pathD: '', totalWidth, pegCoords: [] };
 
-    let d = `M 0,26 `;
+    let d = `M 0,24 `;
     const first = pegCoords[0];
-    d += `C ${first.x * 0.3},28 ${first.x * 0.7},${first.y + 12} ${first.x},${first.y} `;
+    d += `C ${first.x * 0.3},26 ${first.x * 0.7},${first.y + 10} ${first.x},${first.y} `;
 
     for (let i = 0; i < pegCoords.length - 1; i++) {
       const p1 = pegCoords[i];
       const p2 = pegCoords[i + 1];
       const dx = p2.x - p1.x;
-      const sag = 20;
+      const sag = 18; // Natural catenary drape sag
       const cp1x = p1.x + dx * 0.35;
       const cp1y = p1.y + sag;
       const cp2x = p2.x - dx * 0.35;
@@ -436,7 +423,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     }
 
     const last = pegCoords[pegCoords.length - 1];
-    d += `C ${last.x + 50},${last.y + 14} ${totalWidth - 30},24 ${totalWidth},20`;
+    d += `C ${last.x + 50},${last.y + 12} ${totalWidth - 30},24 ${totalWidth},20`;
 
     return { pathD: d, totalWidth, pegCoords };
   }, [shelfProducts.length]);
@@ -455,12 +442,12 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
           src="/garden-bg.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover opacity-[0.18] mix-blend-multiply filter contrast-[0.92] brightness-[1.08] select-none pointer-events-none"
+          className="w-full h-full object-cover opacity-[0.14] mix-blend-multiply filter contrast-[0.92] brightness-[1.08] select-none pointer-events-none"
         />
 
-        {/* Delicate Gradient Masks to blend into the cozy cream tones */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#faf4e8]/85 via-transparent to-[#faf4e8]/90" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#faf4e8]/95 via-transparent to-[#faf4e8]/75" />
+        {/* Delicate Gradient Masks to blend seamlessly into the warm cream tones */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#faf4e8]/90 via-transparent to-[#faf4e8]/95" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#faf4e8]/95 via-transparent to-[#faf4e8]/80" />
 
         {/* Ambient Whimsical Light Flares */}
         <div className="absolute top-10 right-12 w-80 h-80 rounded-full bg-[#faedd3]/70 blur-3xl" />
@@ -472,7 +459,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
         {/* TWO-COLUMN LAYOUT: Left Shelf Selector, Right Hanging Clothesline Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* LEFT COLUMN: Editorial Typography & Interactive Hover Shelf Category Menu */}
+          {/* LEFT COLUMN: Editorial Typography & Interactive Shelf Category Menu */}
           <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between pr-0 lg:pr-4 pt-1">
             <div>
               {/* Eyebrow */}
@@ -492,7 +479,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
 
               {/* Subtitle */}
               <p className="text-xs sm:text-sm text-[#7c5c62] leading-relaxed max-w-md font-medium mb-8">
-                Hover over a shelf to see items drop onto the clothesline. Swipe or drag along the line to explore.
+                Flowers that never wilt, plushies and little gifts. Pick a shelf, then swipe along the line.
               </p>
 
               {/* Category Shelves List: Artisan Picks, Keychains, Accessories, and Bags */}
@@ -506,6 +493,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       key={shelf.id}
                       onMouseEnter={() => handleCategorySwitch(shelf.id)}
                       onClick={() => handleCategorySwitch(shelf.id)}
+                      type="button"
                       className={`w-full py-3 px-4 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
                         isSelected
                           ? 'bg-[#faedd3] text-[#841724] font-extrabold shadow-sm border border-[#841724]/20 translate-x-1.5'
@@ -542,6 +530,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
             {/* Bottom Dark Pill CTA Button */}
             <button
               onClick={onBrowseAll}
+              type="button"
               className="inline-flex items-center justify-center gap-2 self-start bg-[#2b0b12] hover:bg-[#841724] text-[#faedd3] font-bold text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 group"
             >
               <span>Shop all {products.length} pieces</span>
@@ -549,7 +538,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
             </button>
           </div>
 
-          {/* RIGHT COLUMN: The Interactive Hanging Clothesline with Natural Sagging Rope & Cascading Drop Motion */}
+          {/* RIGHT COLUMN: The Interactive Hanging Clothesline with Natural Sagging Rope & Smooth Hanging Cards */}
           <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-start relative pt-2">
             
             {/* HORIZONTALLY SCROLLABLE / DRAGGABLE CLOTHESLINE TRACK */}
@@ -562,7 +551,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              className="w-full overflow-x-auto no-scrollbar pt-6 pb-12 px-2 cursor-grab active:cursor-grabbing select-none relative z-10"
+              className="w-full overflow-x-auto no-scrollbar pt-4 pb-12 px-2 cursor-grab active:cursor-grabbing select-none relative z-10"
               style={{
                 WebkitOverflowScrolling: 'touch',
               }}
@@ -572,15 +561,15 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                 className="relative flex items-start"
                 style={{ 
                   width: `${ropeSvgData.totalWidth}px`,
-                  minHeight: '490px',
+                  minHeight: '480px',
                   paddingLeft: `${LEFT_PAD}px`,
                   gap: `${CARD_GAP}px`,
                 }}
               >
-                {/* 1. SAGGING JUTE ROPE SVG: Flows continuously through every wooden peg coordinate */}
+                {/* 1. SAGGING JUTE ROPE SVG: Flows continuously through every wooden peg notch */}
                 <svg
                   className="absolute top-0 left-0 pointer-events-none z-20 overflow-visible"
-                  style={{ width: `${ropeSvgData.totalWidth}px`, height: '120px' }}
+                  style={{ width: `${ropeSvgData.totalWidth}px`, height: '110px' }}
                 >
                   {/* Rope Ambient Cast Shadow */}
                   <path
@@ -629,7 +618,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                   ))}
                 </svg>
 
-                {/* 2. HANGING POLAROID CARDS (DROPPING FROM ABOVE WITH REALISTIC SPRING BOUNCE & CLOTHESPINS) */}
+                {/* 2. HANGING POLAROID CARDS (SUSPENDED FIRMLY BY REALISTIC WOODEN CLOTHESPIN PEGS) */}
                 {shelfProducts.map((product, index) => {
                   const isJustAdded = justAddedId === product.id;
 
@@ -647,7 +636,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       onMouseEnter={() => {
                         const p = physicsRef.current;
                         p.hoveredIndex = index;
-                        p.hoverNudge = index % 2 === 0 ? -2.2 : 2.2;
+                        p.hoverNudge = index % 2 === 0 ? -2.0 : 2.0;
                       }}
                       onMouseLeave={() => {
                         const p = physicsRef.current;
@@ -660,11 +649,11 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                         width: `${CARD_WIDTH}px`,
                         willChange: 'transform, opacity',
                       }}
-                      className="shrink-0 relative pt-7 group/card cursor-pointer"
+                      className="shrink-0 relative pt-5 group/card cursor-pointer"
                     >
                       {/* REALISTIC WOODEN CLOTHESPIN PEG CLAMPING THE ROPE & CARD TOP */}
-                      <div className="absolute top-1 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center drop-shadow-md">
-                        {/* Upper Peg Pinch Handles (sticking up past the rope) */}
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center drop-shadow-md">
+                        {/* Upper Peg Pinch Handles (clamping onto the rope notch) */}
                         <div className="w-4 h-9 rounded-[3px] bg-gradient-to-b from-[#e3b88a] via-[#c9955e] to-[#9c6a3b] border border-[#6b421a]/30 relative shadow-sm flex flex-col justify-between items-center py-1">
                           
                           {/* Center vertical wood grain slit */}
@@ -678,8 +667,8 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                         </div>
                       </div>
 
-                      {/* AUTHENTIC TALL POLAROID KEEPSAKE CARD */}
-                      <div className="bg-[#faf7f2] rounded-2xl p-3 pb-4 border border-[#841724]/12 shadow-[0_14px_35px_-8px_rgba(43,11,18,0.14)] group-hover/card:shadow-[0_24px_48px_-6px_rgba(132,23,36,0.22)] transition-shadow duration-300 flex flex-col justify-between">
+                      {/* AUTHENTIC TALL POLAROID KEEPSAKE CARD (SUSPENDED EXACTLY ON THE CLIP) */}
+                      <div className="mt-3 bg-[#faf7f2] rounded-2xl p-3 pb-4 border border-[#841724]/12 shadow-[0_14px_35px_-8px_rgba(43,11,18,0.14)] group-hover/card:shadow-[0_24px_48px_-6px_rgba(132,23,36,0.22)] transition-shadow duration-300 flex flex-col justify-between">
                         
                         {/* PHOTO WRAPPER: Portrait Ratio (approx 3:4) with Smooth Rounded Corners */}
                         <div className="relative w-full h-[270px] sm:h-[295px] rounded-xl overflow-hidden bg-[#f0e6d6] mb-3">
@@ -732,6 +721,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                           {/* Signature Round Black Plus Action Button */}
                           <button
                             onClick={(e) => handleQuickAdd(e, product)}
+                            type="button"
                             className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
                               isJustAdded
                                 ? 'bg-emerald-700 text-white scale-110 shadow-emerald-900/30'
@@ -761,6 +751,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               {/* Prev Button with Physical Swing Kick */}
               <button
                 onClick={() => handleScrollBy('left')}
+                type="button"
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                 aria-label="Previous hanging products"
               >
@@ -782,6 +773,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               {/* Next Button with Physical Swing Kick */}
               <button
                 onClick={() => handleScrollBy('right')}
+                type="button"
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                 aria-label="Next hanging products"
               >

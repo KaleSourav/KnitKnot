@@ -186,7 +186,6 @@ export default function App() {
           const el = document.getElementById('catalog-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
-        onSelectCategory={handleTabChange}
       />
 
       {/* 4. FULLSCREEN HIGH-QUALITY AUTO-PLAYING LOOP VIDEO SHOWCASE */}
