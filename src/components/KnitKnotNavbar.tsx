@@ -228,9 +228,9 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 w-full select-none shadow-sm bg-[#faf4e8]">
+    <header className="sticky top-0 z-50 w-full max-w-full select-none shadow-sm bg-[#faf4e8]">
       {/* 1. TOP ANNOUNCEMENT BAR (Rich Burgundy #841724 with soft cream text) */}
-      <div className="bg-[#841724] text-[#faedd3] py-2 px-3 sm:px-6 relative flex items-center justify-center border-b border-[#5c0f19]">
+      <div className="bg-[#841724] text-[#faedd3] py-2 px-3 sm:px-6 relative flex items-center justify-center border-b border-[#5c0f19] w-full">
         <button
           onClick={handlePrevAnnouncement}
           className="absolute left-2 sm:left-4 p-1 hover:text-white transition-colors cursor-pointer text-[#faedd3]/80 hover:bg-black/10 rounded-full"
@@ -354,10 +354,17 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
 
           {/* BOTTOM ROW: The 6 Exact Categories with Rich Mega Dropdown (Desktop) */}
           <div className="hidden lg:flex items-center justify-center gap-4 xl:gap-7 pb-2.5 pt-0 border-t border-[#841724]/10 relative">
-            {NAV_CATEGORIES.map((cat) => {
+            {NAV_CATEGORIES.map((cat, catIndex) => {
               const isOpen = activeDropdown === cat.id;
               const catProducts = categoryProductsMap[cat.id] || [];
               const isSelected = activeTab.toLowerCase() === cat.name.toLowerCase();
+
+              const alignmentClass =
+                catIndex <= 1
+                  ? 'left-0 translate-x-0'
+                  : catIndex >= 4
+                  ? 'right-0 left-auto translate-x-0'
+                  : 'left-1/2 -translate-x-1/2';
 
               return (
                 <div
@@ -385,7 +392,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                   {/* RICH SHOPIFY PRODUCTS MEGA DROPDOWN */}
                   {isOpen && (
                     <div
-                      className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-[580px] xl:w-[680px] animate-in fade-in slide-in-from-top-2 duration-150"
+                      className={`absolute top-full ${alignmentClass} pt-2 z-50 w-[92vw] sm:w-[540px] xl:w-[620px] max-w-[calc(100vw-32px)] animate-in fade-in slide-in-from-top-2 duration-150`}
                       onMouseEnter={() => handleMouseEnter(cat.id)}
                       onMouseLeave={handleMouseLeave}
                     >

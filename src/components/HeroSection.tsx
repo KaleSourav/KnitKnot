@@ -142,7 +142,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <img
                 src={slide.image}
                 alt={slide.title}
-                className="w-full h-full object-contain object-center"
+                className="w-full h-full object-cover object-center"
               />
 
               {/* Interactive Hotspot Pins (Only on Slide 1 for "Handmade Happiness") */}
