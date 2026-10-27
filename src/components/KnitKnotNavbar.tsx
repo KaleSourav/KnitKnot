@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Search, 
   User, 
@@ -9,53 +9,120 @@ import {
   ChevronRight, 
   Menu, 
   X, 
-  Sparkles,
-  ArrowRight
+  Eye,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
+import { Product } from '../data/products';
 import logoImg from '../assets/logo-knotsnco.png';
 
-export interface NavCategoryGroup {
+export interface NavCategoryConfig {
   id: string;
   name: string;
-  subcategories: {
-    name: string;
-    label: string;
-    count: number;
-    emoji: string;
-    description: string;
-  }[];
+  tagline: string;
+  emoji: string;
+  filter: (p: Product) => boolean;
 }
 
-export const NAV_CATEGORY_GROUPS: NavCategoryGroup[] = [
+export const NAV_CATEGORIES: NavCategoryConfig[] = [
   {
-    id: 'floral',
-    name: 'Floral',
-    subcategories: [
-      { name: 'Flowers', label: 'Everlasting Flowers', count: 61, emoji: '🌸', description: 'Single roses, lilies, tulips & sunflowers' },
-      { name: 'Fillers', label: 'Bouquet Fillers & Foliage', count: 22, emoji: '🌿', description: 'Eucalyptus, sage & baby’s breath stems' },
-      { name: 'Flower Pots', label: 'Desk Flower Pots', count: 21, emoji: '🪴', description: 'Potted lilies, double tulips & heart pots' },
-      { name: 'Vases', label: 'Arrangement Vases', count: 19, emoji: '🏺', description: 'Pastel tabletop flower gardens & bouquets' },
-    ],
-  },
-  {
-    id: 'baby-products',
-    name: 'Baby Products',
-    subcategories: [
-      { name: 'Characters', label: 'Amigurumi Plushies', count: 9, emoji: '🧸', description: 'Soft chenille bunnies, chicks & Hello Kitty' },
-      { name: 'Keychains', label: 'Pocket Animal Pals', count: 40, emoji: '🔑', description: 'Fruit turtles, tiny bunnies & mini octopus' },
-      { name: 'Bag Charms', label: 'Floral Charms & Tassels', count: 6, emoji: '🏷️', description: 'Puffy flower bag charms & evil eye protection' },
-    ],
+    id: 'bags',
+    name: 'Bags',
+    tagline: 'Handmade Daisy & Sunflower Carryalls',
+    emoji: '👜',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return c === 'bags' || n.includes('bag') || n.includes('tote');
+    },
   },
   {
     id: 'accessories',
     name: 'Accessories',
-    subcategories: [
-      { name: 'Hair Accessories', label: 'Clips, Gajras & Scrunchies', count: 15, emoji: '🎀', description: 'Cherry blossom hair clips & crochet mogra gajras' },
-      { name: 'Bags', label: 'Granny Square Totes', count: 19, emoji: '👜', description: 'Artisan floral totes & puffy shoulder bags' },
-      { name: 'Earrings', label: 'Handmade Studs & Drops', count: 10, emoji: '💎', description: 'Ultra-lightweight fruit & floral drop earrings' },
-      { name: 'Fridge Magnets', label: 'Miniature Potted Magnets', count: 12, emoji: '🧲', description: 'Sunflowers & potted plant desk magnets' },
-      { name: 'Bandanas', label: 'Boho Crochet Headscarves', count: 3, emoji: '🧣', description: 'Open-stitch floral & beachy bandanas' },
-    ],
+    tagline: 'Floral Hair Clips, Gajras & Bandanas',
+    emoji: '🎀',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        c === 'hair accessories' ||
+        c === 'bandanas' ||
+        c === 'earrings' ||
+        c === 'accessories' ||
+        n.includes('clip') ||
+        n.includes('gajra') ||
+        n.includes('bandana')
+      );
+    },
+  },
+  {
+    id: 'flowers',
+    name: 'Flowers',
+    tagline: 'Everlasting Roses, Lilies & Foliage',
+    emoji: '🌸',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        c === 'flowers' ||
+        c === 'fillers' ||
+        c === 'bouquets' ||
+        n.includes('rose') ||
+        n.includes('lily') ||
+        n.includes('tulip') ||
+        n.includes('flower') ||
+        n.includes('daisy') ||
+        n.includes('sunflower')
+      );
+    },
+  },
+  {
+    id: 'home-decore',
+    name: 'Home Decore',
+    tagline: 'Character Standees, Vases & Magnets',
+    emoji: '🏺',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        c === 'standees' ||
+        c === 'vases' ||
+        c === 'fridge magnets' ||
+        c.includes('decor') ||
+        n.includes('standee') ||
+        n.includes('vase') ||
+        n.includes('magnet')
+      );
+    },
+  },
+  {
+    id: 'flower-pots',
+    name: 'Flower Pots',
+    tagline: 'Desk Potted Plants & Illuminated Lilies',
+    emoji: '🪴',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return c === 'flower pots' || c.includes('pot') || n.includes('pot');
+    },
+  },
+  {
+    id: 'keychains-bag-charms',
+    name: 'Keychains & Bag Charms',
+    tagline: 'Fruit Turtles, Pocket Pals & Charms',
+    emoji: '🔑',
+    filter: (p) => {
+      const c = (p.category || '').toLowerCase();
+      const n = (p.name || '').toLowerCase();
+      return (
+        c === 'keychains' ||
+        c === 'bag charms' ||
+        c.includes('charm') ||
+        n.includes('keychain') ||
+        n.includes('charm') ||
+        n.includes('turtle')
+      );
+    },
   },
 ];
 
@@ -69,6 +136,9 @@ const ANNOUNCEMENTS = [
 interface KnitKnotNavbarProps {
   activeTab: string;
   onTabChange: (id: string) => void;
+  products?: Product[];
+  onQuickView?: (product: Product) => void;
+  onAddToCart?: (product: Product) => void;
   cartCount?: number;
   wishlistCount?: number;
   onSearchClick?: () => void;
@@ -81,20 +151,31 @@ interface KnitKnotNavbarProps {
 export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   activeTab,
   onTabChange,
+  products = [],
+  onQuickView,
+  onAddToCart,
   cartCount = 0,
   wishlistCount = 0,
   onSearchClick,
   onUserClick,
   onCartClick,
   onWishlistClick,
-  onShopNowClick,
 }) => {
   const [announcementIndex, setAnnouncementIndex] = useState(0);
   const [announcementVisible, setAnnouncementVisible] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [expandedMobileGroup, setExpandedMobileGroup] = useState<string | null>('floral');
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState<string | null>('bags');
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Group products by the 6 navigation categories
+  const categoryProductsMap = useMemo(() => {
+    const map: { [key: string]: Product[] } = {};
+    NAV_CATEGORIES.forEach((cat) => {
+      map[cat.id] = products.filter(cat.filter);
+    });
+    return map;
+  }, [products]);
 
   // Smooth slow fade out -> update text -> slow fade in
   const transitionAnnouncement = (nextIndex: number) => {
@@ -102,10 +183,10 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
     setTimeout(() => {
       setAnnouncementIndex(nextIndex);
       setAnnouncementVisible(true);
-    }, 450); // 450ms fade-out duration
+    }, 450);
   };
 
-  // Auto rotate announcement every 5 seconds
+  // Auto rotate announcement every 5.2 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setAnnouncementVisible(false);
@@ -127,17 +208,17 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
     transitionAnnouncement((announcementIndex + 1) % ANNOUNCEMENTS.length);
   };
 
-  const handleMouseEnter = (groupId: string) => {
+  const handleMouseEnter = (catId: string) => {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
     }
-    setActiveDropdown(groupId);
+    setActiveDropdown(catId);
   };
 
   const handleMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-    }, 180);
+    }, 200);
   };
 
   const handleCategorySelect = (catName: string) => {
@@ -147,7 +228,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 w-full select-none shadow-sm">
+    <header className="sticky top-0 left-0 right-0 z-50 w-full select-none shadow-sm bg-[#faf4e8]">
       {/* 1. TOP ANNOUNCEMENT BAR (Rich Burgundy #841724 with soft cream text) */}
       <div className="bg-[#841724] text-[#faedd3] py-2 px-3 sm:px-6 relative flex items-center justify-center border-b border-[#5c0f19]">
         <button
@@ -184,7 +265,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* TOP ROW: Search on left, Logo in center, Icons on right */}
-          <div className="h-16 sm:h-18 lg:h-20 flex items-center justify-between relative">
+          <div className="h-14 sm:h-16 lg:h-18 flex items-center justify-between relative">
             
             {/* LEFT: Search Icon + Mobile Menu Trigger */}
             <div className="flex items-center gap-1 sm:gap-2 w-1/3 justify-start">
@@ -225,7 +306,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                 <img
                   src={logoImg}
                   alt="knotsnco."
-                  className="h-8 sm:h-9 md:h-10 lg:h-11 w-auto max-w-[170px] sm:max-w-[210px] md:max-w-[240px] object-contain drop-shadow-sm"
+                  className="h-8 sm:h-9 md:h-10 w-auto max-w-[170px] sm:max-w-[210px] md:max-w-[240px] object-contain drop-shadow-sm"
                 />
               </button>
             </div>
@@ -271,26 +352,29 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
 
           </div>
 
-          {/* BOTTOM ROW: Center Categories with Dropdowns (Desktop View) */}
-          <div className="hidden lg:flex items-center justify-center gap-8 pb-3 pt-0 border-t border-[#841724]/10 relative">
-            {NAV_CATEGORY_GROUPS.map((group) => {
-              const isOpen = activeDropdown === group.id;
+          {/* BOTTOM ROW: The 6 Exact Categories with Rich Mega Dropdown (Desktop) */}
+          <div className="hidden lg:flex items-center justify-center gap-4 xl:gap-7 pb-2.5 pt-0 border-t border-[#841724]/10 relative">
+            {NAV_CATEGORIES.map((cat) => {
+              const isOpen = activeDropdown === cat.id;
+              const catProducts = categoryProductsMap[cat.id] || [];
+              const isSelected = activeTab.toLowerCase() === cat.name.toLowerCase();
+
               return (
                 <div
-                  key={group.id}
+                  key={cat.id}
                   className="relative"
-                  onMouseEnter={() => handleMouseEnter(group.id)}
+                  onMouseEnter={() => handleMouseEnter(cat.id)}
                   onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    onClick={() => handleMouseEnter(group.id)}
-                    className={`flex items-center gap-1 py-1 px-3 text-[14px] font-medium transition-colors cursor-pointer rounded-full ${
-                      isOpen
+                    onClick={() => handleCategorySelect(cat.name)}
+                    className={`flex items-center gap-1 py-1 px-2.5 xl:px-3 text-[13px] xl:text-[14px] font-medium transition-colors cursor-pointer rounded-full ${
+                      isOpen || isSelected
                         ? 'text-[#841724] font-bold bg-[#841724]/8'
                         : 'text-[#4a121d] hover:text-[#841724] hover:bg-[#841724]/5'
                     }`}
                   >
-                    <span>{group.name}</span>
+                    <span>{cat.name}</span>
                     <ChevronDown
                       className={`w-3.5 h-3.5 transition-transform duration-200 ${
                         isOpen ? 'rotate-180 text-[#841724]' : 'text-[#841724]/60'
@@ -298,66 +382,102 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                     />
                   </button>
 
-                  {/* LUXURY DROPDOWN MENU */}
+                  {/* RICH SHOPIFY PRODUCTS MEGA DROPDOWN */}
                   {isOpen && (
                     <div
-                      className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-80 sm:w-96 animate-in fade-in slide-in-from-top-2 duration-150"
-                      onMouseEnter={() => handleMouseEnter(group.id)}
+                      className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-[580px] xl:w-[680px] animate-in fade-in slide-in-from-top-2 duration-150"
+                      onMouseEnter={() => handleMouseEnter(cat.id)}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <div className="bg-[#fffdfa] rounded-2xl shadow-xl border border-[#841724]/15 p-4 divide-y divide-[#841724]/10 overflow-hidden">
-                        <div className="pb-2.5 px-1 flex items-center justify-between">
-                          <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#841724]/80">
-                            {group.name} Collection
-                          </span>
-                          <span className="text-[10px] font-medium text-[#7c5c62]">
-                            Handcrafted by artisans
+                      <div className="bg-[#fffdfa] rounded-2xl shadow-2xl border border-[#841724]/15 p-4 xl:p-5 overflow-hidden">
+                        
+                        {/* Dropdown Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-[#841724]/10">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">{cat.emoji}</span>
+                            <div>
+                              <h4 className="text-xs xl:text-sm font-extrabold uppercase tracking-wider text-[#841724]">
+                                {cat.name} Collection
+                              </h4>
+                              <p className="text-[11px] text-[#7c5c62]">
+                                {cat.tagline}
+                              </p>
+                            </div>
+                          </div>
+
+                          <span className="text-[11px] font-bold text-[#841724] bg-[#841724]/10 px-2.5 py-0.5 rounded-full">
+                            {catProducts.length} Live Items
                           </span>
                         </div>
 
-                        <div className="pt-2 space-y-1">
-                          {group.subcategories.map((sub) => {
-                            const isCurrent = activeTab.toLowerCase() === sub.name.toLowerCase();
-                            return (
-                              <button
-                                key={sub.name}
-                                onClick={() => handleCategorySelect(sub.name)}
-                                className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start gap-3 cursor-pointer group ${
-                                  isCurrent
-                                    ? 'bg-[#841724]/10 text-[#841724]'
-                                    : 'hover:bg-[#841724]/5 text-[#361117]'
-                                }`}
-                              >
-                                <span className="text-xl shrink-0 group-hover:scale-110 transition-transform">
-                                  {sub.emoji}
+                        {/* Shopify Products Grid with Embedded Images */}
+                        <div className="grid grid-cols-3 xl:grid-cols-4 gap-3 py-3">
+                          {catProducts.slice(0, 4).map((product) => (
+                            <div
+                              key={product.id}
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                onQuickView?.(product);
+                              }}
+                              className="group flex flex-col bg-[#faf4e8]/60 hover:bg-[#faf4e8] p-2 rounded-xl border border-[#841724]/10 transition-all hover:shadow-md cursor-pointer text-left"
+                            >
+                              {/* Embedded Shopify Image */}
+                              <div className="w-full aspect-square rounded-lg overflow-hidden bg-white mb-2 relative">
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  loading="lazy"
+                                />
+                                {product.badge && (
+                                  <span className="absolute top-1 left-1 bg-[#841724] text-[#faedd3] text-[9px] font-bold px-1.5 py-0.2 rounded-full">
+                                    {product.badge}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Title & Price */}
+                              <h5 className="text-[11px] font-bold text-[#2d0a10] group-hover:text-[#841724] line-clamp-1">
+                                {product.name}
+                              </h5>
+                              <div className="flex items-center justify-between mt-1">
+                                <span className="text-xs font-black text-[#841724]">
+                                  ₹{product.price.toLocaleString('en-IN')}
                                 </span>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-xs font-bold text-[#2d0a10] group-hover:text-[#841724] truncate">
-                                      {sub.label}
-                                    </span>
-                                    <span className="text-[10px] font-semibold text-[#841724] bg-[#841724]/10 px-2 py-0.5 rounded-full shrink-0 ml-2">
-                                      {sub.count}
-                                    </span>
-                                  </div>
-                                  <p className="text-[11px] text-[#7c5c62] line-clamp-1 mt-0.5">
-                                    {sub.description}
-                                  </p>
-                                </div>
-                              </button>
-                            );
-                          })}
+                                
+                                {onAddToCart && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onAddToCart(product);
+                                    }}
+                                    className="p-1 text-[#841724] hover:bg-[#841724]/15 rounded-md transition-colors"
+                                    title="Add to bag"
+                                    aria-label="Add to bag"
+                                  >
+                                    <ShoppingBag className="w-3 h-3 stroke-[2.2]" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          ))}
                         </div>
 
-                        <div className="pt-2 px-1 text-center">
+                        {/* Dropdown Footer CTA */}
+                        <div className="pt-2.5 border-t border-[#841724]/10 flex items-center justify-between">
+                          <span className="text-[11px] text-[#7c5c62] italic">
+                            Handcrafted with combed cotton yarn in Surat ♡
+                          </span>
+
                           <button
-                            onClick={() => handleCategorySelect('All Products')}
-                            className="text-[11px] font-bold text-[#841724] hover:underline inline-flex items-center gap-1 py-1"
+                            onClick={() => handleCategorySelect(cat.name)}
+                            className="inline-flex items-center gap-1 text-xs font-extrabold text-[#841724] hover:text-[#5c0f19] hover:underline"
                           >
-                            <span>Browse All 252 Items</span>
-                            <ArrowRight className="w-3 h-3" />
+                            <span>Explore all {catProducts.length} {cat.name}</span>
+                            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                           </button>
                         </div>
+
                       </div>
                     </div>
                   )}
@@ -365,16 +485,16 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
               );
             })}
 
-            {/* Direct Quick Link: All Products */}
+            {/* Quick link to All 252 items */}
             <button
               onClick={() => handleCategorySelect('All Products')}
-              className={`text-[14px] font-medium py-1 px-3 rounded-full transition-colors cursor-pointer ${
+              className={`text-[13px] xl:text-[14px] font-medium py-1 px-3 rounded-full transition-colors cursor-pointer ${
                 activeTab === 'All Products'
                   ? 'text-[#841724] font-bold bg-[#841724]/8'
                   : 'text-[#4a121d] hover:text-[#841724] hover:bg-[#841724]/5'
               }`}
             >
-              All 252 Items
+              All Items
             </button>
           </div>
 
@@ -419,45 +539,66 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                   className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#841724]/5 border border-[#841724]/15 text-[#841724] text-xs font-medium cursor-pointer"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Search all 252 handcrafted items...</span>
+                  <span>Search all handcrafted items...</span>
                 </button>
               </div>
 
-              {/* Categories Accordion */}
+              {/* The 6 Categories Accordion */}
               <div className="p-4 space-y-2">
                 <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#841724]/70 px-2 mb-1">
                   Shop by Category
                 </div>
 
-                {NAV_CATEGORY_GROUPS.map((group) => {
-                  const isExpanded = expandedMobileGroup === group.id;
+                {NAV_CATEGORIES.map((cat) => {
+                  const isExpanded = expandedMobileCategory === cat.id;
+                  const catProducts = categoryProductsMap[cat.id] || [];
+
                   return (
-                    <div key={group.id} className="rounded-xl border border-[#841724]/10 overflow-hidden">
+                    <div key={cat.id} className="rounded-xl border border-[#841724]/10 overflow-hidden">
                       <button
-                        onClick={() => setExpandedMobileGroup(isExpanded ? null : group.id)}
+                        onClick={() => setExpandedMobileCategory(isExpanded ? null : cat.id)}
                         className="w-full p-3 flex items-center justify-between text-left font-bold text-sm text-[#2d0a10] bg-[#faf4e8]/60 hover:bg-[#faf4e8]"
                       >
-                        <span>{group.name}</span>
+                        <span className="flex items-center gap-2">
+                          <span>{cat.emoji}</span>
+                          <span>{cat.name}</span>
+                        </span>
                         <ChevronDown className={`w-4 h-4 text-[#841724] transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
 
                       {isExpanded && (
-                        <div className="p-2 space-y-1 bg-[#fffdfa] border-t border-[#841724]/10">
-                          {group.subcategories.map((sub) => (
-                            <button
-                              key={sub.name}
-                              onClick={() => handleCategorySelect(sub.name)}
-                              className="w-full text-left p-2 rounded-lg text-xs flex items-center justify-between hover:bg-[#841724]/5 text-[#361117]"
+                        <div className="p-2 space-y-2 bg-[#fffdfa] border-t border-[#841724]/10">
+                          {catProducts.slice(0, 3).map((product) => (
+                            <div
+                              key={product.id}
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                onQuickView?.(product);
+                              }}
+                              className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-[#841724]/5 cursor-pointer text-left"
                             >
-                              <span className="flex items-center gap-2">
-                                <span>{sub.emoji}</span>
-                                <span className="font-medium">{sub.label}</span>
-                              </span>
-                              <span className="text-[10px] text-[#841724] font-bold bg-[#841724]/10 px-2 py-0.5 rounded-full">
-                                {sub.count}
-                              </span>
-                            </button>
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                className="w-10 h-10 rounded-md object-cover shrink-0"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h6 className="text-xs font-bold text-[#2d0a10] truncate">
+                                  {product.name}
+                                </h6>
+                                <span className="text-[11px] font-black text-[#841724]">
+                                  ₹{product.price.toLocaleString('en-IN')}
+                                </span>
+                              </div>
+                            </div>
                           ))}
+
+                          <button
+                            onClick={() => handleCategorySelect(cat.name)}
+                            className="w-full text-center text-xs font-bold text-[#841724] py-1.5 hover:underline"
+                          >
+                            View all {cat.name} ({catProducts.length}) →
+                          </button>
                         </div>
                       )}
                     </div>
@@ -468,7 +609,7 @@ export const KnitKnotNavbar: React.FC<KnitKnotNavbarProps> = ({
                   onClick={() => handleCategorySelect('All Products')}
                   className="w-full p-3 rounded-xl bg-[#841724] text-[#faedd3] font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-sm mt-3"
                 >
-                  <span>Explore All 252 Items</span>
+                  <span>Explore All Items</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

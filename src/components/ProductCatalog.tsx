@@ -37,9 +37,53 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
   // Filtering products
   const filteredProducts = useMemo(() => {
-    let result = selectedCategory === 'All Products' || selectedCategory === 'Home'
+    const sel = selectedCategory.toLowerCase().trim();
+    let result = sel === 'all products' || sel === 'home' || !sel
       ? products
-      : products.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase());
+      : products.filter((p) => {
+          const cat = (p.category || '').toLowerCase();
+          const name = (p.name || '').toLowerCase();
+          if (sel === 'bags') {
+            return cat === 'bags' || cat.includes('bag') || name.includes('tote') || name.includes('bag');
+          }
+          if (sel === 'accessories') {
+            return (
+              cat === 'hair accessories' ||
+              cat === 'bandanas' ||
+              cat === 'earrings' ||
+              cat === 'accessories' ||
+              name.includes('clip') ||
+              name.includes('gajra') ||
+              name.includes('bandana')
+            );
+          }
+          if (sel === 'flowers') {
+            return (
+              cat === 'flowers' ||
+              cat === 'fillers' ||
+              cat.includes('flower') ||
+              name.includes('rose') ||
+              name.includes('lily') ||
+              name.includes('tulip')
+            );
+          }
+          if (sel === 'home decore' || sel === 'home decor' || sel === 'home & decor') {
+            return (
+              cat === 'standees' ||
+              cat === 'vases' ||
+              cat === 'fridge magnets' ||
+              cat.includes('decor') ||
+              name.includes('standee')
+            );
+          }
+          if (sel === 'flower pots') {
+            return cat === 'flower pots' || cat.includes('pot') || name.includes('pot');
+          }
+          if (sel === 'keychains & bag charms' || sel === 'keychains' || sel === 'bag charms') {
+            return cat === 'keychains' || cat === 'bag charms' || name.includes('keychain') || name.includes('charm');
+          }
+          return cat === sel || cat.includes(sel);
+        });
 
     // Search filter
     if (searchFilter.trim()) {

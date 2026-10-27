@@ -152,6 +152,9 @@ export default function App() {
       <KnitKnotNavbar
         activeTab={activeTab}
         onTabChange={handleTabChange}
+        products={products}
+        onQuickView={(p) => setQuickViewProduct(p)}
+        onAddToCart={handleAddToCart}
         cartCount={totalCartCount}
         wishlistCount={wishlistCount}
         onSearchClick={() => setIsSearchOpen(true)}
