@@ -117,14 +117,25 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
   },
 ];
 
+// Continuous trust badge ticker items (matching reference image)
+const TICKER_ITEMS = [
+  'Delivered in 4–7 days across India',
+  'Free shipping on orders over ₹999',
+  'UPI · Cards · Netbanking · Cash on Delivery',
+  'Faulty or wrong — we cover it with instant replacement',
+  'Packed plastic-free with eco-conscious care',
+  '100% Handcrafted by women artisans in Surat',
+  'Soft combed milk cotton yarn made to keep',
+];
+
 // Natural variation values for authentic hand-hung clothesline look
 const NATURAL_TILTS = [-3.0, 2.6, -1.8, 3.2, -2.4, 2.0, -2.8, 2.2, -1.8, 2.8, -1.6, 2.4];
-const NATURAL_STAGGERS = [2, 12, -2, 14, 4, -4, 10, 0, 8, -2, 12, 2];
+const NATURAL_STAGGERS = [2, 10, -2, 12, 4, -4, 8, 0, 6, -2, 10, 2];
 
-// Card layout constants
-const CARD_WIDTH = 280; // px
-const CARD_GAP = 28; // px
-const LEFT_PAD = 48; // px
+// Card layout constants (compacted to prevent excessive blank space)
+const CARD_WIDTH = 265; // px
+const CARD_GAP = 24; // px
+const LEFT_PAD = 40; // px
 
 export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   products,
@@ -198,13 +209,12 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return () => el.removeEventListener('scroll', updateScrollProgress);
   }, [updateScrollProgress, shelfProducts]);
 
-  // Internal shelf switcher: NO PAGE SCROLLING! Updates only the hanging cards and reset line scroll
+  // Internal shelf switcher: NO PAGE SCROLLING!
   const handleCategorySwitch = (shelfId: string) => {
     if (selectedShelfId === shelfId) return;
     setSelectedShelfId(shelfId);
     categorySwitchTimeRef.current = performance.now();
 
-    // Smoothly reset horizontal track to start of the line
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
     }
@@ -411,21 +421,21 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     for (let i = 0; i < count; i++) {
       const x = LEFT_PAD + i * (CARD_WIDTH + CARD_GAP) + CARD_WIDTH / 2;
       const stagger = NATURAL_STAGGERS[i % NATURAL_STAGGERS.length];
-      const y = 32 + stagger;
+      const y = 30 + stagger;
       pegCoords.push({ x, y });
     }
 
     if (pegCoords.length === 0) return { pathD: '', totalWidth, pegCoords: [] };
 
-    let d = `M 0,24 `;
+    let d = `M 0,22 `;
     const first = pegCoords[0];
-    d += `C ${first.x * 0.3},26 ${first.x * 0.7},${first.y + 10} ${first.x},${first.y} `;
+    d += `C ${first.x * 0.3},24 ${first.x * 0.7},${first.y + 8} ${first.x},${first.y} `;
 
     for (let i = 0; i < pegCoords.length - 1; i++) {
       const p1 = pegCoords[i];
       const p2 = pegCoords[i + 1];
       const dx = p2.x - p1.x;
-      const sag = 18;
+      const sag = 16;
       const cp1x = p1.x + dx * 0.35;
       const cp1y = p1.y + sag;
       const cp2x = p2.x - dx * 0.35;
@@ -434,7 +444,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     }
 
     const last = pegCoords[pegCoords.length - 1];
-    d += `C ${last.x + 50},${last.y + 12} ${totalWidth - 30},24 ${totalWidth},20`;
+    d += `C ${last.x + 45},${last.y + 10} ${totalWidth - 30},22 ${totalWidth},18`;
 
     return { pathD: d, totalWidth, pegCoords };
   }, [shelfProducts.length]);
@@ -442,7 +452,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
   return (
     <section 
       id="hanging-shelf-section" 
-      className="w-full bg-[#faf4e8] text-[#2b0b12] py-14 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 relative overflow-hidden select-none font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
+      className="w-full bg-[#faf4e8] text-[#2b0b12] pt-6 sm:pt-8 lg:pt-10 pb-0 relative overflow-hidden select-none font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
     >
       {/* ------------------------------------------------------------- */}
       {/* VIBRANT & RICHER GARDEN WATERCOLOR BACKDROP (CLEARLY VISIBLE) */}
@@ -453,7 +463,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
           src="/garden-bg.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover opacity-[0.34] mix-blend-multiply filter contrast-[1.06] brightness-[0.92] select-none pointer-events-none"
+          className="w-full h-full object-cover opacity-[0.32] mix-blend-multiply filter contrast-[1.06] brightness-[0.92] select-none pointer-events-none"
         />
 
         {/* Soft edge gradients so the meadow artwork integrates seamlessly with warm cream */}
@@ -465,22 +475,22 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
         <div className="absolute bottom-6 left-8 w-96 h-96 rounded-full bg-[#f8f0dc]/50 blur-3xl" />
       </div>
 
-      <div className="max-w-[1540px] mx-auto relative z-10">
+      <div className="max-w-[1540px] mx-auto relative z-10 px-3 sm:px-6 lg:px-12 pb-5 sm:pb-7">
         
         {/* TWO-COLUMN LAYOUT: Left Editorial Menu, Right Hanging Clothesline Gallery */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
           
           {/* LEFT COLUMN: Fresh, Eye-Catchy Editorial Copy & Luxury Vector Icon Menu */}
-          <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between pr-0 lg:pr-4 pt-1">
+          <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between pr-0 lg:pr-2 pt-0.5">
             <div>
               {/* Eyebrow - Fresh & Distinctive to Knitknot */}
-              <div className="flex items-center gap-2 text-[#841724] font-black text-xs uppercase tracking-widest mb-3">
+              <div className="flex items-center gap-2 text-[#841724] font-black text-[11px] uppercase tracking-widest mb-2">
                 <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>STITCHED WITH SOUL • SURAT CRAFTED</span>
               </div>
 
-              {/* Headline - Poetic, Memorable & Brand-Unique */}
-              <h2 className="text-3xl sm:text-5xl lg:text-[46px] xl:text-[52px] font-medium text-[#2b0b12] leading-[1.12] tracking-tight font-serif mb-4">
+              {/* Headline - Poetic, Memorable & Brand-Unique (Tighter line height and scale) */}
+              <h2 className="text-2xl sm:text-4xl lg:text-[38px] xl:text-[42px] font-medium text-[#2b0b12] leading-[1.14] tracking-tight font-serif mb-2.5">
                 Knotted with love, <br />
                 woven to <br />
                 <span className="italic font-normal text-[#841724] font-serif">
@@ -489,12 +499,12 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               </h2>
 
               {/* Subtitle - Inviting & Engaging */}
-              <p className="text-xs sm:text-sm text-[#7c5c62] leading-relaxed max-w-md font-medium mb-8">
+              <p className="text-xs sm:text-sm text-[#7c5c62] leading-relaxed max-w-md font-medium mb-4">
                 Bespoke crochet totes, cuddly companions, and artisanal keepsakes. Glide along the clothesline to discover today's hand-hung pieces.
               </p>
 
               {/* Category Shelves List: Luxury Vector Badges with Micro-Interactions (No Emojis!) */}
-              <div className="space-y-1.5 mb-8 max-w-sm">
+              <div className="space-y-1 mb-4 max-w-sm">
                 {SHELF_CATEGORIES.map((shelf) => {
                   const isSelected = selectedShelfId === shelf.id;
                   const count = shelfCounts[shelf.id] || 0;
@@ -505,15 +515,15 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       onMouseEnter={() => handleCategorySwitch(shelf.id)}
                       onClick={() => handleCategorySwitch(shelf.id)}
                       type="button"
-                      className={`w-full py-2.5 px-3.5 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
+                      className={`w-full py-2 px-3 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
                         isSelected
-                          ? 'bg-[#faedd3] text-[#841724] font-extrabold shadow-sm border border-[#841724]/20 translate-x-1.5'
-                          : 'text-[#2b0b12] hover:text-[#841724] hover:bg-[#faedd3]/60 font-serif text-sm sm:text-base border border-transparent'
+                          ? 'bg-[#faedd3] text-[#841724] font-extrabold shadow-sm border border-[#841724]/20 translate-x-1'
+                          : 'text-[#2b0b12] hover:text-[#841724] hover:bg-[#faedd3]/60 font-serif text-sm sm:text-[14.5px] border border-transparent'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
                         {/* Elegant vector icon box with hover pop effect */}
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${
                           isSelected 
                             ? 'bg-[#841724] text-[#faedd3] shadow-md scale-105' 
                             : 'bg-[#faedd3]/80 text-[#841724] border border-[#841724]/15 group-hover:bg-[#841724] group-hover:text-[#faedd3] group-hover:scale-110 shadow-xs'
@@ -521,14 +531,14 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                           {shelf.icon}
                         </div>
 
-                        <span className={`text-sm sm:text-[15px] ${isSelected ? 'font-black font-sans tracking-tight' : 'font-serif font-medium'}`}>
+                        <span className={`text-xs sm:text-sm ${isSelected ? 'font-black font-sans tracking-tight' : 'font-serif font-medium'}`}>
                           {shelf.label}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5 text-xs">
                         {isSelected ? (
-                          <span className="text-xs font-black text-[#841724] flex items-center gap-1 bg-[#841724]/10 px-2.5 py-0.5 rounded-full">
+                          <span className="text-[11px] font-black text-[#841724] flex items-center gap-0.5 bg-[#841724]/10 px-2 py-0.5 rounded-full">
                             <span>{count}</span>
                             <ArrowRight className="w-3 h-3 stroke-[2.5]" />
                           </span>
@@ -548,15 +558,15 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
             <button
               onClick={onBrowseAll}
               type="button"
-              className="inline-flex items-center justify-center gap-2 self-start bg-[#2b0b12] hover:bg-[#841724] text-[#faedd3] font-bold text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 group"
+              className="inline-flex items-center justify-center gap-2 self-start bg-[#2b0b12] hover:bg-[#841724] text-[#faedd3] font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 group"
             >
               <span>Explore all {products.length} creations</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
 
           {/* RIGHT COLUMN: The Interactive Hanging Clothesline with Natural Sagging Rope & Smooth Hanging Cards */}
-          <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-start relative pt-2">
+          <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-start relative pt-1">
             
             {/* HORIZONTALLY SCROLLABLE / DRAGGABLE CLOTHESLINE TRACK */}
             <div
@@ -568,7 +578,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              className="w-full overflow-x-auto no-scrollbar pt-4 pb-12 px-2 cursor-grab active:cursor-grabbing select-none relative z-10"
+              className="w-full overflow-x-auto no-scrollbar pt-2 pb-6 px-1 cursor-grab active:cursor-grabbing select-none relative z-10"
               style={{
                 WebkitOverflowScrolling: 'touch',
               }}
@@ -578,7 +588,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                 className="relative flex items-start"
                 style={{ 
                   width: `${ropeSvgData.totalWidth}px`,
-                  minHeight: '480px',
+                  minHeight: '430px',
                   paddingLeft: `${LEFT_PAD}px`,
                   gap: `${CARD_GAP}px`,
                 }}
@@ -586,16 +596,16 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                 {/* 1. SAGGING JUTE ROPE SVG: Flows continuously through every wooden peg notch */}
                 <svg
                   className="absolute top-0 left-0 pointer-events-none z-20 overflow-visible"
-                  style={{ width: `${ropeSvgData.totalWidth}px`, height: '110px' }}
+                  style={{ width: `${ropeSvgData.totalWidth}px`, height: '90px' }}
                 >
                   {/* Rope Ambient Cast Shadow */}
                   <path
                     d={ropeSvgData.pathD}
                     fill="none"
                     stroke="rgba(43, 11, 18, 0.14)"
-                    strokeWidth="6"
+                    strokeWidth="5"
                     strokeLinecap="round"
-                    className="translate-y-2 blur-[2px]"
+                    className="translate-y-1.5 blur-[2px]"
                   />
 
                   {/* Main Rustic Braided Twine Body */}
@@ -603,7 +613,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                     d={ropeSvgData.pathD}
                     fill="none"
                     stroke="#8b3a2b"
-                    strokeWidth="4"
+                    strokeWidth="3.5"
                     strokeLinecap="round"
                   />
 
@@ -612,8 +622,8 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                     d={ropeSvgData.pathD}
                     fill="none"
                     stroke="#faedd3"
-                    strokeWidth="1.8"
-                    strokeDasharray="6 5"
+                    strokeWidth="1.6"
+                    strokeDasharray="5 5"
                     strokeLinecap="round"
                   />
 
@@ -623,14 +633,14 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                     fill="none"
                     stroke="#3b151a"
                     strokeWidth="1"
-                    strokeDasharray="2 7"
+                    strokeDasharray="2 6"
                     strokeLinecap="round"
                   />
 
                   {/* Little stitched knot accents at each peg contact point */}
                   {ropeSvgData.pegCoords.map((coord, idx) => (
                     <g key={idx} transform={`translate(${coord.x}, ${coord.y})`}>
-                      <circle r="3.5" fill="#8b3a2b" stroke="#faedd3" strokeWidth="1" />
+                      <circle r="3" fill="#8b3a2b" stroke="#faedd3" strokeWidth="1" />
                     </g>
                   ))}
                 </svg>
@@ -653,7 +663,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       onMouseEnter={() => {
                         const p = physicsRef.current;
                         p.hoveredIndex = index;
-                        p.hoverNudge = index % 2 === 0 ? -2.0 : 2.0;
+                        p.hoverNudge = index % 2 === 0 ? -1.8 : 1.8;
                       }}
                       onMouseLeave={() => {
                         const p = physicsRef.current;
@@ -666,29 +676,29 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                         width: `${CARD_WIDTH}px`,
                         willChange: 'transform, opacity',
                       }}
-                      className="shrink-0 relative pt-5 group/card cursor-pointer"
+                      className="shrink-0 relative pt-4 group/card cursor-pointer"
                     >
                       {/* REALISTIC WOODEN CLOTHESPIN PEG CLAMPING THE ROPE & CARD TOP */}
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center drop-shadow-md">
                         {/* Upper Peg Pinch Handles (clamping onto the rope notch) */}
-                        <div className="w-4 h-9 rounded-[3px] bg-gradient-to-b from-[#e3b88a] via-[#c9955e] to-[#9c6a3b] border border-[#6b421a]/30 relative shadow-sm flex flex-col justify-between items-center py-1">
+                        <div className="w-3.5 h-8 rounded-[3px] bg-gradient-to-b from-[#e3b88a] via-[#c9955e] to-[#9c6a3b] border border-[#6b421a]/30 relative shadow-sm flex flex-col justify-between items-center py-1">
                           
                           {/* Center vertical wood grain slit */}
                           <div className="absolute inset-y-1 left-1/2 -translate-x-1/2 w-0.5 bg-[#4a2810]/40 rounded-full" />
                           
                           {/* Metal Spring Wire Ring Clamping the Peg Center */}
-                          <div className="w-[18px] h-2 bg-gradient-to-r from-[#422c1d] via-[#75553e] to-[#422c1d] rounded-sm border border-black/40 shadow-xs z-10 -my-0.5" />
+                          <div className="w-[16px] h-1.5 bg-gradient-to-r from-[#422c1d] via-[#75553e] to-[#422c1d] rounded-sm border border-black/40 shadow-xs z-10 -my-0.5" />
                           
                           {/* Lower clamping jaws shadow cast directly onto the polaroid card */}
-                          <div className="w-3.5 h-1.5 bg-[#3a1d0d]/30 rounded-full blur-[0.5px]" />
+                          <div className="w-3 h-1 bg-[#3a1d0d]/30 rounded-full blur-[0.5px]" />
                         </div>
                       </div>
 
                       {/* AUTHENTIC TALL POLAROID KEEPSAKE CARD (SUSPENDED EXACTLY ON THE CLIP) */}
-                      <div className="mt-3 bg-[#faf7f2] rounded-2xl p-3 pb-4 border border-[#841724]/12 shadow-[0_14px_35px_-8px_rgba(43,11,18,0.14)] group-hover/card:shadow-[0_24px_48px_-6px_rgba(132,23,36,0.22)] transition-shadow duration-300 flex flex-col justify-between">
+                      <div className="mt-2.5 bg-[#faf7f2] rounded-2xl p-2.5 sm:p-3 pb-3.5 border border-[#841724]/12 shadow-[0_12px_30px_-8px_rgba(43,11,18,0.13)] group-hover/card:shadow-[0_22px_44px_-6px_rgba(132,23,36,0.20)] transition-shadow duration-300 flex flex-col justify-between">
                         
-                        {/* PHOTO WRAPPER: Portrait Ratio (approx 3:4) with Smooth Rounded Corners */}
-                        <div className="relative w-full h-[270px] sm:h-[295px] rounded-xl overflow-hidden bg-[#f0e6d6] mb-3">
+                        {/* PHOTO WRAPPER: Compacted Portrait Ratio with Smooth Rounded Corners */}
+                        <div className="relative w-full h-[240px] sm:h-[265px] rounded-xl overflow-hidden bg-[#f0e6d6] mb-2.5">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -702,14 +712,14 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
 
                           {/* Top Left Badge (e.g., Artisan Pick, Bestseller) */}
                           {product.badge && (
-                            <span className="absolute top-2.5 left-2.5 bg-[#841724] text-[#faedd3] text-[9.5px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
+                            <span className="absolute top-2 left-2 bg-[#841724] text-[#faedd3] text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
                               {product.badge}
                             </span>
                           )}
 
                           {/* Hover Quick View Eye Pill */}
                           <div className="opacity-0 group-hover/card:opacity-100 absolute inset-0 bg-[#2b0b12]/30 backdrop-blur-[1px] flex items-center justify-center transition-opacity duration-200">
-                            <span className="bg-[#faedd3] text-[#841724] font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
+                            <span className="bg-[#faedd3] text-[#841724] font-bold text-xs px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
                               <Eye className="w-3.5 h-3.5" />
                               <span>Quick View</span>
                             </span>
@@ -717,18 +727,18 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                         </div>
 
                         {/* CARD DETAILS ROW: Title, Price & Signature Round Black Action Button */}
-                        <div className="flex items-end justify-between gap-2 px-1">
+                        <div className="flex items-end justify-between gap-2 px-0.5">
                           <div className="flex-1 min-w-0 pr-1">
-                            <h4 className="text-sm sm:text-[15px] font-bold text-[#2b0b12] group-hover/card:text-[#841724] transition-colors line-clamp-1 leading-snug">
+                            <h4 className="text-xs sm:text-[14px] font-bold text-[#2b0b12] group-hover/card:text-[#841724] transition-colors line-clamp-1 leading-snug">
                               {product.name}
                             </h4>
 
-                            <div className="flex items-center gap-1.5 mt-1">
-                              <span className="text-sm sm:text-base font-black text-[#2b0b12]">
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <span className="text-sm sm:text-[15px] font-black text-[#2b0b12]">
                                 ₹{product.price.toLocaleString('en-IN')}
                               </span>
                               {product.originalPrice && (
-                                <span className="text-[11px] text-[#7c5c62] line-through font-medium">
+                                <span className="text-[10.5px] text-[#7c5c62] line-through font-medium">
                                   ₹{product.originalPrice}
                                 </span>
                               )}
@@ -739,7 +749,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                           <button
                             onClick={(e) => handleQuickAdd(e, product)}
                             type="button"
-                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
+                            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer shrink-0 ${
                               isJustAdded
                                 ? 'bg-emerald-700 text-white scale-110 shadow-emerald-900/30'
                                 : 'bg-[#2b0b12] hover:bg-[#841724] active:scale-95 text-[#faedd3]'
@@ -748,9 +758,9 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                             aria-label={`Add ${product.name} to bag`}
                           >
                             {isJustAdded ? (
-                              <Check className="w-4 h-4 stroke-[3]" />
+                              <Check className="w-3.5 h-3.5 stroke-[3]" />
                             ) : (
-                              <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.4]" />
+                              <Plus className="w-4 h-4 stroke-[2.4]" />
                             )}
                           </button>
                         </div>
@@ -763,16 +773,16 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
             </div>
 
             {/* 3. BOTTOM SLIDER CONTROLS: Arrow Left + Draggable Progress Line + Arrow Right */}
-            <div className="flex items-center justify-end gap-3 sm:gap-4 max-w-sm ml-auto px-4 mt-2">
+            <div className="flex items-center justify-end gap-3 sm:gap-4 max-w-sm ml-auto px-4 mt-1">
               
               {/* Prev Button with Physical Swing Kick */}
               <button
                 onClick={() => handleScrollBy('left')}
                 type="button"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                 aria-label="Previous hanging products"
               >
-                <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
+                <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
               </button>
 
               {/* Interactive Progress Track */}
@@ -791,10 +801,10 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               <button
                 onClick={() => handleScrollBy('right')}
                 type="button"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#841724]/20 hover:border-[#841724] bg-[#faedd3] hover:bg-[#f8f0dc] text-[#841724] flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
                 aria-label="Next hanging products"
               >
-                <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
               </button>
             </div>
 
@@ -802,6 +812,20 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
 
         </div>
 
+      </div>
+
+      {/* ------------------------------------------------------------- */}
+      {/* 4. CONTINUOUS ROTATING MARQUEE TICKER STRIPE (FULL BLEED AT BOTTOM) */}
+      {/* ------------------------------------------------------------- */}
+      <div className="w-full bg-[#23070d] text-[#faedd3] py-2.5 sm:py-3 overflow-hidden border-t border-[#841724]/20 select-none relative z-20">
+        <div className="animate-marquee-ltr flex items-center whitespace-nowrap">
+          {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
+            <div key={idx} className="flex items-center text-xs sm:text-[13px] font-medium tracking-wide">
+              <span className="text-[#faedd3]/95">{item}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#38b2ac] inline-block mx-4 sm:mx-6 shrink-0 shadow-xs" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
