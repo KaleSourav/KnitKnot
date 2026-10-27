@@ -6,7 +6,12 @@ import {
   Plus, 
   Check, 
   Sparkles, 
-  Eye
+  Eye,
+  Crown,
+  ShoppingBag,
+  Heart,
+  KeyRound,
+  Scissors
 } from 'lucide-react';
 import { Product } from '../data/products';
 
@@ -21,24 +26,24 @@ interface ShelfCategory {
   id: string;
   name: string;
   label: string;
-  icon?: string;
+  icon: React.ReactNode;
   filter: (p: Product) => boolean;
 }
 
-// Strictly partitioned categories from Shopify catalog (zero overlap)
+// Strictly partitioned categories from Shopify catalog (zero overlap, luxury icons with effects)
 const SHELF_CATEGORIES: ShelfCategory[] = [
   {
     id: 'picks',
     name: 'All Products',
     label: 'Artisan Picks',
-    icon: '🌸',
+    icon: <Crown className="w-4 h-4 stroke-[2.2]" />,
     filter: (p) => Boolean(p.featuredInHero) || p.badge === 'Artisan Pick' || p.badge === 'Bestseller' || p.badge === 'Best Seller',
   },
   {
     id: 'bags',
     name: 'Bags',
     label: 'Bags & Totes',
-    icon: '👜',
+    icon: <ShoppingBag className="w-4 h-4 stroke-[2.2]" />,
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
@@ -58,7 +63,7 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     id: 'toys',
     name: 'Toys',
     label: 'Toys & Standees',
-    icon: '🧸',
+    icon: <Heart className="w-4 h-4 stroke-[2.2]" />,
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
@@ -75,7 +80,7 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     id: 'keychains',
     name: 'Keychains & Bag Charms',
     label: 'Keychains & Charms',
-    icon: '🎀',
+    icon: <KeyRound className="w-4 h-4 stroke-[2.2]" />,
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
@@ -95,7 +100,7 @@ const SHELF_CATEGORIES: ShelfCategory[] = [
     id: 'accessories',
     name: 'Accessories',
     label: 'Hair Accessories',
-    icon: '✨',
+    icon: <Scissors className="w-4 h-4 stroke-[2.2]" />,
     filter: (p) => {
       const c = (p.category || '').toLowerCase();
       const n = (p.name || '').toLowerCase();
@@ -213,50 +218,41 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     let lastTime = performance.now();
 
     const animate = (currentTime: number) => {
-      const dt = Math.min(0.04, (currentTime - lastTime) / 1000); // capped delta time in seconds
+      const dt = Math.min(0.04, (currentTime - lastTime) / 1000);
       lastTime = currentTime;
 
       const p = physicsRef.current;
 
       if (p.isDragging) {
-        // While dragging: spring towards the target drag tilt
         const diff = p.targetAngle - p.angle;
         p.angle += diff * Math.min(1, 14 * dt);
         p.angularVelocity = diff * 8;
       } else {
-        // Released or idle: damped harmonic spring oscillator
-        const kSpring = 42; // spring stiffness
-        const kDamping = 4.8; // air resistance damping
+        const kSpring = 42;
+        const kDamping = 4.8;
         const acc = -kSpring * p.angle - kDamping * p.angularVelocity;
         p.angularVelocity += acc * dt;
         p.angle += p.angularVelocity * dt;
       }
 
-      // Elapsed time since current category was selected
       const timeSinceSwitch = (currentTime - categorySwitchTimeRef.current) / 1000;
       const timeSec = currentTime / 1000;
 
-      // Update each hanging card's transformation
       cardRefs.current.forEach((el, index) => {
         if (!el) return;
         const baseTilt = NATURAL_TILTS[index % NATURAL_TILTS.length];
         const staggerY = NATURAL_STAGGERS[index % NATURAL_STAGGERS.length];
         
-        // Gentle ambient breeze sway (each card has its own slightly out-of-phase frequency)
         const phase = index * 0.78;
         const ambient = Math.sin(timeSec * 1.5 + phase) * 1.15;
 
-        // Wave ripple factor: cards further along the line swing with a tiny delay
         const waveFactor = Math.cos((p.angle * 0.1) + (index * 0.3));
         const dynamicSway = p.angle * (0.9 + 0.15 * waveFactor);
 
-        // Hover effect if this specific card is hovered
         const isHovered = p.hoveredIndex === index;
         const hoverLift = isHovered ? -6 : 0;
         const hoverTilt = isHovered ? p.hoverNudge : 0;
 
-        // GENTLE HANGING ENTRANCE:
-        // Each card smoothly fades & settles directly on its clip (max 14px dip)
         const cardDelay = index * 0.035;
         const cardElapsed = timeSinceSwitch - cardDelay;
 
@@ -281,7 +277,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
 
         el.style.transform = `translateY(${totalY.toFixed(1)}px) rotate(${totalAngle.toFixed(2)}deg)`;
         el.style.opacity = cardOpacity.toFixed(2);
-        el.style.transformOrigin = '50% 0px'; // Pivot firmly from top wooden clip
+        el.style.transformOrigin = '50% 0px';
       });
 
       animId = requestAnimationFrame(animate);
@@ -291,13 +287,11 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     return () => cancelAnimationFrame(animId);
   }, [shelfProducts]);
 
-  // Impart an impulse (sway swing) down the clothesline
   const impartImpulse = (velocityImpulse: number) => {
     const p = physicsRef.current;
     p.angularVelocity += velocityImpulse;
   };
 
-  // Smooth scroll left/right arrows with dynamic physical swing impulse
   const handleScrollBy = (direction: 'left' | 'right') => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -308,7 +302,6 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     impartImpulse(direction === 'right' ? -12 : 12);
   };
 
-  // Drag-to-scroll via mouse pointer with fluid physics
   const handleMouseDown = (e: React.MouseEvent) => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -353,7 +346,6 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     p.targetAngle = 0;
   };
 
-  // Touch swipe support for mobile/tablet
   const handleTouchStart = (e: React.TouchEvent) => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -387,7 +379,6 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     p.targetAngle = 0;
   };
 
-  // Add to cart with feedback
   const handleQuickAdd = (e: React.MouseEvent, product: Product) => {
     e.stopPropagation();
     onAddToCart(product);
@@ -395,7 +386,6 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     setTimeout(() => setJustAddedId(null), 1200);
   };
 
-  // Jump to position on progress track click
   const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = scrollContainerRef.current;
     const track = e.currentTarget;
@@ -421,7 +411,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
     for (let i = 0; i < count; i++) {
       const x = LEFT_PAD + i * (CARD_WIDTH + CARD_GAP) + CARD_WIDTH / 2;
       const stagger = NATURAL_STAGGERS[i % NATURAL_STAGGERS.length];
-      const y = 32 + stagger; // exact height where the clothespin peg notch clamps the rope
+      const y = 32 + stagger;
       pegCoords.push({ x, y });
     }
 
@@ -435,7 +425,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
       const p1 = pegCoords[i];
       const p2 = pegCoords[i + 1];
       const dx = p2.x - p1.x;
-      const sag = 18; // Natural catenary drape sag
+      const sag = 18;
       const cp1x = p1.x + dx * 0.35;
       const cp1y = p1.y + sag;
       const cp2x = p2.x - dx * 0.35;
@@ -455,55 +445,55 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
       className="w-full bg-[#faf4e8] text-[#2b0b12] py-14 sm:py-20 lg:py-24 px-3 sm:px-6 lg:px-12 relative overflow-hidden select-none font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
     >
       {/* ------------------------------------------------------------- */}
-      {/* SUBTLE, LIGHT GARDEN WATERCOLOR BACKDROP (GENTLE & AIRY) */}
+      {/* VIBRANT & RICHER GARDEN WATERCOLOR BACKDROP (CLEARLY VISIBLE) */}
       {/* ------------------------------------------------------------- */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Soft Wildflower Garden Watercolor Image at gentle opacity */}
+        {/* Wildflower Garden Watercolor Image darkened and contrasted for rich visual presence */}
         <img
           src="/garden-bg.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover opacity-[0.14] mix-blend-multiply filter contrast-[0.92] brightness-[1.08] select-none pointer-events-none"
+          className="w-full h-full object-cover opacity-[0.34] mix-blend-multiply filter contrast-[1.06] brightness-[0.92] select-none pointer-events-none"
         />
 
-        {/* Delicate Gradient Masks to blend seamlessly into the warm cream tones */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#faf4e8]/90 via-transparent to-[#faf4e8]/95" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#faf4e8]/95 via-transparent to-[#faf4e8]/80" />
+        {/* Soft edge gradients so the meadow artwork integrates seamlessly with warm cream */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#faf4e8]/65 via-transparent to-[#faf4e8]/75" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#faf4e8]/75 via-transparent to-[#faf4e8]/45" />
 
         {/* Ambient Whimsical Light Flares */}
-        <div className="absolute top-10 right-12 w-80 h-80 rounded-full bg-[#faedd3]/70 blur-3xl" />
-        <div className="absolute bottom-6 left-8 w-96 h-96 rounded-full bg-[#f8f0dc]/60 blur-3xl" />
+        <div className="absolute top-10 right-12 w-80 h-80 rounded-full bg-[#faedd3]/60 blur-3xl" />
+        <div className="absolute bottom-6 left-8 w-96 h-96 rounded-full bg-[#f8f0dc]/50 blur-3xl" />
       </div>
 
       <div className="max-w-[1540px] mx-auto relative z-10">
         
-        {/* TWO-COLUMN LAYOUT: Left Shelf Selector, Right Hanging Clothesline Gallery */}
+        {/* TWO-COLUMN LAYOUT: Left Editorial Menu, Right Hanging Clothesline Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* LEFT COLUMN: Editorial Typography & Interactive Shelf Category Menu */}
+          {/* LEFT COLUMN: Fresh, Eye-Catchy Editorial Copy & Luxury Vector Icon Menu */}
           <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between pr-0 lg:pr-4 pt-1">
             <div>
-              {/* Eyebrow */}
+              {/* Eyebrow - Fresh & Distinctive to Knitknot */}
               <div className="flex items-center gap-2 text-[#841724] font-black text-xs uppercase tracking-widest mb-3">
                 <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>HAND-CROCHETED IN INDIA</span>
+                <span>STITCHED WITH SOUL • SURAT CRAFTED</span>
               </div>
 
-              {/* Headline with Serif Italic Accent (Matching Reference Photo) */}
+              {/* Headline - Poetic, Memorable & Brand-Unique */}
               <h2 className="text-3xl sm:text-5xl lg:text-[46px] xl:text-[52px] font-medium text-[#2b0b12] leading-[1.12] tracking-tight font-serif mb-4">
-                Handmade <br className="hidden sm:inline" />
-                crochet, <br />
+                Knotted with love, <br />
+                woven to <br />
                 <span className="italic font-normal text-[#841724] font-serif">
-                  made to keep
+                  treasure forever
                 </span>
               </h2>
 
-              {/* Subtitle */}
+              {/* Subtitle - Inviting & Engaging */}
               <p className="text-xs sm:text-sm text-[#7c5c62] leading-relaxed max-w-md font-medium mb-8">
-                Flowers that never wilt, plushies and little gifts. Pick a shelf, then swipe along the line.
+                Bespoke crochet totes, cuddly companions, and artisanal keepsakes. Glide along the clothesline to discover today's hand-hung pieces.
               </p>
 
-              {/* Category Shelves List: Artisan Picks, Keychains, Accessories, and Bags */}
+              {/* Category Shelves List: Luxury Vector Badges with Micro-Interactions (No Emojis!) */}
               <div className="space-y-1.5 mb-8 max-w-sm">
                 {SHELF_CATEGORIES.map((shelf) => {
                   const isSelected = selectedShelfId === shelf.id;
@@ -515,16 +505,22 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                       onMouseEnter={() => handleCategorySwitch(shelf.id)}
                       onClick={() => handleCategorySwitch(shelf.id)}
                       type="button"
-                      className={`w-full py-3 px-4 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
+                      className={`w-full py-2.5 px-3.5 rounded-2xl flex items-center justify-between text-left transition-all duration-200 cursor-pointer group ${
                         isSelected
                           ? 'bg-[#faedd3] text-[#841724] font-extrabold shadow-sm border border-[#841724]/20 translate-x-1.5'
                           : 'text-[#2b0b12] hover:text-[#841724] hover:bg-[#faedd3]/60 font-serif text-sm sm:text-base border border-transparent'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        {shelf.icon && (
-                          <span className="text-base">{shelf.icon}</span>
-                        )}
+                        {/* Elegant vector icon box with hover pop effect */}
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                          isSelected 
+                            ? 'bg-[#841724] text-[#faedd3] shadow-md scale-105' 
+                            : 'bg-[#faedd3]/80 text-[#841724] border border-[#841724]/15 group-hover:bg-[#841724] group-hover:text-[#faedd3] group-hover:scale-110 shadow-xs'
+                        }`}>
+                          {shelf.icon}
+                        </div>
+
                         <span className={`text-sm sm:text-[15px] ${isSelected ? 'font-black font-sans tracking-tight' : 'font-serif font-medium'}`}>
                           {shelf.label}
                         </span>
@@ -554,7 +550,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
               type="button"
               className="inline-flex items-center justify-center gap-2 self-start bg-[#2b0b12] hover:bg-[#841724] text-[#faedd3] font-bold text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95 group"
             >
-              <span>Shop all {products.length} pieces</span>
+              <span>Explore all {products.length} creations</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -596,7 +592,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
                   <path
                     d={ropeSvgData.pathD}
                     fill="none"
-                    stroke="rgba(43, 11, 18, 0.12)"
+                    stroke="rgba(43, 11, 18, 0.14)"
                     strokeWidth="6"
                     strokeLinecap="round"
                     className="translate-y-2 blur-[2px]"
