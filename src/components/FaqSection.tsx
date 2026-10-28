@@ -90,8 +90,8 @@ export const FaqSection: React.FC = () => {
                 key={item.id}
                 className={`rounded-2xl sm:rounded-3xl border transition-all duration-300 overflow-hidden ${
                   isOpen
-                    ? 'bg-[#faf4e8] border-[#841724]/30 shadow-md ring-1 ring-[#841724]/20'
-                    : 'bg-[#faf4e8]/80 hover:bg-[#faf4e8] border-[#841724]/15'
+                    ? 'bg-white border-[#841724]/30 shadow-lg ring-1 ring-[#841724]/20'
+                    : 'bg-white/80 hover:bg-white border-[#841724]/12 shadow-xs'
                 }`}
               >
                 <button

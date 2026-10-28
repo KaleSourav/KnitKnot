@@ -132,9 +132,9 @@ const TICKER_ITEMS = [
 const NATURAL_TILTS = [-3.0, 2.6, -1.8, 3.2, -2.4, 2.0, -2.8, 2.2, -1.8, 2.8, -1.6, 2.4];
 const NATURAL_STAGGERS = [2, 10, -2, 12, 4, -4, 8, 0, 6, -2, 10, 2];
 
-// Card layout constants (compacted to prevent excessive blank space)
-const CARD_WIDTH = 265; // px
-const CARD_GAP = 24; // px
+// Card layout constants (spacious luxury ecommerce layout)
+const CARD_WIDTH = 270; // px
+const CARD_GAP = 32; // px (generous breathing room)
 const LEFT_PAD = 40; // px
 
 export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
@@ -865,7 +865,7 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
           {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
             <div key={idx} className="flex items-center text-xs sm:text-[13px] font-medium tracking-wide">
               <span className="text-[#faedd3]/95">{item}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#38b2ac] inline-block mx-4 sm:mx-6 shrink-0 shadow-xs" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#faedd3] inline-block mx-4 sm:mx-6 shrink-0 shadow-xs opacity-75" />
             </div>
           ))}
         </div>

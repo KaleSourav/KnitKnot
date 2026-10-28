@@ -4,9 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { BloomEditorialHero } from './components/BloomEditorialHero';
-import { KnitKnotNavbar } from './components/KnitKnotNavbar';
-import { HeroSection } from './components/HeroSection';
+import { KnotsncoBrandHero } from './components/KnotsncoBrandHero';
 import { HangingYarnShowcase } from './components/HangingYarnShowcase';
 import { AutoBannerSlideshow } from './components/AutoBannerSlideshow';
 import { BestSellerSection } from './components/BestSellerSection';
@@ -154,26 +152,25 @@ export default function App() {
       {/* DYNAMIC SCROLL REACTIVE LIGHT-THEME BACKGROUND WITH GLOW ORBS */}
       <DynamicScrollBackground />
 
-      {/* 1. EDITORIAL BOUTIQUE HERO & FLOATING CAPSULE NAVBAR (MATCHING REFERENCE INSPIRATION) */}
-      <BloomEditorialHero
+      {/* 1. EDITORIAL BOUTIQUE HERO & FLOATING CAPSULE NAVBAR (BRAND AESTHETIC & OUR PRODUCTS) */}
+      <KnotsncoBrandHero
         cartCount={totalCartCount}
+        products={products}
         onCartClick={() => setIsCartOpen(true)}
         onSearchClick={() => setIsSearchOpen(true)}
         onUserClick={() => setIsAccountOpen(true)}
         onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
-        onExploreCatalog={() => {
-          const el = document.getElementById('bloom-catalog') || document.getElementById('bestseller-section');
-          el?.scrollIntoView({ behavior: 'smooth' });
-        }}
+        onSelectCategory={handleTabChange}
         onCustomOrder={() => {
-          showToast('Opening bespoke bouquet inquiry on WhatsApp... ♡');
+          showToast('Opening bespoke artisan order on WhatsApp... ♡');
           window.open(
-            "https://wa.me/919999999999?text=Hi%20Knotsnco!%20I'd%20like%20to%20place%20a%20custom%20order%20for%20a%20handcrafted%20bouquet",
+            "https://wa.me/919999999999?text=Hi%20Knotsnco!%20I'd%20like%20to%20place%20a%20custom%20crochet%20order",
             '_blank'
           );
         }}
         onAddToCart={handleAddToCart}
         onQuickView={(p) => setQuickViewProduct(p)}
+        heroProductsMap={heroProductsMap}
       />
 
       {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING REFERENCE WITH CLIPS & ROTATING TICKER) */}
