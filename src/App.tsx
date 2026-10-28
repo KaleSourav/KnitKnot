@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { BloomEditorialHero } from './components/BloomEditorialHero';
 import { KnitKnotNavbar } from './components/KnitKnotNavbar';
 import { HeroSection } from './components/HeroSection';
 import { HangingYarnShowcase } from './components/HangingYarnShowcase';
@@ -153,32 +154,26 @@ export default function App() {
       {/* DYNAMIC SCROLL REACTIVE LIGHT-THEME BACKGROUND WITH GLOW ORBS */}
       <DynamicScrollBackground />
 
-      {/* 1. STICKY KNOTSNCO NAVBAR WITH LOGO & ALL CONTROLS */}
-      <KnitKnotNavbar
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        products={products}
-        onQuickView={(p) => setQuickViewProduct(p)}
-        onAddToCart={handleAddToCart}
+      {/* 1. EDITORIAL BOUTIQUE HERO & FLOATING CAPSULE NAVBAR (MATCHING REFERENCE INSPIRATION) */}
+      <BloomEditorialHero
         cartCount={totalCartCount}
-        wishlistCount={wishlistCount}
+        onCartClick={() => setIsCartOpen(true)}
         onSearchClick={() => setIsSearchOpen(true)}
         onUserClick={() => setIsAccountOpen(true)}
-        onCartClick={() => setIsCartOpen(true)}
-        onWishlistClick={() => showToast('♡ Added to your wishlist collection!')}
-        onShopNowClick={() => handleTabChange('All Products')}
-      />
-
-      {/* 2. FULL LANDING PAGE HERO WITH THE KNOTSNCO LANDING IMAGE */}
-      <HeroSection
-        onExploreClick={() => {
-          const el = document.getElementById('hanging-shelf-section') || document.getElementById('bestseller-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
+        onExploreCatalog={() => {
+          const el = document.getElementById('bloom-catalog') || document.getElementById('bestseller-section');
+          el?.scrollIntoView({ behavior: 'smooth' });
         }}
-        onSelectCategory={handleTabChange}
+        onCustomOrder={() => {
+          showToast('Opening bespoke bouquet inquiry on WhatsApp... ♡');
+          window.open(
+            "https://wa.me/919999999999?text=Hi%20Knotsnco!%20I'd%20like%20to%20place%20a%20custom%20order%20for%20a%20handcrafted%20bouquet",
+            '_blank'
+          );
+        }}
         onAddToCart={handleAddToCart}
         onQuickView={(p) => setQuickViewProduct(p)}
-        heroProducts={heroProductsMap}
       />
 
       {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING REFERENCE WITH CLIPS & ROTATING TICKER) */}

@@ -15,10 +15,10 @@ interface ColorStop {
 // Curated aesthetic light-theme gradient palettes for each page section
 const SCROLL_THEMES: Record<string, ColorStop> = {
   hero: {
-    bgBase: 'linear-gradient(180deg, #fffcf7 0%, #faf3ea 100%)',
-    orb1: 'rgba(254, 215, 170, 0.45)', // soft warm peach
-    orb2: 'rgba(253, 230, 138, 0.35)', // soft golden champagne
-    orb3: 'rgba(254, 205, 211, 0.30)', // delicate blush
+    bgBase: 'linear-gradient(180deg, #fcecee 0%, #fbe8ea 60%, #faf3ea 100%)',
+    orb1: 'rgba(254, 205, 211, 0.45)', // delicate blush
+    orb2: 'rgba(253, 230, 138, 0.25)', // soft golden champagne
+    orb3: 'rgba(244, 114, 182, 0.20)', // pastel rose
   },
   hanging: {
     bgBase: 'linear-gradient(180deg, #faf3ea 0%, #f6f0e4 50%, #faf2e8 100%)',

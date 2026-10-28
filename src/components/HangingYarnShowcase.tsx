@@ -478,24 +478,16 @@ export const HangingYarnShowcase: React.FC<HangingYarnShowcaseProps> = ({
       className="w-full bg-[#faf4e8] text-[#2b0b12] pt-6 sm:pt-8 lg:pt-10 pb-0 relative overflow-hidden select-none font-['DM_Sans',sans-serif] border-t border-[#841724]/10"
     >
       {/* ------------------------------------------------------------- */}
-      {/* VIBRANT & RICHER GARDEN WATERCOLOR BACKDROP (CLEARLY VISIBLE) */}
+      {/* CLEAN LUXURY ATELIER BACKDROP (PERSONAL BRAND AESTHETIC)       */}
       {/* ------------------------------------------------------------- */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Wildflower Garden Watercolor Image darkened and contrasted for rich visual presence */}
-        <img
-          src="/garden-bg.jpg"
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover opacity-[0.32] mix-blend-multiply filter contrast-[1.06] brightness-[0.92] select-none pointer-events-none"
-        />
-
-        {/* Soft edge gradients so the meadow artwork integrates seamlessly with warm cream */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#faf4e8]/65 via-transparent to-[#faf4e8]/75" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#faf4e8]/75 via-transparent to-[#faf4e8]/45" />
-
-        {/* Ambient Whimsical Light Flares */}
-        <div className="absolute top-10 right-12 w-80 h-80 rounded-full bg-[#faedd3]/60 blur-3xl" />
-        <div className="absolute bottom-6 left-8 w-96 h-96 rounded-full bg-[#f8f0dc]/50 blur-3xl" />
+        {/* Soft elegant studio gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#fcecee]/80 via-[#faf4e8] to-[#fbf0f2]" />
+        
+        {/* Ambient Warm Blush & Champagne Light Flares */}
+        <div className="absolute top-10 right-12 w-80 h-80 rounded-full bg-[#fcecee]/70 blur-3xl" />
+        <div className="absolute bottom-6 left-8 w-96 h-96 rounded-full bg-[#faedd3]/60 blur-3xl" />
+        <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-pink-100/40 blur-2xl" />
       </div>
 
       <div className="max-w-[1540px] mx-auto relative z-10 px-3 sm:px-6 lg:px-12 pb-5 sm:pb-7">
