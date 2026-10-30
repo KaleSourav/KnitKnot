@@ -4,6 +4,7 @@
  */
 
 import { Product, CartItem, PRODUCTS } from '../data/products';
+import { mapToMainCategory } from '../data/categories';
 
 const SHOPIFY_STORE_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || '04wv6h-ut.myshopify.com';
 const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '0c626353bdea1d2a4c8f32890eb14565';
@@ -197,7 +198,9 @@ export async function fetchShopifyProducts(): Promise<{ products: Product[]; isL
     if (allNodes.length > 0) {
       const liveProducts: Product[] = allNodes.map((node, index) => {
         const firstVariant = node.variants.edges[0]?.node;
-        const mainImage = node.images.edges[0]?.node.url || getImageForProduct(node.productType, node.title);
+        const imageUrls = node.images.edges.map((e) => e.node.url).filter(Boolean);
+        const mainImage = imageUrls[0] || getImageForProduct(node.productType, node.title);
+        const images = imageUrls.length > 0 ? imageUrls : [mainImage, getImageForProduct(node.productType, node.title)];
         const price = firstVariant ? parseFloat(firstVariant.price.amount) : 499;
         const originalPrice = firstVariant?.compareAtPrice
           ? parseFloat(firstVariant.compareAtPrice.amount)
@@ -213,17 +216,21 @@ export async function fetchShopifyProducts(): Promise<{ products: Product[]; isL
           .replace(/\\n/g, ' ')
           .trim();
 
+        const mappedCategory = mapToMainCategory(node.productType, node.title);
+
         return {
           id: node.id,
           shopifyId: node.id,
           variantId: firstVariant?.id,
           handle: node.handle,
           name: node.title,
-          category: node.productType || 'Flowers',
+          category: mappedCategory,
+          rawCategory: node.productType,
           group: getCategoryGroup(node.productType),
           price,
           originalPrice: originalPrice > price ? originalPrice : undefined,
           image: mainImage,
+          images,
           rating: Number((4.7 + ((index * 13) % 4) * 0.1).toFixed(1)),
           reviewsCount: 18 + ((index * 17) % 125),
           badge,
@@ -235,7 +242,7 @@ export async function fetchShopifyProducts(): Promise<{ products: Product[]; isL
             'Durable, everlasting & easy care',
           ],
           inStock: firstVariant?.availableForSale !== false,
-          featuredInHero: index < 6,
+          featuredInHero: index < 8,
           tags: node.tags || [],
         };
       });

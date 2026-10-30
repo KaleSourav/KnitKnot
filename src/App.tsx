@@ -4,44 +4,69 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { KnotsncoBrandHero } from './components/KnotsncoBrandHero';
-import { HangingYarnShowcase } from './components/HangingYarnShowcase';
-import { AutoBannerSlideshow } from './components/AutoBannerSlideshow';
-import { BestSellerSection } from './components/BestSellerSection';
-import { InstaReelsSection } from './components/InstaReelsSection';
-import { MoodwiseDecksSection } from './components/MoodwiseDecksSection';
-import { ReviewsSection } from './components/ReviewsSection';
-import { FaqSection } from './components/FaqSection';
-import { ProductCatalog } from './components/ProductCatalog';
-import { Footer } from './components/Footer';
-import { DynamicScrollBackground } from './components/DynamicScrollBackground';
-import { CartDrawer } from './components/CartDrawer';
-import { SearchModal } from './components/SearchModal';
-import { AccountModal } from './components/AccountModal';
-import { QuickViewModal } from './components/QuickViewModal';
-import { CategoryNavDrawer } from './components/CategoryNavDrawer';
 import { PRODUCTS, Product, CartItem } from './data/products';
-import { Check } from 'lucide-react';
 import { fetchShopifyProducts, createShopifyCheckout } from './services/shopify';
+import { CrochetBouquetIntro } from './components/CrochetBouquetIntro';
+import { KnotsncoNav } from './components/KnotsncoNav';
+import { KnotsncoHero } from './components/KnotsncoHero';
+import { BrandMarquee } from './components/BrandMarquee';
+import { ShopByCategoryGrid } from './components/ShopByCategoryGrid';
+import { BestsellersShowcase } from './components/BestsellersShowcase';
+import { BouquetCustomizerSection } from './components/BouquetCustomizerSection';
+import { DadiStorySection } from './components/DadiStorySection';
+import { EditorialSpotlight } from './components/EditorialSpotlight';
+import { WhyKnotsncoSection } from './components/WhyKnotsncoSection';
+import { SocialScrapbook } from './components/SocialScrapbook';
+import { NewsletterSection } from './components/NewsletterSection';
+import { KnotsncoFooter } from './components/KnotsncoFooter';
+
+// Full Storefront Pages
+import { CollectionPage } from './pages/CollectionPage';
+import { ShopAllPage } from './pages/ShopAllPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
+import { DedicatedBYOBPage } from './pages/DedicatedBYOBPage';
+import { AboutUsPage } from './pages/AboutUsPage';
+import { ContactUsPage } from './pages/ContactUsPage';
+import { CartPage } from './pages/CartPage';
+
+// Modals & Drawers
+import { KnotsncoCartDrawer } from './components/KnotsncoCartDrawer';
+import { KnotsncoQuickViewModal } from './components/KnotsncoQuickViewModal';
+import { KnotsncoSearchModal } from './components/KnotsncoSearchModal';
+import { KnotsncoAccountModal } from './components/KnotsncoAccountModal';
+import { Check, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('Home');
-  const [products, setProducts] = useState<Product[]>(PRODUCTS);
-  const [isLiveShopify, setIsLiveShopify] = useState(false);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      product: PRODUCTS[0], // Sample item in cart
-      quantity: 1,
-    },
-  ]);
+  // Opening Bouquet Animation state (session-aware with instant replay support)
+  const [showBouquetIntro, setShowBouquetIntro] = useState<boolean>(() => {
+    return !sessionStorage.getItem('knotsnco_intro_seen');
+  });
 
-  // Modals state
+  // Main Navigation View State: 'home' | 'shop-all' | 'collection' | 'product-detail' | 'byob' | 'about' | 'contact' | 'cart'
+  const [currentView, setCurrentView] = useState<string>('home');
+  const [viewParam, setViewParam] = useState<string>(''); // For collection slug or product ID
+
+  // Products & Shopify Storefront Data
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [isLiveShopify, setIsLiveShopify] = useState<boolean>(false);
+  const [isCheckingOut, setIsCheckingOut] = useState<boolean>(false);
+
+  // Cart with local storage persistence
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('knotsnco_cart');
+      return saved ? JSON.parse(saved) : [{ product: PRODUCTS[0], quantity: 1 }];
+    } catch {
+      return [{ product: PRODUCTS[0], quantity: 1 }];
+    }
+  });
+
+  // Modal Dialogs State
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [activeProductDetail, setActiveProductDetail] = useState<Product | null>(null);
 
   // Toast feedback state
   const [toast, setToast] = useState<{ message: string; show: boolean }>({
@@ -56,22 +81,113 @@ export default function App() {
     }, 2800);
   };
 
-  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  // Sync Cart with localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('knotsnco_cart', JSON.stringify(cartItems));
+    } catch (e) {
+      console.warn('Could not save cart to localStorage', e);
+    }
+  }, [cartItems]);
 
-  // Cart operations
-  const handleAddToCart = (product: Product, qty: number = 1) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.product.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + qty }
-            : item
-        );
+  // Fetch Live Shopify Products on mount
+  useEffect(() => {
+    fetchShopifyProducts().then((res) => {
+      if (res.isLiveShopify && res.products.length > 0) {
+        setProducts(res.products);
+        setIsLiveShopify(true);
       }
-      return [...prev, { product, quantity: qty }];
     });
-    showToast(`Added "${product.name}" to bag! ♡`);
+  }, []);
+
+  // Hash-based URL routing synchronization
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '').trim();
+      if (!hash || hash === 'home') {
+        setCurrentView('home');
+        setViewParam('');
+      } else if (hash === 'shop' || hash === 'shop-all') {
+        setCurrentView('shop-all');
+        setViewParam('');
+      } else if (hash.startsWith('collection/')) {
+        const slug = hash.replace('collection/', '');
+        setCurrentView('collection');
+        setViewParam(slug);
+      } else if (hash.startsWith('product/')) {
+        const prodIdOrHandle = hash.replace('product/', '');
+        const found = products.find((p) => p.handle === prodIdOrHandle || p.id === prodIdOrHandle);
+        if (found) {
+          setActiveProductDetail(found);
+          setCurrentView('product-detail');
+        }
+      } else if (hash === 'byob') {
+        setCurrentView('byob');
+        setViewParam('');
+      } else if (hash === 'about') {
+        setCurrentView('about');
+        setViewParam('');
+      } else if (hash === 'contact') {
+        setCurrentView('contact');
+        setViewParam('');
+      } else if (hash === 'cart') {
+        setCurrentView('cart');
+        setViewParam('');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Run on initial load
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [products]);
+
+  // View navigation handler
+  const handleNavigate = (view: string, param?: string) => {
+    setCurrentView(view);
+    if (param) setViewParam(param);
+
+    if (view === 'home') {
+      window.location.hash = 'home';
+    } else if (view === 'shop-all') {
+      window.location.hash = 'shop';
+    } else if (view === 'collection' && param) {
+      window.location.hash = `collection/${param}`;
+    } else if (view === 'product-detail' && param) {
+      window.location.hash = `product/${param}`;
+    } else if (view === 'byob') {
+      window.location.hash = 'byob';
+    } else if (view === 'about') {
+      window.location.hash = 'about';
+    } else if (view === 'contact') {
+      window.location.hash = 'contact';
+    } else if (view === 'cart') {
+      window.location.hash = 'cart';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Add to cart operation
+  const handleAddToCart = (product: Product, quantity: number = 1, customization?: CartItem['customization']) => {
+    setCartItems((prev) => {
+      // Check for exact matching product & customization
+      const existingIndex = prev.findIndex(
+        (item) => item.product.id === product.id && !item.customization && !customization
+      );
+
+      if (existingIndex > -1) {
+        const next = [...prev];
+        next[existingIndex] = {
+          ...next[existingIndex],
+          quantity: next[existingIndex].quantity + quantity,
+        };
+        return next;
+      }
+
+      return [...prev, { product, quantity, customization }];
+    });
+
+    showToast(`Added "${product.name}" to your bag! ♡`);
   };
 
   const handleUpdateQuantity = (productId: string, quantity: number) => {
@@ -80,9 +196,7 @@ export default function App() {
       return;
     }
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
-      )
+      prev.map((item) => (item.product.id === productId ? { ...item, quantity } : item))
     );
   };
 
@@ -90,21 +204,12 @@ export default function App() {
     setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
   };
 
-  useEffect(() => {
-    fetchShopifyProducts().then((res) => {
-      if (res.isLiveShopify && res.products.length > 0) {
-        setProducts(res.products);
-        setIsLiveShopify(true);
-        showToast(`✨ Connected to Shopify! Loaded ${res.products.length} live products.`);
-      }
-    });
-  }, []);
-
+  // Shopify Checkout Integration
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
 
     setIsCheckingOut(true);
-    showToast('Connecting to secure Shopify checkout...');
+    showToast('Connecting to official Shopify checkout...');
 
     try {
       const checkoutUrl = await createShopifyCheckout(cartItems);
@@ -114,138 +219,177 @@ export default function App() {
       }
     } catch (err) {
       console.warn('Shopify checkout notice:', err);
-      showToast('🛍️ Shopify store connected! Add products in Shopify Admin to enable live checkout.');
+      showToast('🛍️ Connecting to Shopify Storefront Checkout...');
       setTimeout(() => {
-        setIsCartOpen(false);
-      }, 2500);
+        window.location.href = 'https://04wv6h-ut.myshopify.com/cart';
+      }, 1500);
     } finally {
       setIsCheckingOut(false);
     }
   };
 
-  // Tab & Category navigation
-  const handleTabChange = (id: string) => {
-    setActiveTab(id);
-    if (id === 'Home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      const el = document.getElementById('catalog-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        const fallback = document.getElementById('bestseller-section');
-        fallback?.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
-
-  const heroProductsMap: { [key: string]: Product } = {};
-  products.forEach((p) => {
-    heroProductsMap[p.id] = p;
-  });
-
-  const [wishlistCount, setWishlistCount] = useState(0);
+  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen w-full bg-transparent text-[#2b0b12] flex flex-col justify-start relative overflow-x-hidden selection:bg-[#841724] selection:text-[#faedd3]">
+    <div className="min-h-screen w-full bg-[#FFF5CC] text-[#811B2B] flex flex-col justify-between relative overflow-x-hidden selection:bg-[#811B2B] selection:text-[#FFF5CC]">
       
-      {/* DYNAMIC SCROLL REACTIVE LIGHT-THEME BACKGROUND WITH GLOW ORBS */}
-      <DynamicScrollBackground />
+      {/* 0. SIGNATURE ANIMATED CROCHET BOUQUET OPENING EXPERIENCE */}
+      {showBouquetIntro && (
+        <CrochetBouquetIntro
+          onComplete={() => {
+            setShowBouquetIntro(false);
+            sessionStorage.setItem('knotsnco_intro_seen', 'true');
+          }}
+        />
+      )}
 
-      {/* 1. EDITORIAL BOUTIQUE HERO & FLOATING CAPSULE NAVBAR (BRAND AESTHETIC & OUR PRODUCTS) */}
-      <KnotsncoBrandHero
+      {/* 1. KNOTSNCO BRAND NAVIGATION */}
+      <KnotsncoNav
+        currentView={currentView}
+        onNavigate={handleNavigate}
         cartCount={totalCartCount}
-        products={products}
-        onCartClick={() => setIsCartOpen(true)}
-        onSearchClick={() => setIsSearchOpen(true)}
-        onUserClick={() => setIsAccountOpen(true)}
-        onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
-        onSelectCategory={handleTabChange}
-        onCustomOrder={() => {
-          showToast('Opening bespoke artisan order on WhatsApp... ♡');
-          window.open(
-            "https://wa.me/919999999999?text=Hi%20Knotsnco!%20I'd%20like%20to%20place%20a%20custom%20crochet%20order",
-            '_blank'
-          );
-        }}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-        heroProductsMap={heroProductsMap}
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenAccount={() => setIsAccountOpen(true)}
+        onReplayIntro={() => setShowBouquetIntro(true)}
       />
 
-      {/* 3. INTERACTIVE HANGING YARN SHOWCASE (MATCHING REFERENCE WITH CLIPS & ROTATING TICKER) */}
-      <HangingYarnShowcase
-        products={products}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-        onBrowseAll={() => {
-          const el = document.getElementById('catalog-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
+      {/* 2. DYNAMIC PAGE ROUTING VIEWS */}
+      <main className="flex-1 w-full">
+        
+        {/* VIEW 1: HOMEPAGE (ALL 12 CREATIVE SECTIONS) */}
+        {currentView === 'home' && (
+          <>
+            {/* Section 2: Hero — The Knotsnco World */}
+            <KnotsncoHero
+              onExplore={() => handleNavigate('shop-all')}
+              onMakeBouquet={() => handleNavigate('byob')}
+              onQuickView={(p) => setQuickViewProduct(p)}
+              featuredProduct={products[0]}
+            />
+
+            {/* Section 3: Animated Marquee */}
+            <BrandMarquee variant="burgundy" />
+
+            {/* Section 4: Shop by Category (6 Magazine Cards) */}
+            <ShopByCategoryGrid
+              onSelectCategory={(slug) => handleNavigate('collection', slug)}
+            />
+
+            {/* Section 5: Bestselling Products */}
+            <BestsellersShowcase
+              products={products}
+              onAddToCart={handleAddToCart}
+              onQuickView={(p) => setQuickViewProduct(p)}
+              onViewAll={() => handleNavigate('shop-all')}
+            />
+
+            {/* Section 6: Build Your Own Bouquet (Interactive Studio) */}
+            <BouquetCustomizerSection
+              onAddToCart={handleAddToCart}
+              onOpenCart={() => setIsCartOpen(true)}
+            />
+
+            {/* Section 7: Brand Story ("Made By Hands That Know What Love Looks Like") */}
+            <DadiStorySection
+              onReadMore={() => handleNavigate('about')}
+            />
+
+            {/* Section 8: Creative Product Spotlight */}
+            <EditorialSpotlight
+              onAddToCart={handleAddToCart}
+              onQuickView={(p) => setQuickViewProduct(p)}
+              onExploreCollection={(slug) => handleNavigate('collection', slug)}
+            />
+
+            {/* Section 9: Why Knotsnco? */}
+            <WhyKnotsncoSection />
+
+            {/* Section 10: Instagram / Social Showcase */}
+            <SocialScrapbook />
+
+            {/* Section 11: Newsletter */}
+            <NewsletterSection />
+          </>
+        )}
+
+        {/* VIEW 2: SHOP ALL PAGE (252 PRODUCTS) */}
+        {currentView === 'shop-all' && (
+          <ShopAllPage
+            products={products}
+            onAddToCart={handleAddToCart}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {/* VIEW 3: COLLECTION PAGES (FLOWERS, POTS, CHARMS, ACCESSORIES, BAGS, DECOR) */}
+        {currentView === 'collection' && (
+          <CollectionPage
+            categorySlug={viewParam || 'flowers'}
+            products={products}
+            onAddToCart={handleAddToCart}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {/* VIEW 4: PRODUCT DETAIL PAGE */}
+        {currentView === 'product-detail' && activeProductDetail && (
+          <ProductDetailPage
+            product={activeProductDetail}
+            allProducts={products}
+            onAddToCart={handleAddToCart}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            onNavigate={handleNavigate}
+            onCheckoutInstant={(p, q) => {
+              handleAddToCart(p, q);
+              setIsCartOpen(true);
+            }}
+          />
+        )}
+
+        {/* VIEW 5: DEDICATED BUILD YOUR OWN BOUQUET STUDIO */}
+        {currentView === 'byob' && (
+          <DedicatedBYOBPage
+            onAddToCart={handleAddToCart}
+            onOpenCart={() => setIsCartOpen(true)}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {/* VIEW 6: ABOUT US PAGE (DADIS IN SURAT) */}
+        {currentView === 'about' && (
+          <AboutUsPage onNavigate={handleNavigate} />
+        )}
+
+        {/* VIEW 7: CONTACT US & FAQS */}
+        {currentView === 'contact' && (
+          <ContactUsPage onNavigate={handleNavigate} />
+        )}
+
+        {/* VIEW 8: DEDICATED CART PAGE */}
+        {currentView === 'cart' && (
+          <CartPage
+            items={cartItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveItem}
+            onCheckout={handleCheckout}
+            isCheckingOut={isCheckingOut}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+      </main>
+
+      {/* 3. EDITORIAL FOOTER */}
+      <KnotsncoFooter
+        onNavigate={handleNavigate}
+        onReplayIntro={() => setShowBouquetIntro(true)}
       />
 
-      {/* AUTOMATIC SLIDESHOW BANNER BEFORE STEP 3 (USING /banners/1.png, 3.png, 4.png, 5.png) */}
-      <AutoBannerSlideshow
-        onBannerClick={() => {
-          const el = document.getElementById('bestseller-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
-      />
-
-      {/* 3) BEST SELLER SECTION */}
-      <BestSellerSection
-        products={products}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-        onBrowseAll={() => {
-          const el = document.getElementById('catalog-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
-      />
-
-      {/* 4) INSTA REELS SECTION ("WATCH & BUY") */}
-      <InstaReelsSection
-        products={products}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-      />
-
-      {/* 5) CARDWISE / MOODWISE DECKS ROW & 6) 20 PRODUCTS FOR THE ABOVE */}
-      <MoodwiseDecksSection
-        products={products}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-      />
-
-      {/* 7) REVIEWS SECTION */}
-      <ReviewsSection />
-
-      {/* 8) FAQS SECTION */}
-      <FaqSection />
-
-      {/* FULL CATALOG (COLLAPSIBLE / ACCESSIBLE VIA TABS & DRAWER) */}
-      <ProductCatalog
-        products={products}
-        selectedCategory={activeTab}
-        onSelectCategory={handleTabChange}
-        onAddToCart={handleAddToCart}
-        onQuickView={(p) => setQuickViewProduct(p)}
-        onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
-      />
-
-      {/* EDITORIAL LUXURY FOOTER */}
-      <Footer onSelectCategory={handleTabChange} />
-
-      {/* MODALS & DRAWERS */}
-      <CategoryNavDrawer
-        isOpen={isCategoryDrawerOpen}
-        onClose={() => setIsCategoryDrawerOpen(false)}
-        selectedCategory={activeTab}
-        onSelectCategory={handleTabChange}
-        totalProductsCount={products.length}
-      />
-
-      <CartDrawer
+      {/* 4. MODALS & DRAWERS */}
+      <KnotsncoCartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
@@ -253,34 +397,44 @@ export default function App() {
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
         isCheckingOut={isCheckingOut}
+        onNavigate={handleNavigate}
       />
 
-      <SearchModal
+      <KnotsncoQuickViewModal
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
+        onAddToCart={handleAddToCart}
+        onViewFullDetails={(p) => {
+          setActiveProductDetail(p);
+          handleNavigate('product-detail', p.handle || p.id);
+        }}
+      />
+
+      <KnotsncoSearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         products={products}
-        onSelectProduct={(p) => setQuickViewProduct(p)}
+        onSelectProduct={(p) => {
+          setActiveProductDetail(p);
+          handleNavigate('product-detail', p.handle || p.id);
+        }}
         onAddToCart={handleAddToCart}
       />
 
-      <AccountModal
+      <KnotsncoAccountModal
         isOpen={isAccountOpen}
         onClose={() => setIsAccountOpen(false)}
       />
 
-      <QuickViewModal
-        product={quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
-        onAddToCart={handleAddToCart}
-      />
-
       {/* FLOATING TOAST NOTIFICATION */}
       {toast.show && (
-        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-md z-50 bg-[#841724] border border-[#5c0f19] rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-200">
-          <div className="w-7 h-7 rounded-full bg-[#faedd3]/20 text-[#faedd3] flex items-center justify-center shrink-0">
-            <Check className="w-4 h-4 stroke-[2.5]" />
+        <div className="fixed bottom-5 right-5 left-5 sm:left-auto sm:max-w-md z-[80] bg-[#811B2B] border-2 border-[#5C0F19] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-200">
+          <div className="w-8 h-8 rounded-full bg-[#FFF5CC] text-[#811B2B] flex items-center justify-center shrink-0 shadow-sm">
+            <Check className="w-4 h-4 stroke-[3]" />
           </div>
-          <span className="text-xs sm:text-sm font-bold text-[#faedd3]">{toast.message}</span>
+          <span className="text-xs sm:text-sm font-bold text-[#FFF5CC] font-rounded">
+            {toast.message}
+          </span>
         </div>
       )}
 
