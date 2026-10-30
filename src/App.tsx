@@ -100,68 +100,121 @@ export default function App() {
     });
   }, []);
 
-  // Hash-based URL routing synchronization
+  // HTML5 History & Pathname URL Routing
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '').trim();
-      if (!hash || hash === 'home') {
+    const resolveRoute = () => {
+      // Check pathname (e.g. /shop, /collection/flowers, /byob, /about, /contact, /cart)
+      const pathname = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+      const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase().trim();
+
+      // Prioritize pathname if not root, otherwise check hash
+      const target = pathname !== '/' ? pathname : (hash ? `/${hash}` : '/');
+
+      if (target === '/' || target === '/home') {
         setCurrentView('home');
         setViewParam('');
-      } else if (hash === 'shop' || hash === 'shop-all') {
+        document.title = 'Knotsnco | Handmade Happiness Crochet Boutique';
+      } else if (target === '/shop' || target === '/shop-all') {
         setCurrentView('shop-all');
         setViewParam('');
-      } else if (hash.startsWith('collection/')) {
-        const slug = hash.replace('collection/', '');
+        document.title = 'Shop All Crochet Treasures | Knotsnco';
+      } else if (target.startsWith('/collection/')) {
+        const slug = target.replace('/collection/', '');
         setCurrentView('collection');
         setViewParam(slug);
-      } else if (hash.startsWith('product/')) {
-        const prodIdOrHandle = hash.replace('product/', '');
+        document.title = `${slug.replace(/-/g, ' ').toUpperCase()} | Knotsnco Collection`;
+      } else if (target === '/flowers') {
+        setCurrentView('collection');
+        setViewParam('flowers');
+        document.title = 'Everlasting Crochet Flowers | Knotsnco';
+      } else if (target === '/flower-pots') {
+        setCurrentView('collection');
+        setViewParam('flower-pots');
+        document.title = 'Desktop Flower Pots | Knotsnco';
+      } else if (target === '/keychains' || target === '/keychains-and-bag-charms') {
+        setCurrentView('collection');
+        setViewParam('keychains-and-bag-charms');
+        document.title = 'Keychains & Bag Charms | Knotsnco';
+      } else if (target === '/accessories') {
+        setCurrentView('collection');
+        setViewParam('accessories');
+        document.title = 'Crochet Accessories | Knotsnco';
+      } else if (target === '/bags') {
+        setCurrentView('collection');
+        setViewParam('bags');
+        document.title = 'Granny Square Bags | Knotsnco';
+      } else if (target === '/home-decor') {
+        setCurrentView('collection');
+        setViewParam('home-decor');
+        document.title = 'Home Decor & Standees | Knotsnco';
+      } else if (target.startsWith('/product/')) {
+        const prodIdOrHandle = target.replace('/product/', '');
         const found = products.find((p) => p.handle === prodIdOrHandle || p.id === prodIdOrHandle);
         if (found) {
           setActiveProductDetail(found);
           setCurrentView('product-detail');
+          document.title = `${found.name} | Knotsnco`;
         }
-      } else if (hash === 'byob') {
+      } else if (target === '/byob' || target === '/bouquet-studio') {
         setCurrentView('byob');
         setViewParam('');
-      } else if (hash === 'about') {
+        document.title = 'Build Your Own Bouquet Studio | Knotsnco';
+      } else if (target === '/about') {
         setCurrentView('about');
         setViewParam('');
-      } else if (hash === 'contact') {
+        document.title = 'Our Story & Dadis in Surat | Knotsnco';
+      } else if (target === '/contact') {
         setCurrentView('contact');
         setViewParam('');
-      } else if (hash === 'cart') {
+        document.title = 'Contact & Concierge | Knotsnco';
+      } else if (target === '/cart') {
         setCurrentView('cart');
+        setViewParam('');
+        document.title = 'Your Shopping Bag | Knotsnco';
+      } else {
+        setCurrentView('home');
         setViewParam('');
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Run on initial load
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', resolveRoute);
+    window.addEventListener('hashchange', resolveRoute);
+    resolveRoute(); // Run on initial load
+    return () => {
+      window.removeEventListener('popstate', resolveRoute);
+      window.removeEventListener('hashchange', resolveRoute);
+    };
   }, [products]);
 
-  // View navigation handler
+  // View navigation handler that actively changes browser URL
   const handleNavigate = (view: string, param?: string) => {
     setCurrentView(view);
     if (param) setViewParam(param);
 
+    let targetUrl = '/';
     if (view === 'home') {
-      window.location.hash = 'home';
+      targetUrl = '/';
     } else if (view === 'shop-all') {
-      window.location.hash = 'shop';
+      targetUrl = '/shop';
     } else if (view === 'collection' && param) {
-      window.location.hash = `collection/${param}`;
+      targetUrl = `/collection/${param}`;
     } else if (view === 'product-detail' && param) {
-      window.location.hash = `product/${param}`;
+      targetUrl = `/product/${param}`;
     } else if (view === 'byob') {
-      window.location.hash = 'byob';
+      targetUrl = '/byob';
     } else if (view === 'about') {
-      window.location.hash = 'about';
+      targetUrl = '/about';
     } else if (view === 'contact') {
-      window.location.hash = 'contact';
+      targetUrl = '/contact';
     } else if (view === 'cart') {
-      window.location.hash = 'cart';
+      targetUrl = '/cart';
+    }
+
+    // Update browser URL bar cleanly using HTML5 pushState
+    try {
+      window.history.pushState({ view, param }, '', targetUrl);
+    } catch {
+      window.location.hash = targetUrl.replace(/^\//, '');
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -17,3 +17,4 @@ export function DynamicScrollBackground() {
 }
 
 export default DynamicScrollBackground;
+

@@ -49,15 +49,26 @@ export function KnotsncoNav({
   }, []);
 
   const navLinks = [
-    { label: 'Home', view: 'home' },
-    { label: 'Shop All', view: 'shop-all' },
-    { label: 'Flowers', view: 'collection', slug: 'flowers' },
-    { label: 'Flower Pots', view: 'collection', slug: 'flower-pots' },
-    { label: 'Keychains & Charms', view: 'collection', slug: 'keychains-and-bag-charms' },
-    { label: 'Accessories', view: 'collection', slug: 'accessories' },
-    { label: 'Bags', view: 'collection', slug: 'bags' },
-    { label: 'Home Decor', view: 'collection', slug: 'home-decor' },
+    { label: 'Home', view: 'home', path: '/' },
+    { label: 'Shop All', view: 'shop-all', path: '/shop' },
+    { label: 'Flowers', view: 'collection', slug: 'flowers', path: '/collection/flowers' },
+    { label: 'Flower Pots', view: 'collection', slug: 'flower-pots', path: '/collection/flower-pots' },
+    { label: 'Keychains & Charms', view: 'collection', slug: 'keychains-and-bag-charms', path: '/collection/keychains-and-bag-charms' },
+    { label: 'Accessories', view: 'collection', slug: 'accessories', path: '/collection/accessories' },
+    { label: 'Bags', view: 'collection', slug: 'bags', path: '/collection/bags' },
+    { label: 'Home Decor', view: 'collection', slug: 'home-decor', path: '/collection/home-decor' },
   ];
+
+  const getHref = (view: string, slug?: string) => {
+    if (view === 'home') return '/';
+    if (view === 'shop-all') return '/shop';
+    if (view === 'collection' && slug) return `/collection/${slug}`;
+    if (view === 'byob') return '/byob';
+    if (view === 'about') return '/about';
+    if (view === 'contact') return '/contact';
+    if (view === 'cart') return '/cart';
+    return '/';
+  };
 
   return (
     <>
@@ -107,8 +118,12 @@ export function KnotsncoNav({
             </button>
 
             {/* Knotsnco Official Logo with Mascot */}
-            <div
-              onClick={() => onNavigate('home')}
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('home');
+              }}
               className="cursor-pointer flex items-center gap-2.5 shrink-0 group"
             >
               <img
@@ -119,7 +134,7 @@ export function KnotsncoNav({
               <span className="hidden xl:inline-block font-handwriting text-lg text-[#811B2B]/80 font-bold -mb-1">
                 handmade happiness ♡
               </span>
-            </div>
+            </a>
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-5 xl:gap-6 font-rounded text-[13px] font-bold text-[#811B2B]">
@@ -129,9 +144,13 @@ export function KnotsncoNav({
                   (link.slug && currentView === `collection/${link.slug}`);
 
                 return (
-                  <button
+                  <a
                     key={link.label}
-                    onClick={() => onNavigate(link.view, link.slug)}
+                    href={link.path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(link.view, link.slug);
+                    }}
                     className={`relative py-1 transition-colors hover:text-[#5C0F19] group ${
                       isActive ? 'text-[#811B2B]' : 'text-[#811B2B]/85'
                     }`}
@@ -142,13 +161,17 @@ export function KnotsncoNav({
                         isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`}
                     />
-                  </button>
+                  </a>
                 );
               })}
 
               {/* Special CTA: Build Your Own Bouquet Studio */}
-              <button
-                onClick={() => onNavigate('byob')}
+              <a
+                href="/byob"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate('byob');
+                }}
                 className="relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#811B2B] text-[#FFF5CC] font-bold text-xs tracking-wider shadow-sm hover:shadow-md hover:bg-[#5C0F19] transition-all transform hover:-translate-y-0.5"
               >
                 <Flower2 className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
@@ -156,7 +179,7 @@ export function KnotsncoNav({
                 <span className="absolute -top-2 -right-2 bg-[#F5DD91] text-[#811B2B] text-[9px] font-extrabold px-1.5 py-0.2 rounded-full border border-[#811B2B]/20 rotate-6 shadow-sm">
                   NEW
                 </span>
-              </button>
+              </a>
             </nav>
 
             {/* Right Action Icons: Search, Account, Cart */}
@@ -226,8 +249,10 @@ export function KnotsncoNav({
 
             {/* Highlight BYOB Studio Banner */}
             <div className="p-4 bg-[#F5DD91]/50 border-b border-[#811B2B]/10">
-              <button
-                onClick={() => {
+              <a
+                href="/byob"
+                onClick={(e) => {
+                  e.preventDefault();
                   onNavigate('byob');
                   setIsMobileMenuOpen(false);
                 }}
@@ -238,7 +263,7 @@ export function KnotsncoNav({
                   <span>Build Your Own Bouquet</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#F5DD91]" />
-              </button>
+              </a>
             </div>
 
             {/* Category Navigation Links with Icons */}
@@ -247,8 +272,10 @@ export function KnotsncoNav({
                 Shop Collections
               </div>
 
-              <button
-                onClick={() => {
+              <a
+                href="/shop"
+                onClick={(e) => {
+                  e.preventDefault();
                   onNavigate('shop-all');
                   setIsMobileMenuOpen(false);
                 }}
@@ -256,12 +283,14 @@ export function KnotsncoNav({
               >
                 <span>All Products</span>
                 <span className="text-xs text-[#811B2B]/60">252 Items</span>
-              </button>
+              </a>
 
               {MAIN_CATEGORIES.map((cat) => (
-                <button
+                <a
                   key={cat.id}
-                  onClick={() => {
+                  href={`/collection/${cat.slug}`}
+                  onClick={(e) => {
+                    e.preventDefault();
                     onNavigate('collection', cat.slug);
                     setIsMobileMenuOpen(false);
                   }}
@@ -272,7 +301,7 @@ export function KnotsncoNav({
                     <span>{cat.name}</span>
                   </div>
                   <span className="text-xs text-[#811B2B]/60">{cat.count}</span>
-                </button>
+                </a>
               ))}
 
               <div className="pt-4 mt-4 border-t border-[#811B2B]/10 space-y-1">

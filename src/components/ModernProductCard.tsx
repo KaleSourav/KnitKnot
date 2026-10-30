@@ -6,3 +6,4 @@
 export { KnotsncoProductCard as ModernProductCard, KnotsncoProductCard } from './KnotsncoProductCard';
 import { KnotsncoProductCard } from './KnotsncoProductCard';
 export default KnotsncoProductCard;
+
