@@ -1,136 +1,437 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
+ *
+ * Knotsnco — Build Your Own Bouquet (BYOB) Studio
+ * A beautiful, interactive 3-step bouquet customizer.
  */
 
-import React, { useState } from 'react';
-import { Plus, Minus, Flower2, ShoppingBag, Check, Sparkles, Heart } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  Plus, Minus, ShoppingBag, Check, Sparkles,
+  Heart, ChevronRight, ArrowRight, MessageSquare, Palette, Flower2
+} from 'lucide-react';
 import { Product, CartItem } from '../data/products';
 
-interface FlowerStemOption {
+/* ─── DATA ────────────────────────────────────────────────────── */
+
+interface FlowerOption {
   id: string;
   name: string;
+  tagline: string;
   price: number;
   color: string;
-  icon: string;
+  bg: string;
+  emoji: string;
   image: string;
 }
 
-const AVAILABLE_FLOWERS: FlowerStemOption[] = [
+const FLOWERS: FlowerOption[] = [
   {
-    id: 'stem-rose-red',
+    id: 'rose',
     name: 'Burgundy Classic Rose',
+    tagline: 'Timeless & romantic',
     price: 249,
     color: '#811B2B',
-    icon: '🌹',
+    bg: '#F5C4D5',
+    emoji: '🌹',
     image: '/products/bouquet.jpg',
   },
   {
-    id: 'stem-tulip-pink',
+    id: 'tulip',
     name: 'Pastel Pink Tulip',
+    tagline: 'Soft & dreamy',
     price: 199,
-    color: '#F5C4D5',
-    icon: '🌷',
+    color: '#D46A8A',
+    bg: '#FAE0EB',
+    emoji: '🌷',
     image: '/products/tulips.jpg',
   },
   {
-    id: 'stem-sunflower',
+    id: 'sunflower',
     name: 'Smiling Sunflower',
+    tagline: 'Bright & joyful',
     price: 299,
-    color: '#F5DD91',
-    icon: '🌻',
+    color: '#C4951A',
+    bg: '#FFF0B3',
+    emoji: '🌻',
     image: '/products/byob.jpg',
   },
   {
-    id: 'stem-daisy',
+    id: 'daisy',
     name: 'Marshmallow Daisy',
+    tagline: 'Cute & delicate',
     price: 189,
-    color: '#FFFEF8',
-    icon: '🌼',
+    color: '#8E6B3E',
+    bg: '#F5F0E8',
+    emoji: '🌼',
     image: '/bloom/bouquet-gentle-white.jpg',
   },
   {
-    id: 'stem-lily-blue',
+    id: 'lily',
     name: 'Royal Blue Bloom',
+    tagline: 'Rare & majestic',
     price: 229,
-    color: '#BBDDEB',
-    icon: '🪻',
+    color: '#2E6DA4',
+    bg: '#D6EAF8',
+    emoji: '🪻',
     image: '/bloom/bouquet-royal-blue.jpg',
   },
   {
-    id: 'stem-foliage',
+    id: 'foliage',
     name: 'Sage Eucalyptus Sprig',
+    tagline: 'Lush & fresh',
     price: 129,
-    color: '#C5E7D4',
-    icon: '🌿',
+    color: '#3D7A54',
+    bg: '#D5ECD9',
+    emoji: '🌿',
     image: '/products/utility.jpg',
   },
 ];
 
-const WRAPPING_STYLES = [
-  { id: 'wrap-pink', name: 'Pastel Pink', color: '#F5C4D5', pattern: 'Origami Folds' },
-  { id: 'wrap-yellow', name: 'Butter Yellow', color: '#F5DD91', pattern: 'Sunlit Crepe' },
-  { id: 'wrap-mint', name: 'Muted Mint', color: '#C5E7D4', pattern: 'Checkered Gingham' },
-  { id: 'wrap-blue', name: 'Powder Blue', color: '#BBDDEB', pattern: 'Cloud Matte' },
-  { id: 'wrap-cream', name: 'Warm Cream', color: '#FFF5CC', pattern: 'Vintage Newspaper' },
+interface WrapOption {
+  id: string;
+  name: string;
+  style: string;
+  color: string;
+  textColor: string;
+}
+
+const WRAPS: WrapOption[] = [
+  { id: 'pink',   name: 'Blush Pink',     style: 'Origami Folds',      color: '#F5C4D5', textColor: '#811B2B' },
+  { id: 'yellow', name: 'Butter Yellow',  style: 'Sunlit Crepe',       color: '#F5DD91', textColor: '#7A5C00' },
+  { id: 'mint',   name: 'Muted Mint',     style: 'Gingham Check',      color: '#C5E7D4', textColor: '#1F5E3B' },
+  { id: 'blue',   name: 'Powder Blue',    style: 'Cloud Matte',        color: '#BBDDEB', textColor: '#1A4A70' },
+  { id: 'cream',  name: 'Warm Cream',     style: 'Vintage Newspaper',  color: '#FFF5CC', textColor: '#811B2B' },
 ];
 
-const RIBBON_COLORS = [
-  { id: 'ribbon-burgundy', name: 'Deep Burgundy', color: '#811B2B' },
-  { id: 'ribbon-pink', name: 'Rose Pink', color: '#F5C4D5' },
-  { id: 'ribbon-gold', name: 'Golden Honey', color: '#F5DD91' },
-  { id: 'ribbon-mint', name: 'Muted Forest', color: '#4A7C59' },
+interface RibbonOption {
+  id: string;
+  name: string;
+  color: string;
+}
+
+const RIBBONS: RibbonOption[] = [
+  { id: 'burgundy', name: 'Deep Burgundy', color: '#811B2B' },
+  { id: 'pink',     name: 'Rose Pink',     color: '#F5C4D5' },
+  { id: 'gold',     name: 'Golden Honey',  color: '#C4951A' },
+  { id: 'forest',   name: 'Forest Green',  color: '#4A7C59' },
+  { id: 'navy',     name: 'Midnight Blue', color: '#2E4A7A' },
 ];
+
+const BASE_PACKAGING_PRICE = 149;
+const STEPS = ['Flowers', 'Wrapping', 'Finishing'];
+
+/* ─── PROPS ───────────────────────────────────────────────────── */
 
 interface BouquetCustomizerSectionProps {
   onAddToCart: (product: Product, quantity?: number, customization?: CartItem['customization']) => void;
   onOpenCart?: () => void;
+  showHeader?: boolean;
+  className?: string;
 }
+
+/* ─── LIVE BOUQUET PREVIEW ────────────────────────────────────── */
+
+function BouquetPreview({
+  quantities,
+  wrapColor,
+  ribbonColor,
+  totalStems,
+  totalPrice,
+  isAdded,
+  onAddToCart: handleAdd,
+}: {
+  quantities: Record<string, number>;
+  wrapColor: string;
+  ribbonColor: string;
+  totalStems: number;
+  totalPrice: number;
+  isAdded: boolean;
+  onAddToCart: () => void;
+}) {
+  const activeFlowers = FLOWERS.filter((f) => (quantities[f.id] || 0) > 0);
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Preview card */}
+      <motion.div
+        layout
+        className="relative rounded-3xl overflow-hidden flex flex-col items-center justify-between p-6 pb-5 flex-1"
+        style={{
+          background: `radial-gradient(ellipse at 50% 20%, ${wrapColor} 0%, #FFFEF8 80%)`,
+          border: '2.5px solid #811B2B',
+          boxShadow: '0 20px 60px rgba(129,27,43,0.18)',
+          minHeight: 390,
+        }}
+      >
+        {/* Washi tape label */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 px-5 py-1.5 text-xs font-bold rounded-b-xl shadow-sm z-20"
+          style={{
+            backgroundColor: '#FFFEF8',
+            color: '#811B2B',
+            fontFamily: 'Caveat, cursive',
+            fontSize: 16,
+            border: '1.5px solid rgba(129,27,43,0.2)',
+            borderTop: 'none',
+          }}
+        >
+          Your Arrangement Preview ✿
+        </div>
+
+        {/* Flower cluster & wrapping cone */}
+        <div className="relative w-56 h-56 mt-7 flex items-center justify-center">
+          {activeFlowers.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center gap-2 text-center"
+            >
+              <span className="text-5xl opacity-30">🌸</span>
+              <p className="text-xs font-bold opacity-40" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                Add stems below to craft your bouquet
+              </p>
+            </motion.div>
+          ) : (
+            <>
+              {/* Wrapping paper cone */}
+              <svg
+                viewBox="0 0 200 200"
+                className="absolute inset-0 w-full h-full"
+                style={{ pointerEvents: 'none' }}
+              >
+                {/* Back flap */}
+                <polygon
+                  points="36,86 100,192 78,86"
+                  fill="#FFFEF8"
+                  stroke="#811B2B"
+                  strokeWidth="2"
+                  opacity="0.9"
+                />
+                <polygon
+                  points="164,86 100,192 122,86"
+                  fill="#FFFEF8"
+                  stroke="#811B2B"
+                  strokeWidth="2"
+                  opacity="0.9"
+                />
+                {/* Main wrap */}
+                <polygon
+                  points="52,90 100,192 148,90"
+                  fill={wrapColor}
+                  stroke="#811B2B"
+                  strokeWidth="2.5"
+                  opacity="0.95"
+                />
+                {/* Ribbon band */}
+                <motion.path
+                  key={ribbonColor}
+                  d="M 70,140 Q 100,152 130,140"
+                  fill="none"
+                  stroke={ribbonColor}
+                  strokeWidth="7"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                {/* Bow */}
+                <motion.g
+                  key={`bow-${ribbonColor}`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 18 }}
+                  transform="translate(100, 148)"
+                >
+                  <path d="M 0,0 C -20,-14 -28,6 -5,0" fill={ribbonColor} stroke="#811B2B" strokeWidth="2" />
+                  <path d="M 0,0 C 20,-14 28,6 5,0"  fill={ribbonColor} stroke="#811B2B" strokeWidth="2" />
+                  <path d="M -2,3 Q -12,20 -20,30 Q -10,18 0,6"  fill={ribbonColor} stroke="#811B2B" strokeWidth="1.5" />
+                  <path d="M 2,3 Q 12,20 20,30 Q 10,18 0,6"   fill={ribbonColor} stroke="#811B2B" strokeWidth="1.5" />
+                  <circle cx="0" cy="0" r="5" fill={ribbonColor} stroke="#FFFEF8" strokeWidth="1.5" />
+                </motion.g>
+              </svg>
+
+              {/* Realistic Flower Mini-Thumbnails Clustered in Cone */}
+              <div className="relative w-44 h-32 flex items-end justify-center -mt-12" style={{ zIndex: 2 }}>
+                {activeFlowers.map((f, i) => {
+                  const total = activeFlowers.length;
+                  const angle = total === 1 ? 0 : ((i / (total - 1)) - 0.5) * 110;
+                  const rad = (angle * Math.PI) / 180;
+                  const x = Math.sin(rad) * 50;
+                  const y = -Math.cos(rad) * 18;
+                  const count = quantities[f.id] || 0;
+                  return (
+                    <motion.div
+                      key={f.id}
+                      layout
+                      initial={{ scale: 0, y: 20 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0 }}
+                      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                      className="absolute flex flex-col items-center group cursor-pointer"
+                      style={{ transform: `translate(${x}px, ${y}px)` }}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 relative"
+                        style={{ backgroundColor: f.bg, borderColor: f.color }}
+                      >
+                        <img
+                          src={f.image}
+                          alt={f.name}
+                          className="w-full h-full object-cover scale-110"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                        <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-base -z-10">
+                          {f.emoji}
+                        </span>
+                      </div>
+                      {count > 1 && (
+                        <span
+                          className="text-[9px] font-black mt-0.5 px-1.5 py-0.5 rounded-full border border-white/50 shadow-xs"
+                          style={{ backgroundColor: '#811B2B', color: '#FFF5CC' }}
+                        >
+                          ×{count}
+                        </span>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Summary Details */}
+        <div className="w-full mt-4 space-y-2">
+          {activeFlowers.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {activeFlowers.map((f) => (
+                <span
+                  key={f.id}
+                  className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-black/5"
+                  style={{ backgroundColor: f.bg, color: f.color }}
+                >
+                  {quantities[f.id]}× {f.name.replace(/^(Burgundy|Pastel|Smiling|Marshmallow|Royal|Sage)\s+/i, '')}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between py-3 border-t border-[#811B2B]/15">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                Bouquet Total
+              </p>
+              <p
+                className="text-3xl font-black leading-none"
+                style={{ color: '#811B2B', fontFamily: '"Playfair Display", serif' }}
+              >
+                {totalStems > 0 ? `₹${totalPrice}` : '—'}
+              </p>
+              {totalStems > 0 && (
+                <p className="text-[10px] opacity-50 mt-0.5" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                  {totalStems} stems + artisan gift wrapping
+                </p>
+              )}
+            </div>
+
+            <motion.button
+              whileHover={{ scale: totalStems > 0 ? 1.05 : 1 }}
+              whileTap={{ scale: totalStems > 0 ? 0.95 : 1 }}
+              onClick={handleAdd}
+              disabled={totalStems === 0}
+              className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all"
+              style={{
+                backgroundColor: totalStems === 0 ? 'rgba(129,27,43,0.12)' : isAdded ? '#16a34a' : '#811B2B',
+                color: totalStems === 0 ? 'rgba(129,27,43,0.4)' : '#FFF5CC',
+                cursor: totalStems === 0 ? 'not-allowed' : 'pointer',
+                boxShadow: totalStems > 0 ? '0 8px 24px rgba(129,27,43,0.3)' : 'none',
+                fontFamily: 'Quicksand, Nunito, sans-serif',
+              }}
+            >
+              {isAdded ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Added!</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>Add to Bag</span>
+                </>
+              )}
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Trust pills */}
+      <div className="flex flex-wrap gap-2 mt-3">
+        {[
+          { icon: '✿', text: 'Handmade in Surat' },
+          { icon: '♡', text: 'Gift-ready box' },
+          { icon: '✦', text: 'Never wilts' },
+        ].map((pill) => (
+          <span
+            key={pill.text}
+            className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#811B2B]/10"
+            style={{ backgroundColor: 'rgba(129,27,43,0.06)', color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}
+          >
+            {pill.icon} {pill.text}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── MAIN COMPONENT ──────────────────────────────────────────── */
 
 export function BouquetCustomizerSection({
   onAddToCart,
   onOpenCart,
+  showHeader = true,
+  className = '',
 }: BouquetCustomizerSectionProps) {
-  // Quantities for each stem
+  const [activeStep, setActiveStep] = useState(0);
+  // Inspiring default bouquet arrangement so visitors immediately see the visualizer alive
   const [quantities, setQuantities] = useState<Record<string, number>>({
-    'stem-rose-red': 2,
-    'stem-tulip-pink': 2,
-    'stem-sunflower': 1,
-    'stem-daisy': 1,
+    rose: 2,
+    tulip: 2,
+    daisy: 1,
   });
-
-  const [selectedWrap, setSelectedWrap] = useState(WRAPPING_STYLES[0]);
-  const [selectedRibbon, setSelectedRibbon] = useState(RIBBON_COLORS[0]);
+  const [selectedWrap, setSelectedWrap] = useState(WRAPS[0]);
+  const [selectedRibbon, setSelectedRibbon] = useState(RIBBONS[0]);
   const [customNote, setCustomNote] = useState('Happy Birthday! May your smile bloom forever ♡');
   const [isAdded, setIsAdded] = useState(false);
 
-  const updateQuantity = (id: string, delta: number) => {
+  const updateQty = (id: string, delta: number) => {
     setQuantities((prev) => {
-      const current = prev[id] || 0;
-      const next = Math.max(0, current + delta);
+      const next = Math.max(0, (prev[id] || 0) + delta);
       return { ...prev, [id]: next };
     });
   };
 
-  const totalStems = Object.values(quantities).reduce((a, b) => a + b, 0);
+  const totalStems = useMemo(() => Object.values(quantities).reduce((a, b) => a + b, 0), [quantities]);
+  const stemsPrice = useMemo(
+    () => FLOWERS.reduce((sum, f) => sum + f.price * (quantities[f.id] || 0), 0),
+    [quantities]
+  );
+  const totalPrice = totalStems > 0 ? stemsPrice + BASE_PACKAGING_PRICE : 0;
 
-  // Price calculation: sum of stems + base artisanal wrapping packaging ₹149
-  const baseWrappingPrice = 149;
-  const stemsTotal = AVAILABLE_FLOWERS.reduce((sum, stem) => {
-    return sum + stem.price * (quantities[stem.id] || 0);
-  }, 0);
-  const totalPrice = stemsTotal > 0 ? stemsTotal + baseWrappingPrice : 0;
-
-  const handleCreateAndAddToCart = () => {
+  const handleAddToCart = () => {
     if (totalStems === 0) return;
-
-    const breakdown = AVAILABLE_FLOWERS.filter((f) => (quantities[f.id] || 0) > 0).map((f) => ({
+    const breakdown = FLOWERS.filter((f) => (quantities[f.id] || 0) > 0).map((f) => ({
       name: f.name,
       qty: quantities[f.id],
     }));
 
-    const customBouquetProduct: Product = {
-      id: `custom-bouquet-${Date.now()}`,
+    const product: Product = {
+      id: `byob-${Date.now()}`,
       name: `Bespoke Bouquet (${totalStems} Stems)`,
       category: 'Flowers',
       price: totalPrice,
@@ -138,18 +439,18 @@ export function BouquetCustomizerSection({
       rating: 5.0,
       reviewsCount: 1,
       badge: 'Bespoke Order',
-      description: `Custom arrangement of ${totalStems} handcrafted crochet stems with ${selectedWrap.name} wrapping and ${selectedRibbon.name} ribbon bow. Note: "${customNote}"`,
+      description: `Custom arrangement: ${breakdown.map((b) => `${b.qty}× ${b.name}`).join(', ')}. Wrapping: ${selectedWrap.name}. Ribbon: ${selectedRibbon.name}. Note: "${customNote}"`,
       details: [
-        `Includes: ${breakdown.map((b) => `${b.qty}x ${b.name}`).join(', ')}`,
-        `Wrapping Paper: ${selectedWrap.name} (${selectedWrap.pattern})`,
+        `Stems: ${breakdown.map((b) => `${b.qty}× ${b.name}`).join(', ')}`,
+        `Wrapping: ${selectedWrap.name} (${selectedWrap.style})`,
         `Ribbon: ${selectedRibbon.name} hand-tied bow`,
-        `Includes handwritten artisan gift card`,
-        `Crafted stitch by stitch by Dadis in Surat`,
+        `Handwritten note card included`,
+        `Crafted by Dadis in Surat`,
       ],
       inStock: true,
     };
 
-    onAddToCart(customBouquetProduct, 1, {
+    onAddToCart(product, 1, {
       wrapping: selectedWrap.name,
       ribbonColor: selectedRibbon.name,
       flowerBreakdown: breakdown,
@@ -160,366 +461,618 @@ export function BouquetCustomizerSection({
     setTimeout(() => {
       setIsAdded(false);
       if (onOpenCart) onOpenCart();
-    }, 1200);
+    }, 1400);
   };
 
   return (
     <section
       id="bouquet-customizer-section"
-      className="w-full bg-[#FFF5CC] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#811B2B]/15 relative"
+      className={`w-full relative ${
+        showHeader
+          ? 'bg-[#FFF5CC] py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-b border-[#811B2B]/15'
+          : ''
+      } ${className}`}
     >
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#811B2B] text-[#FFF5CC] text-xs font-bold mb-4 font-rounded shadow-sm">
-            <Flower2 className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
-            <span>INTERACTIVE STUDIO</span>
+      <div className={showHeader ? 'max-w-7xl mx-auto' : 'w-full'}>
+
+        {/* Optional Editorial Header */}
+        {showHeader && (
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#811B2B] text-[#FFF5CC] text-xs font-bold mb-4 font-rounded shadow-sm">
+              <Flower2 className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
+              <span>INTERACTIVE BESPOKE STUDIO</span>
+            </div>
+            <h2 className="font-editorial text-3xl sm:text-5xl font-extrabold text-[#811B2B] tracking-tight">
+              Build Your Own Bouquet.
+            </h2>
+            <p className="mt-3 text-[#811B2B]/85 font-rounded text-sm sm:text-base leading-relaxed">
+              Pick your favorite stems, choose your wrapping paper &amp; ribbon, and write a sweet note.
+              Our Dadis in Surat will knit and assemble it just for you ♡
+            </p>
           </div>
-          <h2 className="font-editorial text-3xl sm:text-5xl font-extrabold text-[#811B2B] tracking-tight">
-            Build Your Own Bouquet.
-          </h2>
-          <p className="mt-3 text-[#811B2B]/85 font-rounded text-sm sm:text-base leading-relaxed">
-            Select your favorite stems, pick the wrapping paper, choose the ribbon, and write a sweet note.
-            Our Dadis in Surat will knit and assemble it just for you.
-          </p>
+        )}
+
+        {/* Step progress bar */}
+        <div className="flex items-center justify-center gap-0 mb-10">
+          {STEPS.map((step, i) => (
+            <React.Fragment key={step}>
+              <button
+                onClick={() => setActiveStep(i)}
+                className="flex items-center gap-2 group cursor-pointer"
+              >
+                <div
+                  className="flex items-center justify-center w-8 h-8 rounded-full text-xs font-black transition-all duration-300 border-2"
+                  style={{
+                    backgroundColor: activeStep >= i ? '#811B2B' : '#FFFEF8',
+                    borderColor: activeStep >= i ? '#811B2B' : 'rgba(129,27,43,0.25)',
+                    color: activeStep >= i ? '#FFF5CC' : 'rgba(129,27,43,0.4)',
+                    boxShadow: activeStep === i ? '0 4px 16px rgba(129,27,43,0.3)' : 'none',
+                  }}
+                >
+                  {activeStep > i ? <Check className="w-3.5 h-3.5" /> : i + 1}
+                </div>
+                <span
+                  className="text-xs font-bold hidden sm:inline transition-colors"
+                  style={{
+                    color: activeStep >= i ? '#811B2B' : 'rgba(129,27,43,0.35)',
+                    fontFamily: 'Quicksand, sans-serif',
+                  }}
+                >
+                  {step}
+                </span>
+              </button>
+              {i < STEPS.length - 1 && (
+                <div
+                  className="w-12 sm:w-20 h-0.5 mx-2 transition-all duration-500"
+                  style={{ backgroundColor: activeStep > i ? '#811B2B' : 'rgba(129,27,43,0.15)' }}
+                />
+              )}
+            </React.Fragment>
+          ))}
         </div>
 
-        {/* Main Studio Interactive Layout */}
+        {/* Main Layout: Preview (left) + Controls (right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* LEFT: Live Bouquet Visualizer & Summary (5 Cols) */}
-          <div className="lg:col-span-5 sticky top-24">
-            <div
-              className="rounded-3xl p-6 sm:p-8 border-2 border-[#811B2B] shadow-2xl relative overflow-hidden flex flex-col items-center text-center"
-              style={{ backgroundColor: selectedWrap.color }}
-            >
-              {/* Paper Washi Tape Header */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-[#FFFEF8] text-[#811B2B] px-4 py-1 rounded shadow-sm text-xs font-bold border border-[#811B2B]/20 font-handwriting text-lg">
-                Your Arrangement Preview ✿
-              </div>
 
-              {/* Live Visual Illustration of Bouquet with chosen wrapper & ribbon */}
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 mt-6 flex items-center justify-center">
-                {/* SVG Visualizer with real-time stem bubbles and ribbon */}
-                <svg viewBox="0 0 240 240" className="w-full h-full overflow-visible">
-                  {/* Outer Wrapper Shape matching selectedWrap color */}
-                  <polygon
-                    points="60,80 120,225 180,80"
-                    fill={selectedWrap.color}
-                    stroke="#811B2B"
-                    strokeWidth="3"
-                  />
-                  <polygon
-                    points="45,75 120,225 90,75"
-                    fill="#FFFEF8"
-                    stroke="#811B2B"
-                    strokeWidth="2.5"
-                    opacity="0.85"
-                  />
-                  <polygon
-                    points="195,75 120,225 150,75"
-                    fill="#FFFEF8"
-                    stroke="#811B2B"
-                    strokeWidth="2.5"
-                    opacity="0.85"
-                  />
-
-                  {/* Render stems clustered inside */}
-                  {AVAILABLE_FLOWERS.map((flower, idx) => {
-                    const count = quantities[flower.id] || 0;
-                    if (count === 0) return null;
-
-                    // Compute slight positions based on index
-                    const angle = ((idx * 55) % 180) - 90;
-                    const rad = (angle * Math.PI) / 180;
-                    const cx = 120 + Math.sin(rad) * 45;
-                    const cy = 60 + Math.cos(rad) * 25;
-
-                    return (
-                      <g key={flower.id} transform={`translate(${cx}, ${cy})`}>
-                        <circle
-                          cx="0"
-                          cy="0"
-                          r="18"
-                          fill={flower.color}
-                          stroke="#811B2B"
-                          strokeWidth="2"
-                        />
-                        <text
-                          x="0"
-                          y="6"
-                          textAnchor="middle"
-                          fontSize="16"
-                          className="select-none"
-                        >
-                          {flower.icon}
-                        </text>
-                        {count > 1 && (
-                          <g transform="translate(10, -10)">
-                            <circle cx="0" cy="0" r="8" fill="#811B2B" />
-                            <text
-                              x="0"
-                              y="3"
-                              textAnchor="middle"
-                              fill="#FFF5CC"
-                              fontSize="9"
-                              fontWeight="bold"
-                            >
-                              x{count}
-                            </text>
-                          </g>
-                        )}
-                      </g>
-                    );
-                  })}
-
-                  {/* Ribbon Knot at center waist */}
-                  <g transform="translate(120, 160)">
-                    {/* Ribbon Bow in selectedRibbon color */}
-                    <path
-                      d="M 0,0 C -22,-18 -32,5 -5,0"
-                      fill={selectedRibbon.color}
-                      stroke="#811B2B"
-                      strokeWidth="2.5"
-                    />
-                    <path
-                      d="M 0,0 C 22,-18 32,5 5,0"
-                      fill={selectedRibbon.color}
-                      stroke="#811B2B"
-                      strokeWidth="2.5"
-                    />
-                    <path
-                      d="M -2,4 Q -10,25 -18,35 Q -8,25 0,8"
-                      fill={selectedRibbon.color}
-                      stroke="#811B2B"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M 2,4 Q 10,25 18,35 Q 8,25 0,8"
-                      fill={selectedRibbon.color}
-                      stroke="#811B2B"
-                      strokeWidth="2"
-                    />
-                    <circle cx="0" cy="0" r="6" fill={selectedRibbon.color} stroke="#FFF5CC" strokeWidth="1.5" />
-                  </g>
-                </svg>
-              </div>
-
-              {/* Bouquet Summary Box */}
-              <div className="w-full bg-[#FFFEF8] p-4 rounded-2xl border border-[#811B2B]/20 text-left mt-4 shadow-sm">
-                <div className="flex items-center justify-between font-bold text-sm text-[#811B2B]">
-                  <span>Total Stems:</span>
-                  <span className="font-editorial text-base">{totalStems} Stems</span>
-                </div>
-                <div className="flex items-center justify-between text-xs text-[#811B2B]/80 mt-1 font-rounded">
-                  <span>Paper Wrapper:</span>
-                  <span className="font-bold">{selectedWrap.name}</span>
-                </div>
-                <div className="flex items-center justify-between text-xs text-[#811B2B]/80 mt-1 font-rounded">
-                  <span>Ribbon Color:</span>
-                  <span className="font-bold">{selectedRibbon.name}</span>
-                </div>
-
-                <div className="border-t border-[#811B2B]/15 pt-3 mt-3 flex items-baseline justify-between">
-                  <span className="font-editorial text-lg font-bold text-[#811B2B]">
-                    Bouquet Total:
-                  </span>
-                  <span className="font-editorial text-2xl font-extrabold text-[#811B2B]">
-                    ₹{totalPrice}
-                  </span>
-                </div>
-              </div>
-
-              {/* Add to Cart Button */}
-              <button
-                disabled={totalStems === 0}
-                onClick={handleCreateAndAddToCart}
-                className={`w-full mt-4 py-3.5 px-6 rounded-full font-bold text-sm tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2 ${
-                  totalStems === 0
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : isAdded
-                    ? 'bg-green-600 text-white'
-                    : 'bg-[#811B2B] hover:bg-[#5C0F19] text-[#FFF5CC] hover:scale-105 active:scale-95'
-                }`}
-              >
-                {isAdded ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Bouquet Added to Bag! ♡</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>Add Custom Bouquet to Bag (₹{totalPrice})</span>
-                  </>
-                )}
-              </button>
-
-            </div>
+          {/* ── LIVE PREVIEW (sticky) ─────────────────── */}
+          <div className="lg:col-span-5 lg:sticky lg:top-24">
+            <BouquetPreview
+              quantities={quantities}
+              wrapColor={selectedWrap.color}
+              ribbonColor={selectedRibbon.color}
+              totalStems={totalStems}
+              totalPrice={totalPrice}
+              isAdded={isAdded}
+              onAddToCart={handleAddToCart}
+            />
           </div>
 
-          {/* RIGHT: Customizer Controls (7 Cols) */}
-          <div className="lg:col-span-7 space-y-8">
-            
-            {/* STEP 1: Select Flower Stems */}
-            <div className="bg-[#FFFEF8] p-6 sm:p-7 rounded-3xl border-2 border-[#811B2B] shadow-md">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <span className="text-[11px] font-extrabold text-[#811B2B]/70 tracking-widest uppercase font-rounded">
-                    Step 01
-                  </span>
-                  <h3 className="font-editorial text-xl sm:text-2xl font-bold text-[#811B2B]">
-                    Choose Your Crochet Stems
-                  </h3>
-                </div>
-                <span className="text-xs font-bold text-[#811B2B] bg-[#FFF5CC] px-3 py-1 rounded-full border border-[#811B2B]/20">
-                  {totalStems} Selected
-                </span>
-              </div>
+          {/* ── STEP PANELS ────────────────────────────── */}
+          <div className="lg:col-span-7 space-y-5">
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {AVAILABLE_FLOWERS.map((stem) => {
-                  const qty = quantities[stem.id] || 0;
-                  return (
-                    <div
-                      key={stem.id}
-                      className="p-3.5 rounded-2xl border border-[#811B2B]/20 bg-[#FFF5CC]/40 hover:bg-[#FFF5CC] transition-colors flex items-center justify-between gap-3"
+            {/* ══ STEP 1: FLOWERS ══════════════════════════════ */}
+            <motion.div
+              layout
+              className="rounded-3xl overflow-hidden"
+              style={{
+                border: '2px solid',
+                borderColor: activeStep === 0 ? '#811B2B' : 'rgba(129,27,43,0.2)',
+                backgroundColor: '#FFFEF8',
+                boxShadow: activeStep === 0 ? '0 8px 32px rgba(129,27,43,0.12)' : 'none',
+              }}
+            >
+              {/* Step header — always visible */}
+              <button
+                onClick={() => setActiveStep(0)}
+                className="w-full flex items-center justify-between px-6 py-5 text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-sm"
+                    style={{
+                      backgroundColor: activeStep >= 0 ? '#811B2B' : 'rgba(129,27,43,0.1)',
+                      color: activeStep >= 0 ? '#FFF5CC' : '#811B2B',
+                    }}
+                  >
+                    <Flower2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>Step 01</p>
+                    <h3 className="font-bold text-lg leading-tight" style={{ color: '#811B2B', fontFamily: '"Playfair Display", serif' }}>
+                      Choose Your Crochet Stems
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {totalStems > 0 && (
+                    <span
+                      className="text-xs font-black px-3 py-1 rounded-full"
+                      style={{ backgroundColor: '#811B2B', color: '#FFF5CC', fontFamily: 'Quicksand, sans-serif' }}
                     >
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{stem.icon}</span>
-                        <div>
-                          <p className="text-xs font-bold text-[#811B2B] leading-tight">
-                            {stem.name}
-                          </p>
-                          <p className="text-xs font-extrabold text-[#811B2B]/80 font-editorial">
-                            ₹{stem.price}
-                          </p>
+                      {totalStems} stems
+                    </span>
+                  )}
+                  <ChevronRight
+                    className="w-4 h-4 transition-transform"
+                    style={{
+                      color: '#811B2B',
+                      transform: activeStep === 0 ? 'rotate(90deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {activeStep === 0 && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="px-6 pb-6">
+                      <p className="text-xs mb-5 opacity-70" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                        Pick as many as you'd like — we recommend 4 to 6 stems for a lush, balanced bouquet ✿
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        {FLOWERS.map((flower) => {
+                          const qty = quantities[flower.id] || 0;
+                          const isSelected = qty > 0;
+                          return (
+                            <motion.div
+                              key={flower.id}
+                              layout
+                              className="relative rounded-2xl p-4 transition-all duration-200 cursor-pointer"
+                              style={{
+                                backgroundColor: isSelected ? flower.bg : '#FFF5CC',
+                                border: `2px solid ${isSelected ? flower.color : 'rgba(129,27,43,0.12)'}`,
+                                boxShadow: isSelected ? `0 4px 20px ${flower.bg}80` : 'none',
+                              }}
+                              onClick={() => !isSelected && updateQty(flower.id, 1)}
+                            >
+                              {/* Flower image + info */}
+                              <div className="flex items-start gap-3 mb-3">
+                                <div
+                                  className="w-13 h-13 rounded-xl overflow-hidden flex items-center justify-center text-2xl shrink-0 shadow-sm border border-black/5"
+                                  style={{ backgroundColor: isSelected ? '#FFFEF8' : flower.bg }}
+                                >
+                                  <img
+                                    src={flower.image}
+                                    alt={flower.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-bold text-xs leading-tight truncate" style={{ color: '#811B2B' }}>
+                                    {flower.name}
+                                  </p>
+                                  <p className="text-[10px] opacity-60 leading-tight mt-0.5" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                                    {flower.tagline}
+                                  </p>
+                                  <p className="font-black text-sm mt-1" style={{ color: flower.color, fontFamily: '"Playfair Display", serif' }}>
+                                    ₹{flower.price}
+                                    <span className="text-[9px] opacity-60 font-normal ml-1" style={{ fontFamily: 'Quicksand, sans-serif' }}>/ stem</span>
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Quantity stepper */}
+                              <div className="flex items-center justify-between pt-1">
+                                {isSelected ? (
+                                  <div
+                                    className="flex items-center gap-2 rounded-full px-2.5 py-1"
+                                    style={{ backgroundColor: '#FFFEF8', border: `1.5px solid ${flower.color}` }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <button
+                                      onClick={() => updateQty(flower.id, -1)}
+                                      className="w-6 h-6 rounded-full flex items-center justify-center transition-colors hover:bg-red-50 cursor-pointer"
+                                      style={{ color: '#811B2B' }}
+                                    >
+                                      <Minus className="w-3 h-3" />
+                                    </button>
+                                    <span className="w-5 text-center text-sm font-black" style={{ color: '#811B2B' }}>
+                                      {qty}
+                                    </span>
+                                    <button
+                                      onClick={() => updateQty(flower.id, 1)}
+                                      className="w-6 h-6 rounded-full flex items-center justify-center transition-colors hover:bg-green-50 cursor-pointer"
+                                      style={{ color: '#811B2B' }}
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      updateQty(flower.id, 1);
+                                    }}
+                                    className="text-[11px] font-bold px-3 py-1 rounded-full border border-[#811B2B]/20 bg-white hover:bg-[#811B2B] hover:text-[#FFF5CC] transition-colors cursor-pointer"
+                                    style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}
+                                  >
+                                    + Add Stem
+                                  </button>
+                                )}
+                                <span className="text-sm font-bold opacity-75" style={{ color: flower.color }}>
+                                  {flower.emoji}
+                                </span>
+                              </div>
+
+                              {/* Selected indicator */}
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center shadow-xs"
+                                  style={{ backgroundColor: flower.color }}
+                                >
+                                  <Check className="w-3 h-3" style={{ color: '#FFFEF8' }} />
+                                </motion.div>
+                              )}
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Next step button */}
+                      <motion.button
+                        onClick={() => setActiveStep(1)}
+                        disabled={totalStems === 0}
+                        whileHover={{ scale: totalStems > 0 ? 1.02 : 1 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full mt-6 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                        style={{
+                          backgroundColor: totalStems === 0 ? 'rgba(129,27,43,0.08)' : '#811B2B',
+                          color: totalStems === 0 ? 'rgba(129,27,43,0.35)' : '#FFF5CC',
+                          cursor: totalStems === 0 ? 'not-allowed' : 'pointer',
+                          fontFamily: 'Quicksand, sans-serif',
+                        }}
+                      >
+                        <span>Next: Choose Wrapping &amp; Ribbon</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* ══ STEP 2: WRAPPING ══════════════════════════════ */}
+            <motion.div
+              layout
+              className="rounded-3xl overflow-hidden"
+              style={{
+                border: '2px solid',
+                borderColor: activeStep === 1 ? '#811B2B' : 'rgba(129,27,43,0.2)',
+                backgroundColor: '#FFFEF8',
+                boxShadow: activeStep === 1 ? '0 8px 32px rgba(129,27,43,0.12)' : 'none',
+              }}
+            >
+              <button
+                onClick={() => setActiveStep(1)}
+                className="w-full flex items-center justify-between px-6 py-5 text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center"
+                    style={{
+                      backgroundColor: activeStep >= 1 ? '#811B2B' : 'rgba(129,27,43,0.1)',
+                      color: activeStep >= 1 ? '#FFF5CC' : '#811B2B',
+                    }}
+                  >
+                    <Palette className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>Step 02</p>
+                    <h3 className="font-bold text-lg leading-tight" style={{ color: '#811B2B', fontFamily: '"Playfair Display", serif' }}>
+                      Pick Your Wrapping & Ribbon
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-5 h-5 rounded-full border-2 border-[#811B2B]"
+                    style={{ backgroundColor: selectedWrap.color }}
+                  />
+                  <ChevronRight
+                    className="w-4 h-4 transition-transform"
+                    style={{
+                      color: '#811B2B',
+                      transform: activeStep === 1 ? 'rotate(90deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {activeStep === 1 && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="px-6 pb-6 space-y-6">
+                      {/* Wrapping paper */}
+                      <div>
+                        <p className="text-xs font-bold mb-3 uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                          Artisanal Wrapping Paper
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                          {WRAPS.map((wrap) => {
+                            const isSelected = selectedWrap.id === wrap.id;
+                            return (
+                              <motion.button
+                                key={wrap.id}
+                                whileHover={{ scale: 1.04 }}
+                                whileTap={{ scale: 0.96 }}
+                                onClick={() => setSelectedWrap(wrap)}
+                                className="relative flex flex-col items-center gap-2 p-3 rounded-2xl transition-all cursor-pointer"
+                                style={{
+                                  backgroundColor: isSelected ? wrap.color : '#FFF5CC',
+                                  border: `2px solid ${isSelected ? '#811B2B' : 'rgba(129,27,43,0.15)'}`,
+                                  boxShadow: isSelected ? '0 4px 16px rgba(129,27,43,0.2)' : 'none',
+                                }}
+                              >
+                                {/* Color circle */}
+                                <div
+                                  className="w-10 h-10 rounded-full shadow-inner border"
+                                  style={{
+                                    backgroundColor: wrap.color,
+                                    borderColor: 'rgba(129,27,43,0.2)',
+                                  }}
+                                />
+                                <div className="text-center">
+                                  <p className="text-[10px] font-black leading-tight" style={{ color: '#811B2B' }}>
+                                    {wrap.name}
+                                  </p>
+                                  <p className="text-[8px] opacity-60 leading-tight mt-0.5" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                                    {wrap.style}
+                                  </p>
+                                </div>
+                                {isSelected && (
+                                  <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center shadow-xs"
+                                    style={{ backgroundColor: '#811B2B' }}
+                                  >
+                                    <Check className="w-2.5 h-2.5" style={{ color: '#FFF5CC' }} />
+                                  </motion.div>
+                                )}
+                              </motion.button>
+                            );
+                          })}
                         </div>
                       </div>
 
-                      {/* Quantity stepper */}
-                      <div className="flex items-center gap-1.5 bg-[#FFFEF8] border border-[#811B2B]/30 rounded-full p-1 shadow-sm">
-                        <button
-                          onClick={() => updateQuantity(stem.id, -1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-[#811B2B] hover:bg-[#811B2B]/10 active:scale-90"
-                          aria-label="Decrease"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="w-5 text-center text-xs font-bold text-[#811B2B]">
-                          {qty}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(stem.id, 1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-[#811B2B] hover:bg-[#811B2B]/10 active:scale-90"
-                          aria-label="Increase"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
+                      {/* Ribbon */}
+                      <div>
+                        <p className="text-xs font-bold mb-3 uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                          Satin Ribbon Bow
+                        </p>
+                        <div className="flex flex-wrap gap-2.5">
+                          {RIBBONS.map((ribbon) => {
+                            const isSelected = selectedRibbon.id === ribbon.id;
+                            return (
+                              <motion.button
+                                key={ribbon.id}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setSelectedRibbon(ribbon)}
+                                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold transition-all cursor-pointer"
+                                style={{
+                                  backgroundColor: isSelected ? ribbon.color : '#FFF5CC',
+                                  color: isSelected
+                                    ? ribbon.color === '#F5C4D5' || ribbon.color === '#C4951A' ? '#811B2B' : '#FFFEF8'
+                                    : '#811B2B',
+                                  border: `2px solid ${isSelected ? ribbon.color : 'rgba(129,27,43,0.15)'}`,
+                                  boxShadow: isSelected ? `0 4px 12px ${ribbon.color}60` : 'none',
+                                  fontFamily: 'Quicksand, sans-serif',
+                                }}
+                              >
+                                <span
+                                  className="w-3.5 h-3.5 rounded-full border border-white/60 shrink-0"
+                                  style={{ backgroundColor: ribbon.color }}
+                                />
+                                {ribbon.name}
+                              </motion.button>
+                            );
+                          })}
+                        </div>
                       </div>
+
+                      <motion.button
+                        onClick={() => setActiveStep(2)}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                        style={{
+                          backgroundColor: '#811B2B',
+                          color: '#FFF5CC',
+                          fontFamily: 'Quicksand, sans-serif',
+                        }}
+                      >
+                        <span>Next: Add Handwritten Gift Note</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </motion.button>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
 
-            {/* STEP 2: Choose Wrapping Style */}
-            <div className="bg-[#FFFEF8] p-6 sm:p-7 rounded-3xl border-2 border-[#811B2B] shadow-md">
-              <span className="text-[11px] font-extrabold text-[#811B2B]/70 tracking-widest uppercase font-rounded">
-                Step 02
-              </span>
-              <h3 className="font-editorial text-xl sm:text-2xl font-bold text-[#811B2B] mb-4">
-                Pick Your Wrapping Paper
-              </h3>
-
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                {WRAPPING_STYLES.map((wrap) => {
-                  const isSelected = selectedWrap.id === wrap.id;
-                  return (
-                    <button
-                      key={wrap.id}
-                      onClick={() => setSelectedWrap(wrap)}
-                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center text-center ${
-                        isSelected
-                          ? 'border-[#811B2B] bg-[#811B2B]/10 shadow-md scale-105'
-                          : 'border-[#811B2B]/20 bg-white hover:border-[#811B2B]/50'
-                      }`}
-                    >
-                      <div
-                        className="w-9 h-9 rounded-full border border-[#811B2B]/30 mb-2 shadow-inner"
-                        style={{ backgroundColor: wrap.color }}
-                      />
-                      <span className="text-xs font-bold text-[#811B2B]">
-                        {wrap.name}
-                      </span>
-                      <span className="text-[9px] text-[#811B2B]/60 font-rounded mt-0.5">
-                        {wrap.pattern}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* STEP 3: Choose Ribbon Color & Handwritten Note */}
-            <div className="bg-[#FFFEF8] p-6 sm:p-7 rounded-3xl border-2 border-[#811B2B] shadow-md">
-              <span className="text-[11px] font-extrabold text-[#811B2B]/70 tracking-widest uppercase font-rounded">
-                Step 03
-              </span>
-              <h3 className="font-editorial text-xl sm:text-2xl font-bold text-[#811B2B] mb-4">
-                Ribbon Bow & Gift Message
-              </h3>
-
-              {/* Ribbons */}
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                {RIBBON_COLORS.map((ribbon) => {
-                  const isSelected = selectedRibbon.id === ribbon.id;
-                  return (
-                    <button
-                      key={ribbon.id}
-                      onClick={() => setSelectedRibbon(ribbon)}
-                      className={`px-4 py-2 rounded-full border-2 flex items-center gap-2 text-xs font-bold transition-all ${
-                        isSelected
-                          ? 'border-[#811B2B] bg-[#811B2B] text-[#FFF5CC] shadow-md'
-                          : 'border-[#811B2B]/20 bg-white text-[#811B2B] hover:border-[#811B2B]/50'
-                      }`}
-                    >
-                      <span
-                        className="w-3.5 h-3.5 rounded-full border border-white"
-                        style={{ backgroundColor: ribbon.color }}
-                      />
-                      <span>{ribbon.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Note input */}
-              <div>
-                <label className="block text-xs font-bold text-[#811B2B] mb-1.5 font-rounded">
-                  Complimentary Handwritten Note Card:
-                </label>
-                <textarea
-                  value={customNote}
-                  onChange={(e) => setCustomNote(e.target.value)}
-                  maxLength={140}
-                  rows={2}
-                  className="w-full p-3 rounded-2xl border border-[#811B2B]/30 bg-[#FFF5CC]/30 text-[#811B2B] text-xs font-handwriting text-lg focus:outline-none focus:ring-2 focus:ring-[#811B2B] resize-none"
-                  placeholder="Write your personal message here..."
+            {/* ══ STEP 3: FINISHING ══════════════════════════════ */}
+            <motion.div
+              layout
+              className="rounded-3xl overflow-hidden"
+              style={{
+                border: '2px solid',
+                borderColor: activeStep === 2 ? '#811B2B' : 'rgba(129,27,43,0.2)',
+                backgroundColor: '#FFFEF8',
+                boxShadow: activeStep === 2 ? '0 8px 32px rgba(129,27,43,0.12)' : 'none',
+              }}
+            >
+              <button
+                onClick={() => setActiveStep(2)}
+                className="w-full flex items-center justify-between px-6 py-5 text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center"
+                    style={{
+                      backgroundColor: activeStep >= 2 ? '#811B2B' : 'rgba(129,27,43,0.1)',
+                      color: activeStep >= 2 ? '#FFF5CC' : '#811B2B',
+                    }}
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>Step 03</p>
+                    <h3 className="font-bold text-lg leading-tight" style={{ color: '#811B2B', fontFamily: '"Playfair Display", serif' }}>
+                      Write a Sweet Gift Note
+                    </h3>
+                  </div>
+                </div>
+                <ChevronRight
+                  className="w-4 h-4 transition-transform"
+                  style={{
+                    color: '#811B2B',
+                    transform: activeStep === 2 ? 'rotate(90deg)' : 'rotate(0deg)',
+                  }}
                 />
-                <span className="text-[10px] text-[#811B2B]/60 font-rounded text-right block mt-1">
-                  {140 - customNote.length} characters left • Written by hand on recycled cotton card
-                </span>
-              </div>
-            </div>
+              </button>
+
+              <AnimatePresence>
+                {activeStep === 2 && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="px-6 pb-6">
+                      {/* Note card visual */}
+                      <div
+                        className="relative rounded-2xl p-5 mb-4 shadow-sm"
+                        style={{
+                          backgroundColor: '#FFFEF8',
+                          border: '2px dashed rgba(129,27,43,0.25)',
+                          backgroundImage: `repeating-linear-gradient(transparent, transparent 27px, rgba(129,27,43,0.06) 27px, rgba(129,27,43,0.06) 28px)`,
+                        }}
+                      >
+                        <div className="flex items-center gap-2 mb-3">
+                          <Heart className="w-4 h-4" style={{ color: '#811B2B' }} />
+                          <span className="text-xs font-bold uppercase tracking-widest opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                            Complimentary Handwritten Note Card
+                          </span>
+                        </div>
+                        <textarea
+                          value={customNote}
+                          onChange={(e) => setCustomNote(e.target.value)}
+                          maxLength={160}
+                          rows={3}
+                          placeholder="Write your personal message here...&#10;e.g. Happy Birthday! May your smile bloom forever ♡"
+                          className="w-full bg-transparent text-[#811B2B] resize-none focus:outline-none placeholder:opacity-40"
+                          style={{
+                            fontFamily: 'Caveat, cursive',
+                            fontSize: 19,
+                            lineHeight: '28px',
+                            color: '#811B2B',
+                          }}
+                        />
+                        <div className="flex items-center justify-between mt-2 pt-1 border-t border-[#811B2B]/10">
+                          <span className="text-[10px] opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                            Written by hand on recycled cotton card
+                          </span>
+                          <span className="text-[10px] font-bold opacity-60" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                            {160 - customNote.length} chars left
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Quick message suggestions */}
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {[
+                          'Happy Birthday! ♡',
+                          'With all my love 🌸',
+                          'Just because ✿',
+                          'Thinking of you 💌',
+                        ].map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            onClick={() => setCustomNote(suggestion)}
+                            className="text-[11px] px-3.5 py-1.5 rounded-full font-bold transition-all hover:scale-105 cursor-pointer shadow-xs"
+                            style={{
+                              backgroundColor: '#FFF5CC',
+                              color: '#811B2B',
+                              border: '1px solid rgba(129,27,43,0.2)',
+                              fontFamily: 'Quicksand, sans-serif',
+                            }}
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Final CTA */}
+                      <motion.button
+                        onClick={handleAddToCart}
+                        disabled={totalStems === 0}
+                        whileHover={{ scale: totalStems > 0 ? 1.02 : 1, y: totalStems > 0 ? -2 : 0 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 transition-all cursor-pointer"
+                        style={{
+                          backgroundColor: totalStems === 0 ? 'rgba(129,27,43,0.1)' : isAdded ? '#16a34a' : '#811B2B',
+                          color: totalStems === 0 ? 'rgba(129,27,43,0.35)' : '#FFF5CC',
+                          cursor: totalStems === 0 ? 'not-allowed' : 'pointer',
+                          boxShadow: totalStems > 0 ? '0 12px 36px rgba(129,27,43,0.3)' : 'none',
+                          fontFamily: 'Quicksand, sans-serif',
+                          fontSize: '0.85rem',
+                          letterSpacing: '0.06em',
+                        }}
+                      >
+                        {totalStems === 0 ? (
+                          <>
+                            <Sparkles className="w-4 h-4" />
+                            <span>Add flowers first (Step 1)</span>
+                          </>
+                        ) : isAdded ? (
+                          <>
+                            <Check className="w-5 h-5" />
+                            <span>Your bouquet is in the bag! ♡</span>
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingBag className="w-5 h-5" />
+                            <span>Add Custom Bouquet to Bag — ₹{totalPrice}</span>
+                          </>
+                        )}
+                      </motion.button>
+
+                      {totalStems === 0 && (
+                        <p className="text-center text-[10px] mt-2 opacity-50" style={{ color: '#811B2B', fontFamily: 'Quicksand, sans-serif' }}>
+                          Go back to Step 1 and pick your flowers ✿
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
 
           </div>
-
         </div>
-
       </div>
     </section>
   );
 }
-
+export default BouquetCustomizerSection;
