@@ -206,3 +206,4 @@ export function KnotsncoFooter({ onNavigate, onReplayIntro }: KnotsncoFooterProp
     </footer>
   );
 }
+

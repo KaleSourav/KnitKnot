@@ -172,3 +172,4 @@ export function KnotsncoQuickViewModal({
     </div>
   );
 }
+

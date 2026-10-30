@@ -142,3 +142,4 @@ export function KnotsncoAccountModal({ isOpen, onClose }: KnotsncoAccountModalPr
     </div>
   );
 }
+

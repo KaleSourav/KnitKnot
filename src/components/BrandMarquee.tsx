@@ -51,3 +51,4 @@ export function BrandMarquee({ variant = 'burgundy' }: BrandMarqueeProps) {
     </div>
   );
 }
+

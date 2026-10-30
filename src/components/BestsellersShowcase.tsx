@@ -133,3 +133,4 @@ export function BestsellersShowcase({
     </section>
   );
 }
+
