@@ -591,17 +591,6 @@
         color: var(--olive);
       }
 
-      /* Section 4c: FLOATING PRODUCT CATEGORY CARDS */
-      .floating-categories-section {
-        position: relative;
-        width: 100%;
-        background: #FFFFFF;
-        display: block;
-      }
-      #floating-categories-root {
-        width: 100%;
-        display: block;
-      }
       .track {
         position: absolute;
         z-index: 2;
@@ -1225,10 +1214,6 @@
         </div>
       </section>
 
-      <!-- FLOATING PRODUCT CATEGORY CARDS -->
-      <section class="floating-categories-section" id="categories">
-        <div id="floating-categories-root"></div>
-      </section>
 
       <!-- CTA -->
       <section class="cta" id="cta">
@@ -1965,7 +1950,7 @@
         }
       };
       window.handleShopAll = function() {
-        const target = document.getElementById('categories') || document.getElementById('loop') || document.getElementById('cta');
+        const target = document.getElementById('cta') || document.getElementById('footer');
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
         }
