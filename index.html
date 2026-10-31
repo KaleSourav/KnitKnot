@@ -636,13 +636,18 @@
         color: var(--olive);
       }
 
-      /* Section 4c: ACCORDION */
+      /* Section 4c: CRAFT STORY SCROLL STACK */
       .loop {
         position: relative;
-        height: 100vh;
-        min-height: 680px;
+        min-height: 100vh;
+        height: auto;
+        padding: clamp(60px, 8vh, 90px) 0 clamp(70px, 9vh, 100px);
         overflow: hidden;
-        background: #fff;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
       .loop-cloud {
         position: absolute;
@@ -656,18 +661,29 @@
         width: 100%;
         display: block;
       }
-      .loop-head {
-        position: absolute;
+      .craft-stack-container {
+        position: relative;
         z-index: 4;
-        top: 9vh;
-        left: 0;
         width: 100%;
+        max-width: min(1200px, 94vw);
+        margin: 0 auto;
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 0 clamp(16px, 2.5vw, 32px);
+        box-sizing: border-box;
+      }
+      .craft-stack-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         gap: 16px;
-        padding: 0 16px;
-        pointer-events: none;
+        margin-bottom: 24px;
+        width: 100%;
+      }
+      #scroll-stack-root {
+        width: 100%;
       }
       .track {
         position: absolute;
@@ -1380,7 +1396,7 @@
         </div>
       </section>
 
-      <!-- HUMAN-IN-THE-LOOP HOVER ACCORDION -->
+      <!-- CRAFT STORY SCROLL STACK -->
       <section class="loop" id="loop">
         <div class="loop-cloud" data-par="-50">
           <img
@@ -1393,65 +1409,24 @@
           <div class="glass" style="left: 38%; top: 24%; width: 13%; aspect-ratio: 1"></div>
         </div>
 
-        <div class="loop-head">
-          <span class="pill reveal">Expert escalation</span>
-          <h2 class="h2 split">Humans take over only at<br />the crunch.</h2>
-        </div>
-
-        <div class="track" id="track">
-          <div class="panel is-active" tabindex="0" aria-label="Step 1: Ticket comes in">
-            <div class="panel-in">
-              <div class="num" style="color: var(--olive)">1</div>
-              <div class="step">
-                <img
-                  class="mini-cloud"
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_0f37c0c3-f82c-485b-87dd-5a35b75a8782.png"
-                  alt=""
-                />
-                <h3>Ticket comes in</h3>
-                <p>
-                  A shopper files a return claim with the purchase details, why it's going back, and
-                  any proof they can share.
-                </p>
-              </div>
-            </div>
+        <div class="craft-stack-container">
+          <div class="craft-stack-header">
+            <span class="pill reveal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:5px; color:var(--olive);">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m4.93 4.93 4.24 4.24"></path>
+                <path d="m14.83 9.17 4.24-4.24"></path>
+                <path d="m14.83 14.83 4.24 4.24"></path>
+                <path d="m9.17 14.83-4.24 4.24"></path>
+                <circle cx="12" cy="12" r="3.5"></circle>
+              </svg>
+              Our Handcrafted Promise
+            </span>
+            <h2 class="h2 split">
+              Every knot tied by hand,<br /><em>every stitch with purpose.</em>
+            </h2>
           </div>
-
-          <div class="panel" tabindex="0" aria-label="Step 2: Review record">
-            <div class="panel-in">
-              <div class="num" style="color: var(--green)">2</div>
-              <div class="step">
-                <img
-                  class="mini-cloud"
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093216_44218665-b15e-4566-a2d4-2676ab03609d.png"
-                  alt=""
-                />
-                <h3>Review record</h3>
-                <p>
-                  Your agent scans the buyer profile, earlier purchases, prior returns, and any
-                  notable account events.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel" tabindex="0" aria-label="Step 3: Apply the rules">
-            <div class="panel-in">
-              <div class="num" style="color: var(--lime)">3</div>
-              <div class="step">
-                <img
-                  class="mini-cloud"
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093215_0f37c0c3-f82c-485b-87dd-5a35b75a8782.png"
-                  alt=""
-                />
-                <h3>Apply the rules</h3>
-                <p>
-                  Your agent measures the claim against return terms, qualifying conditions, time
-                  limits, and edge cases.
-                </p>
-              </div>
-            </div>
-          </div>
+          <div id="scroll-stack-root"></div>
         </div>
       </section>
 

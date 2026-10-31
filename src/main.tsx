@@ -1,8 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import GooeyNav, { GooeyNavItem } from './components/GooeyNav';
+import { CraftScrollStack } from './components/CraftScrollStack';
 import './index.css';
 
+// 1. Navigation bar
 const navContainer = document.getElementById('gooey-nav-root');
 if (navContainer) {
   const items: GooeyNavItem[] = [
@@ -35,6 +37,16 @@ if (navContainer) {
           console.log('Selected category:', index, item.label);
         }}
       />
+    </StrictMode>
+  );
+}
+
+// 2. Craft Story ScrollStack
+const scrollStackContainer = document.getElementById('scroll-stack-root');
+if (scrollStackContainer) {
+  createRoot(scrollStackContainer).render(
+    <StrictMode>
+      <CraftScrollStack />
     </StrictMode>
   );
 }
