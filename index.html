@@ -312,13 +312,17 @@
         pointer-events: none;
       }
 
-      /* Section 4b: STATS */
+      /* Section 4b: STATS / BOUQUETS SHOWCASE */
       .stats {
         position: relative;
-        height: 100vh;
-        min-height: 680px;
+        min-height: 100vh;
+        height: auto;
+        padding: clamp(60px, 8vh, 90px) 0 clamp(70px, 9vh, 100px);
         overflow: hidden;
         background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .sq-field {
         position: absolute;
@@ -347,55 +351,215 @@
       .stats-inner {
         position: relative;
         z-index: 3;
-        height: 100%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 22px;
-        padding: 0 16px;
+        gap: 20px;
+        padding: 0 clamp(16px, 3vw, 32px);
       }
       .cards {
         position: relative;
         z-index: 4;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        width: min(880px, 100%);
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        width: min(1300px, 100%);
+        margin: 6px auto 0;
       }
       .card {
-        height: 150px;
-        padding: 18px 22px;
+        min-height: 400px;
+        padding: 12px;
         border-radius: 22px;
         background: var(--lime);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        box-shadow: 0 16px 36px -12px rgba(45, 60, 12, 0.22), 0 4px 14px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        position: relative;
         -webkit-mask:
-          radial-gradient(circle 17px at 0 55%, #0000 97%, #000) left / 51% 100% no-repeat,
-          radial-gradient(circle 17px at 100% 55%, #0000 97%, #000) right / 51% 100% no-repeat;
+          radial-gradient(circle 12px at 0 71%, #0000 97%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle 12px at 100% 71%, #0000 97%, #000) right / 51% 100% no-repeat;
         mask:
-          radial-gradient(circle 17px at 0 55%, #0000 97%, #000) left / 51% 100% no-repeat,
-          radial-gradient(circle 17px at 100% 55%, #0000 97%, #000) right / 51% 100% no-repeat;
+          radial-gradient(circle 12px at 0 71%, #0000 97%, #000) left / 51% 100% no-repeat,
+          radial-gradient(circle 12px at 100% 71%, #0000 97%, #000) right / 51% 100% no-repeat;
       }
-      .card-label {
-        font-size: 10.5px;
-        font-weight: 500;
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 24px 44px -10px rgba(45, 60, 12, 0.32), 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+      .card-media {
+        position: relative;
+        width: 100%;
+        height: 180px;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .card:hover .card-img {
+        transform: scale(1.06);
+      }
+      .card-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.94);
         color: #2a3410;
-        letter-spacing: 0.01em;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        padding: 4px 9px;
+        border-radius: 999px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8px);
       }
-      .card b {
-        font-size: clamp(30px, 3.4vw, 44px);
-        font-weight: 600;
-        letter-spacing: -0.04em;
+      .card-info {
+        padding: 10px 4px 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .card-title {
+        font-size: 14.5px;
+        font-weight: 700;
         color: #151a08;
-        font-variant-numeric: tabular-nums;
-        line-height: 1;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .card-desc {
+        font-size: 11px;
+        color: #3b4816;
+        line-height: 1.35;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-top: 5px;
+      }
+      .card-price {
+        font-size: 18px;
+        font-weight: 800;
+        color: #151a08;
+        letter-spacing: -0.03em;
+      }
+      .card-old-price {
+        font-size: 12.5px;
+        color: #4a5c1e;
+        text-decoration: line-through;
+        font-weight: 500;
+      }
+      .card-discount {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--olive);
+        background: rgba(255, 255, 255, 0.7);
+        padding: 2px 6px;
+        border-radius: 999px;
+      }
+      .card-tear-line {
+        position: relative;
+        width: 100%;
+        border-top: 1.5px dashed rgba(42, 52, 16, 0.35);
+        margin: 6px 0 10px;
+      }
+      .card-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .btn-card {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        height: 38px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+      }
+      .btn-card:hover {
+        transform: translateY(-1.5px);
+      }
+      .btn-card-cart {
+        background: rgba(255, 255, 255, 0.9);
+        color: #222d0d;
+        border: 1.5px solid rgba(40, 52, 16, 0.18);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .btn-card-cart:hover {
+        background: #ffffff;
+        color: #121410;
+        border-color: rgba(40, 52, 16, 0.35);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .btn-card-buy {
+        background: var(--olive);
+        color: #ffffff !important;
+        border: none;
+        box-shadow: 0 4px 12px rgba(77, 106, 16, 0.35);
+      }
+      .btn-card-buy:hover {
+        background: #3e560c;
+        box-shadow: 0 6px 16px rgba(77, 106, 16, 0.45);
+      }
+      .cart-toast {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 22px;
+        background: rgba(21, 26, 8, 0.94);
+        color: #fbfbf9;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 999px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transform: translateY(80px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      }
+      .cart-toast.show {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
       }
       .cards-shadow {
-        width: min(820px, 94%);
-        height: 10px;
-        margin-top: -18px;
+        width: min(1200px, 94%);
+        height: 12px;
+        margin-top: -6px;
         border-radius: 50%;
         background: radial-gradient(closest-side, rgba(0, 0, 0, 0.08), transparent);
         z-index: 3;
@@ -688,23 +852,20 @@
           display: none;
         }
         .cards {
-          grid-template-columns: repeat(2, 1fr) !important;
-        }
-        .card {
-          height: 120px;
+          grid-template-columns: repeat(3, 1fr) !important;
         }
         .logos {
           flex-wrap: wrap;
           justify-content: center;
-          gap: 14px 26px;
+          gap: 14px 20px;
         }
         .logo-item {
-          font-size: 17px;
+          font-size: 13px;
         }
         .stats {
-          height: auto;
+          height: auto !important;
           min-height: 100vh;
-          padding: 90px 0 300px;
+          padding: 80px 0 100px !important;
         }
         .tree-wrap {
           bottom: 0;
@@ -744,6 +905,30 @@
         }
         .brand-logo-theme {
           height: 30px;
+        }
+        .cards {
+          display: flex !important;
+          grid-template-columns: none !important;
+          overflow-x: auto !important;
+          scroll-snap-type: x mandatory;
+          padding: 10px 16px 24px !important;
+          gap: 14px !important;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          width: 100% !important;
+        }
+        .cards::-webkit-scrollbar {
+          display: none;
+        }
+        .card {
+          flex: 0 0 240px !important;
+          scroll-snap-align: center;
+          min-height: 380px !important;
+        }
+        .stats {
+          height: auto !important;
+          min-height: 0 !important;
+          padding: 50px 0 70px !important;
         }
         .loop {
           height: auto;
@@ -888,8 +1073,9 @@
         <div class="hero-glass" id="heroGlass"></div>
       </section>
 
-      <!-- STATS -->
+      <!-- STATS / BOUQUET PRODUCT SHOWCASE -->
       <section class="stats" id="stats">
+        <div id="flowers" style="position: absolute; top: -60px;"></div>
         <div class="sq-field" data-count="22"></div>
         <div class="tree-wrap">
           <img
@@ -900,26 +1086,164 @@
           />
         </div>
         <div class="stats-inner">
-          <span class="pill reveal">Teams rely on us</span>
+          <span class="pill reveal">🌸 Everlasting Bouquets</span>
           <h2 class="h2 split" style="margin-bottom: 18px">
-            80,000+ flows<br />finished on autopilot.
+            Handcrafted bouquets that<br /><em>never wilt or fade.</em>
           </h2>
           <div class="cards">
-            <div class="card" data-to="40" data-dec="0" data-suf="%">
-              <span class="card-label">Staff Time Freed</span>
-              <b>0%</b>
+            <!-- Product 1 -->
+            <div class="card">
+              <div class="card-media">
+                <span class="card-badge">★ Best Seller</span>
+                <img src="/bloom/bouquet-pink-dawn.jpg" alt="Pink Dawn Rose Bouquet" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">Pink Dawn Rose</h3>
+                <p class="card-desc">Blush pink roses with white baby's breath</p>
+                <div class="card-price-row">
+                  <span class="card-price">₹1,499</span>
+                  <span class="card-old-price">₹1,999</span>
+                  <span class="card-discount">25% OFF</span>
+                </div>
+              </div>
+              <div class="card-tear-line"></div>
+              <div class="card-actions">
+                <button type="button" class="btn-card btn-card-cart" onclick="handleAddToCart('Pink Dawn Rose Bouquet')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Add
+                </button>
+                <button type="button" class="btn-card btn-card-buy" onclick="handleBuyNow('Pink Dawn Rose Bouquet')">
+                  Buy Now
+                </button>
+              </div>
             </div>
-            <div class="card" data-to="300" data-dec="0" data-suf="+">
-              <span class="card-label">Customers</span>
-              <b>0+</b>
+
+            <!-- Product 2 -->
+            <div class="card">
+              <div class="card-media">
+                <span class="card-badge">✨ Trending</span>
+                <img src="/bloom/bouquet-royal-blue.jpg" alt="Royal Blue Velvet Bouquet" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">Royal Blue Velvet</h3>
+                <p class="card-desc">Cobalt blossoms & dancing lilies with ribbon</p>
+                <div class="card-price-row">
+                  <span class="card-price">₹1,799</span>
+                  <span class="card-old-price">₹2,299</span>
+                  <span class="card-discount">22% OFF</span>
+                </div>
+              </div>
+              <div class="card-tear-line"></div>
+              <div class="card-actions">
+                <button type="button" class="btn-card btn-card-cart" onclick="handleAddToCart('Royal Blue Velvet Bouquet')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Add
+                </button>
+                <button type="button" class="btn-card btn-card-buy" onclick="handleBuyNow('Royal Blue Velvet Bouquet')">
+                  Buy Now
+                </button>
+              </div>
             </div>
-            <div class="card" data-to="99.2" data-dec="1" data-suf="%">
-              <span class="card-label">Task Success Rates</span>
-              <b>0%</b>
+
+            <!-- Product 3 -->
+            <div class="card">
+              <div class="card-media">
+                <span class="card-badge">🌸 Fresh Drop</span>
+                <img src="/bloom/bouquet-summer-tulips.jpg" alt="Sunny Meadow Tulip Mix" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">Sunny Meadow Tulips</h3>
+                <p class="card-desc">Butter yellow tulips, daisies & greenery</p>
+                <div class="card-price-row">
+                  <span class="card-price">₹1,399</span>
+                  <span class="card-old-price">₹1,849</span>
+                  <span class="card-discount">24% OFF</span>
+                </div>
+              </div>
+              <div class="card-tear-line"></div>
+              <div class="card-actions">
+                <button type="button" class="btn-card btn-card-cart" onclick="handleAddToCart('Sunny Meadow Tulip Mix')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Add
+                </button>
+                <button type="button" class="btn-card btn-card-buy" onclick="handleBuyNow('Sunny Meadow Tulip Mix')">
+                  Buy Now
+                </button>
+              </div>
             </div>
-            <div class="card" data-to="99.2" data-dec="1" data-suf="%">
-              <span class="card-label">Output Reliability</span>
-              <b>0%</b>
+
+            <!-- Product 4 -->
+            <div class="card">
+              <div class="card-media">
+                <span class="card-badge">🤍 Pure Classic</span>
+                <img src="/bloom/bouquet-gentle-white.jpg" alt="Gentle White Lily Cascade" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">Gentle White Lily</h3>
+                <p class="card-desc">Calla lilies & snow-white crochet roses</p>
+                <div class="card-price-row">
+                  <span class="card-price">₹1,599</span>
+                  <span class="card-old-price">₹2,099</span>
+                  <span class="card-discount">24% OFF</span>
+                </div>
+              </div>
+              <div class="card-tear-line"></div>
+              <div class="card-actions">
+                <button type="button" class="btn-card btn-card-cart" onclick="handleAddToCart('Gentle White Lily Cascade')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Add
+                </button>
+                <button type="button" class="btn-card btn-card-buy" onclick="handleBuyNow('Gentle White Lily Cascade')">
+                  Buy Now
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="card">
+              <div class="card-media">
+                <span class="card-badge">👑 Signature</span>
+                <img src="/products/bouquet.jpg" alt="Grand Crimson Romance" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">Grand Crimson Romance</h3>
+                <p class="card-desc">Crimson roses, amigurumi bunny & gift card</p>
+                <div class="card-price-row">
+                  <span class="card-price">₹2,199</span>
+                  <span class="card-old-price">₹2,799</span>
+                  <span class="card-discount">21% OFF</span>
+                </div>
+              </div>
+              <div class="card-tear-line"></div>
+              <div class="card-actions">
+                <button type="button" class="btn-card btn-card-cart" onclick="handleAddToCart('Grand Crimson Romance')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Add
+                </button>
+                <button type="button" class="btn-card btn-card-buy" onclick="handleBuyNow('Grand Crimson Romance')">
+                  Buy Now
+                </button>
+              </div>
             </div>
           </div>
           <div class="cards-shadow"></div>
@@ -927,38 +1251,19 @@
             <div class="band" id="band"></div>
             <div class="logos">
               <div class="logo-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M6 15a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2v2a2 2 0 0 1-2 2zm1-5a2 2 0 0 1 2-2 2 2 0 0 1 2 2v5a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-5zm2-4a2 2 0 0 1 2-2 2 2 0 0 1 2 2v2H9V6zm5 1a2 2 0 0 1 2-2 2 2 0 0 1 2 2v2h-5a2 2 0 0 1-2-2 2 2 0 0 1 2-2zm4 7a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-2v-2a2 2 0 0 1 2-2zm-1 5a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1 2 2v5zm-2 4a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-2h5a2 2 0 0 1 2 2 2 2 0 0 1-2 2zm-5-1a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-2h5a2 2 0 0 1 2 2 2 2 0 0 1-2 2z"
-                  />
-                </svg>
-                <span>slack</span>
+                <span>🌸 100% Hand-Crocheted</span>
               </div>
-              <div class="logo-item" style="font-weight: 400">zapier</div>
               <div class="logo-item">
-                <svg width="20" height="18" viewBox="0 0 24 22" fill="currentColor">
-                  <path
-                    d="M6 2 0 6l6 4 6-4-6-4zm12 0-6 4 6 4 6-4-6-4zM0 14l6 4 6-4-6-4-6 4zm18-4-6 4 6 4 6-4-6-4zm-6 5.5-6-4-6 4 6 4.5 6-4.5z"
-                  />
-                </svg>
-                <span>Dropbox</span>
+                <span>✨ Everlasting Blooms</span>
               </div>
-              <div class="logo-item">HubSpot</div>
-              <div class="logo-item" style="font-size: 15px; font-weight: 500">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="4" />
-                  <path d="M9 8v8l6-8v8" />
-                </svg>
-                <span>Notion</span>
+              <div class="logo-item">
+                <span>📦 Free All-India Shipping</span>
+              </div>
+              <div class="logo-item">
+                <span>🎁 Gift Ready Packaging</span>
+              </div>
+              <div class="logo-item">
+                <span>💖 10,000+ Happy Givers</span>
               </div>
             </div>
           </div>
@@ -1730,6 +2035,31 @@
           }
         });
       })();
+    </script>
+    <div id="cartToast" class="cart-toast" aria-live="polite"></div>
+    <script>
+      window.handleAddToCart = function(name) {
+        const toast = document.getElementById('cartToast');
+        if (toast) {
+          toast.innerHTML = `<span>🌸 Added <strong>${name}</strong> to your bag!</span>`;
+          toast.classList.add('show');
+          clearTimeout(window.__toastTimer);
+          window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+      };
+      window.handleBuyNow = function(name) {
+        const toast = document.getElementById('cartToast');
+        if (toast) {
+          toast.innerHTML = `<span>💐 Proceeding to checkout for <strong>${name}</strong>...</span>`;
+          toast.classList.add('show');
+          clearTimeout(window.__toastTimer);
+          window.__toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+            const cta = document.getElementById('cta');
+            if (cta) cta.scrollIntoView({ behavior: 'smooth' });
+          }, 1000);
+        }
+      };
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
