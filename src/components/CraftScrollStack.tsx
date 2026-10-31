@@ -40,7 +40,7 @@ export const CraftScrollStack: React.FC = () => {
     <div className="w-full max-w-[1680px] mx-auto px-2 sm:px-4 md:px-6">
       <div className="w-full h-[460px] sm:h-[540px] md:h-[640px] lg:h-[720px] xl:h-[760px]">
         <ScrollStack
-          itemDistance={110}
+          itemDistance={45}
           itemStackDistance={32}
           stackPosition="4%"
           itemScale={0.035}
@@ -48,7 +48,8 @@ export const CraftScrollStack: React.FC = () => {
           dimAmount={0.22}
           tiltAmount={1.8}
           rotationAmount={0.8}
-          holdDistance={220}
+          holdDistance={80}
+          scrollSpeed={2.8}
           smoothScroll={true}
           snap={false}
           className="w-full h-full"

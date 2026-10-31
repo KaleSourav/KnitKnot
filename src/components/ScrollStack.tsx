@@ -24,6 +24,7 @@ export interface ScrollStackProps {
   smoothScroll?: boolean;
   snap?: boolean;
   useWindowScroll?: boolean;
+  scrollSpeed?: number;
   onStackComplete?: () => void;
 }
 
@@ -40,6 +41,7 @@ interface StackSettings {
   holdDistance: number;
   smoothScroll: boolean;
   snap: boolean;
+  scrollSpeed: number;
   onStackComplete?: () => void;
 }
 
@@ -101,6 +103,7 @@ const ScrollStack = ({
   smoothScroll = true,
   snap = false,
   useWindowScroll = false,
+  scrollSpeed = 2.4,
   onStackComplete
 }: ScrollStackProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -124,6 +127,7 @@ const ScrollStack = ({
       holdDistance,
       smoothScroll,
       snap,
+      scrollSpeed,
       onStackComplete
     };
     scheduleRef.current?.();
@@ -261,7 +265,7 @@ const ScrollStack = ({
         settleSoon();
         return;
       }
-      current += (goal - current) * (1 - Math.pow(0.9, dt * 60));
+      current += (goal - current) * (1 - Math.pow(0.68, dt * 60));
       if (Math.abs(goal - current) < 0.5) current = goal;
       writeScroll(current);
       if (current === goal) {
@@ -311,7 +315,8 @@ const ScrollStack = ({
       if (!settingsRef.current?.smoothScroll || motion.matches || event.defaultPrevented || event.ctrlKey) return;
       if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
       const page = windowed ? window.innerHeight : root.clientHeight;
-      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? page : 1);
+      const speed = settingsRef.current?.scrollSpeed ?? 2.4;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? page : 1) * speed;
       if (!delta || scrollsInside(event.target as Element | null, windowed ? document.body : root, delta)) return;
       const base = gliding ? goal : readScroll();
       if ((delta < 0 && base <= 0) || (delta > 0 && base >= maxScroll() - 0.5)) return;
