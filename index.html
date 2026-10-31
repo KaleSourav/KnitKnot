@@ -591,22 +591,15 @@
         color: var(--olive);
       }
 
-      /* Section 4c: FULL-SCREEN AUTOMATIC SLIDESHOW */
-      .loop,
-      .loop.slideshow-section {
+      /* Section 4c: FLOATING PRODUCT CATEGORY CARDS */
+      .floating-categories-section {
         position: relative;
         width: 100%;
-        min-height: 70vh;
-        height: auto;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-        background: #FAF8F2;
+        background: #FFFFFF;
         display: block;
       }
-      #slideshow-root {
+      #floating-categories-root {
         width: 100%;
-        height: 100%;
         display: block;
       }
       .track {
@@ -1232,9 +1225,9 @@
         </div>
       </section>
 
-      <!-- FULL-SCREEN AUTOMATIC SLIDESHOW -->
-      <section class="loop slideshow-section" id="loop">
-        <div id="slideshow-root"></div>
+      <!-- FLOATING PRODUCT CATEGORY CARDS -->
+      <section class="floating-categories-section" id="categories">
+        <div id="floating-categories-root"></div>
       </section>
 
       <!-- CTA -->
@@ -1972,7 +1965,7 @@
         }
       };
       window.handleShopAll = function() {
-        const target = document.getElementById('loop') || document.getElementById('cta');
+        const target = document.getElementById('categories') || document.getElementById('loop') || document.getElementById('cta');
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
         }
