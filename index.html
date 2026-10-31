@@ -179,7 +179,7 @@
       }
       .site-header {
         position: absolute;
-        top: 22px;
+        top: 26px;
         left: 0;
         right: 0;
         width: 100%;
@@ -187,7 +187,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 clamp(20px, 4vw, 56px);
+        padding: 0 clamp(24px, 4.5vw, 64px);
         box-sizing: border-box;
         pointer-events: none;
       }
@@ -204,10 +204,11 @@
         transform: scale(1.04);
       }
       .brand-logo-theme {
-        height: clamp(34px, 3.8vw, 44px);
+        height: clamp(44px, 4vw, 56px);
         width: auto;
         object-fit: contain;
         display: block;
+        filter: drop-shadow(0 2px 8px rgba(77, 106, 16, 0.12));
       }
       .nav-center {
         position: absolute;
@@ -216,6 +217,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 10;
       }
       .corner-action {
         display: flex;
@@ -225,22 +227,24 @@
       .header-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 9px 20px;
+        justify-content: center;
+        gap: 8px;
+        height: 50px;
+        padding: 0 26px;
         border-radius: 999px;
         background: var(--olive);
         color: #fff !important;
-        font-size: 13.5px;
+        font-size: 15px;
         font-weight: 600;
         letter-spacing: -0.01em;
         text-decoration: none;
-        box-shadow: 0 4px 14px rgba(77, 106, 16, 0.25);
+        box-shadow: 0 6px 20px rgba(77, 106, 16, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.35);
         transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease;
       }
       .header-btn:hover {
         background: #3e560c;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(77, 106, 16, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(77, 106, 16, 0.4);
       }
       .cloud {
         position: absolute;

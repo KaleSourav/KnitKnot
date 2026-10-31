@@ -1,5 +1,6 @@
 'use client';
 
+import './GooeyNav.css';
 import {
   useEffect,
   useLayoutEffect,
@@ -103,47 +104,42 @@ interface Pipeline {
 
 const THEMES: Record<Palette, Record<string, string>> = {
   dark: {
-    '--gn-frame': 'rgba(38, 35, 46, 0.66)',
-    '--gn-frame-edge': 'rgba(255, 255, 255, 0.08)',
-    '--gn-frame-highlight': 'rgba(255, 255, 255, 0.07)',
-    '--gn-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
-    '--gn-ink': '#f4f4f5',
-    '--gn-muted': 'rgba(244, 244, 245, 0.62)'
+    '--gn-frame': 'rgba(28, 32, 22, 0.92)',
+    '--gn-frame-edge': 'rgba(255, 255, 255, 0.12)',
+    '--gn-frame-highlight': 'rgba(255, 255, 255, 0.15)',
+    '--gn-frame-shadow': '0 22px 48px -18px rgba(0, 0, 0, 0.7), 0 6px 18px -4px rgba(0, 0, 0, 0.4)',
+    '--gn-ink': '#ffffff',
+    '--gn-muted': 'rgba(255, 255, 255, 0.72)'
   },
   light: {
-    '--gn-frame': 'rgba(240, 240, 243, 0.8)',
-    '--gn-frame-edge': 'rgba(24, 24, 27, 0.07)',
-    '--gn-frame-highlight': 'rgba(255, 255, 255, 0.95)',
-    '--gn-frame-shadow': '0 22px 44px -22px rgba(24, 24, 27, 0.3), 0 6px 16px -10px rgba(24, 24, 27, 0.16)',
-    '--gn-ink': '#27272a',
-    '--gn-muted': 'rgba(39, 39, 42, 0.62)'
+    '--gn-frame': 'rgba(255, 255, 255, 0.96)',
+    '--gn-frame-edge': 'rgba(77, 106, 16, 0.22)',
+    '--gn-frame-highlight': 'rgba(255, 255, 255, 0.98)',
+    '--gn-frame-shadow': '0 18px 40px -12px rgba(77, 106, 16, 0.2), 0 4px 16px -2px rgba(0, 0, 0, 0.08)',
+    '--gn-ink': '#121410',
+    '--gn-muted': '#2c351b'
   }
 };
 
 const PILLS: Record<Palette, { color: string; hover: string; shadow: number }> = {
   dark: { color: '#f4f4f5', hover: 'rgba(255, 255, 255, 0.08)', shadow: 0.4 },
-  light: { color: '#27272a', hover: 'rgba(24, 24, 27, 0.06)', shadow: 0.2 }
+  light: { color: '#4d6a10', hover: 'rgba(77, 106, 16, 0.08)', shadow: 0.22 }
 };
 
 const SIZES: Record<Size, Record<string, string>> = {
-  sm: { '--gn-pad': '5px', '--gn-gap': '2px', '--gn-font': '13px', '--gn-x': '13px', '--gn-y': '7px' },
-  md: { '--gn-pad': '6px', '--gn-gap': '4px', '--gn-font': '14px', '--gn-x': '16px', '--gn-y': '9px' },
-  lg: { '--gn-pad': '7px', '--gn-gap': '6px', '--gn-font': '16px', '--gn-x': '20px', '--gn-y': '11px' }
+  sm: { '--gn-pad': '6px 10px', '--gn-gap': '4px', '--gn-font': '14px', '--gn-x': '16px', '--gn-y': '9px' },
+  md: { '--gn-pad': '8px 12px', '--gn-gap': '6px', '--gn-font': '16px', '--gn-x': '22px', '--gn-y': '12px' },
+  lg: { '--gn-pad': '10px 16px', '--gn-gap': '8px', '--gn-font': '17px', '--gn-x': '26px', '--gn-y': '14px' }
 };
 
-const ROOT = 'relative inline-flex max-w-full text-[length:var(--gn-font)] leading-[1.2]';
-const FRAMED =
-  'rounded-full p-[var(--gn-pad)] backdrop-blur-[20px] backdrop-saturate-[1.6] [background:var(--gn-frame)] [box-shadow:var(--gn-frame-shadow)]';
-const LIST_BASE = 'm-0 flex list-none flex-wrap gap-[var(--gn-gap)] p-0';
-const LIST = `relative ${LIST_BASE}`;
-const OVERLAY = `${LIST_BASE} pointer-events-none invisible absolute inset-0 text-[var(--gn-active-ink)] [clip-path:inset(100%)]`;
-const LINK_BASE =
-  'inline-flex items-center gap-2 whitespace-nowrap rounded-full border-none bg-transparent px-[var(--gn-x)] py-[var(--gn-y)] [font-family:inherit] [font-size:inherit] [line-height:inherit] font-medium no-underline';
-const LINK = `${LINK_BASE} cursor-pointer text-[var(--gn-muted)] transition-colors duration-200 [-webkit-tap-highlight-color:transparent] group-data-[active]:text-[var(--gn-ink)] hover:text-[var(--gn-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gn-ink)]`;
-const GHOST = `${LINK_BASE} text-inherit`;
-const ICON = 'inline-flex flex-none [&_svg]:h-[1.15em] [&_svg]:w-[1.15em]';
-const RIM =
-  'pointer-events-none absolute inset-0 rounded-[inherit] [box-shadow:inset_0_0_0_1px_var(--gn-frame-edge),inset_0_1px_0_var(--gn-frame-highlight)]';
+const ROOT = 'gn-root';
+const FRAMED = 'gn-framed';
+const LIST = 'gn-list';
+const OVERLAY = 'gn-overlay';
+const LINK = 'gn-link';
+const GHOST = 'gn-ghost';
+const ICON = 'gn-icon';
+const RIM = 'gn-rim';
 
 const DEFAULT_ITEMS: GooeyNavItem[] = [
   { label: 'Home', href: '#' },
@@ -872,7 +868,7 @@ export const GooeyNav = ({
       );
       if (!interactive) {
         return (
-          <li key={index} className="flex">
+          <li key={index} className="gn-item">
             <span className={GHOST}>{content}</span>
           </li>
         );
@@ -888,7 +884,7 @@ export const GooeyNav = ({
       return (
         <li
           key={index}
-          className="group flex"
+          className="gn-item"
           data-gooey-index={index}
           data-active={index === current ? '' : undefined}
         >
@@ -919,11 +915,12 @@ export const GooeyNav = ({
       }
     >
       {frame && <span className={RIM} />}
-      <div ref={stageRef} className="relative max-w-full">
-        <canvas ref={canvasRef} className="pointer-events-none absolute left-0 top-0" aria-hidden="true" />
+      <div ref={stageRef} className="gn-stage">
+        <canvas ref={canvasRef} className="gn-canvas" aria-hidden="true" />
         <span
           ref={fallbackRef}
-          className="pointer-events-none absolute left-0 top-0 hidden rounded-full bg-[var(--gn-pill)]"
+          className="gn-fallback"
+          style={{ display: 'none' }}
           aria-hidden="true"
         />
         <ul ref={listRef} className={LIST}>
@@ -938,3 +935,4 @@ export const GooeyNav = ({
 };
 
 export default GooeyNav;
+
