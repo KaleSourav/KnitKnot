@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import GooeyNav, { GooeyNavItem } from './components/GooeyNav';
-import { FloatingCategoryCards } from './components/FloatingCategoryCards';
+import { AllCategoriesShowcase } from './components/AllCategoriesShowcase';
 import './index.css';
 
 // 1. Navigation bar
@@ -41,16 +41,17 @@ if (navContainer) {
   );
 }
 
-// 2. Floating Product Category Cards Section
-const floatingCategoriesContainer =
+// 2. All Categories Showcase Section
+const categoriesContainer =
   document.getElementById('floating-categories-root') ||
+  document.getElementById('categories-root') ||
   document.getElementById('slideshow-root') ||
   document.getElementById('scroll-stack-root');
 
-if (floatingCategoriesContainer) {
-  createRoot(floatingCategoriesContainer).render(
+if (categoriesContainer) {
+  createRoot(categoriesContainer).render(
     <StrictMode>
-      <FloatingCategoryCards />
+      <AllCategoriesShowcase />
     </StrictMode>
   );
 }
