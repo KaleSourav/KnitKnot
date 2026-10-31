@@ -591,6 +591,18 @@
         color: var(--olive);
       }
 
+      /* Section 4c: OUR CATEGORIES FULL-PAGE SECTION */
+      .our-categories-section {
+        position: relative;
+        width: 100%;
+        background: #FAF7F2;
+        display: block;
+      }
+      #our-categories-root {
+        width: 100%;
+        display: block;
+      }
+
       .track {
         position: absolute;
         z-index: 2;
@@ -1214,6 +1226,11 @@
         </div>
       </section>
 
+
+      <!-- OUR CATEGORIES FULL-PAGE SECTION -->
+      <section class="our-categories-section" id="categories">
+        <div id="our-categories-root"></div>
+      </section>
 
       <!-- CTA -->
       <section class="cta" id="cta">
@@ -1950,7 +1967,7 @@
         }
       };
       window.handleShopAll = function() {
-        const target = document.getElementById('cta') || document.getElementById('footer');
+        const target = document.getElementById('categories') || document.getElementById('cta');
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
         }

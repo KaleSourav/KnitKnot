@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import GooeyNav, { GooeyNavItem } from './components/GooeyNav';
+import { OurCategoriesGrid } from './components/OurCategoriesGrid';
 import './index.css';
 
 // 1. Navigation bar
@@ -36,6 +37,20 @@ if (navContainer) {
           console.log('Selected category:', index, item.label);
         }}
       />
+    </StrictMode>
+  );
+}
+
+// 2. Full-Page "Our Categories" Grid Section
+const categoriesContainer =
+  document.getElementById('our-categories-root') ||
+  document.getElementById('categories-root') ||
+  document.getElementById('floating-categories-root');
+
+if (categoriesContainer) {
+  createRoot(categoriesContainer).render(
+    <StrictMode>
+      <OurCategoriesGrid />
     </StrictMode>
   );
 }
