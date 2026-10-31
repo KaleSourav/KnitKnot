@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import GooeyNav, { GooeyNavItem } from './components/GooeyNav';
-import { CraftScrollStack } from './components/CraftScrollStack';
+import { BannerSlideshow } from './components/BannerSlideshow';
 import './index.css';
 
 // 1. Navigation bar
@@ -41,12 +41,13 @@ if (navContainer) {
   );
 }
 
-// 2. Craft Story ScrollStack
-const scrollStackContainer = document.getElementById('scroll-stack-root');
-if (scrollStackContainer) {
-  createRoot(scrollStackContainer).render(
+// 2. Full-Screen Automatic Slideshow Section
+const slideshowContainer =
+  document.getElementById('slideshow-root') || document.getElementById('scroll-stack-root');
+if (slideshowContainer) {
+  createRoot(slideshowContainer).render(
     <StrictMode>
-      <CraftScrollStack />
+      <BannerSlideshow />
     </StrictMode>
   );
 }

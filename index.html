@@ -592,54 +592,23 @@
         color: var(--olive);
       }
 
-      /* Section 4c: CRAFT STORY SCROLL STACK */
-      .loop {
+      /* Section 4c: FULL-SCREEN AUTOMATIC SLIDESHOW */
+      .loop,
+      .loop.slideshow-section {
         position: relative;
-        min-height: 100vh;
-        height: auto;
-        padding: clamp(50px, 6vh, 80px) 0 clamp(60px, 7vh, 90px);
-        overflow: hidden;
-        background: #ffffff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .loop-cloud {
-        position: absolute;
-        z-index: 3;
-        top: 4vh;
-        left: -4vw;
-        width: min(36vw, 520px);
-        pointer-events: none;
-      }
-      .loop-cloud img {
         width: 100%;
+        min-height: 70vh;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        background: #FAF8F2;
         display: block;
       }
-      .craft-stack-container {
-        position: relative;
-        z-index: 4;
+      #slideshow-root {
         width: 100%;
-        max-width: min(1740px, 96vw);
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0 clamp(10px, 1.6vw, 32px);
-        box-sizing: border-box;
-      }
-      .craft-stack-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 16px;
-        margin-bottom: 20px;
-        width: 100%;
-      }
-      #scroll-stack-root {
-        width: 100%;
+        height: 100%;
+        display: block;
       }
       .track {
         position: absolute;
@@ -938,10 +907,11 @@
           min-height: 0 !important;
           padding: 50px 0 70px !important;
         }
-        .loop {
-          height: auto;
-          min-height: 0;
-          padding: 12vh 0 40px;
+        .loop,
+        .loop.slideshow-section {
+          height: auto !important;
+          min-height: 0 !important;
+          padding: 0 !important;
         }
         .loop-head {
           position: relative;
@@ -1242,38 +1212,9 @@
         </div>
       </section>
 
-      <!-- CRAFT STORY SCROLL STACK -->
-      <section class="loop" id="loop">
-        <div class="loop-cloud" data-par="-50">
-          <img
-            class="drift-a"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261021_093216_44218665-b15e-4566-a2d4-2676ab03609d.png"
-            alt=""
-          />
-          <div class="glass" style="left: 6%; top: 30%; width: 15%; aspect-ratio: 1"></div>
-          <div class="glass" style="left: 23%; top: 58%; width: 13%; aspect-ratio: 1"></div>
-          <div class="glass" style="left: 38%; top: 24%; width: 13%; aspect-ratio: 1"></div>
-        </div>
-
-        <div class="craft-stack-container">
-          <div class="craft-stack-header">
-            <span class="pill reveal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:5px; color:var(--olive);">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="m4.93 4.93 4.24 4.24"></path>
-                <path d="m14.83 9.17 4.24-4.24"></path>
-                <path d="m14.83 14.83 4.24 4.24"></path>
-                <path d="m9.17 14.83-4.24 4.24"></path>
-                <circle cx="12" cy="12" r="3.5"></circle>
-              </svg>
-              Our Handcrafted Promise
-            </span>
-            <h2 class="h2 split">
-              Every knot tied by hand,<br /><em>every stitch with purpose.</em>
-            </h2>
-          </div>
-          <div id="scroll-stack-root"></div>
-        </div>
+      <!-- FULL-SCREEN AUTOMATIC SLIDESHOW -->
+      <section class="loop slideshow-section" id="loop">
+        <div id="slideshow-root"></div>
       </section>
 
       <!-- CTA -->
