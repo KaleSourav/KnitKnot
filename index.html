@@ -15,6 +15,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
       rel="stylesheet"
     />
+    <script>
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      window.scrollTo(0, 0);
+    </script>
     <style>
       :root {
         --ink: #121410;
@@ -1657,7 +1666,11 @@
         });
 
         // 7. INTRO animation
-        if (lenis) lenis.stop();
+        window.scrollTo(0, 0);
+        if (lenis) {
+          lenis.stop();
+          lenis.scrollTo(0, { immediate: true });
+        }
 
         if (typeof gsap !== 'undefined') {
           gsap.set('#heroTitle .w', { opacity: 0, y: 24, filter: 'blur(10px)' });
@@ -1670,7 +1683,10 @@
               gsap.set('#app', { clearProps: 'all' });
               const backdrop = document.querySelector('.backdrop');
               if (backdrop) backdrop.remove();
-              if (lenis) lenis.start();
+              if (lenis) {
+                lenis.start();
+                lenis.scrollTo(0, { immediate: true });
+              }
               setupScroll();
             },
           });

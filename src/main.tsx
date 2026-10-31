@@ -32,14 +32,7 @@ if (navContainer) {
         color="#4d6a10"
         activeTextColor="#ffffff"
         onChange={(index, item) => {
-          console.log(index, item.label);
-          // If corresponding section exists, smooth scroll to it
-          if (item.href && item.href.startsWith('#')) {
-            const targetEl = document.querySelector(item.href);
-            if (targetEl) {
-              targetEl.scrollIntoView({ behavior: 'smooth' });
-            }
-          }
+          console.log('Selected category:', index, item.label);
         }}
       />
     </StrictMode>

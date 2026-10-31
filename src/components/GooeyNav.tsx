@@ -877,8 +877,14 @@ export const GooeyNav = ({
         className: LINK,
         'aria-current': index === current ? ('page' as const) : undefined,
         onClick: (event: MouseEvent) => {
-          if (!item.href || item.href === '#') event.preventDefault();
+          event.preventDefault();
           select(index);
+          if (item.href && item.href.startsWith('#')) {
+            const targetEl = document.querySelector(item.href);
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
         }
       };
       return (
