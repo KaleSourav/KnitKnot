@@ -326,7 +326,7 @@
         position: relative;
         min-height: 100vh;
         height: auto;
-        padding: clamp(60px, 8vh, 90px) 0 clamp(70px, 9vh, 100px);
+        padding: clamp(32px, 3.8vh, 52px) 0 clamp(34px, 4.2vh, 56px);
         overflow: hidden;
         background: #FAF8F2;
         display: flex;
@@ -366,29 +366,29 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 20px;
-        padding: 0 clamp(16px, 3.2vw, 56px);
+        gap: clamp(10px, 1.4vh, 18px);
+        padding: 0 clamp(12px, 1.8vw, 32px);
         box-sizing: border-box;
       }
       .cards {
         position: relative;
         z-index: 4;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: clamp(16px, 1.8vw, 28px);
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: clamp(12px, 1.2vw, 20px);
         width: 100%;
-        max-width: min(1480px, 94vw);
-        margin: 12px auto 0;
+        max-width: min(1880px, 98vw);
+        margin: 6px auto 0;
         box-sizing: border-box;
       }
       .card {
         position: relative;
-        aspect-ratio: 3 / 4;
-        min-height: 400px;
-        border-radius: 28px;
+        aspect-ratio: 3 / 4.4;
+        min-height: clamp(500px, 60vh, 660px);
+        border-radius: clamp(22px, 1.6vw, 30px);
         overflow: hidden;
         background: #eae7dc;
-        box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.14), 0 2px 10px rgba(0, 0, 0, 0.05);
         transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
         cursor: pointer;
         display: flex;
@@ -400,8 +400,8 @@
         box-sizing: border-box;
       }
       .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.22), 0 6px 16px rgba(0, 0, 0, 0.08);
+        transform: translateY(-8px) scale(1.015);
+        box-shadow: 0 28px 56px -12px rgba(0, 0, 0, 0.24), 0 8px 20px rgba(0, 0, 0, 0.08);
       }
       .card-media {
         position: absolute;
@@ -416,19 +416,19 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center 32%;
+        object-position: center 26%;
         display: block;
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .card:hover .card-img {
-        transform: scale(1.06);
+        transform: scale(1.08);
       }
       .card-overlay {
         position: relative;
         z-index: 2;
         width: 100%;
-        padding: clamp(32px, 3.5vw, 44px) clamp(16px, 1.8vw, 24px) clamp(22px, 2.2vw, 28px);
-        background: linear-gradient(to top, rgba(14, 18, 8, 0.82) 0%, rgba(14, 18, 8, 0.44) 60%, transparent 100%);
+        padding: clamp(38px, 4.2vw, 54px) clamp(12px, 1.3vw, 20px) clamp(20px, 2.2vh, 26px);
+        background: linear-gradient(to top, rgba(14, 18, 8, 0.88) 0%, rgba(14, 18, 8, 0.48) 55%, transparent 100%);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -437,8 +437,8 @@
         box-sizing: border-box;
       }
       .card-title {
-        font-size: clamp(15px, 1.15vw, 17px);
-        font-weight: 500;
+        font-size: clamp(15px, 1.05vw, 18px);
+        font-weight: 600;
         color: #ffffff;
         letter-spacing: -0.01em;
         margin: 0;
@@ -446,30 +446,30 @@
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
       }
       .card-price {
-        font-size: clamp(14px, 1vw, 15.5px);
-        font-weight: 500;
+        font-size: clamp(14.5px, 0.95vw, 17px);
+        font-weight: 600;
         color: rgba(255, 255, 255, 0.95);
-        letter-spacing: 0.05em;
+        letter-spacing: 0.03em;
         margin: 0;
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
       }
       .card-quick-add {
-        margin-top: 6px;
+        margin-top: 8px;
         opacity: 0;
         transform: translateY(8px);
         transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
-        padding: 6px 16px;
+        padding: 7px 18px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.96);
         color: #1a220a;
-        font-size: 11.5px;
+        font-size: 12px;
         font-weight: 600;
         border: none;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        gap: 6px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
       }
       .card:hover .card-quick-add {
         opacity: 1;
@@ -483,18 +483,18 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        margin-top: 24px;
+        margin-top: clamp(14px, 1.8vh, 22px);
       }
       .btn-shop-all {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 12px clamp(40px, 5vw, 68px);
+        padding: 11px clamp(36px, 4.5vw, 60px);
         border-radius: 999px;
         border: 1.5px solid #282d12;
         background: transparent;
         color: #1a220a;
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 500;
         letter-spacing: -0.01em;
         text-decoration: none;
@@ -822,20 +822,22 @@
           display: none;
         }
         .cards {
-          grid-template-columns: repeat(2, 1fr) !important;
+          grid-template-columns: repeat(3, 1fr) !important;
+          max-width: 98vw !important;
+          gap: 12px !important;
         }
         .logos {
           flex-wrap: wrap;
           justify-content: center;
-          gap: 14px 20px;
+          gap: 12px 18px;
         }
         .logo-item {
           font-size: 13px;
         }
         .stats {
           height: auto !important;
-          min-height: 100vh;
-          padding: 80px 0 100px !important;
+          min-height: 0 !important;
+          padding: 40px 0 50px !important;
         }
         .tree-wrap {
           bottom: 0;
@@ -881,7 +883,7 @@
           grid-template-columns: none !important;
           overflow-x: auto !important;
           scroll-snap-type: x mandatory;
-          padding: 10px 16px 24px !important;
+          padding: 8px 16px 20px !important;
           gap: 14px !important;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
@@ -891,10 +893,10 @@
           display: none;
         }
         .card {
-          flex: 0 0 280px !important;
+          flex: 0 0 clamp(280px, 78vw, 340px) !important;
           scroll-snap-align: center;
-          min-height: 380px !important;
-          aspect-ratio: 3 / 4 !important;
+          min-height: 480px !important;
+          aspect-ratio: 3 / 4.4 !important;
         }
         .card-media {
           position: absolute !important;
@@ -905,7 +907,7 @@
         .stats {
           height: auto !important;
           min-height: 0 !important;
-          padding: 50px 0 70px !important;
+          padding: 34px 0 46px !important;
         }
         .loop,
         .loop.slideshow-section {
@@ -1074,7 +1076,7 @@
             </svg>
             Everlasting Bouquets
           </span>
-          <h2 class="h2 split" style="margin-bottom: 18px">
+          <h2 class="h2 split" style="margin-bottom: 8px">
             Handcrafted bouquets that<br /><em>never wilt or fade.</em>
           </h2>
           <div class="cards">
@@ -1135,7 +1137,26 @@
               </div>
             </div>
 
-            <!-- Product 4: Grand Crimson Romance -->
+            <!-- Product 4: Gentle White Lily -->
+            <div class="card" onclick="handleAddToCart('Gentle White Lily Cascade')">
+              <div class="card-media">
+                <img src="/bloom/bouquet-gentle-white.jpg" alt="Gentle White Lily Cascade" class="card-img" loading="lazy" />
+              </div>
+              <div class="card-overlay">
+                <h3 class="card-title">Gentle White Lily</h3>
+                <span class="card-price">₹1,599.00</span>
+                <button type="button" class="card-quick-add" onclick="event.stopPropagation(); handleAddToCart('Gentle White Lily Cascade');">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  Add to Bag
+                </button>
+              </div>
+            </div>
+
+            <!-- Product 5: Grand Crimson Romance -->
             <div class="card" onclick="handleAddToCart('Grand Crimson Romance')">
               <div class="card-media">
                 <img src="/products/bouquet.jpg" alt="Grand Crimson Romance" class="card-img" loading="lazy" />
