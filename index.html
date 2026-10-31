@@ -366,8 +366,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: clamp(10px, 1.4vh, 18px);
-        padding: 0 clamp(12px, 1.8vw, 32px);
+        gap: clamp(14px, 1.8vh, 22px);
+        padding: 0 clamp(16px, 2.5vw, 48px);
         box-sizing: border-box;
       }
       .cards {
@@ -375,20 +375,22 @@
         z-index: 4;
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: clamp(12px, 1.2vw, 20px);
+        gap: clamp(14px, 1.5vw, 24px);
         width: 100%;
-        max-width: min(1880px, 98vw);
-        margin: 6px auto 0;
+        max-width: min(1720px, 95vw);
+        margin: 8px auto 0;
         box-sizing: border-box;
       }
       .card {
         position: relative;
-        aspect-ratio: 3 / 4.4;
-        min-height: clamp(500px, 60vh, 660px);
-        border-radius: clamp(22px, 1.6vw, 30px);
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        height: clamp(440px, 52vh, 550px);
+        border-radius: 26px;
         overflow: hidden;
         background: #eae7dc;
-        box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.14), 0 2px 10px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
         transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
         cursor: pointer;
         display: flex;
@@ -400,8 +402,8 @@
         box-sizing: border-box;
       }
       .card:hover {
-        transform: translateY(-8px) scale(1.015);
-        box-shadow: 0 28px 56px -12px rgba(0, 0, 0, 0.24), 0 8px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-8px);
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.22), 0 6px 16px rgba(0, 0, 0, 0.08);
       }
       .card-media {
         position: absolute;
@@ -483,7 +485,9 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        margin-top: clamp(14px, 1.8vh, 22px);
+        margin-top: clamp(20px, 2.8vh, 32px);
+        position: relative;
+        z-index: 5;
       }
       .btn-shop-all {
         display: inline-flex;
@@ -535,16 +539,11 @@
         pointer-events: auto;
       }
       .cards-shadow {
-        width: min(1680px, 96vw);
-        height: 14px;
-        margin-top: -4px;
-        border-radius: 50%;
-        background: radial-gradient(closest-side, rgba(0, 0, 0, 0.08), transparent);
-        z-index: 3;
+        display: none;
       }
       .band-logos-wrap {
         position: relative;
-        width: min(1680px, 98vw);
+        width: min(1720px, 95vw);
         display: flex;
         align-items: center;
         justify-content: center;
