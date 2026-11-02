@@ -2,52 +2,58 @@ import React, { useState, useRef } from 'react';
 
 interface BestsellerProduct {
   id: string;
-  nameLine1: string;
-  nameLine2: string;
+  name: string;
   price: string;
+  badge?: string;
   image: string;
+  hoverImage: string;
   fallbackImage: string;
 }
 
 const BESTSELLERS: BestsellerProduct[] = [
   {
     id: 'sunflower-keychain',
-    nameLine1: 'sunflower',
-    nameLine2: 'keychain',
-    price: '₹499',
+    name: 'Handcrafted Sunflower Keychain',
+    price: 'Rs. 499',
+    badge: 'COMING SOON',
     image: '/bestsellers/sunflower-keychain-real.jpg',
+    hoverImage: '/bestsellers/sunflower-keychain-hover.jpg',
     fallbackImage: '/bestsellers/sunflower-keychain.jpg',
   },
   {
     id: 'crochet-hair-bow',
-    nameLine1: 'crochet',
-    nameLine2: 'hair bow',
-    price: '₹399',
+    name: 'Cozy Crochet Hair Bow',
+    price: 'Rs. 399',
+    badge: 'COMING SOON',
     image: '/bestsellers/crochet-hair-bow-real.jpg',
+    hoverImage: '/bestsellers/crochet-hair-bow-hover.jpg',
     fallbackImage: '/bestsellers/crochet-hair-bow.jpg',
   },
   {
     id: 'sunflower-bouquet',
-    nameLine1: 'sunflower',
-    nameLine2: 'bouquet',
-    price: '₹1,299',
+    name: 'Everlasting Sunflower Bouquet',
+    price: 'Rs. 1,299',
+    badge: 'COMING SOON',
     image: '/bestsellers/sunflower-bouquet-real.jpg',
+    hoverImage: '/bestsellers/sunflower-bouquet-hover.jpg',
     fallbackImage: '/bestsellers/sunflower-bouquet.jpg',
   },
   {
     id: 'flower-clips',
-    nameLine1: 'flower clips',
-    nameLine2: '(set of 2)',
-    price: '₹399',
+    name: 'Pastel Flower Clips (Set of 2)',
+    price: 'Rs. 399',
+    badge: 'COMING SOON',
     image: '/bestsellers/flower-clips-real.jpg',
+    hoverImage: '/bestsellers/flower-clips-hover.jpg',
     fallbackImage: '/bestsellers/flower-clips.jpg',
   },
   {
     id: 'tulip-stems',
-    nameLine1: 'tulip stems',
-    nameLine2: '(set of 3)',
-    price: '₹999',
+    name: 'Crochet Tulip Stems (Set of 3)',
+    price: 'Rs. 999',
+    badge: 'COMING SOON',
     image: '/bestsellers/tulip-stems-real.jpg',
+    hoverImage: '/bestsellers/tulip-stems-hover.jpg',
     fallbackImage: '/bestsellers/tulip-stems.jpg',
   },
 ];
@@ -55,14 +61,28 @@ const BESTSELLERS: BestsellerProduct[] = [
 interface BestsellersSectionProps {
   onProductClick?: (productId: string) => void;
   onShopAllClick?: () => void;
+  onNotifyClick?: (productId: string) => void;
+  initialHoveredId?: string | null;
 }
 
 export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
   onProductClick,
   onShopAllClick,
+  onNotifyClick,
+  initialHoveredId = null,
 }) => {
   const [activeDot, setActiveDot] = useState(0);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(initialHoveredId);
+  const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const toggleWishlist = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setWishlist((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -87,7 +107,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
 
   return (
     <section className="w-full bg-[#FAF4ED] pt-3 pb-12 sm:pt-5 sm:pb-16 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-[1300px] mx-auto flex flex-col items-center">
+      <div className="w-full max-w-[1340px] mx-auto flex flex-col items-center">
         {/* 1. Curvy Dashed Stitch Divider with Centered Yarn Ball Icon */}
         <div className="w-full mb-5 sm:mb-7 px-2">
           <svg
@@ -106,16 +126,13 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
               className="opacity-85"
             />
 
-            {/* Authentic Yarn Ball Icon in the Center */}
+            {/* Authentic Yarn Ball Icon in Center */}
             <g transform="translate(600, 32)">
-              {/* Page cream background circle to prevent dashed line collision */}
               <circle cx="0" cy="0" r="18" fill="#FAF4ED" stroke="#641623" strokeWidth="2.8" />
-              {/* Yarn strand windings */}
               <path d="M -13 -7 C -7 -14, 2 -14, 12 -8" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M -16 1 C -8 -6, 2 -5, 14 -1" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M -14 9 C -7 3, 4 4, 15 5" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M -9 15 C -3 10, 5 10, 11 13" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
-              {/* Interlocking yarn cross bands */}
               <path d="M -4 -16 C 3 -6, 3 7, -3 16" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M 4 -16 C 10 -5, 9 8, 5 16" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
             </g>
@@ -180,7 +197,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
           {/* Left Arrow Button */}
           <button
             onClick={() => scroll('left')}
-            className="flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Previous products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -194,47 +211,154 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
             onScroll={handleScroll}
             className="w-full flex items-stretch justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-2 px-1 snap-x snap-mandatory"
           >
-            {BESTSELLERS.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => onProductClick?.(item.id)}
-                className="group flex-1 min-w-[175px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[225px] cursor-pointer rounded-[26px] bg-[#FFF7F0] border border-[#F0E2D4] shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.1)] transition-all duration-300 hover:-translate-y-1.5 p-2.5 sm:p-3 flex flex-col items-center justify-between snap-center"
-              >
-                {/* Product Image Window */}
-                <div className="w-full aspect-square rounded-[20px] overflow-hidden bg-[#F8EFE5] flex items-center justify-center relative">
-                  <img
-                    src={item.image}
-                    alt={`${item.nameLine1} ${item.nameLine2}`}
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (target.src !== item.fallbackImage) {
-                        target.src = item.fallbackImage;
-                      }
-                    }}
-                    className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-300 select-none"
-                    loading="lazy"
-                  />
-                </div>
+            {BESTSELLERS.map((item) => {
+              const isHovered = hoveredCard === item.id;
 
-                {/* Product Title & Price */}
-                <div className="w-full text-center mt-3 mb-1 flex flex-col items-center">
-                  <h3 className="font-['Fredoka'] font-bold text-xs sm:text-sm md:text-base lg:text-[17px] text-[#641623] leading-tight lowercase">
-                    {item.nameLine1}
-                    <br />
-                    {item.nameLine2}
-                  </h3>
-                  <span className="font-['Fredoka'] font-bold text-sm sm:text-base md:text-lg lg:text-xl text-[#641623] mt-1.5">
-                    {item.price}
-                  </span>
+              return (
+                <div
+                  key={item.id}
+                  title={item.name}
+                  onClick={() => onProductClick?.(item.id)}
+                  onMouseEnter={() => setHoveredCard(item.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="group flex-1 min-w-[180px] sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col items-start justify-between snap-center"
+                >
+                  {/* 1. Tall Rounded Image Box with Crisp Border & Smooth Hover Crossfade */}
+                  <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[24px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
+                    {/* Default Image */}
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== item.fallbackImage) {
+                          target.src = item.fallbackImage;
+                        }
+                      }}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
+                        isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
+                      }`}
+                      loading="lazy"
+                    />
+
+                    {/* Secondary Hover Image (Fades In on Hover) */}
+                    <img
+                      src={item.hoverImage}
+                      alt={`${item.name} alternate view`}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== item.fallbackImage) {
+                          target.src = item.fallbackImage;
+                        }
+                      }}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
+                        isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                      }`}
+                      loading="lazy"
+                    />
+
+                    {/* Mint Green Scalloped Daisy Flower Badge ("COMING SOON") in Top Right */}
+                    {item.badge && (
+                      <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+                        <svg viewBox="0 0 50 50" className="w-10 h-10 sm:w-11 sm:h-11">
+                          {/* 5 Petal Lobes */}
+                          <g fill="#7FE5BD" stroke="#2D2424" strokeWidth="2.2">
+                            <circle cx="25" cy="14" r="9.5" />
+                            <circle cx="35.5" cy="21.6" r="9.5" />
+                            <circle cx="31.5" cy="34" r="9.5" />
+                            <circle cx="18.5" cy="34" r="9.5" />
+                            <circle cx="14.5" cy="21.6" r="9.5" />
+                          </g>
+                          {/* Center Fill */}
+                          <circle cx="25" cy="25" r="12.5" fill="#7FE5BD" />
+                          {/* Badge Text */}
+                          <text
+                            x="25"
+                            y="22.5"
+                            textAnchor="middle"
+                            fontSize="6.5"
+                            fontWeight="800"
+                            fill="#2D2424"
+                            fontFamily="Fredoka, sans-serif"
+                            letterSpacing="0.02em"
+                          >
+                            COMING
+                          </text>
+                          <text
+                            x="25"
+                            y="30.5"
+                            textAnchor="middle"
+                            fontSize="6.5"
+                            fontWeight="800"
+                            fill="#2D2424"
+                            fontFamily="Fredoka, sans-serif"
+                            letterSpacing="0.02em"
+                          >
+                            SOON
+                          </text>
+                        </svg>
+                      </div>
+                    )}
+
+                    {/* Slide-Up Pill Button ("NOTIFY ME") on Hover */}
+                    <div className="absolute bottom-3 sm:bottom-3.5 left-0 right-0 z-20 flex items-center justify-center px-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onNotifyClick?.(item.id);
+                        }}
+                        className={`w-full py-2.5 px-4 bg-[#2D2424] text-white font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-lg transition-all duration-300 ease-out hover:bg-[#641623] hover:scale-102 active:scale-95 cursor-pointer text-center ${
+                          isHovered
+                            ? 'opacity-100 translate-y-0 pointer-events-auto'
+                            : 'opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto'
+                        }`}
+                      >
+                        NOTIFY ME
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 2. Product Information Below Image (Left-Aligned + Price + Wishlist Heart) */}
+                  <div className="w-full mt-3 px-1 flex flex-col items-start text-left">
+                    {/* Title */}
+                    <h3 className="font-['Fredoka'] font-bold text-sm sm:text-[15px] text-[#2D2424] leading-snug line-clamp-2 hover:text-[#641623] transition-colors">
+                      {item.name}
+                    </h3>
+
+                    {/* Price & Wishlist Row */}
+                    <div className="mt-1.5 flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <span className="font-['Fredoka'] font-bold text-sm sm:text-base text-[#2D2424]">
+                          {item.price}
+                        </span>
+                        {/* Wishlist Heart Icon */}
+                        <button
+                          onClick={(e) => toggleWishlist(item.id, e)}
+                          className="text-[#2D2424] hover:text-[#641623] transition-colors focus:outline-none cursor-pointer"
+                          aria-label="Add to wishlist"
+                        >
+                          {wishlist[item.id] ? (
+                            <svg className="w-4 h-4 text-[#641623] fill-current" viewBox="0 0 24 24">
+                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Right Arrow Button */}
           <button
             onClick={() => scroll('right')}
-            className="flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Next products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">

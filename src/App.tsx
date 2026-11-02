@@ -51,6 +51,7 @@ export default function App() {
           <BestsellersSection
             onProductClick={(id) => console.log('Product clicked:', id)}
             onShopAllClick={() => console.log('Shop all bestsellers clicked')}
+            onNotifyClick={(id) => console.log('Notify me clicked for:', id)}
           />
         </div>
       </main>
