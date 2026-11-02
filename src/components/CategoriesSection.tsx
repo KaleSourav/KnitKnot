@@ -208,40 +208,57 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       {/* 2. Main Cloud Body in Theme's Pastel Blue (#D4EFF4) */}
       <section className="w-full bg-[#D4EFF4] py-4 sm:py-8 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-[1300px] mx-auto">
-          {/* Exact Heading with Whimsical Radiant Dashes: \ | /  shop by category  / | \ */}
-          <div className="flex items-center justify-center gap-2.5 sm:gap-4 mb-8 sm:mb-12 text-center">
-            {/* Left Radiant Dashes */}
-            <svg
-              className="w-6 h-6 sm:w-8 sm:h-8 text-[#641623] flex-shrink-0"
-              viewBox="0 0 32 32"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3.2"
-              strokeLinecap="round"
-            >
-              <line x1="12" y1="16" x2="3" y2="16" />
-              <line x1="14" y1="9" x2="6" y2="5" />
-              <line x1="14" y1="23" x2="6" y2="27" />
-            </svg>
+          {/* Exact Heading with Whimsical Radiant Dashes & Mascot GIFs on Both Sides: [GIF] \ | /  shop by category  / | \ [GIF] */}
+          <div className="flex items-center justify-center gap-3 sm:gap-6 md:gap-8 lg:gap-10 mb-8 sm:mb-12">
+            {/* Left Mascot GIF */}
+            <img
+              src="/knotsnco_mascot_transparent.gif"
+              alt="knotsnco mascot"
+              className="w-16 h-16 sm:w-22 sm:h-22 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain drop-shadow-md select-none flex-shrink-0"
+            />
 
-            {/* Heading in Exact Case & Font */}
-            <h2 className="font-['Fredoka'] font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#641623] lowercase tracking-tight">
-              shop by category
-            </h2>
+            {/* Center Heading with Whimsical Radiant Dashes */}
+            <div className="flex items-center justify-center gap-2 sm:gap-3 text-center">
+              {/* Left Radiant Dashes */}
+              <svg
+                className="w-5 h-5 sm:w-7 sm:h-7 text-[#641623] flex-shrink-0"
+                viewBox="0 0 32 32"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+              >
+                <line x1="12" y1="16" x2="3" y2="16" />
+                <line x1="14" y1="9" x2="6" y2="5" />
+                <line x1="14" y1="23" x2="6" y2="27" />
+              </svg>
 
-            {/* Right Radiant Dashes */}
-            <svg
-              className="w-6 h-6 sm:w-8 sm:h-8 text-[#641623] flex-shrink-0"
-              viewBox="0 0 32 32"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3.2"
-              strokeLinecap="round"
-            >
-              <line x1="20" y1="16" x2="29" y2="16" />
-              <line x1="18" y1="9" x2="26" y2="5" />
-              <line x1="18" y1="23" x2="26" y2="27" />
-            </svg>
+              {/* Heading in Exact Case & Font */}
+              <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-[#641623] lowercase tracking-tight whitespace-nowrap">
+                shop by category
+              </h2>
+
+              {/* Right Radiant Dashes */}
+              <svg
+                className="w-5 h-5 sm:w-7 sm:h-7 text-[#641623] flex-shrink-0"
+                viewBox="0 0 32 32"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+              >
+                <line x1="20" y1="16" x2="29" y2="16" />
+                <line x1="18" y1="9" x2="26" y2="5" />
+                <line x1="18" y1="23" x2="26" y2="27" />
+              </svg>
+            </div>
+
+            {/* Right Mascot GIF */}
+            <img
+              src="/knotsnco_mascot_transparent.gif"
+              alt="knotsnco mascot"
+              className="w-16 h-16 sm:w-22 sm:h-22 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain drop-shadow-md select-none flex-shrink-0"
+            />
           </div>
 
           {/* 3 On Top, 3 Below Grid (3x2 on desktop, 2x3 on tablet, 1x6 on mobile) */}
