@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
+import { TrustBadges } from './components/TrustBadges';
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
@@ -37,8 +38,11 @@ export default function App() {
       <main className="flex-1">
         <HeroBanner onShopClick={handleShopClick} />
 
+        {/* 4. Trust Badges & Value Propositions */}
+        <TrustBadges />
+
         {/* Anchor for shopping section */}
-        <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* We will build the next sections step-by-step as guided by the user */}
         </div>
       </main>
