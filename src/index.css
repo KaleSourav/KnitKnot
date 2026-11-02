@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #FAF4ED;
+    color: #2D2424;
+  }
+}
+
+/* Header vertical stripes matching Screenshot 2026-11-02 at 7.53.20 PM */
+.knots-header-stripes {
+  background-color: #FBF8CF;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #D2E8EF 0px,
+    #D2E8EF 38px,
+    #FBF8CF 38px,
+    #FBF8CF 76px
+  );
+}
+
+/* Hide scrollbar for category pill nav on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
