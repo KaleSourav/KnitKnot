@@ -5,6 +5,7 @@ import { HeroBanner } from './components/HeroBanner';
 import { TrustBadges } from './components/TrustBadges';
 import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
+import { OurStorySection } from './components/OurStorySection';
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
@@ -54,6 +55,9 @@ export default function App() {
             onNotifyClick={(id) => console.log('Notify me clicked for:', id)}
           />
         </div>
+
+        {/* 7. Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
+        <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
       </main>
     </div>
   );
