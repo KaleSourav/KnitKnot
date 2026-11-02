@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 
 interface CategoryItem {
   id: string;
-  name: string;
+  buttonLabel: string;
   badgeLine1: string;
   badgeLine2: string;
-  tagline: string;
   image: string;
   hoverImage: string;
 }
@@ -13,55 +12,49 @@ interface CategoryItem {
 const CATEGORIES: CategoryItem[] = [
   {
     id: 'flowers',
-    name: 'Crochet Flowers & Bouquets',
+    buttonLabel: 'FLOWERS',
     badgeLine1: 'BEST',
     badgeLine2: 'SELLER',
-    tagline: 'everlasting blooms that never fade',
     image: '/categories/flowers-real.jpg',
     hoverImage: '/categories/flowers-hover.jpg',
   },
   {
     id: 'flower-pots',
-    name: 'Handcrafted Flower Pots',
+    buttonLabel: 'FLOWER POTS',
     badgeLine1: 'HAND',
     badgeLine2: 'MADE',
-    tagline: 'charming desk & windowsill daisies',
     image: '/categories/flower-pots-real.jpg',
     hoverImage: '/categories/flower-pots-hover.jpg',
   },
   {
     id: 'plushies',
-    name: 'Cute Amigurumi Plushies',
+    buttonLabel: 'PLUSHIES',
     badgeLine1: 'SO',
     badgeLine2: 'CUTE',
-    tagline: 'ultra-soft hand-knitted companions',
     image: '/categories/plushies-real.jpg',
     hoverImage: '/categories/plushies-hover.jpg',
   },
   {
     id: 'bags',
-    name: 'Bags & Woven Totes',
+    buttonLabel: 'BAGS & TOTES',
     badgeLine1: 'TOP',
     badgeLine2: 'TREND',
-    tagline: 'handwoven granny square tote bags',
     image: '/categories/bags-real.jpg',
     hoverImage: '/categories/bags-hover.jpg',
   },
   {
     id: 'keychains',
-    name: 'Keychains & Bag Charms',
+    buttonLabel: 'KEYCHAINS',
     badgeLine1: 'HOT',
     badgeLine2: 'PICK',
-    tagline: 'adorable everyday pocket companions',
     image: '/categories/keychains-real.jpg',
     hoverImage: '/categories/keychains-hover.jpg',
   },
   {
     id: 'home-decor',
-    name: 'Whimsical Home Decor',
+    buttonLabel: 'HOME DECOR',
     badgeLine1: 'COZY',
     badgeLine2: 'VIBES',
-    tagline: 'cottagecore accents & fairy houses',
     image: '/categories/home-decor-real.jpg',
     hoverImage: '/categories/home-decor-hover.jpg',
   },
@@ -70,7 +63,6 @@ const CATEGORIES: CategoryItem[] = [
 interface CategoriesSectionProps {
   onCategorySelect?: (categoryId: string) => void;
   onShopAllClick?: () => void;
-  initialHoveredId?: string | null;
 }
 
 // Scalloped Cloud Boundary Paths (1440w)
@@ -87,9 +79,8 @@ const BOT_CLOUD_STROKE =
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
   onShopAllClick,
-  initialHoveredId = null,
 }) => {
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(initialHoveredId);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   return (
     <div className="w-full relative mt-4 sm:mt-6">
@@ -161,18 +152,18 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
               return (
                 <div
                   key={cat.id}
-                  title={cat.name}
+                  title={cat.buttonLabel}
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
-                  className="group cursor-pointer flex flex-col items-start transition-all duration-300"
+                  className="group cursor-pointer flex flex-col items-center w-full"
                 >
-                  {/* 1. Tall Rounded Image Box with Crisp Dark Border & Smooth Crossfade */}
-                  <div className="relative w-full aspect-[4/4.7] rounded-[28px] sm:rounded-[32px] overflow-hidden border-[2px] sm:border-[2.4px] border-[#2D2424] bg-white shadow-[0_8px_24px_rgba(45,36,36,0.08)] group-hover:shadow-[0_18px_36px_rgba(45,36,36,0.16)] transition-all duration-300 group-hover:-translate-y-1.5">
+                  {/* 1. Tall Rounded Image Box with Crisp Maroon Border & Smooth Hover Crossfade */}
+                  <div className="relative w-full aspect-[4/4.3] sm:aspect-[4/4.4] rounded-[28px] sm:rounded-[32px] overflow-hidden border-[2.4px] border-[#641623] bg-white shadow-[0_8px_20px_rgba(100,22,35,0.08)] group-hover:shadow-[0_16px_32px_rgba(100,22,35,0.16)] transition-all duration-300 group-hover:-translate-y-1">
                     {/* Default Image */}
                     <img
                       src={cat.image}
-                      alt={cat.name}
+                      alt={cat.buttonLabel}
                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
                         isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
                       }`}
@@ -182,7 +173,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {/* Secondary Alternate / Lifestyle Image (Fades In on Hover) */}
                     <img
                       src={cat.hoverImage}
-                      alt={`${cat.name} alternate view`}
+                      alt={`${cat.buttonLabel} alternate view`}
                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
                         isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                       }`}
@@ -193,7 +184,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     <div className="absolute top-3 right-3 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                       <svg viewBox="0 0 50 50" className="w-10 h-10 sm:w-11 sm:h-11">
                         {/* 5 Petal Lobes */}
-                        <g fill="#7FE5BD" stroke="#2D2424" strokeWidth="2.2">
+                        <g fill="#7FE5BD" stroke="#641623" strokeWidth="2.2">
                           <circle cx="25" cy="14" r="9.5" />
                           <circle cx="35.5" cy="21.6" r="9.5" />
                           <circle cx="31.5" cy="34" r="9.5" />
@@ -209,7 +200,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                           textAnchor="middle"
                           fontSize="6.5"
                           fontWeight="800"
-                          fill="#2D2424"
+                          fill="#641623"
                           fontFamily="Fredoka, sans-serif"
                           letterSpacing="0.02em"
                         >
@@ -221,7 +212,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                           textAnchor="middle"
                           fontSize="6.5"
                           fontWeight="800"
-                          fill="#2D2424"
+                          fill="#641623"
                           fontFamily="Fredoka, sans-serif"
                           letterSpacing="0.02em"
                         >
@@ -229,45 +220,12 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                         </text>
                       </svg>
                     </div>
-
-                    {/* Slide-Up Pill Button ("EXPLORE COLLECTION →") on Hover */}
-                    <div className="absolute bottom-3.5 sm:bottom-4 left-0 right-0 z-20 flex items-center justify-center px-4">
-                      <button
-                        className={`w-[85%] py-2.5 px-4 bg-[#2D2424] text-white font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-lg transition-all duration-300 ease-out hover:bg-[#641623] hover:scale-102 active:scale-95 cursor-pointer text-center ${
-                          isHovered
-                            ? 'opacity-100 translate-y-0 pointer-events-auto'
-                            : 'opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto'
-                        }`}
-                      >
-                        EXPLORE NOW →
-                      </button>
-                    </div>
                   </div>
 
-                  {/* 2. Category Information Below Image (Clean & Left-Aligned) */}
-                  <div className="w-full mt-3.5 px-1.5 flex items-center justify-between">
-                    <div>
-                      <h3 className="font-['Fredoka'] font-bold text-base sm:text-lg md:text-xl text-[#2D2424] leading-snug group-hover:text-[#641623] transition-colors">
-                        {cat.name}
-                      </h3>
-                      <p className="font-['Fredoka'] font-medium text-xs sm:text-sm text-[#2D2424]/70 mt-0.5">
-                        {cat.tagline}
-                      </p>
-                    </div>
-
-                    {/* Arrow Pill Indicator */}
-                    <div className="w-8 h-8 rounded-full border-[1.8px] border-[#2D2424] bg-white flex items-center justify-center text-[#2D2424] group-hover:bg-[#2D2424] group-hover:text-white transition-all shadow-sm flex-shrink-0 ml-2">
-                      <svg
-                        className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
+                  {/* 2. Exact 3D Offset Pill Button in Our Theme (#F7BE44 fill with #641623 border, text, and 3D shadow) */}
+                  <div className="w-full mt-4 sm:mt-5 flex justify-center">
+                    <div className="w-full py-3 sm:py-3.5 px-6 rounded-full bg-[#F7BE44] border-[2.4px] border-[#641623] shadow-[0_8px_0_0_#641623] text-center font-['Fredoka'] font-black tracking-wider text-sm sm:text-base md:text-lg text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-1 group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-2 active:shadow-none select-none">
+                      {cat.buttonLabel}
                     </div>
                   </div>
                 </div>
