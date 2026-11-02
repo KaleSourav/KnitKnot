@@ -7,6 +7,7 @@ interface CategoryItem {
   badgeLine2: string;
   image: string;
   hoverImage: string;
+  icon: React.ReactNode;
 }
 
 const CATEGORIES: CategoryItem[] = [
@@ -17,6 +18,23 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'SELLER',
     image: '/categories/flowers-real.jpg',
     hoverImage: '/categories/flowers-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+        <path d="M12 3a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 3.5 2.5 3.5s2.5-2 2.5-3.5A2.5 2.5 0 0 0 12 3z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M12 21a2.5 2.5 0 0 0 2.5-2.5c0-1.5-2.5-3.5-2.5-3.5s-2.5 2-2.5 3.5A2.5 2.5 0 0 0 12 21z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M3 12a2.5 2.5 0 0 0 2.5 2.5c1.5 0 3.5-2.5 3.5-2.5s-2-2.5-3.5-2.5A2.5 2.5 0 0 0 3 12z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M21 12a2.5 2.5 0 0 0-2.5-2.5c-1.5 0-3.5 2.5-3.5 2.5s2 2.5 3.5 2.5A2.5 2.5 0 0 0 21 12z" fill="currentColor" fillOpacity="0.2" />
+      </svg>
+    ),
   },
   {
     id: 'flower-pots',
@@ -25,6 +43,22 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'MADE',
     image: '/categories/flower-pots-real.jpg',
     hoverImage: '/categories/flower-pots-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M 6 11 L 18 11 L 16.5 21 L 7.5 21 Z" fill="currentColor" fillOpacity="0.2" />
+        <line x1="5" y1="11" x2="19" y2="11" strokeWidth="2.8" />
+        <path d="M 12 11 C 12 7, 7 6, 7 3 C 11 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
+        <path d="M 12 11 C 12 7, 17 6, 17 3 C 13 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
+      </svg>
+    ),
   },
   {
     id: 'plushies',
@@ -33,6 +67,24 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'CUTE',
     image: '/categories/plushies-real.jpg',
     hoverImage: '/categories/plushies-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="6.5" cy="7.5" r="3" fill="currentColor" fillOpacity="0.25" />
+        <circle cx="17.5" cy="7.5" r="3" fill="currentColor" fillOpacity="0.25" />
+        <circle cx="12" cy="14" r="7.5" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="9.5" cy="13" r="1" fill="currentColor" />
+        <circle cx="14.5" cy="13" r="1" fill="currentColor" />
+        <path d="M 10.8 15.5 Q 12 16.8 13.2 15.5" />
+      </svg>
+    ),
   },
   {
     id: 'bags',
@@ -41,6 +93,21 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'TREND',
     image: '/categories/bags-real.jpg',
     hoverImage: '/categories/bags-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-6"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="4" y="9" width="16" height="12" rx="3" fill="currentColor" fillOpacity="0.2" />
+        <path d="M 8 9 V 5 A 4 4 0 0 1 16 5 V 9" strokeWidth="2.4" />
+        <path d="M 12 13 V 17 M 10 15 H 14" strokeWidth="2" />
+      </svg>
+    ),
   },
   {
     id: 'keychains',
@@ -49,6 +116,22 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'PICK',
     image: '/categories/keychains-real.jpg',
     hoverImage: '/categories/keychains-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="9" cy="8" r="4.5" fill="currentColor" fillOpacity="0.2" />
+        <path d="M 12.5 11.5 L 16 15" strokeWidth="2.4" />
+        <circle cx="18" cy="17" r="3.5" fill="currentColor" fillOpacity="0.25" />
+        <path d="M 18 15.5 V 18.5 M 16.5 17 H 19.5" strokeWidth="1.8" />
+      </svg>
+    ),
   },
   {
     id: 'home-decor',
@@ -57,6 +140,23 @@ const CATEGORIES: CategoryItem[] = [
     badgeLine2: 'VIBES',
     image: '/categories/home-decor-real.jpg',
     hoverImage: '/categories/home-decor-hover.jpg',
+    icon: (
+      <svg
+        className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M 3 13 C 3 6, 21 6, 21 13 Z" fill="currentColor" fillOpacity="0.25" />
+        <path d="M 7 13 L 7 19 A 2 2 0 0 0 9 21 L 15 21 A 2 2 0 0 0 17 19 L 17 13" fill="currentColor" fillOpacity="0.15" />
+        <path d="M 10 21 V 16.5 A 2 2 0 0 1 14 16.5 V 21" strokeWidth="2" />
+        <circle cx="8" cy="9.5" r="1" fill="currentColor" />
+        <circle cx="15.5" cy="9.5" r="1" fill="currentColor" />
+      </svg>
+    ),
   },
 ];
 
@@ -222,10 +322,11 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     </div>
                   </div>
 
-                  {/* 2. Exact 3D Offset Pill Button in Our Theme (#F7BE44 fill with #641623 border, text, and 3D shadow) */}
+                  {/* 2. 3D Offset Pill Button with Thematic Icon (#F7BE44 fill with #641623 border, text, and 3D shadow) */}
                   <div className="w-full mt-4 sm:mt-5 flex justify-center">
-                    <div className="w-full py-3 sm:py-3.5 px-6 rounded-full bg-[#F7BE44] border-[2.4px] border-[#641623] shadow-[0_8px_0_0_#641623] text-center font-['Fredoka'] font-black tracking-wider text-sm sm:text-base md:text-lg text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-1 group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-2 active:shadow-none select-none">
-                      {cat.buttonLabel}
+                    <div className="w-full py-3 sm:py-3.5 px-5 sm:px-6 rounded-full bg-[#F7BE44] border-[2.4px] border-[#641623] shadow-[0_8px_0_0_#641623] flex items-center justify-center gap-2.5 sm:gap-3 text-center font-['Fredoka'] font-black tracking-wider text-sm sm:text-base md:text-lg text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-1 group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-2 active:shadow-none select-none">
+                      {cat.icon}
+                      <span className="leading-none pt-0.5">{cat.buttonLabel}</span>
                     </div>
                   </div>
                 </div>
