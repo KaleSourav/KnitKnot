@@ -54,13 +54,42 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
 }) => {
   return (
-    <section className="w-full bg-[#FAF4ED] py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#FAF4ED] pt-2 sm:pt-4 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-[1440px] mx-auto">
-        {/* Bold Chunky Retro Heading */}
-        <div className="flex flex-col items-center justify-center mb-10 sm:mb-16 text-center">
-          <h2 className="font-['Fredoka'] font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#641623] uppercase tracking-wider">
-            SHOP BY COLLECTION
+        {/* Exact Heading with Whimsical Radiant Dashes: \ | /  shop by category  / | \ */}
+        <div className="flex items-center justify-center gap-2.5 sm:gap-4 mb-6 sm:mb-9 text-center">
+          {/* Left Radiant Dashes */}
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-[#641623] flex-shrink-0"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          >
+            <line x1="12" y1="16" x2="3" y2="16" />
+            <line x1="14" y1="9" x2="6" y2="5" />
+            <line x1="14" y1="23" x2="6" y2="27" />
+          </svg>
+
+          {/* Heading in Exact Case & Font */}
+          <h2 className="font-['Fredoka'] font-bold text-3xl sm:text-4xl md:text-5xl text-[#641623] lowercase tracking-tight">
+            shop by category
           </h2>
+
+          {/* Right Radiant Dashes */}
+          <svg
+            className="w-6 h-6 sm:w-8 sm:h-8 text-[#641623] flex-shrink-0"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          >
+            <line x1="20" y1="16" x2="29" y2="16" />
+            <line x1="18" y1="9" x2="26" y2="5" />
+            <line x1="18" y1="23" x2="26" y2="27" />
+          </svg>
         </div>
 
         {/* 3 On Top, 3 Below Grid (3x2 on desktop, 2x3 on tablet, 1x6 on mobile) */}

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const TrustBadges: React.FC = () => {
   return (
-    <section className="w-full bg-[#FAF4ED] pt-4 pb-10 sm:pt-6 sm:pb-16 px-3 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="w-full bg-[#FAF4ED] pt-3 pb-2 sm:pt-4 sm:pb-3 px-3 sm:px-6 lg:px-8 overflow-hidden">
       <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center">
         {/* 1. Full-Width Puffy Scalloped Cloud Container */}
         <div className="relative w-full min-h-[120px] sm:min-h-[140px] md:min-h-[160px] flex items-center justify-center px-4 sm:px-10 md:px-14 py-6 sm:py-8 md:py-10">
@@ -150,7 +150,7 @@ export const TrustBadges: React.FC = () => {
         </div>
 
         {/* 2. Full-Width Curvy Dashed Stitch Ribbon Section Divider */}
-        <div className="w-full max-w-[1440px] mt-8 sm:mt-12 px-2 sm:px-6">
+        <div className="w-full max-w-[1440px] mt-4 sm:mt-6 px-2 sm:px-6">
           <svg
             viewBox="0 0 1200 64"
             className="w-full h-auto text-[#641623] overflow-visible"
