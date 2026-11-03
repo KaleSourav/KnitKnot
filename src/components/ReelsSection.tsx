@@ -14,8 +14,8 @@ export interface ReelItem {
 const REELS_DATA: ReelItem[] = [
   {
     id: 'reel-1',
-    videoUrl: '/reels/reel-1.mp4',
-    posterUrl: '/reels/reel-1-poster.jpg',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793695623/Video-39764.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793695623/Video-39764.jpg',
     caption: 'unboxing our bestselling sunflower bouquet',
     handle: '@knotsnco.',
     productName: 'Sunflower Bouquet',
@@ -24,9 +24,9 @@ const REELS_DATA: ReelItem[] = [
   },
   {
     id: 'reel-2',
-    videoUrl: '/reels/reel-2.mp4',
-    posterUrl: '/reels/reel-2-poster.jpg',
-    caption: 'how to style daisy hair clips for summer',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793695675/Video-54767.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793695675/Video-54767.jpg',
+    caption: 'styling cute handmade daisy hair clips',
     handle: '@knotsnco.',
     productName: 'Daisy Hair Clips',
     productPrice: '₹349',
@@ -34,9 +34,9 @@ const REELS_DATA: ReelItem[] = [
   },
   {
     id: 'reel-3',
-    videoUrl: '/reels/reel-3.mp4',
-    posterUrl: '/reels/reel-3-poster.jpg',
-    caption: 'meet our extra cuddly handmade bunny plushie',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793695836/Video-42975.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793695836/Video-42975.jpg',
+    caption: 'meet the squishiest cuddly bunny plushie',
     handle: '@knotsnco.',
     productName: 'Cozy Bunny Plushie',
     productPrice: '₹1,499',
@@ -44,9 +44,9 @@ const REELS_DATA: ReelItem[] = [
   },
   {
     id: 'reel-4',
-    videoUrl: '/reels/reel-4.mp4',
-    posterUrl: '/reels/reel-4-poster.jpg',
-    caption: 'pastel tulip stems that bloom forever in any vase',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793695892/Video-20019.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793695892/Video-20019.jpg',
+    caption: 'forever blooming pastel tulip stems for your vase',
     handle: '@knotsnco.',
     productName: 'Tulip Stems Set',
     productPrice: '₹899',
@@ -54,8 +54,8 @@ const REELS_DATA: ReelItem[] = [
   },
   {
     id: 'reel-5',
-    videoUrl: '/reels/reel-5.mp4',
-    posterUrl: '/reels/reel-5-poster.jpg',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696005/Video-50450.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696005/Video-50450.jpg',
     caption: 'packing an order with our sunflower granny tote',
     handle: '@knotsnco.',
     productName: 'Sunflower Tote Bag',
@@ -64,12 +64,52 @@ const REELS_DATA: ReelItem[] = [
   },
   {
     id: 'reel-6',
-    videoUrl: '/reels/reel-6.mp4',
-    posterUrl: '/reels/reel-6-poster.jpg',
-    caption: 'tiny crochet sunflower keychains for your bags',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696064/Video-71689.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696064/Video-71689.jpg',
+    caption: 'tiny crochet sunflower keychains for your keys',
     handle: '@knotsnco.',
     productName: 'Sunflower Keychain',
     productPrice: '₹299',
+    productUrl: '#bestsellers',
+  },
+  {
+    id: 'reel-7',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696157/Video-54217.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696157/Video-54217.jpg',
+    caption: 'cute mini daisy flower pot desk companion',
+    handle: '@knotsnco.',
+    productName: 'Daisy Flower Pot',
+    productPrice: '₹799',
+    productUrl: '#bestsellers',
+  },
+  {
+    id: 'reel-8',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696239/Video-14511.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696239/Video-14511.jpg',
+    caption: 'fairytale mushroom cottage trinket house',
+    handle: '@knotsnco.',
+    productName: 'Mushroom Cottage',
+    productPrice: '₹949',
+    productUrl: '#bestsellers',
+  },
+  {
+    id: 'reel-9',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696297/Video-82506.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696297/Video-82506.jpg',
+    caption: 'soft pastel crochet bow clips for daily styling',
+    handle: '@knotsnco.',
+    productName: 'Pastel Bow Clips',
+    productPrice: '₹249',
+    productUrl: '#bestsellers',
+  },
+  {
+    id: 'reel-10',
+    videoUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/q_auto,f_auto/v1793696367/Video-60099.mp4',
+    posterUrl: 'https://res.cloudinary.com/dnxaxhqr/video/upload/so_0,f_auto,q_auto/v1793696367/Video-60099.jpg',
+    caption: 'wrapping our festive special crochet gift box',
+    handle: '@knotsnco.',
+    productName: 'Festive Gift Box',
+    productPrice: '₹1,899',
     productUrl: '#bestsellers',
   },
 ];
@@ -79,14 +119,9 @@ export const ReelsSection: React.FC = () => {
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
 
   // Playing state per reel (all start playing by default)
-  const [playingStates, setPlayingStates] = useState<{ [key: string]: boolean }>({
-    'reel-1': true,
-    'reel-2': true,
-    'reel-3': true,
-    'reel-4': true,
-    'reel-5': true,
-    'reel-6': true,
-  });
+  const [playingStates, setPlayingStates] = useState<{ [key: string]: boolean }>(() =>
+    REELS_DATA.reduce((acc, reel) => ({ ...acc, [reel.id]: true }), {})
+  );
 
   // Active unmuted reel (null means all are muted)
   const [unmutedReelId, setUnmutedReelId] = useState<string | null>(null);
@@ -421,3 +456,4 @@ export const ReelsSection: React.FC = () => {
     </section>
   );
 };
+
