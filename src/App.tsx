@@ -7,6 +7,7 @@ import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
+import { ReelsSection } from './components/ReelsSection';
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
@@ -64,6 +65,9 @@ export default function App() {
         <ShopTheOccasionSection
           onOccasionClick={(id) => console.log('Occasion clicked:', id)}
         />
+
+        {/* 9. Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
+        <ReelsSection />
       </main>
     </div>
   );
