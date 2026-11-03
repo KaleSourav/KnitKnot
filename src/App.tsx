@@ -5,6 +5,7 @@ import { HeroBanner } from './components/HeroBanner';
 import { TrustBadges } from './components/TrustBadges';
 import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
+import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
 
 export default function App() {
@@ -56,7 +57,12 @@ export default function App() {
           />
         </div>
 
-        {/* 7. Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
+        {/* 7. Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
+        <ShopTheOccasionSection
+          onOccasionClick={(id) => console.log('Occasion clicked:', id)}
+        />
+
+        {/* 8. Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
         <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
       </main>
     </div>
