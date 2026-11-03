@@ -8,6 +8,7 @@ import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
 import { ReelsSection } from './components/ReelsSection';
+import { Footer } from './components/Footer';
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
@@ -69,6 +70,9 @@ export default function App() {
         {/* 9. Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
         <ReelsSection />
       </main>
+
+      {/* 10. Footer Section ("stay in the loop" newsletter + scalloped wave + brand links & legal) */}
+      <Footer />
     </div>
   );
 }
