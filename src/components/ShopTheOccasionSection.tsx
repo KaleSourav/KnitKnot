@@ -119,36 +119,56 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
   return (
     <section className="w-full bg-[#FAF4ED] py-8 sm:py-12 lg:py-16 overflow-hidden font-['Fredoka']">
       <div className="w-full max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 1. Top Whimsical Stitch Line with Smiling 5-Petal Flower Divider (Reference) */}
-        <div className="w-full flex items-center justify-center mb-6 sm:mb-8" aria-hidden="true">
-          {/* Left Dashed Stitch Line */}
-          <div className="flex-1 max-w-[380px] h-[2px] border-b-[2.5px] border-dashed border-[#641623]/35" />
+        {/* 1. Top Whimsical Wavy Stitched Line with Smiling 5-Petal Flower Divider (Wave Structure) */}
+        <div className="w-full flex justify-center mb-6 sm:mb-8" aria-hidden="true">
+          <svg
+            viewBox="0 0 1200 48"
+            fill="none"
+            preserveAspectRatio="xMidYMid meet"
+            className="w-full max-w-[960px] h-9 sm:h-12 overflow-visible select-none"
+          >
+            {/* Left Curvy Wavy Dashed Stitch Line */}
+            <path
+              d="M 20 24 C 75 12, 135 36, 195 24 C 255 12, 315 36, 375 24 C 435 12, 495 36, 565 24"
+              stroke="#641623"
+              strokeWidth="2.8"
+              strokeDasharray="22 14"
+              strokeLinecap="round"
+              className="opacity-75"
+            />
 
-          {/* Center Smiling 5-Petal Flower Mascot */}
-          <div className="mx-3 sm:mx-4 flex-shrink-0 relative group cursor-pointer transition-transform duration-300 hover:rotate-12 hover:scale-110">
-            <svg viewBox="0 0 44 44" className="w-8 h-8 sm:w-9 sm:h-9">
+            {/* Center Smiling 5-Petal Flower Mascot */}
+            <g transform="translate(600, 24)" className="cursor-pointer group">
               {/* 5 Rounded Petals */}
-              <g fill="#F7BE44" stroke="#641623" strokeWidth="2.5" strokeLinejoin="round">
-                <circle cx="22" cy="10" r="8" />
-                <circle cx="32.5" cy="18" r="8" />
-                <circle cx="28.5" cy="31" r="8" />
-                <circle cx="15.5" cy="31" r="8" />
-                <circle cx="11.5" cy="18" r="8" />
-              </g>
-              {/* Inner Center Circle */}
-              <circle cx="22" cy="22" r="9" fill="#FFF9F2" stroke="#641623" strokeWidth="2.5" />
-              {/* Smiling Face Details */}
-              <circle cx="19" cy="20.5" r="1.4" fill="#641623" />
-              <circle cx="25" cy="20.5" r="1.4" fill="#641623" />
-              <path d="M19.5 24.2 Q 22 26.5 24.5 24.2" fill="none" stroke="#641623" strokeWidth="1.8" strokeLinecap="round" />
-              {/* Rosy Cheeks */}
-              <circle cx="16.5" cy="22.5" r="1.1" fill="#F472B6" />
-              <circle cx="27.5" cy="22.5" r="1.1" fill="#F472B6" />
-            </svg>
-          </div>
+              <circle cx="0" cy="-11" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
+              <circle cx="10.5" cy="-3.5" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
+              <circle cx="6.5" cy="9" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
+              <circle cx="-6.5" cy="9" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
+              <circle cx="-10.5" cy="-3.5" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
 
-          {/* Right Dashed Stitch Line */}
-          <div className="flex-1 max-w-[380px] h-[2px] border-b-[2.5px] border-dashed border-[#641623]/35" />
+              {/* Inner Center Circle */}
+              <circle cx="0" cy="0" r="8.5" fill="#FFF9F2" stroke="#641623" strokeWidth="2.4" />
+
+              {/* Smiling Face Details */}
+              <circle cx="-2.6" cy="-1.5" r="1.3" fill="#641623" />
+              <circle cx="2.6" cy="-1.5" r="1.3" fill="#641623" />
+              <path d="M -2.2 2 Q 0 4.2 2.2 2" fill="none" stroke="#641623" strokeWidth="1.6" strokeLinecap="round" />
+
+              {/* Rosy Cheeks */}
+              <circle cx="-4.8" cy="0.5" r="1.1" fill="#F472B6" />
+              <circle cx="4.8" cy="0.5" r="1.1" fill="#F472B6" />
+            </g>
+
+            {/* Right Curvy Wavy Dashed Stitch Line */}
+            <path
+              d="M 635 24 C 705 12, 765 36, 825 24 C 885 12, 945 36, 1005 24 C 1065 12, 1125 36, 1180 24"
+              stroke="#641623"
+              strokeWidth="2.8"
+              strokeDasharray="22 14"
+              strokeLinecap="round"
+              className="opacity-75"
+            />
+          </svg>
         </div>
 
         {/* 2. Heading with Whimsical Radiant Dashes: \ | /  shop the occasion  / | \ */}
