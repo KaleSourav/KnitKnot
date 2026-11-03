@@ -313,141 +313,83 @@ export const ReelsSection: React.FC = () => {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                   />
 
-                  {/* Top Overlay Badge: Instagram Handle */}
-                  <div className="absolute top-3.5 left-3.5 z-10">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/35 backdrop-blur-md text-white text-xs font-medium tracking-wide border border-white/15">
-                      <svg
-                        className="w-3.5 h-3.5 text-white/90"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                      </svg>
-                      <span>{reel.handle}</span>
-                    </div>
-                  </div>
+                  {/* Bottom Subtle Vignette for Controls */}
+                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none" />
 
-                  {/* Bottom Vignette & Gradient */}
-                  <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
-
-                  {/* Bottom Info & Controls */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 z-10 flex flex-col justify-end">
-                    {/* Product Chip / Caption */}
-                    <div className="mb-3">
-                      <p className="text-white text-sm font-medium leading-snug line-clamp-2 drop-shadow-md text-left mb-1.5">
-                        {reel.caption}
-                      </p>
-
-                      {/* Linked Product Pill */}
-                      <a
-                        href={reel.productUrl}
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[#641623] text-xs font-semibold hover:bg-white transition-colors duration-150 shadow-sm"
-                      >
-                        {/* Shopping bag mini icon */}
+                  {/* Bottom Action Controls Bar */}
+                  <div className="absolute inset-x-0 bottom-0 p-3.5 z-10 flex items-center justify-between">
+                    {/* Play/Pause Button (Bottom Left) */}
+                    <button
+                      onClick={(e) => togglePlay(reel.id, e)}
+                      type="button"
+                      aria-label={isPlaying ? 'Pause reel' : 'Play reel'}
+                      className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60 flex items-center justify-center transition-all duration-200 border border-white/20 hover:scale-110 active:scale-95"
+                    >
+                      {isPlaying ? (
+                        // Pause Icon
                         <svg
-                          className="w-3 h-3 text-[#641623]"
+                          className="w-3.5 h-3.5"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <rect x="6" y="4" width="4" height="16" rx="1" />
+                          <rect x="14" y="4" width="4" height="16" rx="1" />
+                        </svg>
+                      ) : (
+                        // Play Icon
+                        <svg
+                          className="w-3.5 h-3.5 ml-0.5"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5 3l14 9-14 9V3z" />
+                        </svg>
+                      )}
+                    </button>
+
+                    {/* Sound Toggle Button (Bottom Right) */}
+                    <button
+                      onClick={(e) => toggleSound(reel.id, e)}
+                      type="button"
+                      aria-label={isUnmuted ? 'Mute audio' : 'Unmute audio'}
+                      className={`w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-200 border border-white/20 hover:scale-110 active:scale-95 ${
+                        isUnmuted
+                          ? 'bg-[#F7BE44] text-[#641623]'
+                          : 'bg-black/40 text-white hover:bg-black/60'
+                      }`}
+                    >
+                      {isUnmuted ? (
+                        // Sound ON (Volume High)
+                        <svg
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
                           strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                          />
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
+                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
                         </svg>
-                        <span>{reel.productName}</span>
-                        {reel.productPrice && (
-                          <span className="text-[#641623]/70 font-normal">
-                            • {reel.productPrice}
-                          </span>
-                        )}
-                      </a>
-                    </div>
-
-                    {/* Bottom Action Controls Bar */}
-                    <div className="flex items-center justify-between pt-1">
-                      {/* Play/Pause Button (Bottom Left) */}
-                      <button
-                        onClick={(e) => togglePlay(reel.id, e)}
-                        type="button"
-                        aria-label={isPlaying ? 'Pause reel' : 'Play reel'}
-                        className="w-8 h-8 rounded-full bg-black/45 backdrop-blur-md text-white hover:bg-black/70 flex items-center justify-center transition-all duration-200 border border-white/20 hover:scale-110 active:scale-95"
-                      >
-                        {isPlaying ? (
-                          // Pause Icon
-                          <svg
-                            className="w-3.5 h-3.5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <rect x="6" y="4" width="4" height="16" rx="1" />
-                            <rect x="14" y="4" width="4" height="16" rx="1" />
-                          </svg>
-                        ) : (
-                          // Play Icon
-                          <svg
-                            className="w-3.5 h-3.5 ml-0.5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M5 3l14 9-14 9V3z" />
-                          </svg>
-                        )}
-                      </button>
-
-                      {/* Sound Toggle Button (Bottom Right) */}
-                      <button
-                        onClick={(e) => toggleSound(reel.id, e)}
-                        type="button"
-                        aria-label={isUnmuted ? 'Mute audio' : 'Unmute audio'}
-                        className={`w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-200 border border-white/20 hover:scale-110 active:scale-95 ${
-                          isUnmuted
-                            ? 'bg-[#F7BE44] text-[#641623]'
-                            : 'bg-black/45 text-white hover:bg-black/70'
-                        }`}
-                      >
-                        {isUnmuted ? (
-                          // Sound ON (Volume High)
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                          </svg>
-                        ) : (
-                          // Sound MUTED (Volume X)
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                            <line x1="23" y1="9" x2="17" y2="15" />
-                            <line x1="17" y1="9" x2="23" y2="15" />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
+                      ) : (
+                        // Sound MUTED (Volume X)
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
+                          <line x1="23" y1="9" x2="17" y2="15" />
+                          <line x1="17" y1="9" x2="23" y2="15" />
+                        </svg>
+                      )}
+                    </button>
                   </div>
                 </div>
               );
