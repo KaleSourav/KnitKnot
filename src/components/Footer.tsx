@@ -1,19 +1,36 @@
 import React, { useState } from 'react';
 
-// Cloud pill scalloped border path for the newsletter container (viewBox: 0 0 1100 130)
-const CLOUD_NEWSLETTER_PATH =
-  'M 30,12 ' +
-  'Q 62.5,0 95.0,12 Q 127.5,0 160.0,12 Q 192.5,0 225.0,12 Q 257.5,0 290.0,12 ' +
-  'Q 322.5,0 355.0,12 Q 387.5,0 420.0,12 Q 452.5,0 485.0,12 Q 517.5,0 550.0,12 ' +
-  'Q 582.5,0 615.0,12 Q 647.5,0 680.0,12 Q 712.5,0 745.0,12 Q 777.5,0 810.0,12 ' +
-  'Q 842.5,0 875.0,12 Q 907.5,0 940.0,12 Q 972.5,0 1005.0,12 Q 1037.5,0 1070.0,12 ' +
-  'Q 1100,15 1092,35 Q 1100,55 1092,75 Q 1100,95 1092,115 ' +
-  'Q 1100,128 1070,118 ' +
-  'Q 1037.5,130 1005.0,118 Q 972.5,130 940.0,118 Q 907.5,130 875.0,118 Q 842.5,130 810.0,118 ' +
-  'Q 777.5,130 745.0,118 Q 712.5,130 680.0,118 Q 647.5,130 615.0,118 Q 582.5,130 550.0,118 ' +
-  'Q 517.5,130 485.0,118 Q 452.5,130 420.0,118 Q 387.5,130 355.0,118 Q 322.5,130 290.0,118 ' +
-  'Q 257.5,130 225.0,118 Q 192.5,130 160.0,118 Q 127.5,130 95.0,118 Q 62.5,130 30.0,118 ' +
-  'Q 0,115 8,95 Q 0,75 8,55 Q 0,35 8,15 Q 0,15 30,12 Z';
+// Exact full-screen scalloped cloud path extracted directly from reference (viewBox: 0 0 1440 140)
+const EXACT_FULLSCREEN_CLOUD_PATH =
+  'M 0,52.2 L 12,46.2 L 24,37.9 L 36,25.8 L 48,20.0 L 60,17.6 L 72,16.0 L 84,18.1 L 96,21.4 L 108,25.2 ' +
+  'L 120,24.3 L 132,22.8 L 144,22.9 L 156,22.5 L 168,17.2 L 180,13.0 L 192,13.0 L 204,16.5 L 216,20.0 ' +
+  'L 228,21.0 L 240,21.0 L 252,21.0 L 264,22.4 L 276,17.5 L 288,13.0 L 300,12.0 L 312,14.6 L 324,20.5 ' +
+  'L 336,24.2 L 348,25.0 L 360,20.5 L 372,15.1 L 384,14.0 L 396,16.8 L 408,21.0 L 420,23.8 L 432,25.0 ' +
+  'L 444,24.0 L 456,23.5 L 468,24.8 L 480,22.1 L 492,19.0 L 504,18.0 L 516,21.5 L 528,25.0 L 540,25.0 ' +
+  'L 552,22.2 L 564,19.2 L 576,19.6 L 588,22.8 L 600,25.0 L 612,23.8 L 624,22.2 L 636,22.8 L 648,20.5 ' +
+  'L 660,17.5 L 672,16.0 L 684,20.0 L 696,23.8 L 708,24.8 L 720,23.8 L 732,23.0 L 744,23.0 L 756,19.8 ' +
+  'L 768,16.8 L 780,17.8 L 792,21.5 L 804,24.8 L 816,25.0 L 828,24.5 L 840,20.0 L 852,14.8 L 864,13.0 ' +
+  'L 876,17.0 L 888,22.0 L 900,24.0 L 912,23.0 L 924,20.0 L 936,19.5 L 948,22.5 L 960,23.2 L 972,32.8 ' +
+  'L 984,43.2 L 996,44.0 L 1008,44.0 L 1020,44.0 L 1032,44.0 L 1044,44.0 L 1056,44.0 L 1068,44.0 L 1080,44.0 ' +
+  'L 1092,44.0 L 1104,44.0 L 1116,44.0 L 1128,44.0 L 1140,44.0 L 1152,44.0 L 1164,44.0 L 1176,44.0 L 1188,44.0 ' +
+  'L 1200,44.0 L 1212,44.0 L 1224,44.0 L 1236,44.0 L 1248,44.0 L 1260,44.0 L 1272,44.0 L 1284,44.0 L 1296,44.0 ' +
+  'L 1308,44.0 L 1320,44.0 L 1332,44.0 L 1344,44.0 L 1356,44.0 L 1368,44.0 L 1380,44.0 L 1392,44.0 L 1404,44.0 ' +
+  'L 1416,44.0 L 1428,44.0 L 1440,44.0 ' +
+  // Bottom edge going in reverse
+  'L 1440,89.5 L 1428,89.5 L 1416,89.5 L 1404,89.5 L 1392,89.5 L 1380,89.5 L 1368,89.5 L 1356,89.5 L 1344,89.5 ' +
+  'L 1332,89.5 L 1320,89.5 L 1308,89.5 L 1296,89.5 L 1284,89.5 L 1272,89.5 L 1260,89.5 L 1248,89.5 L 1236,89.5 ' +
+  'L 1224,89.5 L 1212,89.5 L 1200,89.5 L 1188,89.5 L 1176,89.5 L 1164,89.5 L 1152,89.5 L 1140,89.5 L 1128,89.5 ' +
+  'L 1116,89.5 L 1104,89.5 L 1092,89.5 L 1080,89.5 L 1068,89.5 L 1056,89.5 L 1044,89.5 L 1032,89.5 L 1020,89.5 ' +
+  'L 1008,89.5 L 996,89.5 L 984,89.5 L 972,89.5 L 960,89.5 L 948,95.0 L 936,104.0 L 924,115.0 L 912,120.0 ' +
+  'L 900,121.0 L 888,122.5 L 876,123.0 L 864,123.0 L 852,121.5 L 840,121.0 L 828,122.0 L 816,122.8 L 804,122.0 ' +
+  'L 792,121.0 L 780,121.5 L 768,122.5 L 756,123.0 L 744,122.5 L 732,122.0 L 720,122.2 L 708,122.8 L 696,122.5 ' +
+  'L 684,121.8 L 672,121.0 L 660,121.2 L 648,121.8 L 636,122.0 L 624,121.5 L 612,121.0 L 600,121.2 L 588,121.8 ' +
+  'L 576,122.0 L 564,121.8 L 552,121.2 L 540,121.0 L 528,121.5 L 516,122.0 L 504,122.2 L 492,122.0 L 480,121.5 ' +
+  'L 468,121.0 L 456,121.2 L 444,121.8 L 432,122.0 L 420,121.8 L 408,121.2 L 396,121.0 L 384,121.5 L 372,122.0 ' +
+  'L 360,122.2 L 348,122.0 L 336,121.5 L 324,121.0 L 312,121.2 L 300,121.8 L 288,122.0 L 276,121.8 L 264,121.2 ' +
+  'L 252,121.0 L 240,121.5 L 228,122.0 L 216,122.2 L 204,122.0 L 192,121.5 L 180,121.0 L 168,121.2 L 156,121.8 ' +
+  'L 144,122.0 L 132,121.8 L 120,121.2 L 108,121.0 L 96,121.5 L 84,122.0 L 72,122.2 L 60,122.0 L 48,121.5 ' +
+  'L 36,117.3 L 24,104.2 L 12,95.1 L 0,89.5 Z';
 
 // Continuous upward scallop wave for the top border of the maroon footer (viewBox: 0 0 1440 60)
 const FOOTER_SCALLOP_WAVE =
@@ -38,28 +55,28 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative w-full bg-[#FAF4ED] text-white font-['Fredoka'] overflow-hidden pt-6">
+    <footer className="relative w-full bg-[#FAF4ED] text-white font-['Fredoka'] overflow-hidden pt-4">
       {/* =========================================================================
-          1. NEWSLETTER BANNER: "stay in the loop" (Scalloped Cloud Pill Container)
+          1. NEWSLETTER BANNER: "stay in the loop" (Full-Screen Scalloped Cloud Band)
          ========================================================================= */}
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 z-20 pb-4 sm:pb-6">
-        <div className="relative w-full min-h-[110px] sm:min-h-[125px] flex items-center p-6 sm:p-8 md:p-9">
-          {/* Scalloped Cloud Background SVG */}
+      <div className="relative w-full z-20">
+        <div className="relative w-full min-h-[135px] sm:min-h-[145px] md:min-h-[155px] flex items-center justify-center">
+          {/* Full Screen Exact Cloud SVG Background */}
           <svg
-            viewBox="0 0 1100 130"
+            viewBox="0 0 1440 140"
             fill="none"
             preserveAspectRatio="none"
-            className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-[0_8px_20px_rgba(100,22,35,0.06)]"
+            className="absolute inset-0 w-full h-full pointer-events-none"
           >
-            <path d={CLOUD_NEWSLETTER_PATH} fill="#DDF2F8" />
+            <path d={EXACT_FULLSCREEN_CLOUD_PATH} fill="#DBEFF8" />
           </svg>
 
-          {/* Cloud Content Layer */}
-          <div className="relative z-10 w-full flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
+          {/* Centered responsive content container matching reference */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
             {/* Left Content: Envelope Icon + Heading + Subtitle */}
             <div className="flex items-center gap-4 sm:gap-5 text-left w-full lg:w-auto">
               {/* Rounded Envelope Icon */}
-              <div className="w-13 h-11 sm:w-14 sm:h-12 rounded-xl border-2 border-[#641623] bg-[#DDF2F8] flex items-center justify-center flex-shrink-0 text-[#641623]">
+              <div className="w-13 h-11 sm:w-14 sm:h-12 rounded-xl border-2 border-[#641623] bg-transparent flex items-center justify-center flex-shrink-0 text-[#641623]">
                 <svg
                   className="w-7 h-7 sm:w-8 sm:h-8"
                   viewBox="0 0 24 24"
@@ -86,7 +103,7 @@ export const Footer: React.FC = () => {
 
             {/* Right Form: Pill Input + Sign up Button + Cute Sunburst Rays */}
             <div className="relative w-full lg:w-auto flex-shrink-0">
-              {/* Cute 3 red accent rays above the button matching Image 1 */}
+              {/* Cute 3 red accent rays above the button matching Image */}
               <div className="absolute -top-3.5 right-10 sm:right-12 pointer-events-none hidden sm:flex gap-1.5 items-end">
                 <span className="w-0.5 h-3 bg-[#641623] rotate-[-25deg] rounded-full" />
                 <span className="w-0.5 h-4 bg-[#641623] -translate-y-0.5 rounded-full" />
@@ -112,7 +129,7 @@ export const Footer: React.FC = () => {
                 >
                   <span>{isSubscribed ? 'joined!' : 'sign up'}</span>
                   <svg
-                    className="w-4 h-4"
+                    className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -133,7 +150,7 @@ export const Footer: React.FC = () => {
       {/* =========================================================================
           2. SCALLOPED WAVE DIVIDER (Top Edge of Maroon Footer)
          ========================================================================= */}
-      <div className="relative w-full -mt-2 sm:-mt-4 z-10 leading-none">
+      <div className="relative w-full -mt-2 sm:-mt-3 z-10 leading-none">
         <svg
           viewBox="0 0 1440 60"
           fill="none"
