@@ -301,7 +301,9 @@ export const ReelsSection: React.FC = () => {
                 >
                   {/* HTML5 Autoplay Looping Video */}
                   <video
-                    ref={(el) => (videoRefs.current[reel.id] = el)}
+                    ref={(el) => {
+                      videoRefs.current[reel.id] = el;
+                    }}
                     src={reel.videoUrl}
                     poster={reel.posterUrl}
                     autoPlay
