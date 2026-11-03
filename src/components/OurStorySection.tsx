@@ -6,7 +6,24 @@ interface OurStorySectionProps {
 
 export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }) => {
   return (
-    <section className="w-full bg-[#FAF4ED] pt-6 sm:pt-10 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
+    <section className="w-full bg-[#FAF4ED] pt-4 sm:pt-6 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
+      {/* 1. Golden Wavy Sine Divider at Top Transition from Bestsellers */}
+      <div className="w-full overflow-hidden flex justify-center -mt-2 sm:-mt-4 mb-10 sm:mb-14 lg:mb-18" aria-hidden="true">
+        <svg
+          viewBox="0 0 1440 24"
+          fill="none"
+          preserveAspectRatio="none"
+          className="w-full h-4 sm:h-5 text-[#F7BE44]"
+        >
+          <path
+            d="M0 12 C 30 0, 60 24, 90 12 C 120 0, 150 24, 180 12 C 210 0, 240 24, 270 12 C 300 0, 330 24, 360 12 C 390 0, 420 24, 450 12 C 480 0, 510 24, 540 12 C 570 0, 600 24, 630 12 C 660 0, 690 24, 720 12 C 750 0, 780 24, 810 12 C 840 0, 870 24, 900 12 C 930 0, 960 24, 990 12 C 1020 0, 1050 24, 1080 12 C 1110 0, 1140 24, 1170 12 C 1200 0, 1230 24, 1260 12 C 1290 0, 1320 24, 1350 12 C 1380 0, 1410 24, 1440 12"
+            stroke="currentColor"
+            strokeWidth="2.8"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
       {/* Full-Screen Section Coverage Container */}
       <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 xl:gap-20 items-start">

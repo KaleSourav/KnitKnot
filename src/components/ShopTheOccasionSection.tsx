@@ -315,3 +315,4 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
     </section>
   );
 };
+
