@@ -194,10 +194,10 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
 
         {/* 3. Product Carousel Row with Left and Right Circular Arrow Navigation */}
         <div className="relative w-full">
-          {/* Left Arrow Button */}
+          {/* Left Arrow Button (Desktop only, mobile uses smooth touch swipe) */}
           <button
             onClick={() => scroll('left')}
-            className="flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Previous products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -221,10 +221,10 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                   onClick={() => onProductClick?.(item.id)}
                   onMouseEnter={() => setHoveredCard(item.id)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className="group flex-1 min-w-[180px] sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col items-start justify-between snap-center"
+                  className="group flex-1 min-w-[160px] sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col items-start justify-between snap-center"
                 >
                   {/* 1. Tall Rounded Image Box with Crisp Border & Smooth Hover Crossfade */}
-                  <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[24px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
+                  <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[20px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
                     {/* Default Image */}
                     <img
                       src={item.image}
@@ -355,10 +355,10 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
             })}
           </div>
 
-          {/* Right Arrow Button */}
+          {/* Right Arrow Button (Desktop only, mobile uses smooth touch swipe) */}
           <button
             onClick={() => scroll('right')}
-            className="flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Next products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">

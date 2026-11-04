@@ -25,17 +25,17 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
       </div>
 
       {/* Full-Screen Section Coverage Container */}
-      <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 xl:gap-20 items-start">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-10 lg:px-16 xl:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 xl:gap-20 items-start">
           {/* Left Column: Brand Story in Our Font Language (Fredoka & Maroon #641623) */}
           <div className="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-24 pt-2 lg:pt-6">
             {/* Headline in Fredoka Font Language */}
-            <h2 className="font-['Fredoka'] font-black text-4xl sm:text-5xl md:text-6xl lg:text-[68px] text-[#641623] leading-[1.04] tracking-tight mb-6 sm:mb-8 select-none">
+            <h2 className="font-['Fredoka'] font-black text-3xl sm:text-5xl md:text-6xl lg:text-[68px] text-[#641623] leading-[1.08] tracking-tight mb-5 sm:mb-8 select-none">
               made by hand,<br />made with love.
             </h2>
 
             {/* Authentic Brand Story */}
-            <div className="font-['Fredoka'] font-medium text-base sm:text-[18px] leading-[1.65] text-[#2D2424]/85 max-w-[480px] space-y-4 mb-6">
+            <div className="font-['Fredoka'] font-medium text-sm sm:text-[18px] leading-[1.65] text-[#2D2424]/85 max-w-[480px] space-y-3.5 sm:space-y-4 mb-5 sm:mb-6">
               <p>
                 at knotsnco, our crochet pieces are lovingly handmade by a group of talented dadis in surat. each stitch carries their skill, care and years of craft, turning simple yarn into meaningful gifts that last forever.
               </p>
@@ -45,7 +45,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
             </div>
 
             {/* Personal Sign-off */}
-            <div className="font-['Fredoka'] text-base sm:text-[18px] leading-[1.5] text-[#2D2424]/85 mb-8 sm:mb-10">
+            <div className="font-['Fredoka'] text-sm sm:text-[18px] leading-[1.5] text-[#2D2424]/85 mb-6 sm:mb-10">
               <p>much love,</p>
               <p className="mt-1 font-bold text-[#641623]">the dadis &amp; artisans at knotsnco</p>
             </div>
@@ -54,7 +54,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
             <div>
               <button
                 onClick={onStoryClick}
-                className="inline-flex items-center justify-center min-w-[200px] sm:min-w-[220px] py-3 sm:py-3.5 px-7 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-base sm:text-lg tracking-wide hover:bg-[#641623] hover:text-[#FAF4ED] transition-all duration-200 cursor-pointer text-center"
+                className="inline-flex items-center justify-center min-w-[170px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-7 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-lg tracking-wide hover:bg-[#641623] hover:text-[#FAF4ED] transition-all duration-200 cursor-pointer text-center"
               >
                 our story
               </button>

@@ -222,10 +222,10 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
                 onClick={() => onOccasionClick?.(item.id)}
                 onMouseEnter={() => setHoveredCard(item.id)}
                 onMouseLeave={() => setHoveredCard(null)}
-                className="group flex-shrink-0 w-[220px] sm:w-[240px] lg:w-auto snap-center cursor-pointer flex flex-col rounded-[24px] sm:rounded-[28px] bg-[#FAF2E8]/80 hover:bg-[#FAF2E8] border-[2px] border-[#641623]/12 hover:border-[#641623]/30 shadow-[0_4px_16px_rgba(100,22,35,0.05)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1.5 transition-all duration-300 overflow-hidden select-none"
+                className="group flex-shrink-0 w-[185px] sm:w-[220px] lg:w-auto snap-center cursor-pointer flex flex-col rounded-[22px] sm:rounded-[28px] bg-[#FAF2E8]/80 hover:bg-[#FAF2E8] border-[2px] border-[#641623]/12 hover:border-[#641623]/30 shadow-[0_4px_16px_rgba(100,22,35,0.05)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1.5 transition-all duration-300 overflow-hidden select-none"
               >
                 {/* Image Container with Smooth Crossfade and Zoom on Hover */}
-                <div className="relative w-full aspect-[4/3.9] overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] bg-white/60">
+                <div className="relative w-full aspect-[4/3.9] overflow-hidden rounded-t-[20px] sm:rounded-t-[26px] bg-white/60">
                   {/* Default Primary Image */}
                   <img
                     src={item.image}
@@ -251,23 +251,23 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
                   />
 
                   {/* Cute Occasion Floating Badge in Top-Right Corner */}
-                  <div className="absolute top-2.5 right-2.5 z-10 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-[#641623]/15 shadow-sm flex items-center gap-1.5 transition-transform duration-300 group-hover:scale-108 group-hover:bg-white">
-                    {item.badgeIcon}
-                    <span className="text-[10px] sm:text-[11px] font-bold text-[#641623] tracking-wide uppercase">
+                  <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-white/90 backdrop-blur-sm px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-[#641623]/15 shadow-sm flex items-center gap-1 sm:gap-1.5 transition-transform duration-300 group-hover:scale-108 group-hover:bg-white">
+                    <span className="scale-80 sm:scale-100">{item.badgeIcon}</span>
+                    <span className="text-[9px] sm:text-[11px] font-bold text-[#641623] tracking-wide uppercase">
                       {item.badgeLabel}
                     </span>
                   </div>
                 </div>
 
                 {/* Bottom Occasion Pill Banner */}
-                <div className="w-full p-2.5 sm:p-3 flex justify-center items-center bg-[#FAF2E8]/60">
-                  <div className="w-full py-2 sm:py-2.5 px-3 rounded-full bg-[#FFFDF9] group-hover:bg-[#F7BE44] border-[1.8px] border-[#641623]/20 group-hover:border-[#641623] shadow-sm flex items-center justify-center gap-1.5 transition-all duration-300">
-                    <span className="font-['Fredoka'] font-bold text-sm sm:text-base text-[#641623] capitalize tracking-wide leading-none pt-0.5">
+                <div className="w-full p-2 sm:p-3 flex justify-center items-center bg-[#FAF2E8]/60">
+                  <div className="w-full py-1.5 sm:py-2.5 px-2.5 sm:px-3 rounded-full bg-[#FFFDF9] group-hover:bg-[#F7BE44] border-[1.8px] border-[#641623]/20 group-hover:border-[#641623] shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 transition-all duration-300">
+                    <span className="font-['Fredoka'] font-bold text-xs sm:text-base text-[#641623] capitalize tracking-wide leading-none pt-0.5 whitespace-nowrap">
                       {item.title}
                     </span>
                     {/* Animated Arrow on Hover */}
                     <svg
-                      className="w-3.5 h-3.5 text-[#641623] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                      className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#641623] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden sm:block"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"

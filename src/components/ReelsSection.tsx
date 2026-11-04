@@ -190,15 +190,15 @@ export const ReelsSection: React.FC = () => {
     <section className="relative w-full bg-[#FAF4ED] py-12 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header matching Reference 1 (media_1793693473509_aa9fe40d.jpg) */}
-        <div className="flex items-center justify-between mb-8 sm:mb-10">
+        <div className="flex items-center justify-between mb-5 sm:mb-8">
           {/* Left Title: "from our community ♡" */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#641623] tracking-tight lowercase">
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            <h2 className="text-lg sm:text-3xl md:text-4xl font-bold text-[#641623] tracking-tight lowercase whitespace-nowrap">
               from our community
             </h2>
             {/* Outline Heart SVG matching reference ♡ */}
             <svg
-              className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#641623] flex-shrink-0"
+              className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#641623] flex-shrink-0"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -216,11 +216,11 @@ export const ReelsSection: React.FC = () => {
             href="https://www.instagram.com/knotsnco._/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-2 sm:gap-2.5 text-[#641623] font-semibold text-sm sm:text-base md:text-lg hover:opacity-80 transition-all duration-200 py-1 px-2.5 rounded-full hover:bg-[#641623]/5"
+            className="group flex items-center gap-1.5 sm:gap-2.5 text-[#641623] font-semibold text-xs sm:text-base md:text-lg hover:opacity-80 transition-all duration-200 py-1 px-2 sm:px-2.5 rounded-full hover:bg-[#641623]/5 flex-shrink-0"
             aria-label="Visit knotsnco on Instagram"
           >
             {/* Instagram Camera Icon SVG */}
-            <div className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center flex-shrink-0">
+            <div className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center flex-shrink-0">
               <svg
                 className="w-full h-full text-[#641623] transition-transform duration-200 group-hover:scale-110"
                 viewBox="0 0 24 24"
@@ -243,12 +243,12 @@ export const ReelsSection: React.FC = () => {
 
         {/* Carousel Container with Side Controls */}
         <div className="relative group/carousel">
-          {/* Previous Arrow Button */}
+          {/* Previous Arrow Button (Desktop only, mobile uses touch swipe) */}
           <button
             onClick={scrollLeft}
             type="button"
             aria-label="Previous reels"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-5 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(100,22,35,0.12)] border border-[#641623]/15 text-[#641623] flex items-center justify-center hover:bg-[#641623] hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none"
+            className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 sm:-translate-x-5 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(100,22,35,0.12)] border border-[#641623]/15 text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer"
           >
             <svg
               className="w-5 h-5 sm:w-6 sm:h-6"
@@ -263,12 +263,12 @@ export const ReelsSection: React.FC = () => {
             </svg>
           </button>
 
-          {/* Next Arrow Button */}
+          {/* Next Arrow Button (Desktop only, mobile uses touch swipe) */}
           <button
             onClick={scrollRight}
             type="button"
             aria-label="Next reels"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-5 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(100,22,35,0.12)] border border-[#641623]/15 text-[#641623] flex items-center justify-center hover:bg-[#641623] hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none"
+            className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 sm:translate-x-5 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-md shadow-[0_4px_16px_rgba(100,22,35,0.12)] border border-[#641623]/15 text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer"
           >
             <svg
               className="w-5 h-5 sm:w-6 sm:h-6"
@@ -286,7 +286,7 @@ export const ReelsSection: React.FC = () => {
           {/* Horizontal Scrolling Reels Row */}
           <div
             ref={scrollContainerRef}
-            className="flex items-center gap-4 sm:gap-5 overflow-x-auto scroll-smooth pb-4 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
+            className="flex items-center gap-3.5 sm:gap-5 overflow-x-auto scroll-smooth pb-4 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {REELS_DATA.map((reel) => {
@@ -296,7 +296,7 @@ export const ReelsSection: React.FC = () => {
               return (
                 <div
                   key={reel.id}
-                  className="flex-shrink-0 w-[240px] sm:w-[270px] md:w-[290px] h-[426px] sm:h-[480px] md:h-[515px] relative rounded-[22px] overflow-hidden bg-[#2D2424]/5 border-2 border-[#FAF2E8]/90 shadow-[0_8px_24px_rgba(100,22,35,0.08)] hover:shadow-[0_16px_36px_rgba(100,22,35,0.16)] transition-all duration-300 snap-start group/card cursor-pointer"
+                  className="flex-shrink-0 w-[210px] sm:w-[270px] md:w-[290px] h-[373px] sm:h-[480px] md:h-[515px] relative rounded-[20px] sm:rounded-[22px] overflow-hidden bg-[#2D2424]/5 border-2 border-[#FAF2E8]/90 shadow-[0_6px_20px_rgba(100,22,35,0.08)] hover:shadow-[0_16px_36px_rgba(100,22,35,0.16)] transition-all duration-300 snap-start group/card cursor-pointer"
                   onClick={(e) => togglePlay(reel.id, e)}
                 >
                   {/* HTML5 Autoplay Looping Video */}

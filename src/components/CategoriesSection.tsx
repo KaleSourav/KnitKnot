@@ -208,19 +208,19 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         {/* Perfectly proportioned container: max-w-[1040px] creates ideal card dimensions */}
         <div className="w-full max-w-[1040px] mx-auto">
           {/* Header with Mascots on both sides */}
-          <div className="flex items-center justify-center gap-2.5 sm:gap-5 md:gap-6 mb-6 sm:mb-8 text-center">
+          <div className="flex items-center justify-center gap-2 sm:gap-5 md:gap-6 mb-5 sm:mb-8 text-center">
             {/* Left Mascot GIF */}
             <img
               src="/knotsnco_mascot_transparent.gif"
               alt="knotsnco mascot"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
+              className="w-8 h-8 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
             />
 
             {/* Center Heading with Whimsical Radiant Dashes */}
-            <div className="flex items-center justify-center gap-2 sm:gap-2.5 text-center">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 text-center">
               {/* Left Radiant Dashes */}
               <svg
-                className="w-4 h-4 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0"
+                className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0"
                 viewBox="0 0 32 32"
                 fill="none"
                 stroke="currentColor"
@@ -233,13 +233,13 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
               </svg>
 
               {/* Heading in Exact Case & Font */}
-              <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] lowercase tracking-tight whitespace-nowrap">
+              <h2 className="font-['Fredoka'] font-bold text-xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] lowercase tracking-tight whitespace-nowrap">
                 shop by category
               </h2>
 
               {/* Right Radiant Dashes */}
               <svg
-                className="w-4 h-4 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0"
+                className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0"
                 viewBox="0 0 32 32"
                 fill="none"
                 stroke="currentColor"
@@ -256,12 +256,12 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
             <img
               src="/knotsnco_mascot_transparent.gif"
               alt="knotsnco mascot"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
+              className="w-8 h-8 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
             />
           </div>
 
-          {/* 3 On Top, 3 Below Grid (Harmonious compact scale matching the reference) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7">
+          {/* 2 On Mobile, 3 On Desktop Grid (Harmonious compact scale matching the reference) */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-7">
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
 
@@ -275,7 +275,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   className="group cursor-pointer flex flex-col items-center w-full"
                 >
                   {/* 1. Perfect Square Aspect Ratio Image Box with Crisp Maroon Border & Hover Crossfade */}
-                  <div className="relative w-full aspect-square rounded-[24px] sm:rounded-[28px] overflow-hidden border-[2.2px] border-[#641623] bg-white shadow-[0_6px_18px_rgba(100,22,35,0.08)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)] transition-all duration-300 group-hover:-translate-y-1">
+                  <div className="relative w-full aspect-square rounded-[18px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)] transition-all duration-300 group-hover:-translate-y-1">
                     {/* Default Image */}
                     <img
                       src={cat.image}
@@ -297,8 +297,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     />
 
                     {/* Mint Green Scalloped Daisy Flower Badge in Top Right */}
-                    <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
-                      <svg viewBox="0 0 50 50" className="w-8 h-8 sm:w-9 sm:h-9">
+                    <div className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+                      <svg viewBox="0 0 50 50" className="w-6 h-6 sm:w-9 sm:h-9">
                         {/* 5 Petal Lobes */}
                         <g fill="#7FE5BD" stroke="#641623" strokeWidth="2.2">
                           <circle cx="25" cy="14" r="9.5" />
@@ -339,10 +339,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   </div>
 
                   {/* 2. Sleek 3D Offset Pill Button Matching the Card Width */}
-                  <div className="w-full mt-3 sm:mt-3.5 flex justify-center">
-                    <div className="w-full py-2.5 sm:py-3 px-4 sm:px-5 rounded-full bg-[#F7BE44] border-[2.2px] border-[#641623] shadow-[0_6px_0_0_#641623] flex items-center justify-center gap-2 sm:gap-2.5 text-center font-['Fredoka'] font-black tracking-wider text-xs sm:text-sm md:text-[15px] text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
-                      {cat.icon}
-                      <span className="leading-none pt-0.5">{cat.buttonLabel}</span>
+                  <div className="w-full mt-2 sm:mt-3.5 flex justify-center">
+                    <div className="w-full py-1.5 sm:py-3 px-1.5 sm:px-5 rounded-full bg-[#F7BE44] border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_6px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-2.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-sm md:text-[15px] text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
+                      <span className="scale-75 sm:scale-100 flex-shrink-0">{cat.icon}</span>
+                      <span className="leading-tight pt-0.5 truncate">{cat.buttonLabel}</span>
                     </div>
                   </div>
                 </div>
