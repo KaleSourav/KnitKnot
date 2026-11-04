@@ -8,6 +8,7 @@ import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
 import { ReelsSection } from './components/ReelsSection';
+import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { Footer } from './components/Footer';
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
   };
 
   const handleShopClick = () => {
-    const productsEl = document.getElementById('bestsellers');
+    const productsEl = document.getElementById('all-products-shop') || document.getElementById('bestsellers');
     if (productsEl) {
       productsEl.scrollIntoView({ behavior: 'smooth' });
     }
@@ -54,10 +55,16 @@ export default function App() {
         <div id="bestsellers">
           <BestsellersSection
             onProductClick={(id) => console.log('Product clicked:', id)}
-            onShopAllClick={() => console.log('Shop all bestsellers clicked')}
+            onShopAllClick={handleShopClick}
             onNotifyClick={(id) => console.log('Notify me clicked for:', id)}
           />
         </div>
+
+        {/* 7. All Products Shop Section (Exact Match to Desktop 3-Col & Mobile 2-Col Layouts with Shopify Products) */}
+        <AllProductsShopSection
+          onProductClick={(id) => console.log('Product clicked:', id)}
+          onAddToCart={() => setCartCount((prev) => prev + 1)}
+        />
 
         {/* 7. Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
         <OurStorySection onStoryClick={() => console.log('Our story clicked')} />

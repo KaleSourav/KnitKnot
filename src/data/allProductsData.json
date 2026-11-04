@@ -1,0 +1,3296 @@
+[
+  {
+    "id": "showcase-1",
+    "shopifyId": "gid://shopify/Product/8456441430079",
+    "variantId": "gid://shopify/ProductVariant/44230784778303",
+    "name": "Sunflower Bouquet",
+    "subtitle": "Handmade Crochet Bouquet",
+    "category": "Bouquets",
+    "price": 1499,
+    "originalPrice": 1899,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/bestsellers/sunflower-bouquet-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "showcase-2",
+    "shopifyId": "gid://shopify/Product/8456441724991",
+    "variantId": "gid://shopify/ProductVariant/44230785400895",
+    "name": "Bunny Plushie",
+    "subtitle": "Handmade Crochet Plushie",
+    "category": "Plushies",
+    "price": 799,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FAF2E8",
+      "#F472B6"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "showcase-3",
+    "shopifyId": "gid://shopify/Product/8456441856063",
+    "variantId": "gid://shopify/ProductVariant/44230785794111",
+    "name": "Tulip Bouquet",
+    "subtitle": "Handmade Crochet Bouquet",
+    "category": "Bouquets",
+    "price": 1299,
+    "originalPrice": 1449,
+    "discount": "10% off",
+    "badge": "10% off",
+    "image": "/bloom/bouquet-summer-tulips.jpg",
+    "colorSwatches": [
+      "#F472B6",
+      "#F7BE44",
+      "#FB7185"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "showcase-4",
+    "shopifyId": "gid://shopify/Product/8456442019903",
+    "variantId": "gid://shopify/ProductVariant/44230786187327",
+    "name": "Crochet Tote Bag",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 1499,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/bags-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#D4A373",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "showcase-5",
+    "shopifyId": "gid://shopify/Product/8456442118207",
+    "variantId": "gid://shopify/ProductVariant/44230786547775",
+    "name": "Daisy Flower Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 699,
+    "originalPrice": 829,
+    "discount": "15% off",
+    "badge": "15% off",
+    "image": "/categories/flower-pots-real.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#86EFAC"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "showcase-6",
+    "shopifyId": "gid://shopify/Product/8456442249279",
+    "variantId": "gid://shopify/ProductVariant/44230786875455",
+    "name": "Mushroom House",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 1199,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/home-decor-real.jpg",
+    "colorSwatches": [
+      "#E11D48",
+      "#FAF2E8"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "showcase-7",
+    "shopifyId": "gid://shopify/Product/8456442380351",
+    "variantId": "gid://shopify/ProductVariant/44230787170367",
+    "name": "Sunflower Keychain",
+    "subtitle": "Handmade Crochet Keychain",
+    "category": "Keychains",
+    "price": 499,
+    "originalPrice": 549,
+    "discount": "10% off",
+    "badge": "10% off",
+    "image": "/bestsellers/sunflower-keychain-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#78350F"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "showcase-8",
+    "shopifyId": "gid://shopify/Product/8456442478655",
+    "variantId": "gid://shopify/ProductVariant/44230787465279",
+    "name": "Crochet Hair Bow",
+    "subtitle": "Handmade Crochet Bow",
+    "category": "Keychains",
+    "price": 399,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/bestsellers/crochet-hair-bow-real.jpg",
+    "colorSwatches": [
+      "#F472B6",
+      "#C084FC",
+      "#FAF2E8"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "showcase-9",
+    "shopifyId": "gid://shopify/Product/8456442576959",
+    "variantId": "gid://shopify/ProductVariant/44230787727423",
+    "name": "Flower Clips (Set of 2)",
+    "subtitle": "Handmade Crochet Clips",
+    "category": "Keychains",
+    "price": 399,
+    "originalPrice": 499,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/bestsellers/flower-clips-real.jpg",
+    "colorSwatches": [
+      "#F472B6",
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "showcase-10",
+    "shopifyId": "gid://shopify/Product/8456442708031",
+    "variantId": "gid://shopify/ProductVariant/44230788055103",
+    "name": "Tulip Stems (Set of 3)",
+    "subtitle": "Crochet Flowers",
+    "category": "Flowers",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/bestsellers/tulip-stems-real.jpg",
+    "colorSwatches": [
+      "#F472B6",
+      "#FB923C",
+      "#86EFAC"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456452702271",
+    "shopifyId": "gid://shopify/Product/8473633751103",
+    "variantId": "gid://shopify/ProductVariant/44296315338815",
+    "name": "Regular Rose (Baby Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456452767807",
+    "shopifyId": "gid://shopify/Product/8473633816639",
+    "variantId": "gid://shopify/ProductVariant/44296315437119",
+    "name": "Regular Rose (Red)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456452866111",
+    "shopifyId": "gid://shopify/Product/8473633882175",
+    "variantId": "gid://shopify/ProductVariant/44296315535423",
+    "name": "Regular Rose (Off White)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays",
+      "Thank You"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456452931647",
+    "shopifyId": "gid://shopify/Product/8456452931647",
+    "variantId": "gid://shopify/ProductVariant/44230814138431",
+    "name": "Regular Rose (Butter Yellow)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": 312,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456453029951",
+    "shopifyId": "gid://shopify/Product/8456453029951",
+    "variantId": "gid://shopify/ProductVariant/44230814400575",
+    "name": "Regular Rose (Lilac)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456453128255",
+    "shopifyId": "gid://shopify/Product/8473634078783",
+    "variantId": "gid://shopify/ProductVariant/44296315830335",
+    "name": "XL Rose (Red)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 650,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/LblZM5aH_QF3WPDN9U5_2026-09-29_1.jpg?v=1793078234",
+    "colorSwatches": [
+      "#641623",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Anniversaries"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456453161023",
+    "shopifyId": "gid://shopify/Product/8473634144319",
+    "variantId": "gid://shopify/ProductVariant/44296315928639",
+    "name": "XL Rose (Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 450,
+    "originalPrice": 562,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/uE9Eh6eo_SWS822B5QV_2026-09-29_1.jpg?v=1793078235",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456453259327",
+    "shopifyId": "gid://shopify/Product/8456453259327",
+    "variantId": "gid://shopify/ProductVariant/44230814957631",
+    "name": "Thai Rose",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456453324863",
+    "shopifyId": "gid://shopify/Product/8456453324863",
+    "variantId": "gid://shopify/ProductVariant/44230815055935",
+    "name": "Shaded Rose (Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456453423167",
+    "shopifyId": "gid://shopify/Product/8473634340927",
+    "variantId": "gid://shopify/ProductVariant/44296316223551",
+    "name": "Shaded Rose (Blue)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 550,
+    "originalPrice": 687,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/VN4xCNqW_UVHVOGC7JE_2026-09-29_1.jpg?v=1793078237",
+    "colorSwatches": [
+      "#F7BE44",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456453554239",
+    "shopifyId": "gid://shopify/Product/8456453554239",
+    "variantId": "gid://shopify/ProductVariant/44230815645759",
+    "name": "Shaded Rose (Purple)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": 312,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456453619775",
+    "shopifyId": "gid://shopify/Product/8456453619775",
+    "variantId": "gid://shopify/ProductVariant/44230815744063",
+    "name": "Shaded Rose (Peach)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/public/bloom/bouquet-pink-dawn.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456453718079",
+    "shopifyId": "gid://shopify/Product/8456453718079",
+    "variantId": "gid://shopify/ProductVariant/44230816006207",
+    "name": "Regular Sunflower",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/byob.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456453750847",
+    "shopifyId": "gid://shopify/Product/8456453750847",
+    "variantId": "gid://shopify/ProductVariant/44230816038975",
+    "name": "XL Sunflower - Double Layered (Regular)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 550,
+    "originalPrice": 687,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/byob.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456453849151",
+    "shopifyId": "gid://shopify/Product/8456453849151",
+    "variantId": "gid://shopify/ProductVariant/44230816301119",
+    "name": "XL Sunflower - Double Layered (Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 550,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/byob.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456453947455",
+    "shopifyId": "gid://shopify/Product/8456453947455",
+    "variantId": "gid://shopify/ProductVariant/44230816432191",
+    "name": "XL Sunflower - Double Layered (Maroon)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 550,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/byob.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Festive Gifting",
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454045759",
+    "shopifyId": "gid://shopify/Product/8456454045759",
+    "variantId": "gid://shopify/ProductVariant/44230816694335",
+    "name": "Regular Tulip (Butter Yellow)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 220,
+    "originalPrice": 275,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456454144063",
+    "shopifyId": "gid://shopify/Product/8456454144063",
+    "variantId": "gid://shopify/ProductVariant/44230816956479",
+    "name": "Regular Tulip (Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 220,
+    "originalPrice": 275,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456454209599",
+    "shopifyId": "gid://shopify/Product/8456454209599",
+    "variantId": "gid://shopify/ProductVariant/44230817054783",
+    "name": "Regular Tulip (Purple)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 220,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454307903",
+    "shopifyId": "gid://shopify/Product/8456454307903",
+    "variantId": "gid://shopify/ProductVariant/44230817382463",
+    "name": "Regular Tulip (Off White)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 220,
+    "originalPrice": 275,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454373439",
+    "shopifyId": "gid://shopify/Product/8456454373439",
+    "variantId": "gid://shopify/ProductVariant/44230817447999",
+    "name": "Regular Tulip (Sky Blue)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 220,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456454438975",
+    "shopifyId": "gid://shopify/Product/8456454438975",
+    "variantId": "gid://shopify/ProductVariant/44230817742911",
+    "name": "Open Tulip (Butter Yellow)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 280,
+    "originalPrice": 350,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454504511",
+    "shopifyId": "gid://shopify/Product/8456454504511",
+    "variantId": "gid://shopify/ProductVariant/44230817841215",
+    "name": "Open Tulip (Pink)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 280,
+    "originalPrice": 350,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456454602815",
+    "shopifyId": "gid://shopify/Product/8456454602815",
+    "variantId": "gid://shopify/ProductVariant/44230818168895",
+    "name": "Open Tulip (Purple)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 280,
+    "originalPrice": 350,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456454701119",
+    "shopifyId": "gid://shopify/Product/8456454701119",
+    "variantId": "gid://shopify/ProductVariant/44230818431039",
+    "name": "Open Tulip (Off White)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 280,
+    "originalPrice": 350,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454733887",
+    "shopifyId": "gid://shopify/Product/8456454733887",
+    "variantId": "gid://shopify/ProductVariant/44230818463807",
+    "name": "Open Tulip (Red)",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 280,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456454832191",
+    "shopifyId": "gid://shopify/Product/8456454832191",
+    "variantId": "gid://shopify/ProductVariant/44230818725951",
+    "name": "Rapunzel Lily",
+    "subtitle": "Handmade Crochet Flower",
+    "category": "Flowers",
+    "price": 500,
+    "originalPrice": 625,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#BAE6FD"
+    ],
+    "inStock": false,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456443166783",
+    "shopifyId": "gid://shopify/Product/8456443166783",
+    "variantId": "gid://shopify/ProductVariant/44230788907071",
+    "name": "Red Rose Bouquet Charm",
+    "subtitle": "Handmade Crochet Bouquet",
+    "category": "Bouquets",
+    "price": 350,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456443428927",
+    "shopifyId": "gid://shopify/Product/8456443428927",
+    "variantId": "gid://shopify/ProductVariant/44230789627967",
+    "name": "Sunflower Bouquet Charm",
+    "subtitle": "Handmade Crochet Bouquet",
+    "category": "Bouquets",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-bouquets-5",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_5",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_5",
+    "name": "Crochet Bouquets Design #5",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 749,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-bouquets-6",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_6",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_6",
+    "name": "Crochet Bouquets Design #6",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 799,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-bouquets-7",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_7",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_7",
+    "name": "Crochet Bouquets Design #7",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 849,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-bouquets-8",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_8",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_8",
+    "name": "Crochet Bouquets Design #8",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 899,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-bouquets-9",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_9",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_9",
+    "name": "Crochet Bouquets Design #9",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 949,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-bouquets-10",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_10",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_10",
+    "name": "Crochet Bouquets Design #10",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-bouquets-11",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_11",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_11",
+    "name": "Crochet Bouquets Design #11",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1049,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-bouquets-12",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_12",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_12",
+    "name": "Crochet Bouquets Design #12",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1099,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-bouquets-13",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_13",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_13",
+    "name": "Crochet Bouquets Design #13",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1149,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-bouquets-14",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_14",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_14",
+    "name": "Crochet Bouquets Design #14",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1199,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-bouquets-15",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_15",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_15",
+    "name": "Crochet Bouquets Design #15",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1249,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-bouquets-16",
+    "shopifyId": "gid://shopify/Product/auto_Bouquets_16",
+    "variantId": "gid://shopify/ProductVariant/auto_Bouquets_16",
+    "name": "Crochet Bouquets Design #16",
+    "subtitle": "Handmade Crochet Bouquets",
+    "category": "Bouquets",
+    "price": 1299,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/bouquet.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456460468287",
+    "shopifyId": "gid://shopify/Product/8456460468287",
+    "variantId": "gid://shopify/ProductVariant/44230831865919",
+    "name": "Character - Bunny",
+    "subtitle": "Handmade Crochet Plushie",
+    "category": "Plushies",
+    "price": 350,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-plushies-3",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_3",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_3",
+    "name": "Crochet Plushies Design #3",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 649,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-plushies-4",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_4",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_4",
+    "name": "Crochet Plushies Design #4",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 699,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-5",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_5",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_5",
+    "name": "Crochet Plushies Design #5",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 749,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-plushies-6",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_6",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_6",
+    "name": "Crochet Plushies Design #6",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 799,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-plushies-7",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_7",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_7",
+    "name": "Crochet Plushies Design #7",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 849,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Anniversaries"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-plushies-8",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_8",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_8",
+    "name": "Crochet Plushies Design #8",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 899,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-plushies-9",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_9",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_9",
+    "name": "Crochet Plushies Design #9",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 949,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-plushies-10",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_10",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_10",
+    "name": "Crochet Plushies Design #10",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-11",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_11",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_11",
+    "name": "Crochet Plushies Design #11",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1049,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-plushies-12",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_12",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_12",
+    "name": "Crochet Plushies Design #12",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1099,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-13",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_13",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_13",
+    "name": "Crochet Plushies Design #13",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1149,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Festive Gifting"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-plushies-14",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_14",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_14",
+    "name": "Crochet Plushies Design #14",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1199,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-plushies-15",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_15",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_15",
+    "name": "Crochet Plushies Design #15",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1249,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-plushies-16",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_16",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_16",
+    "name": "Crochet Plushies Design #16",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1299,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-plushies-17",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_17",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_17",
+    "name": "Crochet Plushies Design #17",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1349,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-18",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_18",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_18",
+    "name": "Crochet Plushies Design #18",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1399,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-plushies-19",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_19",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_19",
+    "name": "Crochet Plushies Design #19",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1449,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-20",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_20",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_20",
+    "name": "Crochet Plushies Design #20",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1499,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-plushies-21",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_21",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_21",
+    "name": "Crochet Plushies Design #21",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1549,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-plushies-22",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_22",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_22",
+    "name": "Crochet Plushies Design #22",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1599,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Birthdays"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-plushies-23",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_23",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_23",
+    "name": "Crochet Plushies Design #23",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1649,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-plushies-24",
+    "shopifyId": "gid://shopify/Product/auto_Plushies_24",
+    "variantId": "gid://shopify/ProductVariant/auto_Plushies_24",
+    "name": "Crochet Plushies Design #24",
+    "subtitle": "Handmade Crochet Plushies",
+    "category": "Plushies",
+    "price": 1699,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/categories/plushies-real.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456441430079",
+    "shopifyId": "gid://shopify/Product/8473626017855",
+    "variantId": "gid://shopify/ProductVariant/44296302297151",
+    "name": "Maroon Puffy Flower Charm",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456441724991",
+    "shopifyId": "gid://shopify/Product/8473626083391",
+    "variantId": "gid://shopify/ProductVariant/44296302395455",
+    "name": "Pink Puffy Flower Charm",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456441856063",
+    "shopifyId": "gid://shopify/Product/8456441856063",
+    "variantId": "gid://shopify/ProductVariant/44230785794111",
+    "name": "Yellow Puffy Flower Charm",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456442118207",
+    "shopifyId": "gid://shopify/Product/8473626312767",
+    "variantId": "gid://shopify/ProductVariant/44296302755903",
+    "name": "Evil Eye Charm",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 410,
+    "originalPrice": 512,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/3jsrqA9l_SBAW9Y3CT4_2026-09-29_1.jpg?v=1793078138",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456442282047",
+    "shopifyId": "gid://shopify/Product/8473626411071",
+    "variantId": "gid://shopify/ProductVariant/44296303280191",
+    "name": "Rose Bag Charm",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 320,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/79kF9g-j_RNIEMJN3U0_2026-09-29_1.jpg?v=1793078139",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456442413119",
+    "shopifyId": "gid://shopify/Product/8456442413119",
+    "variantId": "gid://shopify/ProductVariant/44230787104831",
+    "name": "Watermelon Shell Turtle",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 300,
+    "originalPrice": 375,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456442576959",
+    "shopifyId": "gid://shopify/Product/8456442576959",
+    "variantId": "gid://shopify/ProductVariant/44230787498047",
+    "name": "Strawberry Shell Turtle",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 300,
+    "originalPrice": 375,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456442675263",
+    "shopifyId": "gid://shopify/Product/8456442675263",
+    "variantId": "gid://shopify/ProductVariant/44230787661887",
+    "name": "Kiwi Shell Turtle",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 300,
+    "originalPrice": 375,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456442806335",
+    "shopifyId": "gid://shopify/Product/8456442806335",
+    "variantId": "gid://shopify/ProductVariant/44230788022335",
+    "name": "Orange Shell Turtle",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 300,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456442937407",
+    "shopifyId": "gid://shopify/Product/8456442937407",
+    "variantId": "gid://shopify/ProductVariant/44230788382783",
+    "name": "Barnaby Bunny",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 350,
+    "originalPrice": 437,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Thank You",
+      "Birthdays"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456443297855",
+    "shopifyId": "gid://shopify/Product/8456443297855",
+    "variantId": "gid://shopify/ProductVariant/44230789234751",
+    "name": "Bunny with Heart",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 300,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456443592767",
+    "shopifyId": "gid://shopify/Product/8456443592767",
+    "variantId": "gid://shopify/ProductVariant/44230789791807",
+    "name": "Octopus Keychain (Pink)",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 250,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456443658303",
+    "shopifyId": "gid://shopify/Product/8456443658303",
+    "variantId": "gid://shopify/ProductVariant/44230790152255",
+    "name": "Octopus Keychain (Blue)",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 250,
+    "originalPrice": 312,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456443822143",
+    "shopifyId": "gid://shopify/Product/8473627197503",
+    "variantId": "gid://shopify/ProductVariant/44296304492607",
+    "name": "Octopus Keychain (Yellow)",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 550,
+    "originalPrice": 687,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/cb-DhXSj_LHHE9DM0E9_2026-09-29_1.jpg?v=1793078149",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456443953215",
+    "shopifyId": "gid://shopify/Product/8456443953215",
+    "variantId": "gid://shopify/ProductVariant/44230790938687",
+    "name": "Long-Neck Goose",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 450,
+    "originalPrice": 562,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/bunny.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456444051519",
+    "shopifyId": "gid://shopify/Product/8456444051519",
+    "variantId": "gid://shopify/ProductVariant/44230791135295",
+    "name": "Tulip Keychain",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 200,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456444215359",
+    "shopifyId": "gid://shopify/Product/8456444215359",
+    "variantId": "gid://shopify/ProductVariant/44230791528511",
+    "name": "Coffee Keychain",
+    "subtitle": "Handmade Crochet Bag",
+    "category": "Bags",
+    "price": 250,
+    "originalPrice": 312,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": false,
+    "occasions": [
+      "Birthdays"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-keychains-4",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_4",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_4",
+    "name": "Crochet Keychains Design #4",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 699,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-5",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_5",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_5",
+    "name": "Crochet Keychains Design #5",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 749,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-6",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_6",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_6",
+    "name": "Crochet Keychains Design #6",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 799,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-7",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_7",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_7",
+    "name": "Crochet Keychains Design #7",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 849,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-8",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_8",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_8",
+    "name": "Crochet Keychains Design #8",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 899,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-9",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_9",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_9",
+    "name": "Crochet Keychains Design #9",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 949,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-10",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_10",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_10",
+    "name": "Crochet Keychains Design #10",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-11",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_11",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_11",
+    "name": "Crochet Keychains Design #11",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1049,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-keychains-12",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_12",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_12",
+    "name": "Crochet Keychains Design #12",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1099,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-13",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_13",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_13",
+    "name": "Crochet Keychains Design #13",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1149,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-14",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_14",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_14",
+    "name": "Crochet Keychains Design #14",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1199,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-keychains-15",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_15",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_15",
+    "name": "Crochet Keychains Design #15",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1249,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-16",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_16",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_16",
+    "name": "Crochet Keychains Design #16",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1299,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-17",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_17",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_17",
+    "name": "Crochet Keychains Design #17",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1349,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Thank You"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-keychains-18",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_18",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_18",
+    "name": "Crochet Keychains Design #18",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1399,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-19",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_19",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_19",
+    "name": "Crochet Keychains Design #19",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1449,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-keychains-20",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_20",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_20",
+    "name": "Crochet Keychains Design #20",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1499,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-keychains-21",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_21",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_21",
+    "name": "Crochet Keychains Design #21",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1549,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-keychains-22",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_22",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_22",
+    "name": "Crochet Keychains Design #22",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1599,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Festive Gifting"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-keychains-23",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_23",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_23",
+    "name": "Crochet Keychains Design #23",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1649,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-24",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_24",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_24",
+    "name": "Crochet Keychains Design #24",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1699,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Festive Gifting"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "auto-keychains-25",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_25",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_25",
+    "name": "Crochet Keychains Design #25",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1749,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Birthdays"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-keychains-26",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_26",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_26",
+    "name": "Crochet Keychains Design #26",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1799,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "auto-keychains-27",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_27",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_27",
+    "name": "Crochet Keychains Design #27",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1849,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "auto-keychains-28",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_28",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_28",
+    "name": "Crochet Keychains Design #28",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1899,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-keychains-29",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_29",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_29",
+    "name": "Crochet Keychains Design #29",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1949,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "auto-keychains-30",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_30",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_30",
+    "name": "Crochet Keychains Design #30",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 1999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "auto-keychains-31",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_31",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_31",
+    "name": "Crochet Keychains Design #31",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 2049,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Thank You"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "auto-keychains-32",
+    "shopifyId": "gid://shopify/Product/auto_Keychains_32",
+    "variantId": "gid://shopify/ProductVariant/auto_Keychains_32",
+    "name": "Crochet Keychains Design #32",
+    "subtitle": "Handmade Crochet Keychains",
+    "category": "Keychains",
+    "price": 2099,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/accessories.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456448933951",
+    "shopifyId": "gid://shopify/Product/8473630703679",
+    "variantId": "gid://shopify/ProductVariant/44296310423615",
+    "name": "Snoopy Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456448999487",
+    "shopifyId": "gid://shopify/Product/8473630769215",
+    "variantId": "gid://shopify/ProductVariant/44296310521919",
+    "name": "Cinderella Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries",
+      "Thank You"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456449065023",
+    "shopifyId": "gid://shopify/Product/8473630834751",
+    "variantId": "gid://shopify/ProductVariant/44296310620223",
+    "name": "Spider-Man Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries",
+      "Festive Gifting"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456449163327",
+    "shopifyId": "gid://shopify/Product/8473630933055",
+    "variantId": "gid://shopify/ProductVariant/44296310751295",
+    "name": "Batman Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456449261631",
+    "shopifyId": "gid://shopify/Product/8473630998591",
+    "variantId": "gid://shopify/ProductVariant/44296310849599",
+    "name": "Mickey Mouse Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456449392703",
+    "shopifyId": "gid://shopify/Product/8473631162431",
+    "variantId": "gid://shopify/ProductVariant/44296311406655",
+    "name": "Pikachu Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456449491007",
+    "shopifyId": "gid://shopify/Product/8473631195199",
+    "variantId": "gid://shopify/ProductVariant/44296311504959",
+    "name": "Shinchan Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456449556543",
+    "shopifyId": "gid://shopify/Product/8473631260735",
+    "variantId": "gid://shopify/ProductVariant/44296311603263",
+    "name": "Captain America Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#FFFFFF",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Thank You",
+      "Birthdays"
+    ],
+    "color": "White"
+  },
+  {
+    "id": "gid://shopify/Product/8456449622079",
+    "shopifyId": "gid://shopify/Product/8473631326271",
+    "variantId": "gid://shopify/ProductVariant/44296311701567",
+    "name": "Iron Man Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456449720383",
+    "shopifyId": "gid://shopify/Product/8456449720383",
+    "variantId": "gid://shopify/ProductVariant/44230805880895",
+    "name": "Stitch Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456449818687",
+    "shopifyId": "gid://shopify/Product/8456449818687",
+    "variantId": "gid://shopify/ProductVariant/44230806175807",
+    "name": "SpongeBob Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": 1248,
+    "discount": "19% off",
+    "badge": "19% off",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting",
+      "Just Because"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456449916991",
+    "shopifyId": "gid://shopify/Product/8456449916991",
+    "variantId": "gid://shopify/ProductVariant/44230806503487",
+    "name": "Mario Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#E0BBE4"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456450015295",
+    "shopifyId": "gid://shopify/Product/8456450015295",
+    "variantId": "gid://shopify/ProductVariant/44230806831167",
+    "name": "Naruto Standee",
+    "subtitle": "Handmade Crochet Home Decor",
+    "category": "Home Decor",
+    "price": 999,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": false,
+    "occasions": [
+      "Thank You",
+      "Just Because"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456446869567",
+    "shopifyId": "gid://shopify/Product/8473629196351",
+    "variantId": "gid://shopify/ProductVariant/44296307966015",
+    "name": "Lighting Lily Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 2000,
+    "originalPrice": 2500,
+    "discount": "20% off",
+    "badge": "20% off",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/yshTScKy_PG0PEF8L9U_2026-09-29_1.jpg?v=1793078174",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456446967871",
+    "shopifyId": "gid://shopify/Product/8473629294655",
+    "variantId": "gid://shopify/ProductVariant/44296308129855",
+    "name": "Heart Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 600,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TYaMdzHq_1791261126807_kt9e2taz5tb8j0q.jpg?v=1793078175",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Festive Gifting",
+      "Thank You"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456447033407",
+    "shopifyId": "gid://shopify/Product/8473629360191",
+    "variantId": "gid://shopify/ProductVariant/44296308228159",
+    "name": "Babybreath Pot (Pink)",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 650,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_lrWHYeQQ_1791261167149_nlq7dlxkwaa7zy8.jpg?v=1793078177",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#FFF2A3"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Just Because",
+      "Anniversaries"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456447131711",
+    "shopifyId": "gid://shopify/Product/8473629425727",
+    "variantId": "gid://shopify/ProductVariant/44296308326463",
+    "name": "Single Tulip Pot (Pink)",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 800,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_MbTBGwFQ_1791261137655_r3ws72hdfmsw1va.jpg?v=1793078178",
+    "colorSwatches": [
+      "#E0BBE4",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries"
+    ],
+    "color": "Pastel Lilac"
+  },
+  {
+    "id": "gid://shopify/Product/8456447230015",
+    "shopifyId": "gid://shopify/Product/8473629524031",
+    "variantId": "gid://shopify/ProductVariant/44296308621375",
+    "name": "Double Purple Tulip Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 1000,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_pn7uUIby_1791261161991_brb6b7amc9boibg.jpg?v=1793078179",
+    "colorSwatches": [
+      "#BAE6FD",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "Sky Blue"
+  },
+  {
+    "id": "gid://shopify/Product/8456447295551",
+    "shopifyId": "gid://shopify/Product/8473629622335",
+    "variantId": "gid://shopify/ProductVariant/44296308785215",
+    "name": "Double White Tulip Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 1000,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_sT423kxI_1791261159176_kcd7tjx5waz48tr.jpg?v=1793078179",
+    "colorSwatches": [
+      "#FFF2A3",
+      "#F7BE44"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Thank You",
+      "Anniversaries"
+    ],
+    "color": "Soft Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456447393855",
+    "shopifyId": "gid://shopify/Product/8456447393855",
+    "variantId": "gid://shopify/ProductVariant/44230800474175",
+    "name": "Tulip Pot (Blue)",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 599,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/tulips.jpg",
+    "colorSwatches": [
+      "#641623",
+      "#641623"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Anniversaries",
+      "Birthdays"
+    ],
+    "color": "Maroon"
+  },
+  {
+    "id": "gid://shopify/Product/8456447492159",
+    "shopifyId": "gid://shopify/Product/8473629753407",
+    "variantId": "gid://shopify/ProductVariant/44296308981823",
+    "name": "Pink Shaded Rose Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 750,
+    "originalPrice": null,
+    "discount": null,
+    "badge": "NEW",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_1b5zTbfi_1791261161092_jp118lgikmik2mk.jpg?v=1793078181",
+    "colorSwatches": [
+      "#F7BE44",
+      "#BAE6FD"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Birthdays",
+      "Anniversaries"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456447557695",
+    "shopifyId": "gid://shopify/Product/8473629818943",
+    "variantId": "gid://shopify/ProductVariant/44296309080127",
+    "name": "Red Rose Pot",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 500,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/KwxIcT8S_TOCR5HPCZ8_2026-09-29_1.jpg?v=1793078182",
+    "colorSwatches": [
+      "#F7BE44",
+      "#FFFFFF"
+    ],
+    "inStock": true,
+    "occasions": [
+      "Festive Gifting",
+      "Just Because"
+    ],
+    "color": "Yellow"
+  },
+  {
+    "id": "gid://shopify/Product/8456447623231",
+    "shopifyId": "gid://shopify/Product/8456447623231",
+    "variantId": "gid://shopify/ProductVariant/44230800932927",
+    "name": "Double Rose Pot (Pink)",
+    "subtitle": "Handmade Crochet Flower Pot",
+    "category": "Flower Pots",
+    "price": 520,
+    "originalPrice": null,
+    "discount": null,
+    "badge": null,
+    "image": "/products/utility.jpg",
+    "colorSwatches": [
+      "#F7BE44",
+      "#BAE6FD"
+    ],
+    "inStock": false,
+    "occasions": [
+      "Thank You",
+      "Just Because",
+      "Festive Gifting"
+    ],
+    "color": "Yellow"
+  }
+]

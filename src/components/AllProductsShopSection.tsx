@@ -1,0 +1,878 @@
+import React, { useState, useMemo } from 'react';
+import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
+
+interface AllProductsShopSectionProps {
+  onProductClick?: (productId: string) => void;
+  onAddToCart?: (product: ShopProduct) => void;
+}
+
+const CATEGORIES = [
+  { id: 'all', label: 'tinkle flowers' },
+  { id: 'Flowers', label: 'flowers', count: 28 },
+  { id: 'Bouquets', label: 'bouquet', count: 16 },
+  { id: 'Plushies', label: 'plushies', count: 24 },
+  { id: 'Bags', label: 'bags', count: 18 },
+  { id: 'Keychains', label: 'keychains', count: 32 },
+  { id: 'Home Decor', label: 'home decor', count: 14 },
+  { id: 'Flower Pots', label: 'flower pots', count: 11 },
+];
+
+const OCCASIONS = [
+  'Birthdays',
+  'Anniversaries',
+  'Thank You',
+  'Just Because',
+  'Festive Gifting',
+];
+
+const COLOR_SWATCHES = [
+  { name: 'Maroon', hex: '#641623' },
+  { name: 'Yellow', hex: '#F7BE44' },
+  { name: 'Soft Yellow', hex: '#FFF2A3' },
+  { name: 'Pastel Lilac', hex: '#E0BBE4' },
+  { name: 'Sky Blue', hex: '#BAE6FD' },
+  { name: 'White', hex: '#FFFFFF', hasBorder: true },
+];
+
+export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
+  onProductClick,
+  onAddToCart,
+}) => {
+  // Filter States
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [activeCategoryPill, setActiveCategoryPill] = useState<string>('all');
+  const [maxPrice, setMaxPrice] = useState<number>(2999);
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<string>('featured');
+
+  // Accordion Collapse States
+  const [isCategoryOpen, setIsCategoryOpen] = useState(true);
+  const [isPriceOpen, setIsPriceOpen] = useState(true);
+  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(true);
+  const [isColourOpen, setIsColourOpen] = useState(true);
+  const [isOccasionOpen, setIsOccasionOpen] = useState(true);
+
+  // Mobile Filter Drawer State
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  // Wishlist state
+  const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+
+  const toggleWishlist = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleCategoryPillClick = (catId: string) => {
+    setActiveCategoryPill(catId);
+    if (catId === 'all') {
+      setSelectedCategories([]);
+    } else {
+      setSelectedCategories([catId]);
+    }
+  };
+
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+    );
+  };
+
+  const toggleAvailability = (status: string) => {
+    setSelectedAvailability((prev) =>
+      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
+    );
+  };
+
+  const toggleColor = (color: string) => {
+    setSelectedColors((prev) =>
+      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+    );
+  };
+
+  const toggleOccasion = (occ: string) => {
+    setSelectedOccasions((prev) =>
+      prev.includes(occ) ? prev.filter((o) => o !== occ) : [...prev, occ]
+    );
+  };
+
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setActiveCategoryPill('all');
+    setMaxPrice(2999);
+    setSelectedAvailability([]);
+    setSelectedColors([]);
+    setSelectedOccasions([]);
+    setSortBy('featured');
+  };
+
+  // Filter & Sort Logic
+  const filteredProducts = useMemo(() => {
+    let result = [...ALL_PRODUCTS];
+
+    // Category filter
+    if (selectedCategories.length > 0) {
+      result = result.filter((p) => selectedCategories.includes(p.category));
+    }
+
+    // Price filter
+    result = result.filter((p) => p.price <= maxPrice);
+
+    // Availability filter
+    if (selectedAvailability.length > 0) {
+      const wantInStock = selectedAvailability.includes('in-stock');
+      const wantOutOfStock = selectedAvailability.includes('out-of-stock');
+      if (wantInStock && !wantOutOfStock) {
+        result = result.filter((p) => p.inStock);
+      } else if (!wantInStock && wantOutOfStock) {
+        result = result.filter((p) => !p.inStock);
+      }
+    }
+
+    // Color filter
+    if (selectedColors.length > 0) {
+      result = result.filter((p) => selectedColors.includes(p.color));
+    }
+
+    // Occasion filter
+    if (selectedOccasions.length > 0) {
+      result = result.filter((p) =>
+        p.occasions.some((occ) => selectedOccasions.includes(occ))
+      );
+    }
+
+    // Sorting
+    if (sortBy === 'price-low') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => (b.badge === 'NEW' ? 1 : 0) - (a.badge === 'NEW' ? 1 : 0));
+    }
+
+    return result;
+  }, [
+    selectedCategories,
+    maxPrice,
+    selectedAvailability,
+    selectedColors,
+    selectedOccasions,
+    sortBy,
+  ]);
+
+  return (
+    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] py-8 sm:py-12">
+      {/* =========================================================================
+          1. TOP CATEGORY PILLS BAR (Floating White Capsule matching Reference)
+         ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-12">
+        <div className="flex items-center justify-center">
+          <div className="w-full sm:w-auto inline-flex items-center justify-start sm:justify-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-3 sm:px-6 rounded-full bg-white/95 border border-[#641623]/15 shadow-[0_4px_16px_rgba(100,22,35,0.06)]">
+            {CATEGORIES.slice(0, 6).map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => handleCategoryPillClick(cat.id)}
+                className={`px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 lowercase ${
+                  activeCategoryPill === cat.id
+                    ? 'bg-[#641623] text-white shadow-sm'
+                    : 'text-[#641623] hover:bg-[#641623]/5'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+            <button
+              onClick={() => handleCategoryPillClick('Home Decor')}
+              className={`px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-1 lowercase ${
+                activeCategoryPill === 'Home Decor' || activeCategoryPill === 'Flower Pots'
+                  ? 'bg-[#641623] text-white shadow-sm'
+                  : 'text-[#641623] hover:bg-[#641623]/5'
+              }`}
+            >
+              <span>more</span>
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2a3 3 0 0 1 3 3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          2. SECTION TITLE: Dashed Ribbon Line + Cute Flowers + "all products"
+         ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 text-center">
+        {/* Top Dashed Stitch Line with Ribbon Bow */}
+        <div className="relative flex items-center justify-center mb-6 sm:mb-8">
+          <div className="flex-1 border-t-2 border-dashed border-[#641623]/30" />
+          {/* Centered Ribbon Bow SVG */}
+          <div className="px-4 flex items-center justify-center text-[#641623]">
+            <svg
+              className="w-10 h-7 sm:w-12 sm:h-8"
+              viewBox="0 0 64 40"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {/* Left Bow Loop */}
+              <path d="M30 18 C20 6, 8 10, 10 20 C12 28, 26 24, 30 20" />
+              {/* Right Bow Loop */}
+              <path d="M34 18 C44 6, 56 10, 54 20 C52 28, 38 24, 34 20" />
+              {/* Center Knot */}
+              <ellipse cx="32" cy="19" rx="3.5" ry="3.5" fill="currentColor" />
+              {/* Left Ribbon Tail */}
+              <path d="M29 22 C25 28, 20 34, 18 36" />
+              {/* Right Ribbon Tail */}
+              <path d="M35 22 C39 28, 44 34, 46 36" />
+            </svg>
+          </div>
+          <div className="flex-1 border-t-2 border-dashed border-[#641623]/30" />
+        </div>
+
+        {/* Heading Row with Smiling Flowers on Sides & Sparks */}
+        <div className="relative inline-flex items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto">
+          {/* Left Smiling Flower Doodle (Desktop only) */}
+          <div className="hidden sm:flex items-center justify-center text-[#F7BE44]">
+            <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 48 48" fill="none">
+              {/* 5 Petals */}
+              <circle cx="24" cy="9" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="38" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="33" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="15" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="10" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              {/* Flower Center with Smiling Face */}
+              <circle cx="24" cy="24" r="8" fill="#F7BE44" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="21" cy="23" r="1.2" fill="#641623" />
+              <circle cx="27" cy="23" r="1.2" fill="#641623" />
+              <path d="M22 26 Q24 28 26 26" stroke="#641623" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Heading with Radiating Rays */}
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2 sm:gap-4">
+            {/* Left Rays */}
+            <div className="hidden sm:flex flex-col gap-1 text-[#641623]">
+              <span className="w-3 h-0.5 bg-[#641623] rotate-[-25deg] rounded-full" />
+              <span className="w-4 h-0.5 bg-[#641623] rounded-full" />
+              <span className="w-3 h-0.5 bg-[#641623] rotate-[25deg] rounded-full" />
+            </div>
+
+            {/* Desktop / Mobile Title */}
+            <div className="w-full sm:w-auto text-left sm:text-center flex sm:block items-center justify-between">
+              <div>
+                <h2 className="hidden sm:block text-3xl sm:text-4xl md:text-5xl font-bold text-[#641623] tracking-tight lowercase">
+                  all products
+                </h2>
+                <h2 className="sm:hidden text-2xl font-bold text-[#641623] tracking-tight">
+                  Shop all products
+                </h2>
+                <p className="sm:hidden text-xs text-[#2D2424]/70 font-normal mt-0.5">
+                  Explore all the little things, handmade with love.
+                </p>
+              </div>
+
+              {/* Mobile Filter Button */}
+              <button
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="sm:hidden flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#641623] bg-white text-[#641623] text-xs font-semibold shadow-xs active:scale-95 transition-all ml-2 flex-shrink-0"
+              >
+                <span>Filter</span>
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="4" y1="17" x2="20" y2="17" />
+                  <circle cx="8" cy="7" r="2.5" fill="white" stroke="#641623" strokeWidth="2" />
+                  <circle cx="16" cy="17" r="2.5" fill="white" stroke="#641623" strokeWidth="2" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Right Rays */}
+            <div className="hidden sm:flex flex-col gap-1 text-[#641623]">
+              <span className="w-3 h-0.5 bg-[#641623] rotate-[25deg] rounded-full" />
+              <span className="w-4 h-0.5 bg-[#641623] rounded-full" />
+              <span className="w-3 h-0.5 bg-[#641623] rotate-[-25deg] rounded-full" />
+            </div>
+          </div>
+
+          {/* Right Smiling Flower Doodle (Desktop only) */}
+          <div className="hidden sm:flex items-center justify-center text-[#F7BE44]">
+            <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="9" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="38" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="33" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="15" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="10" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="24" cy="24" r="8" fill="#F7BE44" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="21" cy="23" r="1.2" fill="#641623" />
+              <circle cx="27" cy="23" r="1.2" fill="#641623" />
+              <path d="M22 26 Q24 28 26 26" stroke="#641623" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Desktop Subtitle */}
+        <p className="hidden sm:block text-base sm:text-lg text-[#2D2424]/75 font-normal mt-2 lowercase">
+          explore our complete collection of handmade crochet goodies.
+        </p>
+
+        {/* Mobile Scalloped Wave Divider under Title */}
+        <div className="sm:hidden mt-3 mb-1">
+          <svg viewBox="0 0 340 12" fill="none" className="w-full h-2.5 text-[#F7BE44]/70">
+            <path
+              d="M 0,6 Q 15,1 30,6 Q 45,11 60,6 Q 75,1 90,6 Q 105,11 120,6 Q 135,1 150,6 Q 165,11 180,6 Q 195,1 210,6 Q 225,11 240,6 Q 255,1 270,6 Q 285,11 300,6 Q 315,1 330,6 Q 345,11 360,6"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          3. MAIN LAYOUT: Left Filters Sidebar (Desktop) + Right Products Grid
+         ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row items-start gap-8">
+          {/* =====================================================================
+              A. LEFT FILTERS SIDEBAR (DESKTOP VIEW)
+             ===================================================================== */}
+          <aside className="hidden md:block w-64 lg:w-72 flex-shrink-0">
+            {/* Sidebar Title: "filters" with Slider Icon */}
+            <div className="flex items-center justify-between mb-3 text-[#641623]">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold lowercase tracking-tight">filters</span>
+                <svg className="w-4 h-4 text-[#641623]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="4" y1="18" x2="20" y2="18" />
+                  <circle cx="8" cy="6" r="2.5" fill="white" stroke="#641623" strokeWidth="2" />
+                  <circle cx="16" cy="18" r="2.5" fill="white" stroke="#641623" strokeWidth="2" />
+                </svg>
+              </div>
+
+              {(selectedCategories.length > 0 ||
+                maxPrice < 2999 ||
+                selectedAvailability.length > 0 ||
+                selectedColors.length > 0 ||
+                selectedOccasions.length > 0) && (
+                <button
+                  onClick={clearAllFilters}
+                  className="text-xs text-[#641623]/70 hover:text-[#641623] underline"
+                >
+                  clear all
+                </button>
+              )}
+            </div>
+
+            {/* Filter Accordion Box */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-[#641623]/15 p-4 sm:p-5 shadow-xs space-y-5 text-left">
+              {/* 1. Category Filter */}
+              <div className="border-b border-[#641623]/10 pb-4">
+                <button
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                >
+                  <span>category</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isCategoryOpen ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isCategoryOpen && (
+                  <div className="mt-3 space-y-2 text-sm text-[#2D2424]/80">
+                    {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
+                      <label
+                        key={cat.id}
+                        className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623] transition-colors"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(cat.id)}
+                          onChange={() => toggleCategory(cat.id)}
+                          className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                        />
+                        <span>{cat.label}</span>
+                        <span className="text-[#2D2424]/40 text-xs">({cat.count})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Price Filter */}
+              <div className="border-b border-[#641623]/10 pb-4">
+                <button
+                  onClick={() => setIsPriceOpen(!isPriceOpen)}
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                >
+                  <span>price</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isPriceOpen ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isPriceOpen && (
+                  <div className="mt-3">
+                    <input
+                      type="range"
+                      min={399}
+                      max={2999}
+                      step={50}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(Number(e.target.value))}
+                      className="w-full accent-[#641623] cursor-pointer"
+                    />
+                    <div className="flex items-center justify-between text-xs text-[#641623] font-semibold mt-1">
+                      <span>₹399</span>
+                      <span>₹{maxPrice.toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Availability Filter */}
+              <div className="border-b border-[#641623]/10 pb-4">
+                <button
+                  onClick={() => setIsAvailabilityOpen(!isAvailabilityOpen)}
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                >
+                  <span>availability</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isAvailabilityOpen ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isAvailabilityOpen && (
+                  <div className="mt-3 space-y-2 text-sm text-[#2D2424]/80">
+                    <label className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623]">
+                      <input
+                        type="checkbox"
+                        checked={selectedAvailability.includes('in-stock')}
+                        onChange={() => toggleAvailability('in-stock')}
+                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                      />
+                      <span>In stock</span>
+                      <span className="text-[#2D2424]/40 text-xs">(136)</span>
+                    </label>
+                    <label className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623]">
+                      <input
+                        type="checkbox"
+                        checked={selectedAvailability.includes('out-of-stock')}
+                        onChange={() => toggleAvailability('out-of-stock')}
+                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                      />
+                      <span>Out of stock</span>
+                      <span className="text-[#2D2424]/40 text-xs">(7)</span>
+                    </label>
+                  </div>
+                )}
+              </div>
+
+              {/* 4. Colour Filter */}
+              <div className="border-b border-[#641623]/10 pb-4">
+                <button
+                  onClick={() => setIsColourOpen(!isColourOpen)}
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                >
+                  <span>colour</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isColourOpen ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isColourOpen && (
+                  <div className="mt-3 flex items-center gap-2.5 flex-wrap">
+                    {COLOR_SWATCHES.map((swatch) => {
+                      const isSelected = selectedColors.includes(swatch.name);
+                      return (
+                        <button
+                          key={swatch.name}
+                          onClick={() => toggleColor(swatch.name)}
+                          type="button"
+                          aria-label={swatch.name}
+                          className={`w-6 h-6 rounded-full transition-transform duration-150 hover:scale-110 relative ${
+                            swatch.hasBorder ? 'border border-[#641623]/25' : ''
+                          } ${isSelected ? 'ring-2 ring-[#641623] ring-offset-1 scale-110' : ''}`}
+                          style={{ backgroundColor: swatch.hex }}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* 5. Occasion Filter */}
+              <div>
+                <button
+                  onClick={() => setIsOccasionOpen(!isOccasionOpen)}
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                >
+                  <span>occasion</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isOccasionOpen ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isOccasionOpen && (
+                  <div className="mt-3 space-y-2 text-sm text-[#2D2424]/80">
+                    {OCCASIONS.map((occ) => (
+                      <label
+                        key={occ}
+                        className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623]"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedOccasions.includes(occ)}
+                          onChange={() => toggleOccasion(occ)}
+                          className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                        />
+                        <span>{occ}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </aside>
+
+          {/* =====================================================================
+              B. RIGHT PRODUCTS GRID (DESKTOP & MOBILE VIEWS)
+             ===================================================================== */}
+          <main className="flex-1 w-full">
+            {/* Top Bar: Count & Sort Pill */}
+            <div className="flex items-center justify-between mb-5 sm:mb-6">
+              {/* Product Count (Desktop & Mobile) */}
+              <p className="text-base sm:text-lg font-bold text-[#641623]">
+                {filteredProducts.length} products
+              </p>
+
+              {/* Sort By Dropdown Pill */}
+              <div className="flex items-center gap-2">
+                <span className="hidden sm:inline text-sm text-[#2D2424]/70">Sort by:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="rounded-full border border-[#641623]/25 bg-white px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-[#641623] focus:outline-none focus:ring-1 focus:ring-[#641623] cursor-pointer shadow-2xs"
+                >
+                  <option value="featured">Featured</option>
+                  <option value="best-selling">Best Selling</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="newest">Newest</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Product Cards Grid: 3 cols on Desktop, 2 cols on Mobile */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-5 lg:gap-6">
+              {filteredProducts.map((product) => {
+                const isLiked = wishlist[product.id] ?? false;
+
+                return (
+                  <div
+                    key={product.id}
+                    onClick={() => onProductClick?.(product.id)}
+                    className="group relative rounded-[20px] bg-[#FFFBF7] border border-[#641623]/10 shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
+                  >
+                    {/* Top Image Container */}
+                    <div className="relative aspect-square w-full overflow-hidden bg-[#FAF2E8]/60">
+                      {/* Scalloped Yellow Discount / NEW Badge */}
+                      {product.badge && (
+                        <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
+                          <div className="relative inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#FFE485] border border-dashed border-[#B45309] text-[#78350F] text-[10px] sm:text-xs font-bold shadow-xs">
+                            <span className="tracking-tight">{product.badge}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Top Right Circular Wishlist Heart Button */}
+                      <button
+                        onClick={(e) => toggleWishlist(product.id, e)}
+                        type="button"
+                        aria-label="Add to wishlist"
+                        className="absolute top-2.5 right-2.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#641623]/10 text-[#641623] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xs"
+                      >
+                        {isLiked ? (
+                          // Solid Filled Heart
+                          <svg className="w-4 h-4 text-[#641623]" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                          </svg>
+                        ) : (
+                          // Outline Heart
+                          <svg
+                            className="w-4 h-4 text-[#641623]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          </svg>
+                        )}
+                      </button>
+
+                      {/* Product Image */}
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+
+                    {/* Bottom Details Container */}
+                    <div className="p-3 sm:p-4 text-left flex flex-col justify-between flex-1">
+                      <div>
+                        {/* Title */}
+                        <h3 className="text-sm sm:text-base font-bold text-[#2D2424] group-hover:text-[#641623] transition-colors line-clamp-1">
+                          {product.name}
+                        </h3>
+
+                        {/* Subtitle / Type */}
+                        <p className="text-[11px] sm:text-xs text-[#641623]/70 font-normal mt-0.5 line-clamp-1">
+                          {product.subtitle}
+                        </p>
+
+                        {/* Color Swatch Dots */}
+                        <div className="flex items-center gap-1.5 my-2">
+                          {product.colorSwatches.map((color, idx) => (
+                            <span
+                              key={idx}
+                              className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/15 shadow-2xs"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Price Row */}
+                      <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap pt-1">
+                        <span className="text-sm sm:text-base font-bold text-[#641623]">
+                          ₹{product.price.toLocaleString('en-IN')}
+                        </span>
+
+                        {product.originalPrice && (
+                          <span className="text-[11px] sm:text-xs text-[#2D2424]/45 line-through">
+                            ₹{product.originalPrice.toLocaleString('en-IN')}
+                          </span>
+                        )}
+
+                        {product.discount && (
+                          <span className="text-[10px] sm:text-xs font-semibold text-[#2E7D32]">
+                            {product.discount}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          4. MOBILE FILTER BOTTOM DRAWER (Triggered by "Filter ⊶" on Mobile)
+         ========================================================================= */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileFilterOpen(false)}
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+          />
+
+          {/* Bottom Sheet Drawer */}
+          <div className="relative w-full sm:max-w-md bg-[#FAF4ED] rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] overflow-y-auto z-10 shadow-2xl text-left border border-[#641623]/20">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#641623]/15">
+              <span className="text-xl font-bold text-[#641623] lowercase">filters</span>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623]"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Filter Content */}
+            <div className="py-4 space-y-4">
+              {/* Category */}
+              <div>
+                <p className="text-sm font-bold text-[#641623] lowercase mb-2">category</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
+                    <label
+                      key={cat.id}
+                      className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(cat.id)}
+                        onChange={() => toggleCategory(cat.id)}
+                        className="rounded text-[#641623]"
+                      />
+                      <span>{cat.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price */}
+              <div>
+                <p className="text-sm font-bold text-[#641623] lowercase mb-1">
+                  max price: ₹{maxPrice.toLocaleString('en-IN')}
+                </p>
+                <input
+                  type="range"
+                  min={399}
+                  max={2999}
+                  step={50}
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
+                  className="w-full accent-[#641623]"
+                />
+              </div>
+
+              {/* Availability */}
+              <div>
+                <p className="text-sm font-bold text-[#641623] lowercase mb-2">availability</p>
+                <div className="flex items-center gap-3 text-xs">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedAvailability.includes('in-stock')}
+                      onChange={() => toggleAvailability('in-stock')}
+                      className="rounded text-[#641623]"
+                    />
+                    <span>In stock (136)</span>
+                  </label>
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedAvailability.includes('out-of-stock')}
+                      onChange={() => toggleAvailability('out-of-stock')}
+                      className="rounded text-[#641623]"
+                    />
+                    <span>Out of stock (7)</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Colour */}
+              <div>
+                <p className="text-sm font-bold text-[#641623] lowercase mb-2">colour</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {COLOR_SWATCHES.map((swatch) => (
+                    <button
+                      key={swatch.name}
+                      onClick={() => toggleColor(swatch.name)}
+                      className={`w-7 h-7 rounded-full border ${
+                        selectedColors.includes(swatch.name) ? 'ring-2 ring-[#641623]' : ''
+                      }`}
+                      style={{ backgroundColor: swatch.hex }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="pt-3 border-t border-[#641623]/15 flex items-center gap-3">
+              <button
+                onClick={clearAllFilters}
+                className="flex-1 py-2.5 rounded-full border border-[#641623] text-[#641623] font-semibold text-xs"
+              >
+                Clear all
+              </button>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="flex-2 py-2.5 rounded-full bg-[#641623] text-white font-semibold text-xs shadow-md"
+              >
+                Apply ({filteredProducts.length} items)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          5. BOTTOM RIBBON BOW DIVIDER (matching Reference)
+         ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+        <div className="relative flex items-center justify-center">
+          <div className="flex-1 border-t-2 border-dashed border-[#641623]/30" />
+          <div className="px-4 flex items-center justify-center text-[#641623]">
+            <svg
+              className="w-10 h-7 sm:w-12 sm:h-8"
+              viewBox="0 0 64 40"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M30 18 C20 6, 8 10, 10 20 C12 28, 26 24, 30 20" />
+              <path d="M34 18 C44 6, 56 10, 54 20 C52 28, 38 24, 34 20" />
+              <ellipse cx="32" cy="19" rx="3.5" ry="3.5" fill="currentColor" />
+              <path d="M29 22 C25 28, 20 34, 18 36" />
+              <path d="M35 22 C39 28, 44 34, 46 36" />
+            </svg>
+          </div>
+          <div className="flex-1 border-t-2 border-dashed border-[#641623]/30" />
+        </div>
+      </div>
+    </section>
+  );
+};
