@@ -4,24 +4,30 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
+  currentPage?: 'home' | 'shop';
+  activeCategory?: string;
+  onNavigate?: (page: 'home' | 'shop', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onSearchClick,
   onCartClick,
   cartCount = 0,
+  currentPage = 'home',
+  activeCategory = 'all',
+  onNavigate,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string>('bouquet');
 
   const categories = [
-    { id: 'tinkle-flowers', label: 'tinkle flowers' },
-    { id: 'flowers', label: 'flowers' },
-    { id: 'bouquet', label: 'bouquet' },
-    { id: 'plushies', label: 'plushies' },
-    { id: 'bags', label: 'bags' },
-    { id: 'keychains', label: 'keychains' },
-    { id: 'more', label: 'more', hasIcon: true },
+    { id: 'all', label: 'all products', category: 'all' },
+    { id: 'flowers', label: 'flowers', category: 'Flowers' },
+    { id: 'bouquets', label: 'bouquets', category: 'Bouquets' },
+    { id: 'plushies', label: 'plushies', category: 'Plushies' },
+    { id: 'bags', label: 'bags', category: 'Bags' },
+    { id: 'keychains', label: 'keychains', category: 'Keychains' },
+    { id: 'flower-pots', label: 'flower pots', category: 'Flower Pots' },
+    { id: 'more', label: 'more', hasIcon: true, category: 'Home Decor' },
   ];
 
   return (
@@ -52,7 +58,14 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Center: Brand Logo + Subtitle */}
         <div className="flex flex-col items-center justify-center text-center px-2">
-          <a href="/" className="inline-block transition-transform hover:scale-[1.02]">
+          <a
+            href="#/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate?.('home');
+            }}
+            className="inline-block transition-transform hover:scale-[1.02] cursor-pointer"
+          >
             <img
               src="/logo-knotsnco.png"
               alt="knotsnco."
@@ -146,21 +159,28 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="w-full relative z-20 -mb-4 px-4 flex justify-center">
         <div className="inline-flex items-center gap-1 sm:gap-2 bg-[#FFFDF6] border border-[#EFE4D6] rounded-full px-4 sm:px-6 py-1 sm:py-1.5 shadow-[0_4px_16px_rgba(100,22,35,0.08)] overflow-x-auto no-scrollbar max-w-full">
           {categories.map((cat) => {
-            const isActive = activeCategory === cat.id;
+            const isActive =
+              currentPage === 'shop' &&
+              (activeCategory === cat.category ||
+                activeCategory === cat.id ||
+                (cat.id === 'all' && (!activeCategory || activeCategory === 'all')));
+
             return (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs sm:text-sm font-['Fredoka'] font-semibold lowercase transition-all whitespace-nowrap ${
+                onClick={() => {
+                  onNavigate?.('shop', cat.category || cat.id);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs sm:text-sm font-['Fredoka'] font-semibold lowercase transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? 'text-[#641623] bg-[#641623]/10 scale-105'
-                    : 'text-[#641623] hover:bg-[#641623]/5 hover:scale-[1.02]'
+                    ? 'text-white bg-[#641623] shadow-xs scale-105'
+                    : 'text-[#641623] hover:bg-[#641623]/10 hover:scale-[1.02]'
                 }`}
               >
                 <span>{cat.label}</span>
                 {cat.hasIcon && (
                   <svg
-                    className="w-3.5 h-3.5 text-[#641623] fill-current"
+                    className={`w-3.5 h-3.5 fill-current ${isActive ? 'text-white' : 'text-[#641623]'}`}
                     viewBox="0 0 24 24"
                   >
                     <path
@@ -188,14 +208,24 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Drawer Content */}
           <div className="relative w-4/5 max-w-sm bg-[#FFFDF8] h-full shadow-2xl flex flex-col p-6 z-10 border-r border-[#EFE4D6]">
             <div className="flex items-center justify-between pb-4 border-b border-[#EFE4D6]">
-              <img
-                src="/logo-knotsnco.png"
-                alt="knotsnco."
-                className="h-9 w-auto"
-              />
+              <a
+                href="#/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate?.('home');
+                  setMobileMenuOpen(false);
+                }}
+                className="cursor-pointer"
+              >
+                <img
+                  src="/logo-knotsnco.png"
+                  alt="knotsnco."
+                  className="h-9 w-auto"
+                />
+              </a>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1.5 text-[#641623] hover:opacity-70"
+                className="p-1.5 text-[#641623] hover:opacity-70 cursor-pointer"
                 aria-label="Close menu"
               >
                 <svg
@@ -211,20 +241,78 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
-            <nav className="flex-1 py-6 space-y-2 overflow-y-auto">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base text-[#641623] hover:bg-[#641623]/10 transition-colors flex items-center justify-between"
-                >
-                  <span>{cat.label}</span>
-                  <span className="text-xs text-[#641623]/50">→</span>
-                </button>
-              ))}
+            <nav className="flex-1 py-4 space-y-1.5 overflow-y-auto">
+              {/* Home Navigation Button */}
+              <button
+                onClick={() => {
+                  onNavigate?.('home');
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-colors flex items-center justify-between cursor-pointer ${
+                  currentPage === 'home'
+                    ? 'bg-[#641623] text-white shadow-sm'
+                    : 'text-[#641623] hover:bg-[#641623]/10'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                  <span>home</span>
+                </span>
+                <span className="text-xs opacity-70">→</span>
+              </button>
+
+              {/* Shop All Products Navigation Button */}
+              <button
+                onClick={() => {
+                  onNavigate?.('shop', 'all');
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-colors flex items-center justify-between cursor-pointer ${
+                  currentPage === 'shop' && (!activeCategory || activeCategory === 'all')
+                    ? 'bg-[#641623] text-white shadow-sm'
+                    : 'text-[#641623] hover:bg-[#641623]/10'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                  </svg>
+                  <span>shop all products</span>
+                </span>
+                <span className="text-xs opacity-70">→</span>
+              </button>
+
+              <div className="pt-3 pb-1 px-4 text-xs font-bold text-[#641623]/60 tracking-wider uppercase">
+                categories
+              </div>
+
+              {categories.filter((c) => c.id !== 'all').map((cat) => {
+                const isCatActive =
+                  currentPage === 'shop' &&
+                  (activeCategory === cat.category || activeCategory === cat.id);
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      onNavigate?.('shop', cat.category || cat.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2.5 rounded-xl font-['Fredoka'] font-medium text-sm transition-colors flex items-center justify-between cursor-pointer ${
+                      isCatActive
+                        ? 'bg-[#641623]/15 text-[#641623] font-bold'
+                        : 'text-[#641623] hover:bg-[#641623]/10'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                    <span className="text-xs text-[#641623]/40">→</span>
+                  </button>
+                );
+              })}
             </nav>
 
             <div className="pt-4 border-t border-[#EFE4D6] space-y-2 text-center text-xs text-[#641623]/70 font-['Fredoka']">

@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
 
 interface AllProductsShopSectionProps {
+  initialCategory?: string;
   onProductClick?: (productId: string) => void;
   onAddToCart?: (product: ShopProduct) => void;
+  onNavigateHome?: () => void;
 }
 
 const CATEGORIES = [
@@ -35,17 +37,32 @@ const COLOR_SWATCHES = [
 ];
 
 export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
+  initialCategory = 'all',
   onProductClick,
   onAddToCart,
+  onNavigateHome,
 }) => {
   // Filter States
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [activeCategoryPill, setActiveCategoryPill] = useState<string>('all');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    return initialCategory && initialCategory !== 'all' ? [initialCategory] : [];
+  });
+  const [activeCategoryPill, setActiveCategoryPill] = useState<string>(initialCategory || 'all');
   const [maxPrice, setMaxPrice] = useState<number>(2999);
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('featured');
+
+  // Sync when initialCategory prop changes from outside (e.g. navbar click)
+  useEffect(() => {
+    if (initialCategory && initialCategory !== 'all') {
+      setSelectedCategories([initialCategory]);
+      setActiveCategoryPill(initialCategory);
+    } else {
+      setSelectedCategories([]);
+      setActiveCategoryPill('all');
+    }
+  }, [initialCategory]);
 
   // Accordion Collapse States
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
@@ -163,41 +180,41 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   ]);
 
   return (
-    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] py-8 sm:py-12">
+    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
       {/* =========================================================================
-          1. TOP CATEGORY PILLS BAR (Floating White Capsule matching Reference)
+          1. BREADCRUMB NAVIGATION ("home / shop all products")
          ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-12">
-        <div className="flex items-center justify-center">
-          <div className="w-full sm:w-auto inline-flex items-center justify-start sm:justify-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-3 sm:px-6 rounded-full bg-white/95 border border-[#641623]/15 shadow-[0_4px_16px_rgba(100,22,35,0.06)]">
-            {CATEGORIES.slice(0, 6).map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryPillClick(cat.id)}
-                className={`px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 lowercase ${
-                  activeCategoryPill === cat.id
-                    ? 'bg-[#641623] text-white shadow-sm'
-                    : 'text-[#641623] hover:bg-[#641623]/5'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-            <button
-              onClick={() => handleCategoryPillClick('Home Decor')}
-              className={`px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-1 lowercase ${
-                activeCategoryPill === 'Home Decor' || activeCategoryPill === 'Flower Pots'
-                  ? 'bg-[#641623] text-white shadow-sm'
-                  : 'text-[#641623] hover:bg-[#641623]/5'
-              }`}
-            >
-              <span>more</span>
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2a3 3 0 0 1 3 3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3z" />
-              </svg>
-            </button>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
+        <nav className="flex items-center gap-2 text-xs sm:text-sm text-[#641623]/70 font-medium">
+          <button
+            onClick={onNavigateHome}
+            className="hover:text-[#641623] hover:underline transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            </svg>
+            <span>home</span>
+          </button>
+          <span className="text-[#641623]/40">/</span>
+          <button
+            onClick={clearAllFilters}
+            className={`cursor-pointer transition-colors ${
+              selectedCategories.length === 0
+                ? "text-[#641623] font-bold"
+                : "hover:text-[#641623] hover:underline"
+            }`}
+          >
+            shop all products
+          </button>
+          {selectedCategories.length === 1 && (
+            <>
+              <span className="text-[#641623]/40">/</span>
+              <span className="text-[#641623] font-bold lowercase">
+                {selectedCategories[0]}
+              </span>
+            </>
+          )}
+        </nav>
       </div>
 
       {/* =========================================================================

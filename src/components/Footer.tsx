@@ -41,7 +41,11 @@ const FOOTER_SCALLOP_WAVE =
   'Q 1125,4 1170,32 Q 1215,4 1260,32 Q 1305,4 1350,32 Q 1395,4 1440,32 ' +
   'L 1440,60 Z';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onNavigate?: (page: 'home' | 'shop', category?: string) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -172,7 +176,14 @@ export const Footer: React.FC = () => {
             {/* Column 1: Brand Info (Spans 4 columns on desktop with vertical divider) */}
             <div className="lg:col-span-4 flex flex-col items-start text-left lg:border-r lg:border-white/20 lg:pr-10">
               {/* Wordmark Logo in White (Exact same custom font as 2nd photo logo) */}
-              <a href="#" className="inline-block transition-opacity duration-200 hover:opacity-90">
+              <a
+                href="#/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate?.('home');
+                }}
+                className="inline-block transition-opacity duration-200 hover:opacity-90 cursor-pointer"
+              >
                 <img
                   src="/logo-knotsnco-white.png"
                   alt="knotsnco."
@@ -288,39 +299,60 @@ export const Footer: React.FC = () => {
                 </h4>
                 <ul className="space-y-2 text-sm sm:text-base text-white/80 lowercase">
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'all')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       all products
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Flowers')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       flowers
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Flower Pots')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       flower pots
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Plushies')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       plushies
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Bags')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       bags
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Keychains')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       keychains & charms
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#bestsellers" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('shop', 'Home Decor')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer"
+                    >
                       home decor
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </div>

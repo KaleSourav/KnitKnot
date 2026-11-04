@@ -19,3 +19,4 @@ export interface ShopProduct {
 }
 
 export const ALL_PRODUCTS: ShopProduct[] = allProductsRaw as ShopProduct[];
+
