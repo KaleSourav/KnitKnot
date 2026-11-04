@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface CategoryItem {
   id: string;
@@ -181,6 +181,19 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeDot, setActiveDot] = useState<number>(0);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll > 0) {
+        const progress = scrollLeft / maxScroll;
+        setActiveDot(Math.min(Math.max(0, Math.round(progress * 2)), 2));
+      }
+    }
+  };
 
   return (
     <div className="w-full relative mt-3 sm:mt-5">
@@ -260,8 +273,12 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
             />
           </div>
 
-          {/* 2 On Mobile, 3 On Desktop Grid (Harmonious compact scale matching the reference) */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-7">
+          {/* Mobile Horizontal Carousel (< lg) & Desktop 3x2 Grid (>= lg) */}
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-7 overflow-x-auto lg:overflow-visible pb-3 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
+          >
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
 
@@ -272,7 +289,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
-                  className="group cursor-pointer flex flex-col items-center w-full"
+                  className="group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center"
                 >
                   {/* 1. Perfect Square Aspect Ratio Image Box with Crisp Maroon Border & Hover Crossfade */}
                   <div className="relative w-full aspect-square rounded-[18px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)] transition-all duration-300 group-hover:-translate-y-1">
@@ -348,6 +365,31 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 </div>
               );
             })}
+          </div>
+
+          {/* Mobile Pagination Indicator Dots */}
+          <div className="flex lg:hidden items-center justify-center gap-2 mt-3">
+            {[0, 1, 2].map((idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  if (scrollRef.current) {
+                    const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+                    scrollRef.current.scrollTo({
+                      left: (maxScroll / 2) * idx,
+                      behavior: 'smooth',
+                    });
+                  }
+                  setActiveDot(idx);
+                }}
+                className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                  activeDot === idx
+                    ? 'bg-[#641623] scale-110'
+                    : 'border-2 border-[#641623]/40 bg-transparent'
+                }`}
+                aria-label={`Slide ${idx + 1}`}
+              />
+            ))}
           </div>
 
           {/* Bottom Call to Action: Shop All Collections & Cute Mascot Doodle */}
