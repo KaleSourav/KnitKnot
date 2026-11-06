@@ -229,7 +229,7 @@ export async function fetchShopifyProducts(): Promise<{ products: Product[]; isL
           rawCategory: node.productType,
           group: getCategoryGroup(node.productType),
           price,
-          originalPrice: originalPrice > price ? originalPrice : undefined,
+          originalPrice: originalPrice && originalPrice > price ? originalPrice : undefined,
           image: mainImage,
           images,
           rating: Number((4.7 + ((index * 13) % 4) * 0.1).toFixed(1)),

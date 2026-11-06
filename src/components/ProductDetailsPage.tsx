@@ -24,9 +24,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     if (rawTarget) {
       const found = ALL_PRODUCTS.find((p) => {
         if (p.id === rawTarget || p.shopifyId === rawTarget) return true;
-        if (p.handle === rawTarget || p.handle.toLowerCase() === rawTarget.toLowerCase()) return true;
+        if (p.handle && (p.handle === rawTarget || p.handle.toLowerCase() === rawTarget.toLowerCase())) return true;
         // Handle suffix matching (e.g. 'bouquet-full-of-sunshine' matching 'flowers-bouquet-full-of-sunshine')
-        if (p.handle.endsWith(rawTarget) || rawTarget.endsWith(p.handle)) return true;
+        if (p.handle && (p.handle.endsWith(rawTarget) || rawTarget.endsWith(p.handle))) return true;
         if (p.name.toLowerCase() === rawTarget.toLowerCase()) return true;
         return false;
       });
@@ -35,8 +35,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
     if (rawHandle) {
       const found = ALL_PRODUCTS.find((p) => {
-        if (p.handle === rawHandle || p.handle.toLowerCase() === rawHandle.toLowerCase()) return true;
-        if (p.handle.endsWith(rawHandle) || rawHandle.endsWith(p.handle)) return true;
+        if (p.handle && (p.handle === rawHandle || p.handle.toLowerCase() === rawHandle.toLowerCase())) return true;
+        if (p.handle && (p.handle.endsWith(rawHandle) || rawHandle.endsWith(p.handle))) return true;
         return false;
       });
       if (found) return found;

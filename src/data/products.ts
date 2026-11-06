@@ -15,12 +15,12 @@ export interface Product {
   rawCategory?: string;
   group?: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   image: string;
   images?: string[];
   rating: number;
   reviewsCount: number;
-  badge?: string;
+  badge?: string | null;
   description: string;
   details: string[];
   inStock: boolean;
