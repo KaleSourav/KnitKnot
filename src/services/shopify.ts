@@ -199,12 +199,13 @@ export async function fetchShopifyProducts(): Promise<{ products: Product[]; isL
       const liveProducts: Product[] = allNodes.map((node, index) => {
         const firstVariant = node.variants.edges[0]?.node;
         const imageUrls = node.images.edges.map((e) => e.node.url).filter(Boolean);
-        const mainImage = imageUrls[0] || getImageForProduct(node.productType, node.title);
-        const images = imageUrls.length > 0 ? imageUrls : [mainImage, getImageForProduct(node.productType, node.title)];
+        // ONLY use images that are in Shopify. If no image in Shopify, leave it blank ('')
+        const mainImage = imageUrls[0] || '';
+        const images = imageUrls;
         const price = firstVariant ? parseFloat(firstVariant.price.amount) : 499;
         const originalPrice = firstVariant?.compareAtPrice
           ? parseFloat(firstVariant.compareAtPrice.amount)
-          : Math.round(price * 1.25);
+          : undefined;
 
         let badge: string | undefined = undefined;
         if (index % 11 === 0) badge = 'Artisan Pick';

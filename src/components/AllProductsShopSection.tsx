@@ -10,13 +10,14 @@ interface AllProductsShopSectionProps {
 
 const CATEGORIES = [
   { id: 'all', label: 'tinkle flowers' },
-  { id: 'Flowers', label: 'flowers', count: 28 },
-  { id: 'Bouquets', label: 'bouquet', count: 16 },
-  { id: 'Plushies', label: 'plushies', count: 24 },
-  { id: 'Bags', label: 'bags', count: 18 },
-  { id: 'Keychains', label: 'keychains', count: 32 },
-  { id: 'Home Decor', label: 'home decor', count: 14 },
-  { id: 'Flower Pots', label: 'flower pots', count: 11 },
+  { id: 'Flowers', label: 'flowers' },
+  { id: 'Bouquets', label: 'bouquet' },
+  { id: 'Plushies', label: 'plushies' },
+  { id: 'Bags', label: 'bags' },
+  { id: 'Keychains', label: 'keychains' },
+  { id: 'Flower Pots', label: 'flower pots' },
+  { id: 'Home Decor', label: 'home decor' },
+  { id: 'Accessories', label: 'accessories' },
 ];
 
 const OCCASIONS = [
@@ -47,11 +48,26 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
     return initialCategory && initialCategory !== 'all' ? [initialCategory] : [];
   });
   const [activeCategoryPill, setActiveCategoryPill] = useState<string>(initialCategory || 'all');
-  const [maxPrice, setMaxPrice] = useState<number>(2999);
+  const [maxPrice, setMaxPrice] = useState<number>(5000);
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('featured');
+
+  // Dynamic counts derived from real Shopify products
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of ALL_PRODUCTS) {
+      counts[p.category] = (counts[p.category] || 0) + 1;
+      if (p.rawCategory && p.rawCategory !== p.category) {
+        counts[p.rawCategory] = (counts[p.rawCategory] || 0) + 1;
+      }
+    }
+    return counts;
+  }, []);
+
+  const inStockCount = useMemo(() => ALL_PRODUCTS.filter((p) => p.inStock).length, []);
+  const outOfStockCount = useMemo(() => ALL_PRODUCTS.filter((p) => !p.inStock).length, []);
 
   // Sync when initialCategory prop changes from outside (e.g. navbar click)
   useEffect(() => {
@@ -118,7 +134,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const clearAllFilters = () => {
     setSelectedCategories([]);
     setActiveCategoryPill('all');
-    setMaxPrice(2999);
+    setMaxPrice(5000);
     setSelectedAvailability([]);
     setSelectedColors([]);
     setSelectedOccasions([]);
@@ -129,9 +145,13 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const filteredProducts = useMemo(() => {
     let result = [...ALL_PRODUCTS];
 
-    // Category filter
+    // Category filter (matches high-level or raw Shopify category)
     if (selectedCategories.length > 0) {
-      result = result.filter((p) => selectedCategories.includes(p.category));
+      result = result.filter(
+        (p) =>
+          selectedCategories.includes(p.category) ||
+          (p.rawCategory && selectedCategories.includes(p.rawCategory))
+      );
     }
 
     // Price filter
@@ -421,7 +441,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                           className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
                         />
                         <span>{cat.label}</span>
-                        <span className="text-[#2D2424]/40 text-xs">({cat.count})</span>
+                        <span className="text-[#2D2424]/40 text-xs">({categoryCounts[cat.id] || 0})</span>
                       </label>
                     ))}
                   </div>
@@ -453,15 +473,15 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                   <div className="mt-3">
                     <input
                       type="range"
-                      min={399}
-                      max={2999}
+                      min={50}
+                      max={5000}
                       step={50}
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(Number(e.target.value))}
                       className="w-full accent-[#641623] cursor-pointer"
                     />
                     <div className="flex items-center justify-between text-xs text-[#641623] font-semibold mt-1">
-                      <span>₹399</span>
+                      <span>₹50</span>
                       <span>₹{maxPrice.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
@@ -499,7 +519,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                         className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
                       />
                       <span>In stock</span>
-                      <span className="text-[#2D2424]/40 text-xs">(136)</span>
+                      <span className="text-[#2D2424]/40 text-xs">({inStockCount})</span>
                     </label>
                     <label className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623]">
                       <input
@@ -509,7 +529,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                         className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
                       />
                       <span>Out of stock</span>
-                      <span className="text-[#2D2424]/40 text-xs">(7)</span>
+                      <span className="text-[#2D2424]/40 text-xs">({outOfStockCount})</span>
                     </label>
                   </div>
                 )}
@@ -678,13 +698,17 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                         )}
                       </button>
 
-                      {/* Product Image */}
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                      {/* Product Image (Only uses image from Shopify; left blank if none) */}
+                      {product.image ? (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-[#FAF4ED]" />
+                      )}
                     </div>
 
                     {/* Bottom Details Container */}
@@ -793,8 +817,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                 </p>
                 <input
                   type="range"
-                  min={399}
-                  max={2999}
+                  min={50}
+                  max={5000}
                   step={50}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
@@ -813,7 +837,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                       onChange={() => toggleAvailability('in-stock')}
                       className="rounded text-[#641623]"
                     />
-                    <span>In stock (136)</span>
+                    <span>In stock ({inStockCount})</span>
                   </label>
                   <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1">
                     <input
@@ -822,7 +846,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                       onChange={() => toggleAvailability('out-of-stock')}
                       className="rounded text-[#641623]"
                     />
-                    <span>Out of stock (7)</span>
+                    <span>Out of stock ({outOfStockCount})</span>
                   </label>
                 </div>
               </div>

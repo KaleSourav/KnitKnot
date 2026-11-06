@@ -116,20 +116,26 @@ export function mapToMainCategory(rawCategory: string = '', title: string = ''):
   if (c.includes('flower pot') || c.includes('pot') || c.includes('vase')) {
     return 'Flower Pots';
   }
+  if (c.includes('bouquet')) {
+    return 'Bouquets';
+  }
   if (c.includes('flower') || c.includes('filler')) {
     return 'Flowers';
   }
   if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm')) {
-    return 'Keychains & Bag Charms';
+    return 'Keychains';
   }
   if (c.includes('bag') && !c.includes('charm')) {
     return 'Bags';
   }
+  if (c.includes('plushie') || c.includes('character')) {
+    return 'Plushies';
+  }
+  if (c.includes('standee') || c.includes('magnet') || c.includes('decor')) {
+    return 'Home Decor';
+  }
   if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory')) {
     return 'Accessories';
-  }
-  if (c.includes('standee') || c.includes('magnet') || c.includes('character') || c.includes('decor')) {
-    return 'Home Decor';
   }
 
   return 'Flowers';
