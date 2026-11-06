@@ -9,6 +9,7 @@ import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
 import { ReelsSection } from './components/ReelsSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
+import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
 
 // Mapping from landing page category IDs to Shop category names
@@ -26,13 +27,33 @@ const CATEGORY_MAP: Record<string, string> = {
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
 
-  // Client-side page routing: 'home' | 'shop'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
-      return hash.startsWith('#shop') || hash.startsWith('#/shop') ? 'shop' : 'home';
+      if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
+      if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
+      return 'home';
     }
     return 'home';
+  });
+
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.startsWith('#product') || hash.startsWith('#/product')) {
+        const qIndex = window.location.hash.indexOf('?');
+        if (qIndex !== -1) {
+          const params = new URLSearchParams(window.location.hash.substring(qIndex));
+          return params.get('id') || params.get('handle') || null;
+        }
+        const parts = window.location.hash.split('/');
+        if (parts.length >= 3 && parts[2]) {
+          return decodeURIComponent(parts[2]);
+        }
+      }
+    }
+    return null;
   });
 
   const [selectedCategory, setSelectedCategory] = useState<string>(() => {
@@ -50,18 +71,32 @@ export default function App() {
   // Sync with browser back/forward and URL hash changes
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#shop') || hash.startsWith('#/shop')) {
-        setCurrentPage('shop');
-        const qIndex = hash.indexOf('?');
+      const hash = window.location.hash.toLowerCase();
+      if (hash.startsWith('#product') || hash.startsWith('#/product')) {
+        setCurrentPage('product');
+        const qIndex = window.location.hash.indexOf('?');
         if (qIndex !== -1) {
-          const params = new URLSearchParams(hash.substring(qIndex));
+          const params = new URLSearchParams(window.location.hash.substring(qIndex));
+          setSelectedProductId(params.get('id') || params.get('handle') || null);
+        } else {
+          const parts = window.location.hash.split('/');
+          if (parts.length >= 3 && parts[2]) {
+            setSelectedProductId(decodeURIComponent(parts[2]));
+          }
+        }
+      } else if (hash.startsWith('#shop') || hash.startsWith('#/shop')) {
+        setCurrentPage('shop');
+        setSelectedProductId(null);
+        const qIndex = window.location.hash.indexOf('?');
+        if (qIndex !== -1) {
+          const params = new URLSearchParams(window.location.hash.substring(qIndex));
           setSelectedCategory(params.get('category') || 'all');
         } else {
           setSelectedCategory('all');
         }
       } else {
         setCurrentPage('home');
+        setSelectedProductId(null);
       }
     };
 
@@ -70,20 +105,26 @@ export default function App() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop', category: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product', param: string = 'all') => {
     setCurrentPage(page);
-    setSelectedCategory(category);
 
     if (page === 'home') {
+      setSelectedCategory('all');
+      setSelectedProductId(null);
       if (window.location.hash) {
         window.history.pushState(null, '', window.location.pathname);
       }
-    } else {
-      if (category && category !== 'all') {
-        window.location.hash = `/shop?category=${encodeURIComponent(category)}`;
+    } else if (page === 'shop') {
+      setSelectedCategory(param || 'all');
+      setSelectedProductId(null);
+      if (param && param !== 'all') {
+        window.location.hash = `/shop?category=${encodeURIComponent(param)}`;
       } else {
         window.location.hash = '/shop';
       }
+    } else if (page === 'product') {
+      setSelectedProductId(param);
+      window.location.hash = `/product?id=${encodeURIComponent(param)}`;
     }
 
     // Scroll smoothly to top on page change
@@ -137,9 +178,9 @@ export default function App() {
             {/* Bestsellers Section (Yarn Ball Divider, 4-Point Sparkle Stars, Carousel) */}
             <div id="bestsellers">
               <BestsellersSection
-                onProductClick={(id) => console.log('Product clicked:', id)}
+                onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
-                onNotifyClick={(id) => console.log('Notify me clicked for:', id)}
+                onNotifyClick={(id) => navigateTo('product', id)}
               />
             </div>
 
@@ -154,16 +195,27 @@ export default function App() {
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
             <ReelsSection />
           </>
-        ) : (
+        ) : currentPage === 'shop' ? (
           /* =========================================================================
              DEDICATED SHOP PAGE VIEW (All Products Shop)
              Exact Match to Reference: 3-Col Desktop with Filters & 2-Col Mobile with Drawer
              ========================================================================= */
           <AllProductsShopSection
             initialCategory={selectedCategory}
-            onProductClick={(id) => console.log('Product clicked:', id)}
+            onProductClick={(id) => navigateTo('product', id)}
             onAddToCart={() => setCartCount((prev) => prev + 1)}
             onNavigateHome={() => navigateTo('home')}
+          />
+        ) : (
+          /* =========================================================================
+             DEDICATED PRODUCT DETAILS PAGE VIEW
+             Exact Match to Reference: Gallery with Arrows & Wishlist, Stepper, Actions & Accordions
+             ========================================================================= */
+          <ProductDetailsPage
+            productId={selectedProductId}
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onAddToCart={(_product, qty) => setCartCount((prev) => prev + qty)}
           />
         )}
       </main>

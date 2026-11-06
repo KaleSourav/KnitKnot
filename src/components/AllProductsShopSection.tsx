@@ -656,7 +656,15 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                 return (
                   <div
                     key={product.id}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => onProductClick?.(product.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onProductClick?.(product.id);
+                      }
+                    }}
                     className="group relative rounded-[20px] bg-[#FFFBF7] border border-[#641623]/10 shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
                   >
                     {/* Top Image Container */}

@@ -4,9 +4,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop';
+  currentPage?: 'home' | 'shop' | 'product';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
