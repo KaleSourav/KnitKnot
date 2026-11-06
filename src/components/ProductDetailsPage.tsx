@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
 
 interface ProductDetailsPageProps {
@@ -16,23 +16,33 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onNavigateShop,
   onAddToCart,
 }) => {
-  // Find product from Shopify data by id, handle or fallback
+  // Find product from Shopify data with robust matching (ID, shopifyId, handle, title)
   const product: ShopProduct = useMemo(() => {
-    if (productId) {
-      const found = ALL_PRODUCTS.find(
-        (p) =>
-          p.id === productId ||
-          p.shopifyId === productId ||
-          p.handle === productId ||
-          p.name.toLowerCase() === decodeURIComponent(productId).toLowerCase()
-      );
+    const rawTarget = productId ? decodeURIComponent(productId).trim() : '';
+    const rawHandle = productHandle ? decodeURIComponent(productHandle).trim() : '';
+
+    if (rawTarget) {
+      const found = ALL_PRODUCTS.find((p) => {
+        if (p.id === rawTarget || p.shopifyId === rawTarget) return true;
+        if (p.handle === rawTarget || p.handle.toLowerCase() === rawTarget.toLowerCase()) return true;
+        // Handle suffix matching (e.g. 'bouquet-full-of-sunshine' matching 'flowers-bouquet-full-of-sunshine')
+        if (p.handle.endsWith(rawTarget) || rawTarget.endsWith(p.handle)) return true;
+        if (p.name.toLowerCase() === rawTarget.toLowerCase()) return true;
+        return false;
+      });
       if (found) return found;
     }
-    if (productHandle) {
-      const found = ALL_PRODUCTS.find((p) => p.handle === productHandle);
+
+    if (rawHandle) {
+      const found = ALL_PRODUCTS.find((p) => {
+        if (p.handle === rawHandle || p.handle.toLowerCase() === rawHandle.toLowerCase()) return true;
+        if (p.handle.endsWith(rawHandle) || rawHandle.endsWith(p.handle)) return true;
+        return false;
+      });
       if (found) return found;
     }
-    // Default fallback to "Bouquet Full Of Sunshine" or featured bouquet with images
+
+    // Default fallback: Hero bouquet "Bouquet Full Of Sunshine" (or first bouquet with images)
     const sunshine = ALL_PRODUCTS.find((p) => p.handle === 'flowers-bouquet-full-of-sunshine');
     if (sunshine) return sunshine;
 
@@ -60,8 +70,54 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
-  const [isWishlist, setIsWishlist] = useState<boolean>(false);
   const [addedToast, setAddedToast] = useState<boolean>(false);
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Safe image index guard in case image count shrinks
+  const safeImageIndex = activeImageIndex < images.length ? activeImageIndex : 0;
+
+  // Wishlist state synchronized with localStorage across shop & product pages
+  const [isWishlist, setIsWishlist] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('knotsnco_wishlist');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return !!parsed[product.id];
+      }
+    } catch {}
+    return false;
+  });
+
+  // Keep wishlist in sync with localStorage and product changes
+  useEffect(() => {
+    const syncWishlist = () => {
+      try {
+        const saved = localStorage.getItem('knotsnco_wishlist');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setIsWishlist(!!parsed[product.id]);
+        }
+      } catch {}
+    };
+
+    syncWishlist();
+    window.addEventListener('knotsnco_wishlist_updated', syncWishlist);
+    return () => window.removeEventListener('knotsnco_wishlist_updated', syncWishlist);
+  }, [product.id]);
+
+  const toggleWishlist = () => {
+    setIsWishlist((prev) => {
+      const next = !prev;
+      try {
+        const saved = localStorage.getItem('knotsnco_wishlist');
+        const parsed = saved ? JSON.parse(saved) : {};
+        parsed[product.id] = next;
+        localStorage.setItem('knotsnco_wishlist', JSON.stringify(parsed));
+        window.dispatchEvent(new Event('knotsnco_wishlist_updated'));
+      } catch {}
+      return next;
+    });
+  };
 
   // Reset gallery and quantity when product changes
   useEffect(() => {
@@ -69,6 +125,20 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     setQuantity(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [product.id, product.handle]);
+
+  // Keyboard navigation for image carousel (Left & Right arrows)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (images.length <= 1) return;
+      if (e.key === 'ArrowLeft') {
+        setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [images.length]);
 
   // Accordion open/close states (default closed matching reference image)
   const [openAccordions, setOpenAccordions] = useState<{
@@ -101,8 +171,21 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   const handleAddToCartClick = () => {
     onAddToCart?.(product, quantity);
     setAddedToast(true);
-    setTimeout(() => setAddedToast(false), 2400);
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = setTimeout(() => {
+      setAddedToast(false);
+    }, 2400);
   };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Pricing & Discount calculation
   const currentPrice = product.price;
@@ -116,7 +199,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       ? Math.round((savings / originalPrice) * 100)
       : 0;
 
-  // Extract a concise friendly description for the top area
+  // Extract a crisp 1-2 sentence friendly description for the top area
   const conciseSummary = useMemo(() => {
     if (!product.description) {
       return 'A cheerful handmade crochet bouquet of sunflowers and daisies, perfect to brighten any space.';
@@ -124,25 +207,32 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
     const raw = product.description.trim();
 
-    // If description has bullet points like "• Premium Quality: The Bouquet Full Of Sunshine Is Handcrafted..."
+    // Check if there are bullet points like "• Premium Quality: The Bouquet Full Of Sunshine Is Handcrafted..."
     if (raw.includes('•')) {
       const parts = raw.split('•').filter((p) => p.trim().length > 0);
       if (parts.length > 0) {
-        // Look for the first meaningful sentence
         const first = parts[0].trim();
-        // Remove "Premium Quality:" or "Product Details:" if present
         const cleaned = first.replace(/^[^:]+:\s*/i, '').trim();
         return cleaned.endsWith('.') ? cleaned : `${cleaned}.`;
       }
     }
 
-    // If description is a regular paragraph, grab the first 1-2 sentences
-    const sentences = raw.split(/(?<=[.?!])\s+/);
-    if (sentences.length > 0 && sentences[0].length > 15) {
-      return sentences.slice(0, 2).join(' ');
+    // Cut off before bullet sections or features
+    let intro = raw;
+    for (const marker of ['Features:', '✨ Handmade', 'Perfect for:', 'Craftsmanship:']) {
+      const idx = intro.indexOf(marker);
+      if (idx !== -1 && idx > 20) {
+        intro = intro.substring(0, idx).trim();
+      }
     }
 
-    return raw;
+    // Grab first 1-2 sentences
+    const sentences = intro.split(/(?<=[.?!])\s+/);
+    if (sentences.length > 0 && sentences[0].length > 15) {
+      return sentences.slice(0, 2).join(' ').trim();
+    }
+
+    return intro;
   }, [product.description]);
 
   // Extract full details for the "Product Details" accordion
@@ -156,6 +246,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }
 
     const raw = product.description.trim();
+
+    // If description has bullet points
     if (raw.includes('•')) {
       const parts = raw.split('•').filter((p) => p.trim().length > 0);
       return parts.map((part) => {
@@ -170,6 +262,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       });
     }
 
+    // If description has ✨ items
+    if (raw.includes('✨') && raw.split('✨').length > 2) {
+      const parts = raw.split('✨').filter((p) => p.trim().length > 0);
+      return parts.map((part) => {
+        return { label: 'Handmade Feature', text: part.trim() };
+      });
+    }
+
     return [
       { label: 'Handcrafted', text: raw },
       { label: 'Care & Durability', text: 'Created with soft premium yarn for lasting warmth and cheerful charm.' },
@@ -180,9 +280,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     <article className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-4 pb-16 sm:pb-24">
       {/* Toast Notification for Add to Cart */}
       {addedToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#641623] text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
+        <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
           <svg
-            className="w-5 h-5 text-[#F7BE44]"
+            className="w-5 h-5 text-[#F7BE44] flex-shrink-0"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -199,12 +299,13 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       )}
 
       {/* =========================================================================
-          1. BREADCRUMBS NAVIGATION: home / shop / [category] / [product name]
+          1. BREADCRUMBS NAVIGATION: home / shop all / [category] / [product name]
          ========================================================================= */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
         <nav className="flex items-center gap-2 text-xs sm:text-sm text-[#641623]/70 font-medium flex-wrap">
           <button
             onClick={onNavigateHome}
+            type="button"
             className="hover:text-[#641623] hover:underline transition-colors flex items-center gap-1 cursor-pointer"
           >
             <svg
@@ -221,6 +322,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <span className="text-[#641623]/40">/</span>
           <button
             onClick={() => onNavigateShop?.('all')}
+            type="button"
             className="hover:text-[#641623] hover:underline cursor-pointer"
           >
             shop all
@@ -228,6 +330,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <span className="text-[#641623]/40">/</span>
           <button
             onClick={() => onNavigateShop?.(product.category)}
+            type="button"
             className="hover:text-[#641623] hover:underline cursor-pointer lowercase"
           >
             {product.category}
@@ -252,9 +355,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             <div className="relative aspect-square w-full rounded-[28px] sm:rounded-[32px] overflow-hidden bg-[#FAF2E8]/60 border border-[#641623]/10 shadow-[0_8px_28px_rgba(100,22,35,0.06)] group">
               {/* Overlaid Wishlist Button (Top Right) */}
               <button
-                onClick={() => setIsWishlist(!isWishlist)}
+                onClick={toggleWishlist}
                 type="button"
-                aria-label="Add to wishlist"
+                aria-label={isWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                 className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-20 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm border border-[#641623]/15 text-[#641623] flex items-center justify-center shadow-xs hover:scale-110 active:scale-95 transition-all cursor-pointer"
               >
                 {isWishlist ? (
@@ -327,10 +430,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               )}
 
               {/* Main Image Rendering (Strictly Shopify CDN image, or blank if none) */}
-              {images.length > 0 && images[activeImageIndex] ? (
+              {images.length > 0 && images[safeImageIndex] ? (
                 <img
-                  src={images[activeImageIndex]}
+                  src={images[safeImageIndex]}
                   alt={product.name}
+                  onError={(e) => {
+                    // Gracefully hide broken image
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
                   className="w-full h-full object-cover select-none transition-all duration-300"
                 />
               ) : (
@@ -338,11 +445,11 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               )}
             </div>
 
-            {/* Thumbnail Row Underneath (Matches Reference) */}
+            {/* Thumbnail Row Underneath (Only if > 1 image, matching Reference) */}
             {images.length > 1 && (
               <div className="flex items-center gap-2.5 sm:gap-3.5 overflow-x-auto max-w-full pb-2 pt-4 no-scrollbar">
                 {images.map((imgUrl, idx) => {
-                  const isActive = idx === activeImageIndex;
+                  const isActive = idx === safeImageIndex;
                   return (
                     <button
                       key={idx}
@@ -360,6 +467,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                         alt={`${product.name} thumbnail ${idx + 1}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
                       />
                     </button>
                   );
@@ -373,15 +483,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
              ===================================================================== */}
           <div className="w-full text-left flex flex-col">
             {/* Title Row with Attached Cute Flower Doodle */}
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
               <h1 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl lg:text-4xl text-[#641623] tracking-tight leading-tight">
                 {product.name}
               </h1>
 
               {/* Flower Icon Doodle (Matching Reference) */}
-              <div className="flex-shrink-0 text-[#F7BE44]">
+              <div className="inline-flex items-center text-[#F7BE44] flex-shrink-0">
                 <svg
-                  className="w-8 h-8 sm:w-9 sm:h-9"
+                  className="w-7 h-7 sm:w-8 sm:h-8"
                   viewBox="0 0 32 32"
                   fill="none"
                 >
@@ -414,12 +524,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </span>
               )}
 
-              {/* Discount Pill Badge: "Save ₹300 (19% off)" */}
-              {savings > 0 && (
+              {/* Discount Pill Badge: "Save ₹300 (19% off)" or preset discount */}
+              {savings > 0 ? (
                 <span className="px-3 py-1 rounded-full bg-[#FCE2EB] text-[#811B2B] font-['Fredoka'] font-semibold text-xs sm:text-sm">
                   Save ₹{savings.toLocaleString('en-IN')} ({savingsPct}% off)
                 </span>
-              )}
+              ) : product.discount ? (
+                <span className="px-3 py-1 rounded-full bg-[#FCE2EB] text-[#811B2B] font-['Fredoka'] font-semibold text-xs sm:text-sm">
+                  {product.discount}
+                </span>
+              ) : null}
             </div>
 
             {/* Rating Stars Row: ★★★★★ 4.8 (126 reviews) */}
@@ -461,7 +575,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </button>
                 <span className="font-bold text-sm select-none">{quantity}</span>
                 <button
-                  onClick={() => setQuantity((q) => q + 1)}
+                  onClick={() => setQuantity((q) => Math.min(99, q + 1))}
                   type="button"
                   aria-label="Increase quantity"
                   className="p-1 hover:opacity-70 font-bold text-lg cursor-pointer"
@@ -497,7 +611,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
               {/* 2. Add to Wishlist Button */}
               <button
-                onClick={() => setIsWishlist(!isWishlist)}
+                onClick={toggleWishlist}
                 type="button"
                 className="w-full py-3.5 sm:py-4 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-[0.99] text-[#641623] font-['Fredoka'] font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 transition-all border border-[#641623]/15 shadow-2xs cursor-pointer"
               >
@@ -587,7 +701,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {/* Scalloped 8-petal Rosette background */}
                   <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs">
                     <path
-                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
+                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 42.19 16.47 Z"
                       fill="#FFFDF9"
                       stroke="#641623"
                       strokeWidth="1.6"

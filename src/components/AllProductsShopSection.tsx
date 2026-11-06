@@ -9,9 +9,9 @@ interface AllProductsShopSectionProps {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: 'tinkle flowers' },
+  { id: 'all', label: 'all products' },
   { id: 'Flowers', label: 'flowers' },
-  { id: 'Bouquets', label: 'bouquet' },
+  { id: 'Bouquets', label: 'bouquets' },
   { id: 'Plushies', label: 'plushies' },
   { id: 'Bags', label: 'bags' },
   { id: 'Keychains', label: 'keychains' },
@@ -37,6 +37,20 @@ const COLOR_SWATCHES = [
   { name: 'White', hex: '#FFFFFF', hasBorder: true },
 ];
 
+// Helper to normalize category strings for foolproof matching
+const normalizeCategory = (cat?: string): string => {
+  if (!cat) return '';
+  const cleaned = cat.toLowerCase().replace(/[-_]/g, ' ').trim();
+  if (cleaned === 'bouquet') return 'bouquets';
+  if (cleaned === 'flower') return 'flowers';
+  if (cleaned === 'keychain') return 'keychains';
+  if (cleaned === 'bag') return 'bags';
+  if (cleaned === 'plushie') return 'plushies';
+  if (cleaned === 'flower pot' || cleaned === 'flower-pots') return 'flower pots';
+  if (cleaned === 'home decor' || cleaned === 'homedecor') return 'home decor';
+  return cleaned;
+};
+
 export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   initialCategory = 'all',
   onProductClick,
@@ -54,13 +68,17 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('featured');
 
-  // Dynamic counts derived from real Shopify products
+  // Dynamic counts derived from real Shopify products with normalized categories
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of ALL_PRODUCTS) {
-      counts[p.category] = (counts[p.category] || 0) + 1;
-      if (p.rawCategory && p.rawCategory !== p.category) {
-        counts[p.rawCategory] = (counts[p.rawCategory] || 0) + 1;
+      const normCat = normalizeCategory(p.category);
+      counts[normCat] = (counts[normCat] || 0) + 1;
+      if (p.rawCategory) {
+        const normRaw = normalizeCategory(p.rawCategory);
+        if (normRaw !== normCat) {
+          counts[normRaw] = (counts[normRaw] || 0) + 1;
+        }
       }
     }
     return counts;
@@ -81,21 +99,61 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   }, [initialCategory]);
 
   // Accordion Collapse States
-  const [isCategoryOpen, setIsCategoryOpen] = useState(true);
-  const [isPriceOpen, setIsPriceOpen] = useState(true);
-  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(true);
-  const [isColourOpen, setIsColourOpen] = useState(true);
-  const [isOccasionOpen, setIsOccasionOpen] = useState(true);
+  const [isCategoryOpen, setIsCategoryOpen] = useState<boolean>(true);
+  const [isPriceOpen, setIsPriceOpen] = useState<boolean>(true);
+  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState<boolean>(true);
+  const [isColourOpen, setIsColourOpen] = useState<boolean>(true);
+  const [isOccasionOpen, setIsOccasionOpen] = useState<boolean>(true);
 
   // Mobile Filter Drawer State
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
 
-  // Wishlist state
-  const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+  // Lock body scroll when mobile filter drawer is open
+  useEffect(() => {
+    if (isMobileFilterOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileFilterOpen]);
+
+  // Wishlist state synchronized with localStorage
+  const [wishlist, setWishlist] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('knotsnco_wishlist');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  // Listen for external wishlist changes (e.g. toggled on ProductDetailsPage)
+  useEffect(() => {
+    const handleWishlistSync = () => {
+      try {
+        const saved = localStorage.getItem('knotsnco_wishlist');
+        if (saved) {
+          setWishlist(JSON.parse(saved));
+        }
+      } catch {}
+    };
+    window.addEventListener('knotsnco_wishlist_updated', handleWishlistSync);
+    return () => window.removeEventListener('knotsnco_wishlist_updated', handleWishlistSync);
+  }, []);
 
   const toggleWishlist = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setWishlist((prev) => ({ ...prev, [id]: !prev[id] }));
+    setWishlist((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      try {
+        localStorage.setItem('knotsnco_wishlist', JSON.stringify(next));
+        window.dispatchEvent(new Event('knotsnco_wishlist_updated'));
+      } catch {}
+      return next;
+    });
   };
 
   const handleCategoryPillClick = (catId: string) => {
@@ -108,9 +166,13 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   };
 
   const toggleCategory = (cat: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
+    setSelectedCategories((prev) => {
+      const isAlready = prev.some((c) => normalizeCategory(c) === normalizeCategory(cat));
+      if (isAlready) {
+        return prev.filter((c) => normalizeCategory(c) !== normalizeCategory(cat));
+      }
+      return [...prev, cat];
+    });
   };
 
   const toggleAvailability = (status: string) => {
@@ -145,13 +207,14 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const filteredProducts = useMemo(() => {
     let result = [...ALL_PRODUCTS];
 
-    // Category filter (matches high-level or raw Shopify category)
+    // Category filter with normalized comparison
     if (selectedCategories.length > 0) {
-      result = result.filter(
-        (p) =>
-          selectedCategories.includes(p.category) ||
-          (p.rawCategory && selectedCategories.includes(p.rawCategory))
-      );
+      const normalizedTargets = selectedCategories.map(normalizeCategory);
+      result = result.filter((p) => {
+        const prodCat = normalizeCategory(p.category);
+        const prodRaw = p.rawCategory ? normalizeCategory(p.rawCategory) : '';
+        return normalizedTargets.includes(prodCat) || (prodRaw && normalizedTargets.includes(prodRaw));
+      });
     }
 
     // Price filter
@@ -168,15 +231,24 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
       }
     }
 
-    // Color filter
+    // Color filter (matches primary color OR swatch hex)
     if (selectedColors.length > 0) {
-      result = result.filter((p) => selectedColors.includes(p.color));
+      const activeHexes = COLOR_SWATCHES.filter((s) => selectedColors.includes(s.name)).map((s) =>
+        s.hex.toLowerCase()
+      );
+      result = result.filter((p) => {
+        if (selectedColors.includes(p.color)) return true;
+        if (p.colorSwatches && p.colorSwatches.some((hex) => activeHexes.includes(hex.toLowerCase()))) {
+          return true;
+        }
+        return false;
+      });
     }
 
     // Occasion filter
     if (selectedOccasions.length > 0) {
       result = result.filter((p) =>
-        p.occasions.some((occ) => selectedOccasions.includes(occ))
+        p.occasions && p.occasions.some((occ) => selectedOccasions.includes(occ))
       );
     }
 
@@ -187,6 +259,12 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'newest') {
       result.sort((a, b) => (b.badge === 'NEW' ? 1 : 0) - (a.badge === 'NEW' ? 1 : 0));
+    } else if (sortBy === 'best-selling') {
+      result.sort((a, b) => {
+        const scoreA = (a.discount ? 2 : 0) + (a.badge ? 1 : 0) + (a.originalPrice ? 1 : 0);
+        const scoreB = (b.discount ? 2 : 0) + (b.badge ? 1 : 0) + (b.originalPrice ? 1 : 0);
+        return scoreB - scoreA;
+      });
     }
 
     return result;
@@ -199,15 +277,23 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
     sortBy,
   ]);
 
+  const hasActiveFilters =
+    selectedCategories.length > 0 ||
+    maxPrice < 5000 ||
+    selectedAvailability.length > 0 ||
+    selectedColors.length > 0 ||
+    selectedOccasions.length > 0;
+
   return (
     <section id="all-products-shop" className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
       {/* =========================================================================
           1. BREADCRUMB NAVIGATION ("home / shop all products")
          ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
-        <nav className="flex items-center gap-2 text-xs sm:text-sm text-[#641623]/70 font-medium">
+        <nav className="flex items-center gap-2 text-xs sm:text-sm text-[#641623]/70 font-medium flex-wrap">
           <button
             onClick={onNavigateHome}
+            type="button"
             className="hover:text-[#641623] hover:underline transition-colors flex items-center gap-1 cursor-pointer"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -218,6 +304,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
           <span className="text-[#641623]/40">/</span>
           <button
             onClick={clearAllFilters}
+            type="button"
             className={`cursor-pointer transition-colors ${
               selectedCategories.length === 0
                 ? "text-[#641623] font-bold"
@@ -275,13 +362,11 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
           {/* Left Smiling Flower Doodle (Desktop only) */}
           <div className="hidden sm:flex items-center justify-center text-[#F7BE44]">
             <svg className="w-10 h-10 md:w-12 md:h-12" viewBox="0 0 48 48" fill="none">
-              {/* 5 Petals */}
               <circle cx="24" cy="9" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
               <circle cx="38" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
               <circle cx="33" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
               <circle cx="15" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
               <circle cx="10" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
-              {/* Flower Center with Smiling Face */}
               <circle cx="24" cy="24" r="8" fill="#F7BE44" stroke="#641623" strokeWidth="2.2" />
               <circle cx="21" cy="23" r="1.2" fill="#641623" />
               <circle cx="27" cy="23" r="1.2" fill="#641623" />
@@ -315,7 +400,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               {/* Mobile Filter Button */}
               <button
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="sm:hidden flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#641623] bg-white text-[#641623] text-xs font-semibold shadow-xs active:scale-95 transition-all ml-2 flex-shrink-0"
+                type="button"
+                className="sm:hidden flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#641623] bg-white text-[#641623] text-xs font-semibold shadow-xs active:scale-95 transition-all ml-2 flex-shrink-0 cursor-pointer"
               >
                 <span>Filter</span>
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -390,14 +476,11 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                 </svg>
               </div>
 
-              {(selectedCategories.length > 0 ||
-                maxPrice < 2999 ||
-                selectedAvailability.length > 0 ||
-                selectedColors.length > 0 ||
-                selectedOccasions.length > 0) && (
+              {hasActiveFilters && (
                 <button
                   onClick={clearAllFilters}
-                  className="text-xs text-[#641623]/70 hover:text-[#641623] underline"
+                  type="button"
+                  className="text-xs text-[#641623]/70 hover:text-[#641623] underline cursor-pointer"
                 >
                   clear all
                 </button>
@@ -410,7 +493,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div className="border-b border-[#641623]/10 pb-4">
                 <button
                   onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                  type="button"
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase cursor-pointer"
                 >
                   <span>category</span>
                   <svg
@@ -429,21 +513,28 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
 
                 {isCategoryOpen && (
                   <div className="mt-3 space-y-2 text-sm text-[#2D2424]/80">
-                    {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
-                      <label
-                        key={cat.id}
-                        className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623] transition-colors"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedCategories.includes(cat.id)}
-                          onChange={() => toggleCategory(cat.id)}
-                          className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
-                        />
-                        <span>{cat.label}</span>
-                        <span className="text-[#2D2424]/40 text-xs">({categoryCounts[cat.id] || 0})</span>
-                      </label>
-                    ))}
+                    {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => {
+                      const isChecked = selectedCategories.some(
+                        (sc) => normalizeCategory(sc) === normalizeCategory(cat.id)
+                      );
+                      const count = categoryCounts[normalizeCategory(cat.id)] || 0;
+
+                      return (
+                        <label
+                          key={cat.id}
+                          className="flex items-center gap-2.5 cursor-pointer hover:text-[#641623] transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleCategory(cat.id)}
+                            className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623] cursor-pointer"
+                          />
+                          <span>{cat.label}</span>
+                          <span className="text-[#2D2424]/40 text-xs">({count})</span>
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -452,7 +543,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div className="border-b border-[#641623]/10 pb-4">
                 <button
                   onClick={() => setIsPriceOpen(!isPriceOpen)}
-                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                  type="button"
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase cursor-pointer"
                 >
                   <span>price</span>
                   <svg
@@ -492,7 +584,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div className="border-b border-[#641623]/10 pb-4">
                 <button
                   onClick={() => setIsAvailabilityOpen(!isAvailabilityOpen)}
-                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                  type="button"
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase cursor-pointer"
                 >
                   <span>availability</span>
                   <svg
@@ -516,7 +609,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                         type="checkbox"
                         checked={selectedAvailability.includes('in-stock')}
                         onChange={() => toggleAvailability('in-stock')}
-                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623] cursor-pointer"
                       />
                       <span>In stock</span>
                       <span className="text-[#2D2424]/40 text-xs">({inStockCount})</span>
@@ -526,7 +619,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                         type="checkbox"
                         checked={selectedAvailability.includes('out-of-stock')}
                         onChange={() => toggleAvailability('out-of-stock')}
-                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                        className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623] cursor-pointer"
                       />
                       <span>Out of stock</span>
                       <span className="text-[#2D2424]/40 text-xs">({outOfStockCount})</span>
@@ -539,7 +632,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div className="border-b border-[#641623]/10 pb-4">
                 <button
                   onClick={() => setIsColourOpen(!isColourOpen)}
-                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                  type="button"
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase cursor-pointer"
                 >
                   <span>colour</span>
                   <svg
@@ -565,8 +659,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                           key={swatch.name}
                           onClick={() => toggleColor(swatch.name)}
                           type="button"
-                          aria-label={swatch.name}
-                          className={`w-6 h-6 rounded-full transition-transform duration-150 hover:scale-110 relative ${
+                          aria-label={`Filter by ${swatch.name}`}
+                          className={`w-6 h-6 rounded-full transition-transform duration-150 hover:scale-110 relative cursor-pointer ${
                             swatch.hasBorder ? 'border border-[#641623]/25' : ''
                           } ${isSelected ? 'ring-2 ring-[#641623] ring-offset-1 scale-110' : ''}`}
                           style={{ backgroundColor: swatch.hex }}
@@ -581,7 +675,8 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div>
                 <button
                   onClick={() => setIsOccasionOpen(!isOccasionOpen)}
-                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase"
+                  type="button"
+                  className="w-full flex items-center justify-between text-base font-bold text-[#641623] lowercase cursor-pointer"
                 >
                   <span>occasion</span>
                   <svg
@@ -609,7 +704,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                           type="checkbox"
                           checked={selectedOccasions.includes(occ)}
                           onChange={() => toggleOccasion(occ)}
-                          className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623]"
+                          className="w-4 h-4 rounded text-[#641623] border-[#641623]/30 focus:ring-[#641623] cursor-pointer"
                         />
                         <span>{occ}</span>
                       </label>
@@ -628,7 +723,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
             <div className="flex items-center justify-between mb-5 sm:mb-6">
               {/* Product Count (Desktop & Mobile) */}
               <p className="text-base sm:text-lg font-bold text-[#641623]">
-                {filteredProducts.length} products
+                {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
               </p>
 
               {/* Sort By Dropdown Pill */}
@@ -648,125 +743,163 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               </div>
             </div>
 
-            {/* Product Cards Grid: 3 cols on Desktop, 2 cols on Mobile */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-5 lg:gap-6">
-              {filteredProducts.map((product) => {
-                const isLiked = wishlist[product.id] ?? false;
+            {/* Empty State when 0 products match */}
+            {filteredProducts.length === 0 ? (
+              <div className="w-full py-16 px-4 text-center rounded-[24px] bg-white/70 border border-[#641623]/10 flex flex-col items-center justify-center">
+                <div className="text-[#F7BE44] mb-4">
+                  <svg className="w-16 h-16 sm:w-20 sm:h-20" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="9" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="38" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="33" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="15" cy="35" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="10" cy="20" r="7" fill="#FFE485" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="24" cy="24" r="8" fill="#F7BE44" stroke="#641623" strokeWidth="2.2" />
+                    <circle cx="21" cy="23" r="1.2" fill="#641623" />
+                    <circle cx="27" cy="23" r="1.2" fill="#641623" />
+                    <path d="M22 27 Q24 25 26 27" stroke="#641623" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <h3 className="font-['Fredoka'] font-bold text-xl sm:text-2xl text-[#641623]">
+                  No crochet goodies found
+                </h3>
+                <p className="text-sm text-[#2D2424]/70 max-w-md mt-2">
+                  We couldn't find any items matching your selected filters. Try broadening your price range or resetting filters.
+                </p>
+                <button
+                  onClick={clearAllFilters}
+                  type="button"
+                  className="mt-6 px-6 py-2.5 rounded-full bg-[#641623] hover:bg-[#52121c] text-white font-['Fredoka'] font-bold text-sm transition-all shadow-xs cursor-pointer active:scale-95"
+                >
+                  Reset all filters
+                </button>
+              </div>
+            ) : (
+              /* Product Cards Grid: 3 cols on Desktop, 2 cols on Mobile */
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-5 lg:gap-6">
+                {filteredProducts.map((product) => {
+                  const isLiked = wishlist[product.id] ?? false;
 
-                return (
-                  <div
-                    key={product.id}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => onProductClick?.(product.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onProductClick?.(product.id);
-                      }
-                    }}
-                    className="group relative rounded-[20px] bg-[#FFFBF7] border border-[#641623]/10 shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
-                  >
-                    {/* Top Image Container */}
-                    <div className="relative aspect-square w-full overflow-hidden bg-[#FAF2E8]/60">
-                      {/* Scalloped Yellow Discount / NEW Badge */}
-                      {product.badge && (
-                        <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
-                          <div className="relative inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#FFE485] border border-dashed border-[#B45309] text-[#78350F] text-[10px] sm:text-xs font-bold shadow-xs">
-                            <span className="tracking-tight">{product.badge}</span>
+                  return (
+                    <div
+                      key={product.id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => onProductClick?.(product.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onProductClick?.(product.id);
+                        }
+                      }}
+                      className="group relative rounded-[20px] bg-[#FFFBF7] border border-[#641623]/10 shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
+                    >
+                      {/* Top Image Container */}
+                      <div className="relative aspect-square w-full overflow-hidden bg-[#FAF2E8]/60">
+                        {/* Scalloped Yellow Discount / NEW Badge */}
+                        {product.badge && (
+                          <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
+                            <div className="relative inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#FFE485] border border-dashed border-[#B45309] text-[#78350F] text-[10px] sm:text-xs font-bold shadow-xs">
+                              <span className="tracking-tight">{product.badge}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Top Right Circular Wishlist Heart Button */}
-                      <button
-                        onClick={(e) => toggleWishlist(product.id, e)}
-                        type="button"
-                        aria-label="Add to wishlist"
-                        className="absolute top-2.5 right-2.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#641623]/10 text-[#641623] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xs"
-                      >
-                        {isLiked ? (
-                          // Solid Filled Heart
-                          <svg className="w-4 h-4 text-[#641623]" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                          </svg>
+                        {/* Top Right Circular Wishlist Heart Button */}
+                        <button
+                          onClick={(e) => toggleWishlist(product.id, e)}
+                          type="button"
+                          aria-label={isLiked ? 'Remove from wishlist' : 'Add to wishlist'}
+                          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#641623]/10 text-[#641623] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"
+                        >
+                          {isLiked ? (
+                            // Solid Filled Heart
+                            <svg className="w-4 h-4 text-[#641623]" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                          ) : (
+                            // Outline Heart
+                            <svg
+                              className="w-4 h-4 text-[#641623]"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                          )}
+                        </button>
+
+                        {/* Product Image (Only uses image from Shopify; left blank if none) */}
+                        {product.image ? (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            loading="lazy"
+                            onError={(e) => {
+                              // If broken image URL, hide gracefully
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 select-none"
+                          />
                         ) : (
-                          // Outline Heart
-                          <svg
-                            className="w-4 h-4 text-[#641623]"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                          </svg>
+                          <div className="w-full h-full bg-[#FAF4ED]" />
                         )}
-                      </button>
+                      </div>
 
-                      {/* Product Image (Only uses image from Shopify; left blank if none) */}
-                      {product.image ? (
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-[#FAF4ED]" />
-                      )}
-                    </div>
+                      {/* Bottom Details Container */}
+                      <div className="p-3 sm:p-4 text-left flex flex-col justify-between flex-1">
+                        <div>
+                          {/* Title */}
+                          <h3 className="text-sm sm:text-base font-bold text-[#2D2424] group-hover:text-[#641623] transition-colors line-clamp-1">
+                            {product.name}
+                          </h3>
 
-                    {/* Bottom Details Container */}
-                    <div className="p-3 sm:p-4 text-left flex flex-col justify-between flex-1">
-                      <div>
-                        {/* Title */}
-                        <h3 className="text-sm sm:text-base font-bold text-[#2D2424] group-hover:text-[#641623] transition-colors line-clamp-1">
-                          {product.name}
-                        </h3>
+                          {/* Subtitle / Type */}
+                          <p className="text-[11px] sm:text-xs text-[#641623]/70 font-normal mt-0.5 line-clamp-1">
+                            {product.subtitle}
+                          </p>
 
-                        {/* Subtitle / Type */}
-                        <p className="text-[11px] sm:text-xs text-[#641623]/70 font-normal mt-0.5 line-clamp-1">
-                          {product.subtitle}
-                        </p>
+                          {/* Color Swatch Dots */}
+                          {product.colorSwatches && product.colorSwatches.length > 0 && (
+                            <div className="flex items-center gap-1.5 my-2">
+                              {product.colorSwatches.map((color, idx) => (
+                                <span
+                                  key={idx}
+                                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/15 shadow-2xs"
+                                  style={{ backgroundColor: color }}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
 
-                        {/* Color Swatch Dots */}
-                        <div className="flex items-center gap-1.5 my-2">
-                          {product.colorSwatches.map((color, idx) => (
-                            <span
-                              key={idx}
-                              className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/15 shadow-2xs"
-                              style={{ backgroundColor: color }}
-                            />
-                          ))}
+                        {/* Price Row */}
+                        <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap pt-1">
+                          <span className="text-sm sm:text-base font-bold text-[#641623]">
+                            ₹{product.price.toLocaleString('en-IN')}
+                          </span>
+
+                          {product.originalPrice && (
+                            <span className="text-[11px] sm:text-xs text-[#2D2424]/45 line-through">
+                              ₹{product.originalPrice.toLocaleString('en-IN')}
+                            </span>
+                          )}
+
+                          {product.discount && (
+                            <span className="text-[10px] sm:text-xs font-semibold text-[#2E7D32]">
+                              {product.discount}
+                            </span>
+                          )}
                         </div>
                       </div>
-
-                      {/* Price Row */}
-                      <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap pt-1">
-                        <span className="text-sm sm:text-base font-bold text-[#641623]">
-                          ₹{product.price.toLocaleString('en-IN')}
-                        </span>
-
-                        {product.originalPrice && (
-                          <span className="text-[11px] sm:text-xs text-[#2D2424]/45 line-through">
-                            ₹{product.originalPrice.toLocaleString('en-IN')}
-                          </span>
-                        )}
-
-                        {product.discount && (
-                          <span className="text-[10px] sm:text-xs font-semibold text-[#2E7D32]">
-                            {product.discount}
-                          </span>
-                        )}
-                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </main>
         </div>
       </div>
@@ -779,7 +912,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
           {/* Backdrop */}
           <div
             onClick={() => setIsMobileFilterOpen(false)}
-            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity cursor-pointer"
           />
 
           {/* Bottom Sheet Drawer */}
@@ -789,7 +922,9 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <span className="text-xl font-bold text-[#641623] lowercase">filters</span>
               <button
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623]"
+                type="button"
+                aria-label="Close filters"
+                className="w-8 h-8 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623] cursor-pointer hover:bg-white"
               >
                 ✕
               </button>
@@ -801,20 +936,28 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div>
                 <p className="text-sm font-bold text-[#641623] lowercase mb-2">category</p>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => (
-                    <label
-                      key={cat.id}
-                      className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(cat.id)}
-                        onChange={() => toggleCategory(cat.id)}
-                        className="rounded text-[#641623]"
-                      />
-                      <span>{cat.label}</span>
-                    </label>
-                  ))}
+                  {CATEGORIES.filter((c) => c.id !== 'all').map((cat) => {
+                    const isChecked = selectedCategories.some(
+                      (sc) => normalizeCategory(sc) === normalizeCategory(cat.id)
+                    );
+                    const count = categoryCounts[normalizeCategory(cat.id)] || 0;
+
+                    return (
+                      <label
+                        key={cat.id}
+                        className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 cursor-pointer hover:bg-white/80"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleCategory(cat.id)}
+                          className="rounded text-[#641623] cursor-pointer"
+                        />
+                        <span className="truncate">{cat.label}</span>
+                        <span className="text-[#2D2424]/40 text-[10px]">({count})</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -830,7 +973,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                   step={50}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full accent-[#641623]"
+                  className="w-full accent-[#641623] cursor-pointer"
                 />
               </div>
 
@@ -838,21 +981,21 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
               <div>
                 <p className="text-sm font-bold text-[#641623] lowercase mb-2">availability</p>
                 <div className="flex items-center gap-3 text-xs">
-                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={selectedAvailability.includes('in-stock')}
                       onChange={() => toggleAvailability('in-stock')}
-                      className="rounded text-[#641623]"
+                      className="rounded text-[#641623] cursor-pointer"
                     />
                     <span>In stock ({inStockCount})</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 flex-1 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={selectedAvailability.includes('out-of-stock')}
                       onChange={() => toggleAvailability('out-of-stock')}
-                      className="rounded text-[#641623]"
+                      className="rounded text-[#641623] cursor-pointer"
                     />
                     <span>Out of stock ({outOfStockCount})</span>
                   </label>
@@ -867,11 +1010,34 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                     <button
                       key={swatch.name}
                       onClick={() => toggleColor(swatch.name)}
-                      className={`w-7 h-7 rounded-full border ${
-                        selectedColors.includes(swatch.name) ? 'ring-2 ring-[#641623]' : ''
+                      type="button"
+                      aria-label={`Filter by ${swatch.name}`}
+                      className={`w-7 h-7 rounded-full border cursor-pointer ${
+                        selectedColors.includes(swatch.name) ? 'ring-2 ring-[#641623] ring-offset-1 scale-105' : ''
                       }`}
                       style={{ backgroundColor: swatch.hex }}
                     />
+                  ))}
+                </div>
+              </div>
+
+              {/* Occasion */}
+              <div>
+                <p className="text-sm font-bold text-[#641623] lowercase mb-2">occasion</p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  {OCCASIONS.map((occ) => (
+                    <label
+                      key={occ}
+                      className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#641623]/15 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedOccasions.includes(occ)}
+                        onChange={() => toggleOccasion(occ)}
+                        className="rounded text-[#641623] cursor-pointer"
+                      />
+                      <span>{occ}</span>
+                    </label>
                   ))}
                 </div>
               </div>
@@ -881,13 +1047,15 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
             <div className="pt-3 border-t border-[#641623]/15 flex items-center gap-3">
               <button
                 onClick={clearAllFilters}
-                className="flex-1 py-2.5 rounded-full border border-[#641623] text-[#641623] font-semibold text-xs"
+                type="button"
+                className="flex-1 py-2.5 rounded-full border border-[#641623] text-[#641623] font-semibold text-xs cursor-pointer hover:bg-[#641623]/5"
               >
                 Clear all
               </button>
               <button
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="flex-2 py-2.5 rounded-full bg-[#641623] text-white font-semibold text-xs shadow-md"
+                type="button"
+                className="flex-2 py-2.5 rounded-full bg-[#641623] text-white font-semibold text-xs shadow-md cursor-pointer hover:bg-[#52121c]"
               >
                 Apply ({filteredProducts.length} items)
               </button>
