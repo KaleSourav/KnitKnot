@@ -11,8 +11,7 @@ import { ReelsSection } from './components/ReelsSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
-import { YarnScrollJourney } from './components/YarnScrollJourney';
-import { BouquetClimaxSection } from './components/BouquetClimaxSection';
+import { DynamicScrollBackground } from './components/DynamicScrollBackground';
 
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
@@ -28,7 +27,6 @@ const CATEGORY_MAP: Record<string, string> = {
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
-  const landingRef = useRef<HTMLDivElement>(null);
 
   // Client-side page routing: 'home' | 'shop' | 'product'
   const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
@@ -163,9 +161,9 @@ export default function App() {
           /* =========================================================================
              LANDING PAGE VIEW (Home)
              ========================================================================= */
-          <div ref={landingRef} className="relative w-full overflow-hidden">
-            {/* The "Unraveling Yarn Thread" Scroll Journey & Blooming Flower Milestones */}
-            <YarnScrollJourney containerRef={landingRef} />
+          <div className="relative w-full">
+            {/* Soothing Ambient Particle & Pastel Aura Background */}
+            <DynamicScrollBackground />
 
             {/* Hero Landing Banner */}
             <div id="section-hero">
@@ -208,9 +206,6 @@ export default function App() {
             <div id="section-reels">
               <ReelsSection />
             </div>
-
-            {/* Bouquet Climax Section: Where the Left & Right Yarns converge & bloom into the Forever Bouquet */}
-            <BouquetClimaxSection onShopBouquets={() => navigateTo('shop', 'Bouquets')} />
           </div>
         ) : currentPage === 'shop' ? (
           /* =========================================================================
