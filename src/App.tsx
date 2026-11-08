@@ -17,13 +17,14 @@ import { SignatureYarnThread } from './components/SignatureYarnThread';
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
   'flowers': 'Flowers',
-  'flower-pots': 'Flower Pots',
+  'bouquets': 'Bouquets',
+  'bouquet': 'Bouquets',
   'plushies': 'Plushies',
   'bags': 'Bags',
   'keychains': 'Keychains',
+  'flower-pots': 'Flower Pots',
   'home-decor': 'Home Decor',
-  'bouquets': 'Bouquets',
-  'bouquet': 'Bouquets',
+  'accessories': 'Accessories',
 };
 
 export default function App() {

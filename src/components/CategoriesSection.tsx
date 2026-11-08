@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 
 interface CategoryItem {
   id: string;
   buttonLabel: string;
+  count: number;
   badgeLine1: string;
   badgeLine2: string;
   image: string;
@@ -15,10 +15,11 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'flowers',
     buttonLabel: 'FLOWERS',
-    badgeLine1: 'BEST',
-    badgeLine2: 'SELLER',
-    image: '/categories/flowers-real.jpg',
-    hoverImage: '/categories/flowers-hover.jpg',
+    count: 87,
+    badgeLine1: '87',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/LblZM5aH_QF3WPDN9U5_2026-09-29_1_0fc72431-636f-4824-bf6f-61f7d8054fd1.jpg?v=1793949812',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/LblZM5aH_T40Q1WBCHV_2026-09-29_2_99db06c7-ad5e-48c2-90f6-3003bc3725f2.jpg?v=1793949812',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
@@ -38,15 +39,16 @@ const CATEGORIES: CategoryItem[] = [
     ),
   },
   {
-    id: 'flower-pots',
-    buttonLabel: 'FLOWER POTS',
-    badgeLine1: 'HAND',
-    badgeLine2: 'MADE',
-    image: '/categories/flower-pots-real.jpg',
-    hoverImage: '/categories/flower-pots-hover.jpg',
+    id: 'bouquets',
+    buttonLabel: 'BOUQUETS',
+    count: 56,
+    badgeLine1: '56',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166417_3l7oukh265vjtjy.jpg?v=1793949872',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166945_uqm5apjf2huds4m.jpg?v=1793949872',
     icon: (
       <svg
-        className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5"
+        className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -54,20 +56,22 @@ const CATEGORIES: CategoryItem[] = [
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M 6 11 L 18 11 L 16.5 21 L 7.5 21 Z" fill="currentColor" fillOpacity="0.2" />
-        <line x1="5" y1="11" x2="19" y2="11" strokeWidth="2.8" />
-        <path d="M 12 11 C 12 7, 7 6, 7 3 C 11 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
-        <path d="M 12 11 C 12 7, 17 6, 17 3 C 13 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
+        <path d="M12 2a3 3 0 0 0-3 3c0 2 3 5 3 5s3-3 3-5a3 3 0 0 0-3-3z" fill="currentColor" fillOpacity="0.25" />
+        <path d="M7 6a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 4 2.5 4s2.5-2.5 2.5-4A2.5 2.5 0 0 0 7 6z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M17 6a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 4 2.5 4s2.5-2.5 2.5-4A2.5 2.5 0 0 0 17 6z" fill="currentColor" fillOpacity="0.2" />
+        <path d="M8 12l4 10 4-10" />
+        <path d="M9 16h6" />
       </svg>
     ),
   },
   {
     id: 'plushies',
     buttonLabel: 'PLUSHIES',
-    badgeLine1: 'SO',
-    badgeLine2: 'CUTE',
-    image: '/categories/plushies-real.jpg',
-    hoverImage: '/categories/plushies-hover.jpg',
+    count: 33,
+    badgeLine1: '33',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/NwW_xS1J_K83GBZOD00_2026-09-29_1.jpg?v=1793949989',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/NwW_xS1J_3VGLV1DR3U_2026-09-29_2.jpg?v=1793949989',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
@@ -89,11 +93,12 @@ const CATEGORIES: CategoryItem[] = [
   },
   {
     id: 'bags',
-    buttonLabel: 'BAGS & TOTES',
-    badgeLine1: 'TOP',
-    badgeLine2: 'TREND',
-    image: '/categories/bags-real.jpg',
-    hoverImage: '/categories/bags-hover.jpg',
+    buttonLabel: 'BAGS',
+    count: 21,
+    badgeLine1: '21',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/dzgJ9mNa_NBQEGQ2IUZ_2026-09-29_1_9c018278-b57d-445b-ac2e-521e1ab8daef.jpg?v=1793949724',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ow9KfW4c_1791261176112_undrvzfqesf2o0a_84778e1f-ba80-4f76-be18-caf3be3a9d21.jpg?v=1793949724',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-6"
@@ -113,10 +118,11 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'keychains',
     buttonLabel: 'KEYCHAINS',
-    badgeLine1: 'HOT',
-    badgeLine2: 'PICK',
-    image: '/categories/keychains-real.jpg',
-    hoverImage: '/categories/keychains-hover.jpg',
+    count: 57,
+    badgeLine1: '57',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/iMAwN0wM_ZSRL10SPMT_2026-09-29_1_4a5a721e-baee-4ffe-8d1b-8ed77819f6eb.jpg?v=1793949852',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/iMAwN0wM_HMKY6KIH52_2026-09-29_2_d65d1367-0e23-4eac-b653-f012403ab09a.jpg?v=1793949852',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
@@ -135,12 +141,38 @@ const CATEGORIES: CategoryItem[] = [
     ),
   },
   {
+    id: 'flower-pots',
+    buttonLabel: 'FLOWER POTS',
+    count: 40,
+    badgeLine1: '40',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TYaMdzHq_1791261126807_kt9e2taz5tb8j0q_42707d91-48c8-4f99-bebf-80566a71abd1.jpg?v=1793949845',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TYaMdzHq_1791261127832_0gqtpcxaihze03c_31d7b3ba-6b6f-4461-ba39-0aacbd565b89.jpg?v=1793949844',
+    icon: (
+      <svg
+        className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M 6 11 L 18 11 L 16.5 21 L 7.5 21 Z" fill="currentColor" fillOpacity="0.2" />
+        <line x1="5" y1="11" x2="19" y2="11" strokeWidth="2.8" />
+        <path d="M 12 11 C 12 7, 7 6, 7 3 C 11 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
+        <path d="M 12 11 C 12 7, 17 6, 17 3 C 13 3, 12 6, 12 11" fill="currentColor" fillOpacity="0.25" />
+      </svg>
+    ),
+  },
+  {
     id: 'home-decor',
     buttonLabel: 'HOME DECOR',
-    badgeLine1: 'COZY',
-    badgeLine2: 'VIBES',
-    image: '/categories/home-decor-real.jpg',
-    hoverImage: '/categories/home-decor-hover.jpg',
+    count: 32,
+    badgeLine1: '32',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/GzWHNryG_Q71ZCDQ83J_2026-09-29_1.jpg?v=1793949884',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_I4rX4lsE_1791261147784_g4z4qifwy2x2ffo.jpg?v=1793949884',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
@@ -159,6 +191,30 @@ const CATEGORIES: CategoryItem[] = [
       </svg>
     ),
   },
+  {
+    id: 'accessories',
+    buttonLabel: 'ACCESSORIES',
+    count: 28,
+    badgeLine1: '28',
+    badgeLine2: 'ITEMS',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/yIeeMt1B_UHTT3669DS_2026-09-29_1_6fbf59d8-b422-46c9-831f-50b9737956e7.jpg?v=1793949750',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/yIeeMt1B_8LZ4YJUZLG_2026-09-29_2_2474a603-a2a9-4d75-ae0e-974f8c2d4b33.jpg?v=1793949749',
+    icon: (
+      <svg
+        className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+        <path d="M 5 8 C 7.5 10 9.5 12 12 12 C 9.5 12 7.5 14 5 16 C 4 14 4 10 5 8 Z" fill="currentColor" fillOpacity="0.25" />
+        <path d="M 19 8 C 16.5 10 14.5 12 12 12 C 14.5 12 16.5 14 19 16 C 20 14 20 10 19 8 Z" fill="currentColor" fillOpacity="0.25" />
+      </svg>
+    ),
+  },
 ];
 
 interface GuideStageInfo {
@@ -168,6 +224,7 @@ interface GuideStageInfo {
   speech: string;
   subtext: string;
   accessoryIcon: React.ReactNode;
+  mascotPose?: string;
 }
 
 // Crisp handmade SVGs for mascot accessory badges and card micro-animations (strictly NO emojis)
@@ -179,6 +236,15 @@ const SVG_ICONS = {
       <path d="M12 21a2.2 2.2 0 0 0 2.2-2.2c0-1.2-2.2-2.8-2.2-2.8s-2.2 1.6-2.2 2.8A2.2 2.2 0 0 0 12 21z" fill="#FDA4AF" />
       <path d="M3 12a2.2 2.2 0 0 0 2.2 2.2c1.2 0 2.8-2.2 2.8-2.2s-1.6-2.2-2.8-2.2A2.2 2.2 0 0 0 3 12z" fill="#FDA4AF" />
       <path d="M21 12a2.2 2.2 0 0 0-2.2-2.2c-1.2 0-2.8 2.2-2.8 2.2s1.6 2.2 2.8 2.2A2.2 2.2 0 0 0 21 12z" fill="#FDA4AF" />
+    </svg>
+  ),
+  bouquet: (
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2a3 3 0 0 0-3 3c0 2 3 5 3 5s3-3 3-5a3 3 0 0 0-3-3z" fill="#FDA4AF" />
+      <path d="M7 6a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 4 2.5 4s2.5-2.5 2.5-4A2.5 2.5 0 0 0 7 6z" fill="#F5D76E" />
+      <path d="M17 6a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 4 2.5 4s2.5-2.5 2.5-4A2.5 2.5 0 0 0 17 6z" fill="#F5D76E" />
+      <path d="M8 12l4 10 4-10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 16h6" strokeLinecap="round" />
     </svg>
   ),
   flowerPot: (
@@ -217,6 +283,13 @@ const SVG_ICONS = {
       <rect x="9" y="14" width="6" height="8" fill="#F5D76E" />
     </svg>
   ),
+  accessory: (
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="2.5" fill="#F5D76E" />
+      <path d="M5 8c2.5 2 4.5 4 7 4-2.5 0-4.5 2-7 4-1-2-1-6 0-8z" fill="#FDA4AF" />
+      <path d="M19 8c-2.5 2-4.5 4-7 4 2.5 0 4.5 2 7 4 1-2 1-6 0-8z" fill="#FDA4AF" />
+    </svg>
+  ),
   star: (
     <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F59E0B]" fill="currentColor">
       <path d="M12 0l3 8.5 8.5 2.5-8.5 3.5-3 8.5-3-8.5-8.5-3.5 8.5-2.5z" />
@@ -234,56 +307,81 @@ const GUIDE_STAGES: Record<string, GuideStageInfo> = {
     id: 'welcome',
     stepLabel: 'Welcome!',
     speech: "Hey! Let's find your little favourite.",
-    subtext: 'Scroll or tap any collection to let me guide you.',
+    subtext: 'Scroll or tap any collection below to let your mascot guide you.',
     accessoryIcon: SVG_ICONS.star,
+    mascotPose: '/mascot/guide-welcome.png',
   },
   flowers: {
     id: 'flowers',
     categoryTarget: 'flowers',
     stepLabel: 'Flowers',
     speech: 'Flowers that keep your sweetest moments blooming.',
-    subtext: 'Handcrafted blooms that never wilt or need watering.',
+    subtext: '87 handcrafted blooms that never wilt or need watering.',
     accessoryIcon: SVG_ICONS.flower,
+    mascotPose: '/mascot/guide-flower.png',
   },
-  'flower-pots': {
-    id: 'flower-pots',
-    categoryTarget: 'flower-pots',
-    stepLabel: 'Flower Pots',
-    speech: 'A little handmade happiness for every corner.',
-    subtext: 'Tiny desk buddies and cheerful windowsill greens.',
-    accessoryIcon: SVG_ICONS.flowerPot,
-  },
-  bags: {
-    id: 'bags',
-    categoryTarget: 'bags',
-    stepLabel: 'Bags & Totes',
-    speech: 'Carry a little creativity wherever you go.',
-    subtext: 'Hand-woven crochet shoulder bags and chunky totes.',
-    accessoryIcon: SVG_ICONS.bag,
-  },
-  keychains: {
-    id: 'keychains',
-    categoryTarget: 'keychains',
-    stepLabel: 'Keychains',
-    speech: 'Small charms, big personality.',
-    subtext: 'Cute backpack pendants and tactile yarn buddies.',
-    accessoryIcon: SVG_ICONS.keychain,
+  bouquets: {
+    id: 'bouquets',
+    categoryTarget: 'bouquets',
+    stepLabel: 'Bouquets',
+    speech: 'Everlasting bouquets wrapped with love & ribbons.',
+    subtext: '56 floral bunches ready for your sweetest celebrations.',
+    accessoryIcon: SVG_ICONS.bouquet,
+    mascotPose: '/mascot/guide-flower.png',
   },
   plushies: {
     id: 'plushies',
     categoryTarget: 'plushies',
     stepLabel: 'Plushies',
     speech: 'Tiny yarn-made friends, ready for big hugs.',
-    subtext: 'Soft amigurumi creatures hand-knitted by dadis.',
+    subtext: '33 soft amigurumi creatures hand-knitted by dadis.',
     accessoryIcon: SVG_ICONS.plushie,
+    mascotPose: '/mascot/guide-plushie.png',
+  },
+  bags: {
+    id: 'bags',
+    categoryTarget: 'bags',
+    stepLabel: 'Bags',
+    speech: 'Carry a little creativity wherever you go.',
+    subtext: '21 hand-woven crochet shoulder bags and chunky totes.',
+    accessoryIcon: SVG_ICONS.bag,
+    mascotPose: '/mascot/guide-bag.png',
+  },
+  keychains: {
+    id: 'keychains',
+    categoryTarget: 'keychains',
+    stepLabel: 'Keychains',
+    speech: 'Small charms, big personality.',
+    subtext: '57 cute backpack pendants and tactile yarn buddies.',
+    accessoryIcon: SVG_ICONS.keychain,
+    mascotPose: '/mascot/guide-point.png',
+  },
+  'flower-pots': {
+    id: 'flower-pots',
+    categoryTarget: 'flower-pots',
+    stepLabel: 'Flower Pots',
+    speech: 'A little handmade happiness for every corner.',
+    subtext: '40 tiny desk buddies and cheerful windowsill greens.',
+    accessoryIcon: SVG_ICONS.flowerPot,
+    mascotPose: '/mascot/guide-flower.png',
   },
   'home-decor': {
     id: 'home-decor',
     categoryTarget: 'home-decor',
     stepLabel: 'Home Decor',
     speech: 'Cozy textures to make any space feel like home.',
-    subtext: 'Handmade details that make your style uniquely yours.',
+    subtext: '32 handmade details that make your style uniquely yours.',
     accessoryIcon: SVG_ICONS.homeDecor,
+    mascotPose: '/mascot/guide-final.png',
+  },
+  accessories: {
+    id: 'accessories',
+    categoryTarget: 'accessories',
+    stepLabel: 'Accessories',
+    speech: 'Wearable handmade art to brighten every outfit.',
+    subtext: '28 floral clips, hair bows, gajras & bandanas.',
+    accessoryIcon: SVG_ICONS.accessory,
+    mascotPose: '/mascot/guide-point.png',
   },
   final: {
     id: 'final',
@@ -291,6 +389,7 @@ const GUIDE_STAGES: Record<string, GuideStageInfo> = {
     speech: "There's something special waiting for you!",
     subtext: 'Find your favourite little handmade thing.',
     accessoryIcon: SVG_ICONS.heart,
+    mascotPose: '/mascot/guide-final.png',
   },
 };
 
@@ -310,9 +409,9 @@ const BOT_CLOUD_FILL =
 const BOT_CLOUD_STROKE =
   'M 0 25 C 32.5 53.0, 97.5 53.0, 130.0 25.0 C 157.5 48.0, 212.5 48.0, 240.0 25.0 C 277.5 53.0, 352.5 53.0, 390.0 25.0 C 420.0 48.0, 480.0 48.0, 510.0 25.0 C 545.0 53.0, 615.0 53.0, 650.0 25.0 C 682.5 48.0, 747.5 48.0, 780.0 25.0 C 810.0 53.0, 870.0 53.0, 900.0 25.0 C 937.5 48.0, 1012.5 48.0, 1050.0 25.0 C 1077.5 53.0, 1132.5 53.0, 1160.0 25.0 C 1195.0 48.0, 1265.0 48.0, 1300.0 25.0 C 1335.0 53.0, 1405.0 53.0, 1440.0 25.0';
 
-// Scalloped Puffy Cloud Path for Floating Speech Sticker (Gentle, broad puffy scallops matching brand cloud style)
-const CLOUD_STICKER_PATH =
-  'M 18 135 C 18 70, 32 32, 62 22 C 92 12, 150 12, 180 22 C 210 12, 270 12, 300 22 C 330 12, 390 12, 420 22 C 450 32, 482 70, 482 135 C 482 195, 450 238, 420 248 C 390 258, 330 258, 300 248 C 270 258, 210 258, 180 248 C 150 258, 92 258, 62 248 C 32 238, 18 195, 18 135 Z';
+// Full-Width Scalloped Puffy Cloud Path (Image 1 Trust Badges Cloud Style)
+const PUFFY_CLOUD_PATH =
+  'M 15 80 C 15 45, 30 25, 50.0 20 C 60.0 5.0, 118.6 5.0, 128.6 20 C 138.6 10.0, 197.1 10.0, 207.1 20 C 217.1 5.0, 275.7 5.0, 285.7 20 C 295.7 10.0, 354.3 10.0, 364.3 20 C 374.3 5.0, 432.9 5.0, 442.9 20 C 452.9 10.0, 511.4 10.0, 521.4 20 C 531.4 5.0, 590.0 5.0, 600.0 20 C 610.0 10.0, 668.6 10.0, 678.6 20 C 688.6 5.0, 747.1 5.0, 757.1 20 C 767.1 10.0, 825.7 10.0, 835.7 20 C 845.7 5.0, 904.3 5.0, 914.3 20 C 924.3 10.0, 982.9 10.0, 992.9 20 C 1002.9 5.0, 1061.4 5.0, 1071.4 20 C 1081.4 10.0, 1140.0 10.0, 1150.0 20 C 1170.0 25, 1185.0 45, 1185.0 80 C 1185.0 115, 1170.0 135, 1150.0 140 C 1140.0 155.0, 1081.4 155.0, 1071.4 140 C 1061.4 150.0, 1002.9 150.0, 992.9 140 C 982.9 155.0, 924.3 155.0, 914.3 140 C 904.3 150.0, 845.7 150.0, 835.7 140 C 825.7 155.0, 767.1 155.0, 757.1 140 C 747.1 150.0, 688.6 150.0, 678.6 140 C 668.6 155.0, 610.0 155.0, 600.0 140 C 590.0 150.0, 531.4 150.0, 521.4 140 C 511.4 155.0, 452.9 155.0, 442.9 140 C 432.9 150.0, 374.3 150.0, 364.3 140 C 354.3 155.0, 295.7 155.0, 285.7 140 C 275.7 150.0, 217.1 150.0, 207.1 140 C 197.1 155.0, 138.6 155.0, 128.6 140 C 118.6 150.0, 60.0 150.0, 50.0 140 C 30 135, 15 115, 15 80 Z';
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
@@ -320,8 +419,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [scrollStage, setScrollStage] = useState<string>('welcome');
-  const [isCloudOpen, setIsCloudOpen] = useState<boolean>(false);
-  const [isSectionInView, setIsSectionInView] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState<number>(0);
@@ -337,10 +434,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-
-      // Section entered viewport
-      const inView = rect.top < viewportHeight * 0.85 && rect.bottom > viewportHeight * 0.15;
-      setIsSectionInView(inView);
 
       if (rect.top > viewportHeight * 0.65) {
         setScrollStage('welcome');
@@ -404,7 +497,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
   const handleStageSelect = (stageId: string) => {
     setScrollStage(stageId);
-    setIsCloudOpen(true);
     const cat = CATEGORIES.find((c) => c.id === stageId);
     if (cat && cardRefs.current[cat.id]) {
       cardRefs.current[cat.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -493,22 +585,9 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
         </div>
 
-        <div className="w-full max-w-[1040px] mx-auto relative z-10">
+        <div className="w-full max-w-[1240px] mx-auto relative z-10">
           {/* Header with Whimsical Radiant Dashes (Spacious & Clean) */}
-          <div className="flex flex-col items-center justify-center mb-5 sm:mb-8 text-center">
-            {/* Friendly Mascot Little Shopping Guide Pill (Click to toggle guide) */}
-            <button
-              type="button"
-              onClick={() => setIsCloudOpen((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF5CC] hover:bg-[#FFFDF8] border border-[#641623]/25 shadow-xs mb-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
-              title="Click to meet your shopping guide"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
-              <span className="font-['Fredoka'] font-semibold text-xs text-[#811B2B] tracking-wide">
-                Meet your little shopping guide!
-              </span>
-            </button>
-
+          <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 text-center">
             <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 text-center">
               {/* Left Radiant Dashes */}
               <svg
@@ -546,13 +625,113 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
 
           {/* =========================================================================
-              COLLECTION CARDS GRID (Clean, Beautiful, Unobstructed)
-              Mobile Carousel (< lg) & Desktop 3x2 Grid (>= lg)
+              SOFT PUFFY SCALLOPED CLOUD MASCOT GUIDE BANNER (Combines Image 1 & 2)
+              - Soft pastel-blue puffy scalloped cloud container matching TrustBadges
+              - Real Boy Mascot Portrait on left with dynamic accessory badge
+              - Interactive Speech card on right with live stage comments & 8 category chips
+              ========================================================================= */}
+          <div className="relative w-full mb-6 sm:mb-8 select-none">
+            <div className="relative w-full flex items-center px-3 sm:px-7 md:px-9 py-3 sm:py-5 min-h-[110px] sm:min-h-[140px] md:min-h-[160px]">
+              {/* Puffy Scalloped Cloud Background (Same as Image 1 Trust Badges) */}
+              <svg
+                viewBox="0 0 1200 160"
+                preserveAspectRatio="none"
+                className="absolute inset-0 w-full h-full select-none pointer-events-none drop-shadow-[0_6px_20px_rgba(100,22,35,0.06)]"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="mascotCloudGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#EBF8FA" />
+                    <stop offset="60%" stopColor="#D9F2F6" />
+                    <stop offset="100%" stopColor="#C5EAF2" />
+                  </linearGradient>
+                  <filter id="mascotCloudShadow" x="-5%" y="-10%" width="110%" height="135%">
+                    <feDropShadow dx="0" dy="5" stdDeviation="8" floodColor="#641623" floodOpacity="0.05" />
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#8ED5E3" floodOpacity="0.5" />
+                  </filter>
+                </defs>
+                <path
+                  d={PUFFY_CLOUD_PATH}
+                  fill="url(#mascotCloudGrad)"
+                  filter="url(#mascotCloudShadow)"
+                />
+              </svg>
+
+              {/* Horizontal Mascot Stand + Speech Bubble Card */}
+              <div className="relative z-10 w-full flex flex-row items-center gap-2.5 sm:gap-4 md:gap-6">
+                {/* Mascot Cameo Box */}
+                <div className="flex-shrink-0 flex items-center justify-center relative">
+                  <div className="relative w-16 h-20 sm:w-22 sm:h-26 md:w-28 md:h-30 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#FFFDF8] to-[#FFF5CC] border-[1.8px] sm:border-[2px] border-[#641623] shadow-sm flex items-end justify-center overflow-hidden group">
+                    <img
+                      src={currentStage.mascotPose || '/mascot/guide-portrait.png'}
+                      alt="Knotsnco Boy Shopping Guide"
+                      className="h-16 sm:h-22 md:h-28 w-auto object-contain select-none drop-shadow-sm transition-transform duration-300 transform group-hover:scale-108"
+                    />
+                    {/* Dynamic Accessory Badge */}
+                    <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#641623] flex items-center justify-center shadow-xs animate-bounce">
+                      {currentStage.accessoryIcon}
+                    </div>
+                  </div>
+
+                  {/* Speech Arrow */}
+                  <div className="absolute -right-1.5 sm:-right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] sm:border-t-[7px] border-t-transparent border-b-[5px] sm:border-b-[7px] border-b-transparent border-r-[7px] sm:border-r-[9px] border-r-[#FFFDF8] filter drop-shadow-[-1px_0_0_#641623] z-20" />
+                </div>
+
+                {/* Speech Bubble Card */}
+                <div className="flex-1 min-w-0 bg-[#FFFDF8] rounded-xl sm:rounded-2xl md:rounded-3xl p-2.5 sm:p-3.5 md:p-4.5 border-[1.6px] sm:border-[1.8px] border-[#641623] shadow-xs">
+                  <div className="flex items-center justify-between gap-1.5 mb-0.5 sm:mb-1">
+                    <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full bg-[#811B2B] text-[#FFFDF8] font-bold text-[9.5px] sm:text-xs uppercase tracking-wider shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F5D76E] flex-shrink-0" />
+                      {currentStage.stepLabel}
+                    </span>
+                    <span className="text-[9.5px] sm:text-[11px] text-[#641623]/60 italic hidden md:inline">
+                      hover or click cards to guide
+                    </span>
+                  </div>
+
+                  {/* Main Quote */}
+                  <p className="font-['Fredoka'] font-bold text-xs sm:text-base md:text-xl text-[#641623] leading-snug tracking-tight transition-all duration-300">
+                    &ldquo;{currentStage.speech}&rdquo;
+                  </p>
+
+                  {/* Subtitle */}
+                  <p className="font-['Fredoka'] text-[10px] sm:text-xs text-[#641623]/75 mt-0.5 hidden xs:block">
+                    {currentStage.subtext}
+                  </p>
+
+                  {/* Quick Stage Navigation Chips (All 8 Categories) */}
+                  <div className="mt-1.5 sm:mt-2.5 pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
+                    {CATEGORIES.map((cat) => {
+                      const isActive = activeStageId === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => handleStageSelect(cat.id)}
+                          className={`px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[11px] font-['Fredoka'] font-bold whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
+                            isActive
+                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-102'
+                              : 'bg-[#FFF5CC] text-[#641623] hover:bg-[#FFE8BF] border border-[#641623]/25'
+                          }`}
+                        >
+                          {cat.buttonLabel} ({cat.count})
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              COLLECTION CARDS 4-4 GRID (4 on Top Row, 4 on Bottom Row)
+              Mobile Carousel (< lg) & Desktop 4x2 Grid (>= lg)
               ========================================================================= */}
           <div
             ref={scrollRef}
             onScroll={handleCarouselScroll}
-            className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-7 overflow-x-auto lg:overflow-visible pb-3 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
+            className="flex lg:grid lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6 overflow-x-auto lg:overflow-visible pb-3 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
           >
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
@@ -564,7 +743,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   ref={(el) => {
                     cardRefs.current[cat.id] = el;
                   }}
-                  title={cat.buttonLabel}
+                  title={`${cat.buttonLabel} (${cat.count})`}
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
@@ -574,7 +753,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 >
                   {/* 1. Square Aspect Ratio Image Box with Maroon Border & Hover Crossfade */}
                   <div
-                    className={`relative w-full aspect-square rounded-[18px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 ${
+                    className={`relative w-full aspect-square rounded-[18px] sm:rounded-[26px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 ${
                       isStageActive
                         ? 'shadow-[0_12px_28px_rgba(129,27,43,0.18)] ring-2 ring-[#811B2B]/40'
                         : 'shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)]'
@@ -644,7 +823,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {/* =====================================================================
                         STAGE-SPECIFIC MICRO-ANIMATIONS ON CARDS (Strictly SVG, NO emojis)
                         ===================================================================== */}
-                    {/* Stage 2: Flowers blooming crochet flower */}
+                    {/* Flowers blooming crochet flower */}
                     {cat.id === 'flowers' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -657,7 +836,20 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       </div>
                     )}
 
-                    {/* Stage 2: Flower Pots swaying plant */}
+                    {/* Bouquets tied bouquet */}
+                    {cat.id === 'bouquets' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_2s_infinite]">
+                          {SVG_ICONS.bouquet}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Flower Pots swaying plant */}
                     {cat.id === 'flower-pots' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -670,7 +862,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       </div>
                     )}
 
-                    {/* Stage 3: Bags hanging & swinging charm */}
+                    {/* Bags hanging & swinging charm */}
                     {cat.id === 'bags' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -683,7 +875,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       </div>
                     )}
 
-                    {/* Stage 3: Keychains swinging charm */}
+                    {/* Keychains swinging charm */}
                     {cat.id === 'keychains' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -696,7 +888,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       </div>
                     )}
 
-                    {/* Stage 4: Plushies bouncing friend */}
+                    {/* Plushies bouncing friend */}
                     {cat.id === 'plushies' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -709,7 +901,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       </div>
                     )}
 
-                    {/* Stage 5: Home Decor cozy spark */}
+                    {/* Home Decor cozy spark */}
                     {cat.id === 'home-decor' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
@@ -721,19 +913,33 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                         </div>
                       </div>
                     )}
+
+                    {/* Accessories hairclip sparkle */}
+                    {cat.id === 'accessories' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FDA4AF] border border-[#641623] shadow-md flex items-center justify-center animate-[wiggle_2s_infinite]">
+                          {SVG_ICONS.accessory}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* 2. Sleek 3D Offset Pill Button Matching the Card Width */}
-                  <div className="w-full mt-2 sm:mt-3.5 flex justify-center">
+                  <div className="w-full mt-2 sm:mt-3 flex justify-center">
                     <div
-                      className={`w-full py-1.5 sm:py-3 px-1.5 sm:px-5 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_6px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-2.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-sm md:text-[15px] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none ${
+                      className={`w-full py-1.5 sm:py-2.5 px-1.5 sm:px-3 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_5px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-1.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-xs md:text-[13px] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_3px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none ${
                         isStageActive
                           ? 'bg-[#811B2B] text-white shadow-[0_3px_0_0_#380B12]'
                           : 'bg-[#F7BE44] text-[#641623]'
                       }`}
                     >
-                      <span className="scale-75 sm:scale-100 flex-shrink-0">{cat.icon}</span>
+                      <span className="scale-75 sm:scale-90 flex-shrink-0">{cat.icon}</span>
                       <span className="leading-tight pt-0.5 truncate">{cat.buttonLabel}</span>
+                      <span className="text-[9px] sm:text-[11px] font-bold opacity-80 flex-shrink-0">({cat.count})</span>
                     </div>
                   </div>
                 </div>
@@ -743,7 +949,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
           {/* Mobile Pagination Indicator Dots */}
           <div className="flex lg:hidden items-center justify-center gap-2 mt-3">
-            {[0, 1, 2].map((idx) => (
+            {[0, 1, 2, 3].map((idx) => (
               <button
                 key={idx}
                 onClick={() => {
@@ -832,165 +1038,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           />
         </svg>
       </div>
-
-      {/* =========================================================================
-          FLOATING MASCOT & CLOUDY STICKER GUIDE (Right Side Interactive Companion)
-          - Mounted via Portal to body so viewport positioning is 100% accurate
-          - Real boy mascot standing on the right
-          - Puffy cloudy sticker with live explanation comments
-          - Option to close the cloud sticker (only see mascot)
-          - Tap/click the mascot to reopen cloud comments anytime!
-          ========================================================================= */}
-      {typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            className={`fixed right-3 sm:right-6 md:right-8 bottom-4 sm:bottom-6 z-50 flex flex-col items-end pointer-events-auto transition-all duration-500 ease-out select-none ${
-              isSectionInView
-                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
-                : 'opacity-0 translate-y-8 scale-90 pointer-events-none'
-            }`}
-            aria-live="polite"
-          >
-            {/* Puffy Cloudy Speech Sticker (Exact shape & aesthetic matching brand cloud) */}
-            <div
-              className={`transition-all duration-300 origin-bottom-right mb-1 ${
-                isCloudOpen
-                  ? 'opacity-100 scale-100 pointer-events-auto'
-                  : 'opacity-0 scale-75 pointer-events-none translate-y-4 h-0 overflow-hidden mb-0'
-              }`}
-            >
-              <div className="relative w-[340px] sm:w-[430px] md:w-[480px] h-[250px] sm:h-[265px] filter drop-shadow-[0_16px_32px_rgba(100,22,35,0.18)] select-none mb-1">
-                {/* SVG Puffy Cloud Silhouette (Broad gentle scallops matching brand cloud) */}
-                <svg
-                  viewBox="0 0 500 270"
-                  preserveAspectRatio="none"
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="floatingCloudGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#FFFFFF" />
-                      <stop offset="60%" stopColor="#FFFDF9" />
-                      <stop offset="100%" stopColor="#FFF5CC" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d={CLOUD_STICKER_PATH}
-                    fill="url(#floatingCloudGrad)"
-                    stroke="#641623"
-                    strokeWidth="2.4"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                  />
-
-                  {/* Little Thought / Speech Bubbles pointing to Mascot */}
-                  <circle cx="415" cy="252" r="7.5" fill="#FFF5CC" stroke="#641623" strokeWidth="1.8" />
-                  <circle cx="428" cy="263" r="4.5" fill="#FFF5CC" stroke="#641623" strokeWidth="1.5" />
-                  <circle cx="437" cy="270" r="2.8" fill="#FFF5CC" stroke="#641623" strokeWidth="1.2" />
-                </svg>
-
-                {/* Cloud Content Overlay with Generous Safe Inset */}
-                <div className="relative z-10 w-full h-full pt-5 pb-6 px-6 sm:pt-6 sm:pb-7 sm:px-11 flex flex-col justify-between">
-                  {/* Top Bar: Category Stage Pill + Hint + Close Button */}
-                  <div className="flex items-center justify-between gap-2 pr-1 sm:pr-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#811B2B] text-[#FFFDF8] shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#F5D76E] flex-shrink-0" />
-                      <span className="font-['Fredoka'] font-bold text-[10.5px] sm:text-xs uppercase tracking-wider">
-                        {currentStage.stepLabel}
-                      </span>
-                      <span className="scale-85 text-[#F5D76E]">{currentStage.accessoryIcon}</span>
-                    </div>
-
-                    <span className="hidden sm:inline-block font-['Fredoka'] italic text-[11px] text-[#641623]/65">
-                      hover or scroll cards to guide
-                    </span>
-
-                    {/* Close Cloud Button */}
-                    <button
-                      type="button"
-                      onClick={() => setIsCloudOpen(false)}
-                      title="Close cloud (keep mascot)"
-                      aria-label="Close cloud speech bubble"
-                      className="w-6 h-6 rounded-full bg-[#641623]/10 hover:bg-[#811B2B] text-[#641623] hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs font-bold mr-0.5 sm:mr-1"
-                    >
-                      ✕
-                    </button>
-                  </div>
-
-                  {/* Main Speech Quote & Subtext */}
-                  <div className="my-1">
-                    <p className="font-['Fredoka'] font-bold text-sm sm:text-base md:text-[17px] text-[#641623] leading-snug tracking-tight">
-                      &ldquo;{currentStage.speech}&rdquo;
-                    </p>
-                    <p className="font-['Fredoka'] text-[11px] sm:text-xs text-[#641623]/80 mt-1 leading-snug">
-                      {currentStage.subtext}
-                    </p>
-                  </div>
-
-                  {/* Clean 2x3 Grid of All 6 Category Buttons */}
-                  <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-[#641623]/15">
-                    {CATEGORIES.map((cat) => {
-                      const isActive = activeStageId === cat.id;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => handleStageSelect(cat.id)}
-                          className={`py-1 px-1.5 rounded-full text-[10px] sm:text-[11px] font-['Fredoka'] font-bold text-center truncate transition-all cursor-pointer ${
-                            isActive
-                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-102'
-                              : 'bg-[#FFFDF8] text-[#641623] hover:bg-[#FFF5CC] border border-[#641623]/20'
-                          }`}
-                        >
-                          {cat.buttonLabel}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Real Mascot Stand with Tap-To-Open / Re-open Cloud Button */}
-            <div className="relative flex flex-col items-center">
-              {/* Re-open Cloud Hint Bubble (Shown when Cloud is Closed) */}
-              {!isCloudOpen && (
-                <button
-                  type="button"
-                  onClick={() => setIsCloudOpen(true)}
-                  className="mb-1.5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF5CC] hover:bg-[#FFFDF8] border-[2px] border-[#641623] shadow-md hover:scale-105 transition-all cursor-pointer animate-bounce"
-                >
-                  <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
-                  <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B]">
-                    Tap to open guide
-                  </span>
-                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#811B2B]" fill="currentColor">
-                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Real Mascot Boy Character (Standing Cheerful & Waving) */}
-              <button
-                type="button"
-                onClick={() => setIsCloudOpen((prev) => !prev)}
-                title={isCloudOpen ? 'Click mascot to hide cloud' : 'Click mascot to view cloud guide'}
-                className="group relative cursor-pointer focus:outline-none focus:scale-105 transition-transform"
-              >
-                {/* Ground shadow beneath feet */}
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-2.5 rounded-full bg-[#641623]/25 blur-[2px] transition-transform group-hover:scale-110" />
-
-                {/* Mascot Real Image */}
-                <img
-                  src="/mascot/guide-fullbody.png"
-                  alt="Knotsnco Boy Mascot"
-                  className="h-28 sm:h-34 md:h-40 w-auto object-contain drop-shadow-[0_8px_16px_rgba(100,22,35,0.22)] select-none transition-transform duration-300 group-hover:scale-105 animate-[float_4s_ease-in-out_infinite]"
-                />
-              </button>
-            </div>
-          </div>,
-          document.body
-        )}
     </div>
   );
 };
