@@ -6,6 +6,7 @@ interface ProductDetailsPageProps {
   productHandle?: string | null;
   onNavigateHome?: () => void;
   onNavigateShop?: (category?: string) => void;
+  onNavigateProduct?: (productId: string) => void;
   onAddToCart?: (product: ShopProduct, quantity: number) => void;
 }
 
@@ -14,6 +15,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   productHandle,
   onNavigateHome,
   onNavigateShop,
+  onNavigateProduct,
   onAddToCart,
 }) => {
   // Find product from Shopify data with robust matching (ID, shopifyId, handle, title)
@@ -88,6 +90,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     return false;
   });
 
+  const [wishlistMap, setWishlistMap] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('knotsnco_wishlist');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
   // Keep wishlist in sync with localStorage and product changes
   useEffect(() => {
     const syncWishlist = () => {
@@ -96,6 +107,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         if (saved) {
           const parsed = JSON.parse(saved);
           setIsWishlist(!!parsed[product.id]);
+          setWishlistMap(parsed);
         }
       } catch {}
     };
@@ -113,10 +125,59 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         const parsed = saved ? JSON.parse(saved) : {};
         parsed[product.id] = next;
         localStorage.setItem('knotsnco_wishlist', JSON.stringify(parsed));
+        setWishlistMap({ ...parsed });
         window.dispatchEvent(new Event('knotsnco_wishlist_updated'));
       } catch {}
       return next;
     });
+  };
+
+  const toggleCardWishlist = (targetId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const saved = localStorage.getItem('knotsnco_wishlist');
+      const parsed = saved ? JSON.parse(saved) : {};
+      const nextVal = !parsed[targetId];
+      parsed[targetId] = nextVal;
+      localStorage.setItem('knotsnco_wishlist', JSON.stringify(parsed));
+      setWishlistMap({ ...parsed });
+      if (targetId === product.id) {
+        setIsWishlist(nextVal);
+      }
+      window.dispatchEvent(new Event('knotsnco_wishlist_updated'));
+    } catch {}
+  };
+
+  // Recommendations for "You might also like"
+  const recommendedProducts = useMemo(() => {
+    const valid = ALL_PRODUCTS.filter(
+      (p) =>
+        p.id !== product.id &&
+        p.handle !== product.handle &&
+        p.images &&
+        p.images.length > 0 &&
+        typeof p.price === 'number'
+    );
+
+    const sameCategory = valid.filter((p) => p.category === product.category);
+    const otherCategories = valid.filter((p) => p.category !== product.category);
+    const merged = [...sameCategory, ...otherCategories];
+    return merged.slice(0, 12);
+  }, [product]);
+
+  // Carousel track ref and scroll controls for "You might also like"
+  const carouselTrackRef = useRef<HTMLDivElement>(null);
+
+  const handleCarouselPrev = () => {
+    if (carouselTrackRef.current) {
+      carouselTrackRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const handleCarouselNext = () => {
+    if (carouselTrackRef.current) {
+      carouselTrackRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
   };
 
   // Reset gallery and quantity when product changes
@@ -1177,6 +1238,158 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               fill="#EBD8E7"
             />
           </svg>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          4. "YOU MIGHT ALSO LIKE" SECTION (Exact Match to Reference Image)
+          Heart-accented title, circular carousel arrows, 4 cards in view,
+          bottom-left crochet flower and bottom-right pink yarn ball with heart loop trail.
+         ========================================================================= */}
+      <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16 sm:pb-20 overflow-hidden">
+        {/* Section Heading: ♥ You might also like ♥ */}
+        <div className="flex items-center justify-center gap-2.5 sm:gap-3 mb-8 sm:mb-10 text-[#641623]">
+          <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-[#641623] flex-shrink-0" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#641623]">
+            You might also like
+          </h2>
+          <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-[#641623] flex-shrink-0" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        </div>
+
+        {/* Carousel Container with Left/Right Arrow Buttons */}
+        <div className="relative flex items-center justify-center gap-2 sm:gap-4">
+          {/* Previous Arrow Button */}
+          <button
+            type="button"
+            onClick={handleCarouselPrev}
+            aria-label="Previous products"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-[#641623]/30 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+
+          {/* Scrollable Track / Grid */}
+          <div
+            ref={carouselTrackRef}
+            className="flex-1 flex gap-4 sm:gap-6 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-1"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {recommendedProducts.map((item) => {
+              const isItemWishlist = !!wishlistMap[item.id];
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    if (onNavigateProduct) {
+                      onNavigateProduct(item.handle || item.id);
+                    } else {
+                      window.location.hash = `/product?id=${encodeURIComponent(item.handle || item.id)}`;
+                    }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="w-[calc(50%-8px)] sm:w-[calc(33.333%-12px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col items-center text-center group cursor-pointer"
+                >
+                  {/* Peach / Beige Image Card */}
+                  <div className="relative aspect-square w-full rounded-[24px] sm:rounded-[28px] bg-[#F7ECE2] overflow-hidden border border-[#641623]/8 p-3 sm:p-4 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_8px_24px_rgba(100,22,35,0.08)]">
+                    {/* Top-Right Heart Wishlist Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => toggleCardWishlist(item.id, e)}
+                      aria-label={isItemWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                      className="absolute top-3 right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/20 shadow-xs flex items-center justify-center text-[#641623] z-10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <svg
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                          isItemWishlist ? 'fill-[#641623] text-[#641623]' : 'fill-none text-[#641623]'
+                        }`}
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                      >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                    </button>
+
+                    {/* Product Image */}
+                    {item.image || (item.images && item.images[0]) ? (
+                      <img
+                        src={item.image || (item.images && item.images[0])}
+                        alt={item.name}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#641623]/40">
+                        <span className="text-xs">No image</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Product Title */}
+                  <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-3 group-hover:text-[#8E283A] transition-colors leading-snug line-clamp-1 max-w-[95%]">
+                    {item.name}
+                  </h3>
+
+                  {/* Product Price */}
+                  <p className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-0.5">
+                    ₹{item.price.toLocaleString('en-IN')}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Next Arrow Button */}
+          <button
+            type="button"
+            onClick={handleCarouselNext}
+            aria-label="Next products"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-[#641623]/30 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Bottom Left Handcrafted Flower Illustration */}
+        <div className="absolute -bottom-2 -left-2 sm:left-2 w-20 h-20 sm:w-28 sm:h-28 pointer-events-none select-none z-10">
+          <img
+            src="/decorations/you_might_like_flower.png"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        {/* Bottom Right Pink Yarn Ball with Heart Trail */}
+        <div className="absolute -bottom-2 -right-2 sm:right-2 w-28 sm:w-36 h-18 sm:h-24 pointer-events-none select-none z-10 flex items-end justify-end">
+          <img
+            src="/decorations/you_might_like_yarn.png"
+            alt=""
+            className="w-full h-full object-contain"
+          />
         </div>
       </section>
     </article>

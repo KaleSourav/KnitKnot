@@ -215,6 +215,7 @@ export default function App() {
             productId={selectedProductId}
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onNavigateProduct={(id) => navigateTo('product', id)}
             onAddToCart={(_product, qty) => setCartCount((prev) => prev + qty)}
           />
         )}
