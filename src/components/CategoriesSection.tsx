@@ -217,7 +217,58 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       </div>
 
       {/* 2. Main Cloud Body in Theme's Pastel Blue (#D4EFF4) */}
-      <section className="w-full bg-[#D4EFF4] py-3 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+      <section className="w-full bg-[#D4EFF4] py-3 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Soft Ambient Floating Petals & Fairy Sparkles in the Category Cloud */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+          {/* Top-Left Floating Petal */}
+          <div className="absolute top-4 left-6 sm:left-12 opacity-70 animate-[bounce_6s_infinite_ease-in-out]">
+            <svg viewBox="0 0 24 24" className="w-5 h-5 sm:w-6 sm:h-6 text-[#F472B6] -rotate-12" fill="currentColor">
+              <path d="M12 2C8 6 6 12 12 22C18 12 16 6 12 2Z" />
+            </svg>
+          </div>
+
+          {/* Top-Right Floating Daisy */}
+          <div className="absolute top-6 right-8 sm:right-16 opacity-75 animate-[pulse_5s_infinite_ease-in-out]">
+            <svg viewBox="0 0 28 28" className="w-5 h-5 sm:w-6 sm:h-6" fill="none">
+              <circle cx="14" cy="7" r="4" fill="#FFFDF8" />
+              <circle cx="21" cy="11" r="4" fill="#FFFDF8" />
+              <circle cx="20" cy="18" r="4" fill="#FFFDF8" />
+              <circle cx="14" cy="21" r="4" fill="#FFFDF8" />
+              <circle cx="8" cy="18" r="4" fill="#FFFDF8" />
+              <circle cx="7" cy="11" r="4" fill="#FFFDF8" />
+              <circle cx="14" cy="14" r="4.5" fill="#FBBF24" />
+            </svg>
+          </div>
+
+          {/* Mid-Left Golden Sparkle */}
+          <div className="absolute top-1/2 left-4 sm:left-8 opacity-65 -translate-y-1/2 animate-[spin_8s_linear_infinite]">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#F59E0B]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+            </svg>
+          </div>
+
+          {/* Mid-Right Floating Peach Petal */}
+          <div className="absolute top-2/3 right-4 sm:right-10 opacity-70 animate-[bounce_7s_infinite_ease-in-out]">
+            <svg viewBox="0 0 24 24" className="w-5 h-5 sm:w-6 sm:h-6 text-[#FBBF24] rotate-45" fill="currentColor">
+              <path d="M12 2C8 6 6 12 12 22C18 12 16 6 12 2Z" />
+            </svg>
+          </div>
+
+          {/* Bottom-Left Pink Petal */}
+          <div className="absolute bottom-6 left-12 sm:left-24 opacity-60 animate-[pulse_6s_infinite]">
+            <svg viewBox="0 0 24 24" className="w-4 h-4 sm:w-5 sm:h-5 text-[#FDA4AF] rotate-12" fill="currentColor">
+              <path d="M12 2C8 6 6 12 12 22C18 12 16 6 12 2Z" />
+            </svg>
+          </div>
+
+          {/* Bottom-Right Fairy Sparkle */}
+          <div className="absolute bottom-8 right-16 sm:right-32 opacity-70 animate-[spin_10s_linear_infinite]">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#DE637E]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+            </svg>
+          </div>
+        </div>
+
         {/* Perfectly proportioned container: max-w-[1040px] creates ideal card dimensions */}
         <div className="w-full max-w-[1040px] mx-auto">
           {/* Header with Mascots on both sides */}

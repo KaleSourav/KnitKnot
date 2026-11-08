@@ -336,22 +336,27 @@ export const DynamicScrollBackground: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 w-full h-full pointer-events-none select-none overflow-hidden z-0"
-      aria-hidden="true"
-    >
-      {/* 1. Ultra-Soft Ambient Pastel Breathing Aura Blobs (Liquid Color Moods) */}
-      <div className="absolute top-[5%] -left-[10%] w-[450px] sm:w-[600px] h-[450px] sm:h-[600px] rounded-full bg-[#FCE8ED]/50 blur-[90px] animate-pulse duration-[9000ms]" />
-      <div className="absolute top-[35%] -right-[12%] w-[420px] sm:w-[580px] h-[420px] sm:h-[580px] rounded-full bg-[#FEF9C3]/45 blur-[100px] animate-pulse duration-[11000ms]" />
-      <div className="absolute top-[65%] -left-[8%] w-[460px] sm:w-[620px] h-[460px] sm:h-[620px] rounded-full bg-[#F3E8FF]/40 blur-[95px] animate-pulse duration-[10000ms]" />
-      <div className="absolute top-[88%] -right-[10%] w-[400px] sm:w-[550px] h-[400px] sm:h-[550px] rounded-full bg-[#FFEDD5]/40 blur-[90px] animate-pulse duration-[12000ms]" />
+    <>
+      {/* 1. Background Ambient Pastel Breathing Aura Blobs (z-0) */}
+      <div
+        className="fixed inset-0 w-full h-full pointer-events-none select-none overflow-hidden z-0"
+        aria-hidden="true"
+      >
+        <div className="absolute top-[5%] -left-[10%] w-[450px] sm:w-[600px] h-[450px] sm:h-[600px] rounded-full bg-[#FCE8ED]/50 blur-[90px] animate-pulse duration-[9000ms]" />
+        <div className="absolute top-[35%] -right-[12%] w-[420px] sm:w-[580px] h-[420px] sm:h-[580px] rounded-full bg-[#FEF9C3]/45 blur-[100px] animate-pulse duration-[11000ms]" />
+        <div className="absolute top-[65%] -left-[8%] w-[460px] sm:w-[620px] h-[460px] sm:h-[620px] rounded-full bg-[#F3E8FF]/40 blur-[95px] animate-pulse duration-[10000ms]" />
+        <div className="absolute top-[88%] -right-[10%] w-[400px] sm:w-[550px] h-[400px] sm:h-[550px] rounded-full bg-[#FFEDD5]/40 blur-[90px] animate-pulse duration-[12000ms]" />
+      </div>
 
-      {/* 2. Hardware-Accelerated Drifting Petals & Fairy Sparkles Canvas */}
+      {/* 2. Hardware-Accelerated Floating Petals & Fairy Sparkles (z-20, pointer-events-none) */}
+      {/* Floats gently across the viewport over all sections including Shop by Category */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="fixed inset-0 w-full h-full pointer-events-none select-none z-20"
         style={{ width: '100%', height: '100%' }}
+        aria-hidden="true"
       />
-    </div>
+    </>
   );
 };
+
