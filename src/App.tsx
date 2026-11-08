@@ -167,7 +167,7 @@ export default function App() {
 
             {/* Hero Landing Banner */}
             <div id="section-hero">
-              <HeroBanner onShopClick={() => navigateTo('shop', 'all')} />
+              <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
               <TrustBadges />
             </div>
 
