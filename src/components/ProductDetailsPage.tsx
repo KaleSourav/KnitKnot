@@ -148,21 +148,56 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     } catch {}
   };
 
-  // Recommendations for "You might also like"
-  const recommendedProducts = useMemo(() => {
+  // Recommendations for "You might also like" - strictly authentic bouquets from store catalog
+  const recommendedBouquets = useMemo(() => {
+    const isTrueBouquet = (p: ShopProduct) => {
+      const name = p.name.toLowerCase();
+      // Exclude keychains, charms, pots, loose leaves/packs, magnets, accessories
+      if (p.category === 'Keychains' || name.includes('charm') || name.includes('keychain')) return false;
+      if (p.category === 'Flower Pots' || name.includes(' pot') || name.includes('pot ') || name.endsWith('pot')) return false;
+      if (name.includes('leaf') || name.includes('pack of') || name.includes('magnet') || name.includes('earring') || name.includes('stud') || name.includes('tote') || name.includes('bag')) return false;
+      if (p.category === 'Bouquets') return true;
+      if (name.includes('bouquet')) return true;
+      return false;
+    };
+
     const valid = ALL_PRODUCTS.filter(
       (p) =>
         p.id !== product.id &&
         p.handle !== product.handle &&
+        isTrueBouquet(p) &&
         p.images &&
         p.images.length > 0 &&
         typeof p.price === 'number'
     );
 
-    const sameCategory = valid.filter((p) => p.category === product.category);
-    const otherCategories = valid.filter((p) => p.category !== product.category);
-    const merged = [...sameCategory, ...otherCategories];
-    return merged.slice(0, 12);
+    // Prioritize 4 showcase bouquets matching the reference image:
+    // Slot 1: Tulip Bouquet
+    const tulip =
+      valid.find((p) => p.handle === 'flowers-mini-crochet-tulip-valley') ||
+      valid.find((p) => p.name.toLowerCase().includes('tulip'));
+    // Slot 2: Lavender Bouquet
+    const lavender =
+      valid.find((p) => p.handle === 'flowers-lavender-sunshine-lily-bouquet') ||
+      valid.find((p) => p.name.toLowerCase().includes('lavender'));
+    // Slot 3: Rose Bouquet
+    const rose =
+      valid.find((p) => p.handle === 'flowers-mini-red-rose-garden-bouquet') ||
+      valid.find((p) => p.handle === 'flowers-shaded-rose-bouquet') ||
+      valid.find((p) => p.name.toLowerCase().includes('rose'));
+    // Slot 4: Daisy / Bloom Bouquet
+    const daisy =
+      valid.find((p) => p.handle === 'flowers-mini-pure-bloom-bouquet') ||
+      valid.find((p) => p.handle === 'flowers-pink-daisy') ||
+      valid.find((p) => p.name.toLowerCase().includes('daisy') || p.name.toLowerCase().includes('bloom'));
+
+    const showcase = [tulip, lavender, rose, daisy].filter(
+      (p): p is ShopProduct => p !== undefined && p.id !== product.id && p.handle !== product.handle
+    );
+    // Deduplicate in case a bouquet matched multiple slots
+    const uniqueShowcase = Array.from(new Set(showcase));
+    const rest = valid.filter((p) => !uniqueShowcase.some((s) => s.id === p.id));
+    return [...uniqueShowcase, ...rest].slice(0, 20);
   }, [product]);
 
   // Carousel track ref and scroll controls for "You might also like"
@@ -480,7 +515,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   }, [product, images]);
 
   return (
-    <article className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-4 pb-16 sm:pb-24">
+    <article className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
       {/* Toast Notification for Add to Cart */}
       {addedToast && (
         <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
@@ -1243,12 +1278,12 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
       {/* =========================================================================
           4. "YOU MIGHT ALSO LIKE" SECTION (Exact Match to Reference Image)
-          Heart-accented title, circular carousel arrows, 4 cards in view,
-          bottom-left crochet flower and bottom-right pink yarn ball with heart loop trail.
+          Heart-accented title, circular carousel arrows, 4 bouquet cards in view,
+          bottom-left handcrafted yellow flower and bottom-right pink yarn ball with heart loop trail.
          ========================================================================= */}
-      <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-16 sm:pb-20 overflow-hidden">
+      <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-12 sm:pb-12 overflow-hidden">
         {/* Section Heading: ♥ You might also like ♥ */}
-        <div className="flex items-center justify-center gap-2.5 sm:gap-3 mb-8 sm:mb-10 text-[#641623]">
+        <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mb-6 sm:mb-8 text-[#641623]">
           <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-[#641623] flex-shrink-0" viewBox="0 0 24 24">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
@@ -1261,13 +1296,13 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         </div>
 
         {/* Carousel Container with Left/Right Arrow Buttons */}
-        <div className="relative flex items-center justify-center gap-2 sm:gap-4">
+        <div className="relative flex items-center justify-center gap-2.5 sm:gap-4">
           {/* Previous Arrow Button */}
           <button
             type="button"
             onClick={handleCarouselPrev}
             aria-label="Previous products"
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-[#641623]/30 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-[#641623]/25 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
           >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5"
@@ -1285,10 +1320,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           {/* Scrollable Track / Grid */}
           <div
             ref={carouselTrackRef}
-            className="flex-1 flex gap-4 sm:gap-6 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-1"
+            className="flex-1 flex gap-3.5 sm:gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-0.5"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {recommendedProducts.map((item) => {
+            {recommendedBouquets.map((item) => {
               const isItemWishlist = !!wishlistMap[item.id];
               return (
                 <div
@@ -1301,16 +1336,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="w-[calc(50%-8px)] sm:w-[calc(33.333%-12px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col items-center text-center group cursor-pointer"
+                  className="w-[calc(50%-7px)] sm:w-[calc(33.333%-12px)] lg:w-[calc(25%-15px)] flex-shrink-0 snap-start flex flex-col items-center text-center group cursor-pointer relative z-10"
                 >
-                  {/* Peach / Beige Image Card */}
-                  <div className="relative aspect-square w-full rounded-[24px] sm:rounded-[28px] bg-[#F7ECE2] overflow-hidden border border-[#641623]/8 p-3 sm:p-4 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_8px_24px_rgba(100,22,35,0.08)]">
+                  {/* Peach / Beige Image Card (Matching Reference Landscape Aspect Ratio ~4/3) */}
+                  <div className="relative aspect-[4/3] w-full rounded-[22px] sm:rounded-[26px] overflow-hidden bg-[#F4ECE1] border border-[#641623]/10 transition-all duration-300 group-hover:shadow-[0_8px_24px_rgba(100,22,35,0.08)]">
                     {/* Top-Right Heart Wishlist Button */}
                     <button
                       type="button"
                       onClick={(e) => toggleCardWishlist(item.id, e)}
                       aria-label={isItemWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-                      className="absolute top-3 right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/20 shadow-xs flex items-center justify-center text-[#641623] z-10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                      className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/15 shadow-2xs flex items-center justify-center text-[#641623] z-10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
                     >
                       <svg
                         className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
@@ -1329,7 +1364,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       <img
                         src={item.image || (item.images && item.images[0])}
                         alt={item.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 select-none"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
                         loading="lazy"
                       />
                     ) : (
@@ -1340,7 +1375,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   </div>
 
                   {/* Product Title */}
-                  <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-3 group-hover:text-[#8E283A] transition-colors leading-snug line-clamp-1 max-w-[95%]">
+                  <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-2.5 sm:mt-3 group-hover:text-[#8E283A] transition-colors leading-snug line-clamp-1 max-w-[95%]">
                     {item.name}
                   </h3>
 
@@ -1358,7 +1393,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             type="button"
             onClick={handleCarouselNext}
             aria-label="Next products"
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-[#641623]/30 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-[#641623]/25 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
           >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5"
@@ -1374,22 +1409,103 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </button>
         </div>
 
-        {/* Bottom Left Handcrafted Flower Illustration */}
-        <div className="absolute -bottom-2 -left-2 sm:left-2 w-20 h-20 sm:w-28 sm:h-28 pointer-events-none select-none z-10">
-          <img
-            src="/decorations/you_might_like_flower.png"
-            alt=""
-            className="w-full h-full object-contain"
-          />
+        {/* Bottom Left Handcrafted Flower Illustration (Pure Vector SVG) */}
+        <div className="absolute bottom-1 -left-1 sm:bottom-0 sm:left-1 w-16 h-16 sm:w-28 sm:h-28 md:w-32 md:h-32 pointer-events-none select-none z-0">
+          <svg viewBox="0 0 140 140" className="w-full h-full drop-shadow-2xs" fill="none">
+            {/* Stem */}
+            <path d="M 90,105 Q 98,122 102,136" stroke="#381A1F" strokeWidth="2.2" strokeLinecap="round" />
+            
+            {/* Top Left Leaf */}
+            <g stroke="#381A1F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M 42,48 C 22,32 16,14 30,8 C 44,12 48,28 46,45 Z" fill="#6E8E34" />
+              <path d="M 30,12 L 44,45" />
+              <path d="M 34,20 L 28,17" />
+              <path d="M 38,28 L 32,25" />
+              <path d="M 41,35 L 36,33" />
+              <path d="M 35,22 L 40,24" />
+              <path d="M 39,30 L 43,33" />
+            </g>
+
+            {/* Right Leaf */}
+            <g stroke="#381A1F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M 82,78 C 104,70 120,78 116,92 C 102,104 88,96 76,86 Z" fill="#6E8E34" />
+              <path d="M 82,82 L 112,88" />
+              <path d="M 90,83 L 95,78" />
+              <path d="M 98,85 L 102,81" />
+              <path d="M 92,84 L 90,90" />
+              <path d="M 100,86 L 97,93" />
+            </g>
+
+            {/* 6 Petals (Yellow #F9D35A) */}
+            <g stroke="#381A1F" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              {/* Top-Left */}
+              <path d="M 58,68 C 42,56 30,42 42,28 C 54,16 68,30 62,54 Z" fill="#F9D35A" />
+              {/* Top-Right */}
+              <path d="M 62,54 C 74,32 88,24 96,36 C 104,48 90,64 74,68 Z" fill="#F9D35A" />
+              {/* Right */}
+              <path d="M 74,68 C 96,66 110,74 104,90 C 98,104 78,98 68,82 Z" fill="#F9D35A" />
+              {/* Bottom-Right */}
+              <path d="M 68,82 C 70,104 60,118 44,116 C 30,112 38,94 48,80 Z" fill="#F9D35A" />
+              {/* Bottom-Left */}
+              <path d="M 48,80 C 30,94 14,88 14,72 C 14,58 32,60 48,68 Z" fill="#F9D35A" />
+              {/* Left */}
+              <path d="M 48,68 C 28,62 20,44 32,34 C 44,24 54,42 58,68 Z" fill="#F9D35A" />
+            </g>
+
+            {/* Petal stitch details */}
+            <g stroke="#381A1F" strokeWidth="1.4" strokeLinecap="round" strokeDasharray="2.5 2.5" opacity="0.6">
+              <line x1="46" y1="30" x2="54" y2="54" />
+              <line x1="84" y1="38" x2="68" y2="58" />
+              <line x1="94" y1="84" x2="72" y2="76" />
+              <line x1="50" y1="104" x2="56" y2="80" />
+              <line x1="22" y1="72" x2="46" y2="72" />
+              <line x1="30" y1="44" x2="50" y2="60" />
+            </g>
+
+            {/* Pink Ring Core */}
+            <circle cx="58" cy="72" r="16" fill="#DE637E" stroke="#381A1F" strokeWidth="2.2" />
+            {/* Center Cream Glow Core */}
+            <circle cx="58" cy="72" r="8.5" fill="#FFF5DF" stroke="#381A1F" strokeWidth="1.6" />
+            <circle cx="58" cy="72" r="4.5" fill="#FFE699" />
+          </svg>
         </div>
 
-        {/* Bottom Right Pink Yarn Ball with Heart Trail */}
-        <div className="absolute -bottom-2 -right-2 sm:right-2 w-28 sm:w-36 h-18 sm:h-24 pointer-events-none select-none z-10 flex items-end justify-end">
-          <img
-            src="/decorations/you_might_like_yarn.png"
-            alt=""
-            className="w-full h-full object-contain"
-          />
+        {/* Bottom Right Pink Yarn Ball with Heart Thread (Pure Vector SVG) */}
+        <div className="absolute bottom-1 right-0 sm:bottom-0 sm:right-1 w-28 sm:w-44 md:w-52 h-14 sm:h-20 md:h-24 pointer-events-none select-none z-0 flex items-end justify-end">
+          <svg viewBox="0 0 220 90" className="w-full h-full drop-shadow-2xs" fill="none">
+            {/* Dainty Continuous Heart Trail matching ref */}
+            <path
+              d="M 10,64 C 40,68 62,68 82,60 C 88,54 94,44 98,38 C 102,32 96,26 90,30 C 86,33 85,38 84,41 C 83,38 82,33 78,30 C 72,26 66,32 70,38 C 74,44 80,54 86,60 C 98,68 126,72 158,62"
+              stroke="#DE637E"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Yarn Ball at (182, 45) r=28 */}
+            <g transform="translate(182, 45)">
+              <circle cx="0" cy="0" r="28" fill="#DE637E" stroke="#381A1F" strokeWidth="2.5" />
+
+              {/* Center Diagonal Band */}
+              <path d="M -12,-24 C 0,-6 12,12 22,18" stroke="#381A1F" strokeWidth="2.4" strokeLinecap="round" />
+              <path d="M -20,-18 C -5,2 5,20 14,24" stroke="#381A1F" strokeWidth="2.4" strokeLinecap="round" />
+              <path d="M -16,-21 C -3,-2 9,16 18,21" stroke="#F896AC" strokeWidth="1.8" strokeLinecap="round" />
+
+              {/* Left Winding Strands */}
+              <path d="M -27,-5 C -14,-10 -7,-3 -3,5" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+              <path d="M -26,7 C -16,5 -9,12 -3,21" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+              <path d="M -17,21 C -10,24 -3,24 4,24" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+
+              {/* Right Winding Strands */}
+              <path d="M 4,-27 C 12,-19 21,-12 26,-2" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+              <path d="M 9,-17 C 16,-10 21,-3 25,9" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+              <path d="M 16,2 C 21,9 23,16 21,21" stroke="#381A1F" strokeWidth="2.0" strokeLinecap="round" />
+
+              {/* Highlight accents */}
+              <path d="M -22,-2 C -14,-5 -8,0 -5,7" stroke="#F896AC" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M 7,-23 C 14,-16 19,-9 23,2" stroke="#F896AC" strokeWidth="1.6" strokeLinecap="round" />
+            </g>
+          </svg>
         </div>
       </section>
     </article>
