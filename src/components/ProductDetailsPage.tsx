@@ -276,6 +276,148 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     ];
   }, [product.description]);
 
+  // Dynamic Design Details Cards (Matching Reference: "The Design Details")
+  const designDetailCards = useMemo(() => {
+    const isSunflower =
+      product.handle?.includes('sunshine') ||
+      product.handle?.includes('sunflower') ||
+      product.name.toLowerCase().includes('sunflower') ||
+      product.name.toLowerCase().includes('sunshine');
+
+    if (isSunflower) {
+      return [
+        {
+          id: 'sunflower-flowers',
+          tag: 'Realistic Flowers',
+          description: 'Handcrafted petals with thoughtful detail.',
+          imageUrl: images[0] || undefined,
+          crop: { width: 230, height: 230, x: -15, y: -10 },
+        },
+        {
+          id: 'sunflower-vase',
+          tag: 'Crochet Vase',
+          description: 'A sturdy, textured vase that adds charm.',
+          imageUrl: images[0] || undefined,
+          crop: { width: 230, height: 230, x: -15, y: -30 },
+        },
+        {
+          id: 'sunflower-blooms',
+          tag: 'Mixed Blooms',
+          description: 'A lovely mix of sunflowers and daisies.',
+          imageUrl: images[1] || images[0] || undefined,
+          crop: { width: 230, height: 230, x: -15, y: -15 },
+        },
+        {
+          id: 'sunflower-size',
+          tag: 'Perfect Size',
+          description: 'Ideal for desks, shelves or gifting.',
+          imageUrl: images[0] || undefined,
+          crop: { width: 200, height: 200, x: 0, y: 0 },
+        },
+      ];
+    }
+
+    // Determine category-specific copy
+    const cat = (product.category || '').toLowerCase();
+    let tags = [
+      { tag: 'Handmade with Love', desc: 'Meticulously crocheted stitch by stitch by artisans.' },
+      { tag: 'Premium Cotton', desc: 'Soft, durable fibers designed to maintain vivid hue.' },
+      { tag: 'Thoughtful Details', desc: 'Carefully finished edges and playful sweet accents.' },
+      { tag: 'Timeless Keepsake', desc: 'Everlasting charm made to be cherished for years.' },
+    ];
+
+    if (cat.includes('bouquet')) {
+      tags = [
+        { tag: 'Realistic Petals', desc: 'Handcrafted petals with thoughtful detail.' },
+        { tag: 'Crochet Wrap', desc: 'A sturdy, textured base that adds charm.' },
+        { tag: 'Mixed Blooms', desc: 'A lovely harmonious mix of forever flowers.' },
+        { tag: 'Perfect Size', desc: 'Ideal for desks, shelves or gifting.' },
+      ];
+    } else if (cat.includes('flower')) {
+      tags = [
+        { tag: 'Realistic Petals', desc: 'Handcrafted petals with thoughtful detail.' },
+        { tag: 'Flexible Stems', desc: 'Sturdy, bendable stems to shape as you like.' },
+        { tag: 'Evergreen Blooms', desc: '100% yarn blooms that never wilt or fade.' },
+        { tag: 'Perfect Accent', desc: 'Ideal for single vases, bouquets, or gifting.' },
+      ];
+    } else if (cat.includes('plushie')) {
+      tags = [
+        { tag: 'Handmade Cuddles', desc: 'Soft premium yarn with careful hand-stitching.' },
+        { tag: 'Safe & Sturdy', desc: 'Securely attached details safe for everyday hugs.' },
+        { tag: 'Squishy Filling', desc: 'Fluffy high-grade polyfill for maximum softness.' },
+        { tag: 'Pocket Buddy', desc: 'Cute compact companion to brighten any space.' },
+      ];
+    } else if (cat.includes('bag')) {
+      tags = [
+        { tag: 'Intricate Weave', desc: 'Dense, durable crochet weave for daily carry.' },
+        { tag: 'Reinforced Straps', desc: 'Comfortable sturdy handles built to last.' },
+        { tag: 'Signature Motifs', desc: 'Hand-stitched patterns with vibrant artisan charm.' },
+        { tag: 'Spacious Fit', desc: 'Ample room for your phone, keys, and essentials.' },
+      ];
+    } else if (cat.includes('keychain')) {
+      tags = [
+        { tag: 'Golden Hardware', desc: 'Premium anti-tarnish clasp and sturdy key ring.' },
+        { tag: 'Micro Stitching', desc: 'Delicate miniature crochet work full of personality.' },
+        { tag: 'Lightweight Charm', desc: "Featherlight design that won't weigh down your bag." },
+        { tag: 'Everyday Cute', desc: 'Adds an instant pop of joy to your keys or backpack.' },
+      ];
+    } else if (cat.includes('pot')) {
+      tags = [
+        { tag: 'Textured Pot', desc: 'Sturdy crochet planter base that stands upright.' },
+        { tag: 'Evergreen Blooms', desc: 'Sculpted yarn flowers with lush green leaves.' },
+        { tag: 'Zero Care', desc: 'No watering needed - blooms vibrant all year round.' },
+        { tag: 'Desk Companion', desc: 'Handmade warmth for study tables, desks and shelves.' },
+      ];
+    } else if (cat.includes('decor')) {
+      tags = [
+        { tag: 'Cozy Aesthetic', desc: 'Adds handcrafted warmth and color to your home.' },
+        { tag: 'Artisan Knits', desc: 'Lovingly crocheted with neat, dense yarn stitches.' },
+        { tag: 'Retains Shape', desc: 'Structured form built to retain its charming look.' },
+        { tag: 'Unique Gift', desc: 'A one-of-a-kind handmade treasure for loved ones.' },
+      ];
+    }
+
+    // Assign images and crops
+    if (images.length === 0) {
+      return tags.map((t, idx) => ({
+        id: `detail-${idx}`,
+        tag: t.tag,
+        description: t.desc,
+        imageUrl: undefined,
+        crop: { width: 200, height: 200, x: 0, y: 0 },
+      }));
+    }
+
+    if (images.length === 1) {
+      // Natural focal crops for single image
+      const crops = [
+        { width: 240, height: 240, x: -20, y: -20 },
+        { width: 250, height: 250, x: -25, y: -65 },
+        { width: 240, height: 240, x: -20, y: -10 },
+        { width: 190, height: 190, x: 5, y: 5 },
+      ];
+      return tags.map((t, idx) => ({
+        id: `detail-${idx}`,
+        tag: t.tag,
+        description: t.desc,
+        imageUrl: images[0],
+        crop: crops[idx],
+      }));
+    }
+
+    // Multiple images available
+    return tags.map((t, idx) => {
+      const img = images[idx % images.length];
+      return {
+        id: `detail-${idx}`,
+        tag: t.tag,
+        description: t.desc,
+        imageUrl: img,
+        crop: { width: 200, height: 200, x: 0, y: 0 },
+      };
+    });
+  }, [product, images]);
+
   return (
     <article className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-4 pb-16 sm:pb-24">
       {/* Toast Notification for Add to Cart */}
@@ -884,6 +1026,159 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </div>
         </div>
       </div>
+
+      {/* =========================================================================
+          3. THE DESIGN DETAILS SECTION (Exact Match to Reference Image)
+          Full-width scalloped cloud banner in pastel lilac (#EBD8E7),
+          top 5-petal flower badge, doodle spark rays, 8-lobed rosette frames,
+          butter-yellow pills & centered captions.
+         ========================================================================= */}
+      <section className="relative w-full mt-12 sm:mt-16 mb-4">
+        {/* Scalloped Cloud Top Wave */}
+        <div className="w-full overflow-hidden leading-none -mb-[1px]">
+          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" className="w-full h-7 sm:h-10 block">
+            <path
+              d="M 0,25 Q 30,5 60,25 Q 90,5 120,25 Q 150,5 180,25 Q 210,5 240,25 Q 270,5 300,25 Q 330,5 360,25 Q 390,5 420,25 Q 450,5 480,25 Q 510,5 540,25 Q 570,5 600,25 Q 630,5 660,25 Q 690,5 720,25 Q 750,5 780,25 Q 810,5 840,25 Q 870,5 900,25 Q 930,5 960,25 Q 990,5 1020,25 Q 1050,5 1080,25 Q 1110,5 1140,25 Q 1170,5 1200,25 Q 1230,5 1260,25 Q 1290,5 1320,25 Q 1350,5 1380,25 Q 1410,5 1440,25 L 1440,40 L 0,40 Z"
+              fill="#EBD8E7"
+            />
+          </svg>
+        </div>
+
+        {/* Main Content Area in Pastel Lilac */}
+        <div className="relative w-full bg-[#EBD8E7] px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          {/* Top Center Overlapping Flower Badge */}
+          <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+            <svg viewBox="0 0 44 44" className="w-10 h-10 sm:w-11 sm:h-11 drop-shadow-sm">
+              <circle cx="22" cy="12" r="6" fill="#F47C96" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="31.5" cy="19" r="6" fill="#F47C96" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="28" cy="30" r="6" fill="#F47C96" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="16" cy="30" r="6" fill="#F47C96" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="12.5" cy="19" r="6" fill="#F47C96" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="22" cy="22" r="6" fill="#FCD34D" stroke="#641623" strokeWidth="2.2" />
+              <circle cx="22" cy="22" r="2" fill="#641623" />
+            </svg>
+          </div>
+
+          {/* Floating Spark Doodles on Left and Right */}
+          <div className="absolute top-6 left-6 sm:left-14 md:left-20 text-[#641623] pointer-events-none select-none hidden sm:block">
+            <svg
+              className="w-6 h-6 sm:w-7 sm:h-7 opacity-85"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+            >
+              <line x1="8" y1="18" x2="3" y2="24" />
+              <line x1="16" y1="14" x2="16" y2="6" />
+              <line x1="24" y1="18" x2="29" y2="24" />
+            </svg>
+          </div>
+          <div className="absolute top-6 right-6 sm:right-14 md:right-20 text-[#641623] pointer-events-none select-none hidden sm:block">
+            <svg
+              className="w-6 h-6 sm:w-7 sm:h-7 opacity-85"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+            >
+              <line x1="8" y1="18" x2="3" y2="24" />
+              <line x1="16" y1="14" x2="16" y2="6" />
+              <line x1="24" y1="18" x2="29" y2="24" />
+            </svg>
+          </div>
+
+          {/* Section Heading with Left Stitch & Right Spark Rays */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3.5 mb-8 sm:mb-12 text-[#641623]">
+            <span className="text-xl sm:text-2xl font-bold select-none leading-none">-</span>
+            <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl tracking-tight text-[#641623]">
+              The Design Details
+            </h2>
+            <svg
+              className="w-5 h-5 sm:w-6 sm:h-6 text-[#641623] flex-shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+            >
+              <line x1="8" y1="16" x2="3" y2="21" />
+              <line x1="12" y1="14" x2="12" y2="5" />
+              <line x1="16" y1="16" x2="21" y2="21" />
+            </svg>
+          </div>
+
+          {/* 4 Feature Cards: 2-Col on Mobile, 4-Col on Desktop */}
+          <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 items-start justify-items-center">
+            {designDetailCards.map((card, idx) => {
+              const clipId = `rosette-clip-${card.id}-${idx}`;
+              return (
+                <div key={card.id} className="flex flex-col items-center text-center group w-full">
+                  {/* Rosette Frame with Overlapping Butter-Yellow Pill */}
+                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48">
+                    <svg
+                      viewBox="0 0 200 200"
+                      className="w-full h-full drop-shadow-[0_4px_12px_rgba(100,22,35,0.08)]"
+                    >
+                      <defs>
+                        <clipPath id={clipId}>
+                          <path d="M 169.68 71.14 A 30 30 0 0 1 169.68 128.86 A 30 30 0 0 1 128.86 169.68 A 30 30 0 0 1 71.14 169.68 A 30 30 0 0 1 30.32 128.86 A 30 30 0 0 1 30.32 71.14 A 30 30 0 0 1 71.14 30.32 A 30 30 0 0 1 128.86 30.32 A 30 30 0 0 1 169.68 71.14 Z" />
+                        </clipPath>
+                      </defs>
+                      {/* Outer White Rosette Frame */}
+                      <path
+                        d="M 174.08 69.32 A 32 32 0 0 1 174.08 130.68 A 32 32 0 0 1 130.68 174.08 A 32 32 0 0 1 69.32 174.08 A 32 32 0 0 1 25.92 130.68 A 32 32 0 0 1 25.92 69.32 A 32 32 0 0 1 69.32 25.92 A 32 32 0 0 1 130.68 25.92 A 32 32 0 0 1 174.08 69.32 Z"
+                        fill="#FFFFFF"
+                      />
+                      {/* Inner Image / Blank Pastel Background */}
+                      {card.imageUrl ? (
+                        <image
+                          href={card.imageUrl}
+                          width={card.crop.width}
+                          height={card.crop.height}
+                          x={card.crop.x}
+                          y={card.crop.y}
+                          preserveAspectRatio="xMidYMid slice"
+                          clipPath={`url(#${clipId})`}
+                          className="transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <g clipPath={`url(#${clipId})`}>
+                          <rect width="200" height="200" fill="#FAF4ED" />
+                          <circle cx="100" cy="100" r="32" fill="#EBD8E7" opacity="0.6" />
+                        </g>
+                      )}
+                    </svg>
+
+                    {/* Butter-Yellow Pill Badge Overlapping Bottom */}
+                    <div className="absolute -bottom-2.5 sm:-bottom-3 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
+                      <span className="inline-block px-3.5 sm:px-4 py-1 rounded-full bg-[#FFECA8] border-2 border-white shadow-[0_2px_8px_rgba(100,22,35,0.06)] font-bold text-xs sm:text-sm text-[#641623]">
+                        {card.tag}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Descriptive Caption Underneath */}
+                  <p className="mt-4 sm:mt-5 text-xs sm:text-sm font-medium text-[#5A1827] max-w-[175px] leading-snug">
+                    {card.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Scalloped Cloud Bottom Wave */}
+        <div className="w-full overflow-hidden leading-none -mt-[1px]">
+          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" className="w-full h-7 sm:h-10 block">
+            <path
+              d="M 0,0 L 1440,0 L 1440,15 Q 1410,35 1380,15 Q 1350,35 1320,15 Q 1290,35 1260,15 Q 1230,35 1200,15 Q 1170,35 1140,15 Q 1110,35 1080,15 Q 1050,35 1020,15 Q 990,35 960,15 Q 930,35 900,15 Q 870,35 840,15 Q 810,35 780,15 Q 750,35 720,15 Q 690,35 660,15 Q 630,35 600,15 Q 570,35 540,15 Q 510,35 480,15 Q 450,35 420,15 Q 390,35 360,15 Q 330,35 300,15 Q 270,35 240,15 Q 210,35 180,15 Q 150,35 120,15 Q 90,35 60,15 Q 30,35 0,15 Z"
+              fill="#EBD8E7"
+            />
+          </svg>
+        </div>
+      </section>
     </article>
   );
 };
