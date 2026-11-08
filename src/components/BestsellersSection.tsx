@@ -225,37 +225,57 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                 >
                   {/* 1. Tall Rounded Image Box with Crisp Border & Smooth Hover Crossfade */}
                   <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[20px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
-                    {/* Default Image */}
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (target.src !== item.fallbackImage) {
-                          target.src = item.fallbackImage;
-                        }
-                      }}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
-                        isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
-                      }`}
-                      loading="lazy"
-                    />
+                    {/* Cute Knotsnco Decorative Pop-in Element on Hover (Tiny Crochet Flower) */}
+                    <div
+                      className="absolute top-2.5 left-2.5 z-20 pointer-events-none transition-all duration-300 ease-out transform scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 group-hover:rotate-12"
+                      aria-hidden="true"
+                    >
+                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#FFF5CC] border border-[#811B2B]/20 shadow-sm flex items-center justify-center p-1">
+                        <svg viewBox="0 0 24 24" className="w-full h-full text-[#811B2B]">
+                          <circle cx="12" cy="7" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="16.5" cy="10" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="15" cy="15.5" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="9" cy="15.5" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="7.5" cy="10" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="12" cy="12" r="2.8" fill="#F5D76E" stroke="#811B2B" strokeWidth="1" />
+                        </svg>
+                      </div>
+                    </div>
 
-                    {/* Secondary Hover Image (Fades In on Hover) */}
-                    <img
-                      src={item.hoverImage}
-                      alt={`${item.name} alternate view`}
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (target.src !== item.fallbackImage) {
-                          target.src = item.fallbackImage;
-                        }
-                      }}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
-                        isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                      }`}
-                      loading="lazy"
-                    />
+                    {/* Animated Image Wrapper: 1.04 scale, gentle upward lift, and subtle 2-deg rotation */}
+                    <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:-translate-y-1.5 group-hover:rotate-[2deg] motion-reduce:transform-none">
+                      {/* Default Image */}
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src !== item.fallbackImage) {
+                            target.src = item.fallbackImage;
+                          }
+                        }}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-350 ease-in-out select-none ${
+                          isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
+                        }`}
+                        loading="lazy"
+                      />
+
+                      {/* Secondary Hover Image (Fades In on Hover) */}
+                      <img
+                        src={item.hoverImage}
+                        alt={`${item.name} alternate view`}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.src !== item.fallbackImage) {
+                            target.src = item.fallbackImage;
+                          }
+                        }}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-350 ease-in-out select-none ${
+                          isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                        }`}
+                        loading="lazy"
+                      />
+                    </div>
 
                     {/* Mint Green Scalloped Daisy Flower Badge ("COMING SOON") in Top Right */}
                     {item.badge && (

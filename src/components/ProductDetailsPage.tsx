@@ -1357,12 +1357,29 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 >
                   {/* Peach / Beige Image Card (Matching Reference Landscape Aspect Ratio ~4/3) */}
                   <div className="relative aspect-[4/3] w-full rounded-[22px] sm:rounded-[26px] overflow-hidden bg-[#F4ECE1] border border-[#641623]/10 transition-all duration-300 group-hover:shadow-[0_8px_24px_rgba(100,22,35,0.08)]">
+                    {/* Cute Knotsnco Decorative Pop-in Element on Hover */}
+                    <div
+                      className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 pointer-events-none transition-all duration-300 ease-out transform scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 group-hover:rotate-12"
+                      aria-hidden="true"
+                    >
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#FFF5CC] border border-[#811B2B]/20 shadow-sm flex items-center justify-center p-1">
+                        <svg viewBox="0 0 24 24" className="w-full h-full text-[#811B2B]">
+                          <circle cx="12" cy="7" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="16.5" cy="10" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="15" cy="15.5" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="9" cy="15.5" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="7.5" cy="10" r="3" fill="currentColor" opacity="0.9" />
+                          <circle cx="12" cy="12" r="2.8" fill="#F5D76E" stroke="#811B2B" strokeWidth="1" />
+                        </svg>
+                      </div>
+                    </div>
+
                     {/* Top-Right Heart Wishlist Button */}
                     <button
                       type="button"
                       onClick={(e) => toggleCardWishlist(item.id, e)}
                       aria-label={isItemWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-                      className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/15 shadow-2xs flex items-center justify-center text-[#641623] z-10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                      className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/15 shadow-2xs flex items-center justify-center text-[#641623] z-20 hover:scale-110 active:scale-95 transition-all cursor-pointer"
                     >
                       <svg
                         className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
@@ -1376,19 +1393,35 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       </svg>
                     </button>
 
-                    {/* Product Image */}
-                    {item.image || (item.images && item.images[0]) ? (
-                      <img
-                        src={item.image || (item.images && item.images[0])}
-                        alt={item.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[#641623]/40">
-                        <span className="text-xs">No image</span>
-                      </div>
-                    )}
+                    {/* Animated Product Image Container: 1.04 scale, lift, 2-deg rotation */}
+                    <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:-translate-y-1 group-hover:rotate-[2deg] motion-reduce:transform-none">
+                      {item.image || (item.images && item.images[0]) ? (
+                        <>
+                          <img
+                            src={item.image || (item.images && item.images[0])}
+                            alt={item.name}
+                            className={`w-full h-full object-cover select-none absolute inset-0 block transition-opacity duration-350 ease-in-out ${
+                              item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0])
+                                ? 'group-hover:opacity-0'
+                                : ''
+                            }`}
+                            loading="lazy"
+                          />
+                          {item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0]) && (
+                            <img
+                              src={item.images[1]}
+                              alt={`${item.name} alternate view`}
+                              className="w-full h-full object-cover select-none absolute inset-0 block opacity-0 transition-opacity duration-350 ease-in-out group-hover:opacity-100"
+                              loading="lazy"
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[#641623]/40">
+                          <span className="text-xs">No image</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Product Title */}

@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
+import { ProductCard } from './ProductCard';
 
 interface AllProductsShopSectionProps {
   initialCategory?: string;
@@ -780,122 +781,14 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                   const isLiked = wishlist[product.id] ?? false;
 
                   return (
-                    <div
+                    <ProductCard
                       key={product.id}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => onProductClick?.(product.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          onProductClick?.(product.id);
-                        }
-                      }}
-                      className="group relative rounded-[20px] bg-[#FFFBF7] border border-[#641623]/10 shadow-[0_4px_16px_rgba(100,22,35,0.04)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
-                    >
-                      {/* Top Image Container */}
-                      <div className="relative aspect-square w-full overflow-hidden bg-[#FAF2E8]/60">
-                        {/* Scalloped Yellow Discount / NEW Badge */}
-                        {product.badge && (
-                          <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
-                            <div className="relative inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#FFE485] border border-dashed border-[#B45309] text-[#78350F] text-[10px] sm:text-xs font-bold shadow-xs">
-                              <span className="tracking-tight">{product.badge}</span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Top Right Circular Wishlist Heart Button */}
-                        <button
-                          onClick={(e) => toggleWishlist(product.id, e)}
-                          type="button"
-                          aria-label={isLiked ? 'Remove from wishlist' : 'Add to wishlist'}
-                          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#641623]/10 text-[#641623] flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"
-                        >
-                          {isLiked ? (
-                            // Solid Filled Heart
-                            <svg className="w-4 h-4 text-[#641623]" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                            </svg>
-                          ) : (
-                            // Outline Heart
-                            <svg
-                              className="w-4 h-4 text-[#641623]"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2.2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                          )}
-                        </button>
-
-                        {/* Product Image (Only uses image from Shopify; left blank if none) */}
-                        {product.image ? (
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            loading="lazy"
-                            onError={(e) => {
-                              // If broken image URL, hide gracefully
-                              (e.target as HTMLElement).style.display = 'none';
-                            }}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 select-none"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-[#FAF4ED]" />
-                        )}
-                      </div>
-
-                      {/* Bottom Details Container */}
-                      <div className="p-3 sm:p-4 text-left flex flex-col justify-between flex-1">
-                        <div>
-                          {/* Title */}
-                          <h3 className="text-sm sm:text-base font-bold text-[#2D2424] group-hover:text-[#641623] transition-colors line-clamp-1">
-                            {product.name}
-                          </h3>
-
-                          {/* Subtitle / Type */}
-                          <p className="text-[11px] sm:text-xs text-[#641623]/70 font-normal mt-0.5 line-clamp-1">
-                            {product.subtitle}
-                          </p>
-
-                          {/* Color Swatch Dots */}
-                          {product.colorSwatches && product.colorSwatches.length > 0 && (
-                            <div className="flex items-center gap-1.5 my-2">
-                              {product.colorSwatches.map((color, idx) => (
-                                <span
-                                  key={idx}
-                                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/15 shadow-2xs"
-                                  style={{ backgroundColor: color }}
-                                />
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Price Row */}
-                        <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap pt-1">
-                          <span className="text-sm sm:text-base font-bold text-[#641623]">
-                            ₹{product.price.toLocaleString('en-IN')}
-                          </span>
-
-                          {product.originalPrice && (
-                            <span className="text-[11px] sm:text-xs text-[#2D2424]/45 line-through">
-                              ₹{product.originalPrice.toLocaleString('en-IN')}
-                            </span>
-                          )}
-
-                          {product.discount && (
-                            <span className="text-[10px] sm:text-xs font-semibold text-[#2E7D32]">
-                              {product.discount}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                      product={product}
+                      isLiked={isLiked}
+                      onProductClick={onProductClick}
+                      onAddToCart={onAddToCart}
+                      onToggleWishlist={toggleWishlist}
+                    />
                   );
                 })}
               </div>
