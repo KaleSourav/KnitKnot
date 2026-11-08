@@ -12,6 +12,7 @@ import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
 import { DynamicScrollBackground } from './components/DynamicScrollBackground';
 import { ScrollReveal } from './components/ScrollReveal';
+import { SignatureYarnThread } from './components/SignatureYarnThread';
 
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
@@ -164,6 +165,9 @@ export default function App() {
           <div className="relative w-full">
             {/* Soothing Ambient Particle & Pastel Aura Background */}
             <DynamicScrollBackground />
+
+            {/* Signature Scroll-Responsive Yarn Thread Animation */}
+            <SignatureYarnThread />
 
             {/* Hero Landing Banner */}
             <div id="section-hero">
