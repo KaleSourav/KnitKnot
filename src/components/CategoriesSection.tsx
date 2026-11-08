@@ -310,9 +310,9 @@ const BOT_CLOUD_FILL =
 const BOT_CLOUD_STROKE =
   'M 0 25 C 32.5 53.0, 97.5 53.0, 130.0 25.0 C 157.5 48.0, 212.5 48.0, 240.0 25.0 C 277.5 53.0, 352.5 53.0, 390.0 25.0 C 420.0 48.0, 480.0 48.0, 510.0 25.0 C 545.0 53.0, 615.0 53.0, 650.0 25.0 C 682.5 48.0, 747.5 48.0, 780.0 25.0 C 810.0 53.0, 870.0 53.0, 900.0 25.0 C 937.5 48.0, 1012.5 48.0, 1050.0 25.0 C 1077.5 53.0, 1132.5 53.0, 1160.0 25.0 C 1195.0 48.0, 1265.0 48.0, 1300.0 25.0 C 1335.0 53.0, 1405.0 53.0, 1440.0 25.0';
 
-// Scalloped Puffy Cloud Path for Floating Speech Sticker
+// Scalloped Puffy Cloud Path for Floating Speech Sticker (Gentle wavy scallops matching brand cloud)
 const CLOUD_STICKER_PATH =
-  'M 25 105 A 42 42 0 0 1 55 35 A 48 48 0 0 1 130 18 A 52 52 0 0 1 210 12 A 50 50 0 0 1 290 20 A 44 44 0 0 1 350 45 A 44 44 0 0 1 380 110 A 44 44 0 0 1 345 170 A 48 48 0 0 1 270 198 A 50 50 0 0 1 190 202 A 48 48 0 0 1 110 198 A 44 44 0 0 1 50 170 A 42 42 0 0 1 25 105 Z';
+  'M 12 109 C 12 55, 24 38, 45 30 C 58 10, 98 10, 111 30 C 124 5, 164 5, 177 30 C 190 2, 230 2, 243 30 C 256 5, 296 5, 309 30 C 322 10, 362 10, 375 30 C 396 38, 408 55, 408 109 C 408 163, 396 180, 375 188 C 362 210, 322 210, 309 188 C 296 215, 256 215, 243 188 C 230 218, 190 218, 177 188 C 164 215, 124 215, 111 188 C 98 210, 58 210, 45 188 C 24 180, 12 163, 12 109 Z';
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
@@ -320,12 +320,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [scrollStage, setScrollStage] = useState<string>('welcome');
-  const [isCloudOpen, setIsCloudOpen] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 640;
-    }
-    return true;
-  });
+  const [isCloudOpen, setIsCloudOpen] = useState<boolean>(false);
   const [isSectionInView, setIsSectionInView] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -859,10 +854,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   : 'opacity-0 scale-75 pointer-events-none translate-y-4 h-0 overflow-hidden mb-0'
               }`}
             >
-              <div className="relative w-[300px] sm:w-[360px] md:w-[380px] h-[210px] sm:h-[220px] md:h-[230px] filter drop-shadow-[0_12px_28px_rgba(100,22,35,0.16)] select-none">
-                {/* SVG Puffy Cloud Silhouette */}
+              <div className="relative w-[310px] sm:w-[380px] md:w-[410px] h-[215px] sm:h-[220px] md:h-[225px] filter drop-shadow-[0_14px_28px_rgba(100,22,35,0.16)] select-none mb-1">
+                {/* SVG Puffy Cloud Silhouette (Spacious gentle scallops matching brand cloud) */}
                 <svg
-                  viewBox="0 0 400 230"
+                  viewBox="0 0 420 220"
                   preserveAspectRatio="none"
                   className="absolute inset-0 w-full h-full pointer-events-none"
                   aria-hidden="true"
@@ -870,7 +865,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   <defs>
                     <linearGradient id="floatingCloudGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#FFFFFF" />
-                      <stop offset="45%" stopColor="#F4FBFC" />
+                      <stop offset="50%" stopColor="#F4FBFC" />
                       <stop offset="100%" stopColor="#DCF2F6" />
                     </linearGradient>
                   </defs>
@@ -884,19 +879,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   />
                 </svg>
 
-                {/* Cute Floating Flower on Cloud Scallop */}
-                <div className="absolute top-1 left-7 sm:left-9 w-4 h-4 sm:w-5 sm:h-5 pointer-events-none z-20">
-                  <svg viewBox="0 0 24 24" className="w-full h-full drop-shadow-xs" fill="none">
-                    <circle cx="12" cy="12" r="3.2" fill="#F5D76E" stroke="#641623" strokeWidth="1.2" />
-                    <circle cx="12" cy="5.5" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
-                    <circle cx="12" cy="18.5" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
-                    <circle cx="5.5" cy="12" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
-                    <circle cx="18.5" cy="12" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
-                  </svg>
-                </div>
-
-                {/* Cloud Content Overlay */}
-                <div className="relative z-10 w-full h-full pt-5 pb-7 px-7 sm:pt-6 sm:pb-8 sm:px-9 flex flex-col justify-between">
+                {/* Cloud Content Overlay with Generous Safe Inset */}
+                <div className="relative z-10 w-full h-full pt-8 pb-7 px-8 sm:pt-9 sm:pb-8 sm:px-10 flex flex-col justify-between">
                   {/* Top Bar: Category Stage Pill + Hint + Close Button */}
                   <div className="flex items-center justify-between gap-1.5 sm:gap-2">
                     <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-2xs">
@@ -954,12 +938,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     })}
                   </div>
                 </div>
-              </div>
-
-              {/* Connecting Cloud Puffs Linking Cloud to Mascot */}
-              <div className="flex flex-col items-center mr-12 sm:mr-16 -mt-2 -mb-2 z-20 pointer-events-none">
-                <div className="w-3.5 h-3.5 rounded-full bg-white border-[1.8px] border-[#641623] shadow-xs" />
-                <div className="w-2 h-2 rounded-full bg-white border-[1.5px] border-[#641623] mt-0.5 shadow-2xs" />
               </div>
             </div>
 
