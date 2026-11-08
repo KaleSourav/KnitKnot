@@ -18,8 +18,8 @@ const CATEGORIES: CategoryItem[] = [
     count: 87,
     badgeLine1: '87',
     badgeLine2: 'ITEMS',
-    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/LblZM5aH_QF3WPDN9U5_2026-09-29_1_0fc72431-636f-4824-bf6f-61f7d8054fd1.jpg?v=1793949812',
-    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/LblZM5aH_T40Q1WBCHV_2026-09-29_2_99db06c7-ad5e-48c2-90f6-3003bc3725f2.jpg?v=1793949812',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ocn7Itf__1791261168121_zatq139exytyux3_889a38be-1947-4be8-9d7c-1c62855d22cc.jpg?v=1793949761',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ocn7Itf__1791261168756_ky8iidjl0m9o7ve_2fab5bc4-8918-4d50-8a6e-07fbbbc81c26.jpg?v=1793949762',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
@@ -44,8 +44,8 @@ const CATEGORIES: CategoryItem[] = [
     count: 56,
     badgeLine1: '56',
     badgeLine2: 'ITEMS',
-    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166417_3l7oukh265vjtjy.jpg?v=1793949872',
-    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166945_uqm5apjf2huds4m.jpg?v=1793949872',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171133_ppm15wu6ir03zlw.jpg?v=1793949877',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171212_f0o9dx165knbcyv.jpg?v=1793949877',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
@@ -70,8 +70,8 @@ const CATEGORIES: CategoryItem[] = [
     count: 33,
     badgeLine1: '33',
     badgeLine2: 'ITEMS',
-    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/NwW_xS1J_K83GBZOD00_2026-09-29_1.jpg?v=1793949989',
-    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/NwW_xS1J_3VGLV1DR3U_2026-09-29_2.jpg?v=1793949989',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_jNuEnN6i_1791261160491_7m8icj05q4ucs7u.jpg?v=1793949882',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_jNuEnN6i_1791261160774_xuc01si95x02g5m.jpg?v=1793949883',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:scale-115"
@@ -97,8 +97,8 @@ const CATEGORIES: CategoryItem[] = [
     count: 21,
     badgeLine1: '21',
     badgeLine2: 'ITEMS',
-    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/dzgJ9mNa_NBQEGQ2IUZ_2026-09-29_1_9c018278-b57d-445b-ac2e-521e1ab8daef.jpg?v=1793949724',
-    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ow9KfW4c_1791261176112_undrvzfqesf2o0a_84778e1f-ba80-4f76-be18-caf3be3a9d21.jpg?v=1793949724',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/e3wpWmZB_3TNMZBM166_2026-09-29_1_c05a608f-9693-4e83-958b-f353a48288d3.jpg?v=1793949720',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/e3wpWmZB_9PC0EUHCYP_2026-09-29_2_d7d43cb9-5d03-4835-bcfd-439dd06240b2.jpg?v=1793949720',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-6"
@@ -121,8 +121,8 @@ const CATEGORIES: CategoryItem[] = [
     count: 57,
     badgeLine1: '57',
     badgeLine2: 'ITEMS',
-    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/iMAwN0wM_ZSRL10SPMT_2026-09-29_1_4a5a721e-baee-4ffe-8d1b-8ed77819f6eb.jpg?v=1793949852',
-    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/iMAwN0wM_HMKY6KIH52_2026-09-29_2_d65d1367-0e23-4eac-b653-f012403ab09a.jpg?v=1793949852',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TpmXihBW_1791261167432_2ekupxrps6ykckj.jpg?v=1793949860',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TpmXihBW_1791261167458_j3kgqq6g5bvdqnu.jpg?v=1793949859',
     icon: (
       <svg
         className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0 transition-transform duration-300 group-hover:rotate-12"
