@@ -12,6 +12,7 @@ import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
 import { YarnScrollJourney } from './components/YarnScrollJourney';
+import { BouquetClimaxSection } from './components/BouquetClimaxSection';
 
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
@@ -207,6 +208,9 @@ export default function App() {
             <div id="section-reels">
               <ReelsSection />
             </div>
+
+            {/* Bouquet Climax Section: Where the Left & Right Yarns converge & bloom into the Forever Bouquet */}
+            <BouquetClimaxSection onShopBouquets={() => navigateTo('shop', 'Bouquets')} />
           </div>
         ) : currentPage === 'shop' ? (
           /* =========================================================================
