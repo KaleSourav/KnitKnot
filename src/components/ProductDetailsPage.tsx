@@ -20,8 +20,17 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 }) => {
   // Find product from Shopify data with robust matching (ID, shopifyId, handle, title)
   const product: ShopProduct = useMemo(() => {
-    const rawTarget = productId ? decodeURIComponent(productId).trim() : '';
-    const rawHandle = productHandle ? decodeURIComponent(productHandle).trim() : '';
+    const safeDecode = (val?: string | null) => {
+      if (!val) return '';
+      try {
+        return decodeURIComponent(val).trim();
+      } catch {
+        return val.trim();
+      }
+    };
+
+    const rawTarget = safeDecode(productId);
+    const rawHandle = safeDecode(productHandle);
 
     if (rawTarget) {
       const found = ALL_PRODUCTS.find((p) => {
@@ -205,13 +214,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
   const handleCarouselPrev = () => {
     if (carouselTrackRef.current) {
-      carouselTrackRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+      const scrollAmount = Math.max(220, Math.round(carouselTrackRef.current.clientWidth * 0.75));
+      carouselTrackRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
   };
 
   const handleCarouselNext = () => {
     if (carouselTrackRef.current) {
-      carouselTrackRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+      const scrollAmount = Math.max(220, Math.round(carouselTrackRef.current.clientWidth * 0.75));
+      carouselTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
 
@@ -298,7 +309,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   // Extract a crisp 1-2 sentence friendly description for the top area
   const conciseSummary = useMemo(() => {
     if (!product.description) {
-      return 'A cheerful handmade crochet bouquet of sunflowers and daisies, perfect to brighten any space.';
+      return `Handcrafted ${product.name} lovingly made with soft premium yarn, perfect to brighten any space.`;
     }
 
     const raw = product.description.trim();
@@ -315,7 +326,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
     // Cut off before bullet sections or features
     let intro = raw;
-    for (const marker of ['Features:', '✨ Handmade', 'Perfect for:', 'Craftsmanship:']) {
+    for (const marker of ['Features:', 'Handmade', 'Perfect for:', 'Craftsmanship:']) {
       const idx = intro.indexOf(marker);
       if (idx !== -1 && idx > 20) {
         intro = intro.substring(0, idx).trim();
@@ -329,7 +340,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }
 
     return intro;
-  }, [product.description]);
+  }, [product.description, product.name]);
 
   // Extract full details for the "Product Details" accordion
   const detailedBulletPoints = useMemo(() => {
@@ -358,9 +369,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       });
     }
 
-    // If description has ✨ items
-    if (raw.includes('✨') && raw.split('✨').length > 2) {
-      const parts = raw.split('✨').filter((p) => p.trim().length > 0);
+    // If description has star or hyphen list items
+    if (raw.includes('*') && raw.split('*').length > 2) {
+      const parts = raw.split('*').filter((p) => p.trim().length > 0);
       return parts.map((part) => {
         return { label: 'Handmade Feature', text: part.trim() };
       });
@@ -864,7 +875,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 >
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-                <span>{isWishlist ? 'In Wishlist ♡' : 'Add to Wishlist'}</span>
+                <span>{isWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
               </button>
             </div>
 
@@ -1020,6 +1031,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 <button
                   onClick={() => toggleAccordion('details')}
                   type="button"
+                  aria-expanded={openAccordions.details}
                   className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
                 >
                   <span>Product Details</span>
@@ -1032,6 +1044,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     stroke="currentColor"
                     strokeWidth="2.5"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -1052,6 +1065,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 <button
                   onClick={() => toggleAccordion('care')}
                   type="button"
+                  aria-expanded={openAccordions.care}
                   className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
                 >
                   <span>Care Instructions</span>
@@ -1064,6 +1078,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     stroke="currentColor"
                     strokeWidth="2.5"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -1088,6 +1103,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 <button
                   onClick={() => toggleAccordion('shipping')}
                   type="button"
+                  aria-expanded={openAccordions.shipping}
                   className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
                 >
                   <span>Shipping & Returns</span>
@@ -1100,6 +1116,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     stroke="currentColor"
                     strokeWidth="2.5"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
