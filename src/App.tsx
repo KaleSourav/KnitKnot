@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
@@ -11,6 +11,7 @@ import { ReelsSection } from './components/ReelsSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
+import { YarnScrollJourney } from './components/YarnScrollJourney';
 
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
@@ -26,6 +27,7 @@ const CATEGORY_MAP: Record<string, string> = {
 
 export default function App() {
   const [cartCount, setCartCount] = useState<number>(0);
+  const landingRef = useRef<HTMLDivElement>(null);
 
   // Client-side page routing: 'home' | 'shop' | 'product'
   const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
@@ -160,23 +162,28 @@ export default function App() {
           /* =========================================================================
              LANDING PAGE VIEW (Home)
              ========================================================================= */
-          <>
-            {/* Hero Landing Banner */}
-            <HeroBanner onShopClick={() => navigateTo('shop', 'all')} />
+          <div ref={landingRef} className="relative w-full overflow-hidden">
+            {/* The "Unraveling Yarn Thread" Scroll Journey & Blooming Flower Milestones */}
+            <YarnScrollJourney containerRef={landingRef} />
 
-            {/* Trust Badges & Curvy Section Divider */}
-            <TrustBadges />
+            {/* Hero Landing Banner */}
+            <div id="section-hero">
+              <HeroBanner onShopClick={() => navigateTo('shop', 'all')} />
+              <TrustBadges />
+            </div>
 
             {/* Shop by Category (Scalloped Cloud Container, 3 Top, 3 Below) */}
-            <CategoriesSection
-              onCategorySelect={(id) => {
-                const targetCat = CATEGORY_MAP[id] || id;
-                navigateTo('shop', targetCat);
-              }}
-            />
+            <div id="section-categories">
+              <CategoriesSection
+                onCategorySelect={(id) => {
+                  const targetCat = CATEGORY_MAP[id] || id;
+                  navigateTo('shop', targetCat);
+                }}
+              />
+            </div>
 
             {/* Bestsellers Section (Yarn Ball Divider, 4-Point Sparkle Stars, Carousel) */}
-            <div id="bestsellers">
+            <div id="section-bestsellers">
               <BestsellersSection
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
@@ -185,16 +192,22 @@ export default function App() {
             </div>
 
             {/* Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
-            <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
+            <div id="section-story">
+              <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
+            </div>
 
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
-            <ShopTheOccasionSection
-              onOccasionClick={(id) => navigateTo('shop', 'all')}
-            />
+            <div id="section-occasions">
+              <ShopTheOccasionSection
+                onOccasionClick={(id) => navigateTo('shop', 'all')}
+              />
+            </div>
 
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
-            <ReelsSection />
-          </>
+            <div id="section-reels">
+              <ReelsSection />
+            </div>
+          </div>
         ) : currentPage === 'shop' ? (
           /* =========================================================================
              DEDICATED SHOP PAGE VIEW (All Products Shop)
