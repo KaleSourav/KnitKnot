@@ -15,6 +15,13 @@ interface BannerSlide {
 
 const BANNER_SLIDES: BannerSlide[] = [
   {
+    id: 'hero-main',
+    src: '/hero-banner.png',
+    webp: '/banners/hero-banner.webp',
+    alt: 'Handmade Crochet Bouquet - gifts that last forever',
+    category: 'all',
+  },
+  {
     id: 'plushie-bouquets',
     src: '/banners/3.png',
     webp: '/banners/3.webp',
@@ -37,7 +44,7 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
 ];
 
-const AUTOPLAY_INTERVAL = 4500; // 4.5 seconds per slide
+const AUTOPLAY_INTERVAL = 5000; // 5 seconds per slide
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +97,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
   return (
     <section className="relative w-full bg-[#FAF4ED] overflow-hidden">
       <div className="w-full max-w-[1440px] mx-auto px-0 sm:px-4 lg:px-6 pt-2 sm:pt-3 pb-8">
-        {/* Banner Slideshow Container - Preserves exact original layout, proportions, and styling */}
+        {/* Banner Slideshow Container - Preserves exact layout, proportions, and styling */}
         <div
           className="relative w-full aspect-[2/1] overflow-hidden sm:rounded-2xl md:rounded-3xl shadow-[0_8px_30px_rgba(100,22,35,0.06)] bg-[#F8EFE4] group select-none"
           onMouseEnter={() => setIsPaused(true)}
@@ -98,7 +105,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Stacked Slides with Crossfade */}
+          {/* Stacked Slides with Smooth 1s Crossfade */}
           {BANNER_SLIDES.map((slide, index) => {
             const isActive = index === currentIndex;
             return (
@@ -130,6 +137,21 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
                     draggable={false}
                   />
                 </picture>
+
+                {/* Subtle hover feedback over the button hotspot on hero-main slide */}
+                {slide.id === 'hero-main' && (
+                  <div
+                    className="absolute z-10 cursor-pointer rounded-full transition-all duration-200 pointer-events-none"
+                    style={{
+                      left: '10.5%',
+                      top: '64%',
+                      width: '25.5%',
+                      height: '10%',
+                    }}
+                  >
+                    <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-white/50 group-hover:bg-white/10 transition-all duration-200" />
+                  </div>
+                )}
               </div>
             );
           })}
