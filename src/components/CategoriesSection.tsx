@@ -310,9 +310,9 @@ const BOT_CLOUD_FILL =
 const BOT_CLOUD_STROKE =
   'M 0 25 C 32.5 53.0, 97.5 53.0, 130.0 25.0 C 157.5 48.0, 212.5 48.0, 240.0 25.0 C 277.5 53.0, 352.5 53.0, 390.0 25.0 C 420.0 48.0, 480.0 48.0, 510.0 25.0 C 545.0 53.0, 615.0 53.0, 650.0 25.0 C 682.5 48.0, 747.5 48.0, 780.0 25.0 C 810.0 53.0, 870.0 53.0, 900.0 25.0 C 937.5 48.0, 1012.5 48.0, 1050.0 25.0 C 1077.5 53.0, 1132.5 53.0, 1160.0 25.0 C 1195.0 48.0, 1265.0 48.0, 1300.0 25.0 C 1335.0 53.0, 1405.0 53.0, 1440.0 25.0';
 
-// Scalloped Puffy Cloud Path for Floating Speech Sticker (Gentle wavy scallops matching brand cloud)
+// Scalloped Puffy Cloud Path for Floating Speech Sticker (Gentle, broad puffy scallops matching brand cloud style)
 const CLOUD_STICKER_PATH =
-  'M 12 109 C 12 55, 24 38, 45 30 C 58 10, 98 10, 111 30 C 124 5, 164 5, 177 30 C 190 2, 230 2, 243 30 C 256 5, 296 5, 309 30 C 322 10, 362 10, 375 30 C 396 38, 408 55, 408 109 C 408 163, 396 180, 375 188 C 362 210, 322 210, 309 188 C 296 215, 256 215, 243 188 C 230 218, 190 218, 177 188 C 164 215, 124 215, 111 188 C 98 210, 58 210, 45 188 C 24 180, 12 163, 12 109 Z';
+  'M 18 135 C 18 70, 32 32, 62 22 C 92 12, 150 12, 180 22 C 210 12, 270 12, 300 22 C 330 12, 390 12, 420 22 C 450 32, 482 70, 482 135 C 482 195, 450 238, 420 248 C 390 258, 330 258, 300 248 C 270 258, 210 258, 180 248 C 150 258, 92 258, 62 248 C 32 238, 18 195, 18 135 Z';
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
@@ -496,13 +496,18 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         <div className="w-full max-w-[1040px] mx-auto relative z-10">
           {/* Header with Whimsical Radiant Dashes (Spacious & Clean) */}
           <div className="flex flex-col items-center justify-center mb-5 sm:mb-8 text-center">
-            {/* Friendly Mascot Little Shopping Guide Pill */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-xs mb-2.5">
+            {/* Friendly Mascot Little Shopping Guide Pill (Click to toggle guide) */}
+            <button
+              type="button"
+              onClick={() => setIsCloudOpen((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF5CC] hover:bg-[#FFFDF8] border border-[#641623]/25 shadow-xs mb-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+              title="Click to meet your shopping guide"
+            >
               <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
               <span className="font-['Fredoka'] font-semibold text-xs text-[#811B2B] tracking-wide">
                 Meet your little shopping guide!
               </span>
-            </div>
+            </button>
 
             <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 text-center">
               {/* Left Radiant Dashes */}
@@ -854,10 +859,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   : 'opacity-0 scale-75 pointer-events-none translate-y-4 h-0 overflow-hidden mb-0'
               }`}
             >
-              <div className="relative w-[310px] sm:w-[380px] md:w-[410px] h-[215px] sm:h-[220px] md:h-[225px] filter drop-shadow-[0_14px_28px_rgba(100,22,35,0.16)] select-none mb-1">
-                {/* SVG Puffy Cloud Silhouette (Spacious gentle scallops matching brand cloud) */}
+              <div className="relative w-[340px] sm:w-[430px] md:w-[480px] h-[250px] sm:h-[265px] filter drop-shadow-[0_16px_32px_rgba(100,22,35,0.18)] select-none mb-1">
+                {/* SVG Puffy Cloud Silhouette (Broad gentle scallops matching brand cloud) */}
                 <svg
-                  viewBox="0 0 420 220"
+                  viewBox="0 0 500 270"
                   preserveAspectRatio="none"
                   className="absolute inset-0 w-full h-full pointer-events-none"
                   aria-hidden="true"
@@ -865,33 +870,38 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   <defs>
                     <linearGradient id="floatingCloudGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#FFFFFF" />
-                      <stop offset="50%" stopColor="#F4FBFC" />
-                      <stop offset="100%" stopColor="#DCF2F6" />
+                      <stop offset="60%" stopColor="#FFFDF9" />
+                      <stop offset="100%" stopColor="#FFF5CC" />
                     </linearGradient>
                   </defs>
                   <path
                     d={CLOUD_STICKER_PATH}
                     fill="url(#floatingCloudGrad)"
                     stroke="#641623"
-                    strokeWidth="2.5"
+                    strokeWidth="2.4"
                     strokeLinejoin="round"
                     strokeLinecap="round"
                   />
+
+                  {/* Little Thought / Speech Bubbles pointing to Mascot */}
+                  <circle cx="415" cy="252" r="7.5" fill="#FFF5CC" stroke="#641623" strokeWidth="1.8" />
+                  <circle cx="428" cy="263" r="4.5" fill="#FFF5CC" stroke="#641623" strokeWidth="1.5" />
+                  <circle cx="437" cy="270" r="2.8" fill="#FFF5CC" stroke="#641623" strokeWidth="1.2" />
                 </svg>
 
                 {/* Cloud Content Overlay with Generous Safe Inset */}
-                <div className="relative z-10 w-full h-full pt-8 pb-7 px-8 sm:pt-9 sm:pb-8 sm:px-10 flex flex-col justify-between">
+                <div className="relative z-10 w-full h-full pt-5 pb-6 px-6 sm:pt-6 sm:pb-7 sm:px-11 flex flex-col justify-between">
                   {/* Top Bar: Category Stage Pill + Hint + Close Button */}
-                  <div className="flex items-center justify-between gap-1.5 sm:gap-2">
-                    <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-2xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#811B2B] flex-shrink-0" />
-                      <span className="font-['Fredoka'] font-bold text-[10px] sm:text-[11px] text-[#811B2B] uppercase tracking-wider">
+                  <div className="flex items-center justify-between gap-2 pr-1 sm:pr-2">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#811B2B] text-[#FFFDF8] shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F5D76E] flex-shrink-0" />
+                      <span className="font-['Fredoka'] font-bold text-[10.5px] sm:text-xs uppercase tracking-wider">
                         {currentStage.stepLabel}
                       </span>
-                      <span className="scale-85">{currentStage.accessoryIcon}</span>
+                      <span className="scale-85 text-[#F5D76E]">{currentStage.accessoryIcon}</span>
                     </div>
 
-                    <span className="hidden sm:inline-block font-['Fredoka'] italic text-[10px] text-[#641623]/60">
+                    <span className="hidden sm:inline-block font-['Fredoka'] italic text-[11px] text-[#641623]/65">
                       hover or scroll cards to guide
                     </span>
 
@@ -901,24 +911,24 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                       onClick={() => setIsCloudOpen(false)}
                       title="Close cloud (keep mascot)"
                       aria-label="Close cloud speech bubble"
-                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#641623]/10 hover:bg-[#811B2B] text-[#641623] hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs font-bold"
+                      className="w-6 h-6 rounded-full bg-[#641623]/10 hover:bg-[#811B2B] text-[#641623] hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs font-bold mr-0.5 sm:mr-1"
                     >
                       ✕
                     </button>
                   </div>
 
                   {/* Main Speech Quote & Subtext */}
-                  <div>
-                    <p className="font-['Fredoka'] font-bold text-xs sm:text-[15px] md:text-base text-[#641623] leading-snug tracking-tight">
+                  <div className="my-1">
+                    <p className="font-['Fredoka'] font-bold text-sm sm:text-base md:text-[17px] text-[#641623] leading-snug tracking-tight">
                       &ldquo;{currentStage.speech}&rdquo;
                     </p>
-                    <p className="font-['Fredoka'] text-[10px] sm:text-[11.5px] text-[#641623]/75 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-none">
+                    <p className="font-['Fredoka'] text-[11px] sm:text-xs text-[#641623]/80 mt-1 leading-snug">
                       {currentStage.subtext}
                     </p>
                   </div>
 
-                  {/* Quick Category Chips inside Cloud */}
-                  <div className="pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 overflow-x-auto no-scrollbar">
+                  {/* Clean 2x3 Grid of All 6 Category Buttons */}
+                  <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-[#641623]/15">
                     {CATEGORIES.map((cat) => {
                       const isActive = activeStageId === cat.id;
                       return (
@@ -926,10 +936,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                           key={cat.id}
                           type="button"
                           onClick={() => handleStageSelect(cat.id)}
-                          className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-['Fredoka'] font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                          className={`py-1 px-1.5 rounded-full text-[10px] sm:text-[11px] font-['Fredoka'] font-bold text-center truncate transition-all cursor-pointer ${
                             isActive
-                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-105'
-                              : 'bg-[#FFF5CC] text-[#641623] hover:bg-white border border-[#641623]/20'
+                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-102'
+                              : 'bg-[#FFFDF8] text-[#641623] hover:bg-[#FFF5CC] border border-[#641623]/20'
                           }`}
                         >
                           {cat.buttonLabel}
@@ -948,10 +958,10 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsCloudOpen(true)}
-                  className="mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border-[1.8px] border-[#641623] shadow-md hover:scale-105 transition-transform cursor-pointer animate-bounce"
+                  className="mb-1.5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF5CC] hover:bg-[#FFFDF8] border-[2px] border-[#641623] shadow-md hover:scale-105 transition-all cursor-pointer animate-bounce"
                 >
                   <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
-                  <span className="font-['Fredoka'] font-bold text-[11px] text-[#811B2B]">
+                  <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B]">
                     Tap to open guide
                   </span>
                   <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#811B2B]" fill="currentColor">
@@ -974,7 +984,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 <img
                   src="/mascot/guide-fullbody.png"
                   alt="Knotsnco Boy Mascot"
-                  className="h-28 sm:h-36 md:h-44 w-auto object-contain drop-shadow-[0_8px_16px_rgba(100,22,35,0.22)] select-none transition-transform duration-300 group-hover:scale-105 animate-[float_4s_ease-in-out_infinite]"
+                  className="h-28 sm:h-34 md:h-40 w-auto object-contain drop-shadow-[0_8px_16px_rgba(100,22,35,0.22)] select-none transition-transform duration-300 group-hover:scale-105 animate-[float_4s_ease-in-out_infinite]"
                 />
               </button>
             </div>
