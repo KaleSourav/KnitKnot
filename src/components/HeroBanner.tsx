@@ -44,11 +44,10 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
 ];
 
-const AUTOPLAY_INTERVAL = 5000; // 5 seconds per slide
+const SLIDE_DURATION_MS = 5000; // Exact 5-second automatic rotation
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
   const goToNext = useCallback(() => {
@@ -63,16 +62,14 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
     setCurrentIndex(index);
   }, []);
 
-  // Autoplay crossfade loop
+  // Automatic slideshow loop: reliably triggers every 5 seconds without stopping on mouse hover
   useEffect(() => {
-    if (isPaused) return;
-
     const timer = setInterval(() => {
       goToNext();
-    }, AUTOPLAY_INTERVAL);
+    }, SLIDE_DURATION_MS);
 
     return () => clearInterval(timer);
-  }, [isPaused, goToNext]);
+  }, [currentIndex, goToNext]);
 
   // Handle touch swiping on mobile
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -96,12 +93,18 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
 
   return (
     <section className="relative w-full bg-[#FAF4ED] overflow-hidden">
+      {/* Keyframe animation for subtle 5s progress fill */}
+      <style>{`
+        @keyframes bannerProgressFill {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
+
       <div className="w-full max-w-[1440px] mx-auto px-0 sm:px-4 lg:px-6 pt-2 sm:pt-3 pb-8">
         {/* Banner Slideshow Container - Preserves exact layout, proportions, and styling */}
         <div
           className="relative w-full aspect-[2/1] overflow-hidden sm:rounded-2xl md:rounded-3xl shadow-[0_8px_30px_rgba(100,22,35,0.06)] bg-[#F8EFE4] group select-none"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -164,7 +167,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
               goToPrev();
             }}
             aria-label="Previous banner"
-            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/75 hover:bg-white text-[#641623] shadow-md hover:shadow-lg backdrop-blur-sm flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#641623]/40 cursor-pointer"
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/80 hover:bg-white text-[#641623] shadow-md hover:shadow-lg backdrop-blur-sm flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#641623]/40 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
           </button>
@@ -177,13 +180,13 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
               goToNext();
             }}
             aria-label="Next banner"
-            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/75 hover:bg-white text-[#641623] shadow-md hover:shadow-lg backdrop-blur-sm flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#641623]/40 cursor-pointer"
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/80 hover:bg-white text-[#641623] shadow-md hover:shadow-lg backdrop-blur-sm flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#641623]/40 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2]" />
           </button>
 
-          {/* Slide Indicator Dots */}
-          <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/45 backdrop-blur-md border border-white/40 shadow-sm pointer-events-auto">
+          {/* Slide Indicator Dots with 5-second dynamic progress */}
+          <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/50 backdrop-blur-md border border-white/40 shadow-sm pointer-events-auto">
             {BANNER_SLIDES.map((slide, index) => {
               const isActive = index === currentIndex;
               return (
@@ -196,12 +199,22 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
                   }}
                   aria-label={`Go to slide ${index + 1}: ${slide.alt}`}
                   aria-current={isActive ? 'true' : 'false'}
-                  className={`h-2 transition-all duration-300 rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#641623] ${
+                  className={`h-2 transition-all duration-300 rounded-full cursor-pointer overflow-hidden focus:outline-none focus:ring-1 focus:ring-[#641623] ${
                     isActive
-                      ? 'w-6 bg-[#641623]'
+                      ? 'w-7 bg-[#641623]/25 relative'
                       : 'w-2 bg-[#641623]/35 hover:bg-[#641623]/70'
                   }`}
-                />
+                >
+                  {isActive && (
+                    <span
+                      key={currentIndex}
+                      className="absolute inset-y-0 left-0 bg-[#641623] rounded-full"
+                      style={{
+                        animation: `bannerProgressFill ${SLIDE_DURATION_MS}ms linear forwards`,
+                      }}
+                    />
+                  )}
+                </button>
               );
             })}
           </div>
