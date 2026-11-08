@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
-import { TrustBadges } from './components/TrustBadges';
 import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
@@ -170,9 +169,6 @@ export default function App() {
             <div id="section-hero">
               <ScrollReveal delay={0.05} yOffset={24} duration={1.2}>
                 <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
-              </ScrollReveal>
-              <ScrollReveal delay={0.2} yOffset={28} duration={1.3}>
-                <TrustBadges />
               </ScrollReveal>
             </div>
 
