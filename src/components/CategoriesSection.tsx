@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface CategoryItem {
   id: string;
@@ -160,6 +160,139 @@ const CATEGORIES: CategoryItem[] = [
   },
 ];
 
+interface GuideStageInfo {
+  id: string;
+  categoryTarget?: string;
+  stepLabel: string;
+  speech: string;
+  subtext: string;
+  accessoryIcon: React.ReactNode;
+}
+
+// Crisp handmade SVGs for mascot accessory badges and card micro-animations (strictly NO emojis)
+const SVG_ICONS = {
+  flower: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="3" fill="#F5D76E" />
+      <path d="M12 3a2.2 2.2 0 0 0-2.2 2.2c0 1.2 2.2 2.8 2.2 2.8s2.2-1.6 2.2-2.8A2.2 2.2 0 0 0 12 3z" fill="#FDA4AF" />
+      <path d="M12 21a2.2 2.2 0 0 0 2.2-2.2c0-1.2-2.2-2.8-2.2-2.8s-2.2 1.6-2.2 2.8A2.2 2.2 0 0 0 12 21z" fill="#FDA4AF" />
+      <path d="M3 12a2.2 2.2 0 0 0 2.2 2.2c1.2 0 2.8-2.2 2.8-2.2s-1.6-2.2-2.8-2.2A2.2 2.2 0 0 0 3 12z" fill="#FDA4AF" />
+      <path d="M21 12a2.2 2.2 0 0 0-2.2-2.2c-1.2 0-2.8 2.2-2.8 2.2s1.6 2.2 2.8 2.2A2.2 2.2 0 0 0 21 12z" fill="#FDA4AF" />
+    </svg>
+  ),
+  flowerPot: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M6 10h12l-1.5 10h-9z" fill="#D9EEF5" />
+      <path d="M12 10V5m-3 2c0-2 3-3 3-3s3 1 3 3" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  ),
+  bag: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="5" y="9" width="14" height="11" rx="2.5" fill="#FFF5CC" />
+      <path d="M8 9V6a4 4 0 0 1 8 0v3" strokeWidth="2" />
+      <circle cx="12" cy="14" r="1.5" fill="#811B2B" />
+    </svg>
+  ),
+  keychain: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="10" cy="8" r="4" fill="#F8D9D8" />
+      <path d="M13 11l6 6m-2 0l2 2" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="10" cy="8" r="1.5" fill="#811B2B" />
+    </svg>
+  ),
+  plushie: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="8" cy="7" r="2.5" fill="#FFF5CC" />
+      <circle cx="16" cy="7" r="2.5" fill="#FFF5CC" />
+      <circle cx="12" cy="13" r="6" fill="#FFF5CC" />
+      <circle cx="10" cy="12" r="0.8" fill="#811B2B" />
+      <circle cx="14" cy="12" r="0.8" fill="#811B2B" />
+      <path d="M11 14.5q1 1 2 0" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  homeDecor: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 12l9-8 9 8v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#FFF5CC" />
+      <rect x="9" y="14" width="6" height="8" fill="#F5D76E" />
+    </svg>
+  ),
+  star: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#F59E0B]" fill="currentColor">
+      <path d="M12 0l3 8.5 8.5 2.5-8.5 3.5-3 8.5-3-8.5-8.5-3.5 8.5-2.5z" />
+    </svg>
+  ),
+  heart: (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="currentColor">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+    </svg>
+  ),
+};
+
+const GUIDE_STAGES: Record<string, GuideStageInfo> = {
+  welcome: {
+    id: 'welcome',
+    stepLabel: 'Welcome',
+    speech: "Hey! Let's find your little favourite.",
+    subtext: 'Scroll or tap any collection below to let your mascot guide you.',
+    accessoryIcon: SVG_ICONS.star,
+  },
+  flowers: {
+    id: 'flowers',
+    categoryTarget: 'flowers',
+    stepLabel: 'Flowers',
+    speech: 'Flowers that keep your sweetest moments blooming.',
+    subtext: 'Handcrafted blooms that never wilt or fade away.',
+    accessoryIcon: SVG_ICONS.flower,
+  },
+  'flower-pots': {
+    id: 'flower-pots',
+    categoryTarget: 'flower-pots',
+    stepLabel: 'Flower Pots',
+    speech: 'A little handmade happiness for every corner.',
+    subtext: 'Charming mini planters stitched with love for desk or shelf.',
+    accessoryIcon: SVG_ICONS.flowerPot,
+  },
+  bags: {
+    id: 'bags',
+    categoryTarget: 'bags',
+    stepLabel: 'Bags & Totes',
+    speech: 'Carry a little creativity wherever you go.',
+    subtext: 'Hand-woven crochet shoulder bags and chunky totes.',
+    accessoryIcon: SVG_ICONS.bag,
+  },
+  keychains: {
+    id: 'keychains',
+    categoryTarget: 'keychains',
+    stepLabel: 'Keychains',
+    speech: 'Small charms, big personality.',
+    subtext: 'Cute backpack pendants and tactile yarn accessories.',
+    accessoryIcon: SVG_ICONS.keychain,
+  },
+  plushies: {
+    id: 'plushies',
+    categoryTarget: 'plushies',
+    stepLabel: 'Plushies',
+    speech: 'Tiny yarn-made friends, ready for big hugs.',
+    subtext: 'Soft amigurumi creatures hand-knitted by dadis.',
+    accessoryIcon: SVG_ICONS.plushie,
+  },
+  'home-decor': {
+    id: 'home-decor',
+    categoryTarget: 'home-decor',
+    stepLabel: 'Home Decor',
+    speech: 'Cozy textures to make any space feel like home.',
+    subtext: 'Handmade details that make your style uniquely yours.',
+    accessoryIcon: SVG_ICONS.homeDecor,
+  },
+  final: {
+    id: 'final',
+    stepLabel: 'Find Yours',
+    speech: "There's something special waiting for you!",
+    subtext: 'Find your favourite little handmade thing.',
+    accessoryIcon: SVG_ICONS.heart,
+  },
+};
+
 interface CategoriesSectionProps {
   onCategorySelect?: (categoryId: string) => void;
   onShopAllClick?: () => void;
@@ -181,22 +314,102 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [scrollStage, setScrollStage] = useState<string>('welcome');
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState<number>(0);
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleScroll = () => {
+  // Active guide stage: hovered category takes immediate visual priority, otherwise scroll stage
+  const activeStageId = hoveredCategory || scrollStage;
+  const currentStage = GUIDE_STAGES[activeStageId] || GUIDE_STAGES.welcome;
+
+  // Track scroll position to update mascot guide stages smoothly
+  useEffect(() => {
+    const handleScrollObserver = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Section entered top of viewport
+      if (rect.top > viewportHeight * 0.7) {
+        setScrollStage('welcome');
+        return;
+      }
+
+      // Check card positions to highlight relevant category
+      let bestCategory = 'welcome';
+      let minDistance = Infinity;
+
+      for (const cat of CATEGORIES) {
+        const el = cardRefs.current[cat.id];
+        if (el) {
+          const cardRect = el.getBoundingClientRect();
+          const cardCenter = cardRect.top + cardRect.height / 2;
+          const targetCenter = viewportHeight * 0.55;
+          const distance = Math.abs(cardCenter - targetCenter);
+
+          if (cardRect.top < viewportHeight * 0.85 && cardRect.bottom > viewportHeight * 0.2) {
+            if (distance < minDistance) {
+              minDistance = distance;
+              bestCategory = cat.id;
+            }
+          }
+        }
+      }
+
+      // Bottom invitation zone
+      if (rect.bottom < viewportHeight * 0.95 && rect.bottom > 0) {
+        bestCategory = 'final';
+      }
+
+      setScrollStage(bestCategory);
+    };
+
+    window.addEventListener('scroll', handleScrollObserver, { passive: true });
+    handleScrollObserver();
+    return () => window.removeEventListener('scroll', handleScrollObserver);
+  }, []);
+
+  const handleCarouselScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
       const maxScroll = scrollWidth - clientWidth;
       if (maxScroll > 0) {
         const progress = scrollLeft / maxScroll;
-        setActiveDot(Math.min(Math.max(0, Math.round(progress * 2)), 2));
+        const dotIndex = Math.min(Math.max(0, Math.round(progress * 2)), 2);
+        setActiveDot(dotIndex);
+
+        // Map mobile horizontal carousel position to category stages
+        const approxCategoryIndex = Math.min(
+          CATEGORIES.length - 1,
+          Math.floor((scrollLeft / maxScroll) * CATEGORIES.length)
+        );
+        if (CATEGORIES[approxCategoryIndex]) {
+          setScrollStage(CATEGORIES[approxCategoryIndex].id);
+        }
       }
     }
   };
 
+  const handleStageSelect = (stageId: string) => {
+    setScrollStage(stageId);
+    const cat = CATEGORIES.find((c) => c.id === stageId);
+    if (cat && cardRefs.current[cat.id]) {
+      cardRefs.current[cat.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const handleAllClick = () => {
+    if (onShopAllClick) {
+      onShopAllClick();
+    } else if (onCategorySelect) {
+      onCategorySelect('all');
+    }
+  };
+
   return (
-    <div className="w-full relative mt-3 sm:mt-5">
+    <div ref={sectionRef} className="w-full relative mt-3 sm:mt-5 select-none">
       {/* 1. Top Puffy Cloud Scalloped Border with Clean Maroon Stroke */}
       <div className="w-full overflow-hidden leading-none -mb-[1px]">
         <svg
@@ -269,18 +482,17 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
         </div>
 
-        {/* Perfectly proportioned container: max-w-[1040px] creates ideal card dimensions */}
-        <div className="w-full max-w-[1040px] mx-auto">
-          {/* Header with Mascots on both sides */}
-          <div className="flex items-center justify-center gap-2 sm:gap-5 md:gap-6 mb-5 sm:mb-8 text-center">
-            {/* Left Mascot GIF */}
-            <img
-              src="/knotsnco_mascot_transparent.gif"
-              alt="knotsnco mascot"
-              className="w-8 h-8 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
-            />
+        <div className="w-full max-w-[1060px] mx-auto relative z-10">
+          {/* Header with Whimsical Radiant Dashes */}
+          <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 text-center">
+            {/* Small Friendly Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-xs mb-2">
+              <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
+              <span className="font-['Fredoka'] font-semibold text-xs text-[#811B2B] tracking-wide">
+                Meet your little shopping guide!
+              </span>
+            </div>
 
-            {/* Center Heading with Whimsical Radiant Dashes */}
             <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 text-center">
               {/* Left Radiant Dashes */}
               <svg
@@ -296,8 +508,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 <line x1="14" y1="23" x2="6" y2="27" />
               </svg>
 
-              {/* Heading in Exact Case & Font */}
-              <h2 className="font-['Fredoka'] font-bold text-xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] lowercase tracking-tight whitespace-nowrap">
+              {/* Heading in Exact Brand Font */}
+              <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] lowercase tracking-tight whitespace-nowrap">
                 shop by category
               </h2>
 
@@ -315,35 +527,118 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 <line x1="18" y1="23" x2="26" y2="27" />
               </svg>
             </div>
-
-            {/* Right Mascot GIF */}
-            <img
-              src="/knotsnco_mascot_transparent.gif"
-              alt="knotsnco mascot"
-              className="w-8 h-8 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain drop-shadow-sm select-none flex-shrink-0"
-            />
           </div>
 
-          {/* Mobile Horizontal Carousel (< lg) & Desktop 3x2 Grid (>= lg) */}
+          {/* =========================================================================
+              MASCOT SHOPPING GUIDE STATION
+              Interactive Mascot Companion with Dynamic Speech Bubble
+              ========================================================================= */}
+          <div className="w-full mb-5 sm:mb-8 bg-[#FFFDF8] rounded-2xl sm:rounded-3xl border-[2px] border-[#641623] shadow-[0_6px_20px_rgba(100,22,35,0.08)] p-2.5 sm:p-5 transition-all duration-300">
+            <div className="flex flex-row items-center gap-2.5 sm:gap-6">
+              {/* Mascot Character Avatar Box */}
+              <div className="relative flex-shrink-0 flex items-center justify-center">
+                {/* Clean Cameo Arch Frame with Warm Gradient */}
+                <div className="w-16 h-20 sm:w-24 sm:h-28 md:w-30 md:h-34 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#FFF5CC] to-[#FFE8BF] border-[2px] border-[#641623] flex items-end justify-center overflow-hidden shadow-inner relative group">
+                  {/* Original Boy Mascot Character Portrait */}
+                  <img
+                    src="/mascot/guide-portrait.png"
+                    alt="Knotsnco Boy Shopping Guide"
+                    className="h-20 sm:h-28 md:h-34 w-auto object-contain select-none drop-shadow-sm transition-transform duration-300 transform hover:scale-105"
+                  />
+
+                  {/* Dynamic SVG Accessory Badge for Current Stage */}
+                  <div className="absolute top-1 right-1 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-white border border-[#641623] flex items-center justify-center shadow-xs animate-bounce">
+                    {currentStage.accessoryIcon}
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Speech Bubble */}
+              <div className="flex-1 min-w-0 text-left relative">
+                {/* Speech Bubble Arrow pointing toward Mascot */}
+                <div className="block absolute -left-2 top-6 sm:top-7 w-0 h-0 border-t-[6px] sm:border-t-[8px] border-t-transparent border-b-[6px] sm:border-b-[8px] border-b-transparent border-r-[8px] sm:border-r-[10px] border-r-[#FFF5CC] filter drop-shadow-[-1px_0_0_#641623]" />
+
+                <div className="bg-[#FFF5CC] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border-[1.8px] border-[#641623] relative">
+                  {/* Stage Tracker Pill & Guide Hint */}
+                  <div className="flex items-center justify-between gap-2 mb-0.5 sm:mb-1">
+                    <span className="inline-flex items-center gap-1 font-['Fredoka'] font-bold text-[10px] sm:text-xs text-[#811B2B] uppercase tracking-wider truncate">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#811B2B] flex-shrink-0" />
+                      {currentStage.stepLabel}
+                    </span>
+                    <span className="font-['Fredoka'] text-[10px] sm:text-[11px] text-[#641623]/60 italic hidden md:inline">
+                      hover or scroll cards to guide
+                    </span>
+                  </div>
+
+                  {/* Main Speech Sentence from Mascot */}
+                  <p className="font-['Fredoka'] font-bold text-xs sm:text-lg md:text-xl text-[#641623] leading-snug tracking-tight transition-all duration-300">
+                    &ldquo;{currentStage.speech}&rdquo;
+                  </p>
+
+                  {/* Subtitle / Descriptive Context */}
+                  <p className="font-['Fredoka'] text-[10px] sm:text-sm text-[#641623]/75 mt-0.5 leading-snug sm:leading-relaxed hidden xs:block">
+                    {currentStage.subtext}
+                  </p>
+
+                  {/* Quick Stage Navigation Chips */}
+                  <div className="mt-1.5 sm:mt-2.5 pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
+                    {CATEGORIES.map((cat) => {
+                      const isActive = activeStageId === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => handleStageSelect(cat.id)}
+                          className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[11px] font-['Fredoka'] font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                            isActive
+                              ? 'bg-[#811B2B] text-white shadow-xs scale-105'
+                              : 'bg-white/80 text-[#641623] hover:bg-white border border-[#641623]/20'
+                          }`}
+                        >
+                          {cat.buttonLabel}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              COLLECTION CARDS GRID (Mobile Carousel & Desktop 3x2 Grid)
+              ========================================================================= */}
           <div
             ref={scrollRef}
-            onScroll={handleScroll}
+            onScroll={handleCarouselScroll}
             className="flex lg:grid lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-7 overflow-x-auto lg:overflow-visible pb-3 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
           >
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
+              const isStageActive = activeStageId === cat.id;
 
               return (
                 <div
                   key={cat.id}
+                  ref={(el) => {
+                    cardRefs.current[cat.id] = el;
+                  }}
                   title={cat.buttonLabel}
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
-                  className="group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center"
+                  className={`group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center relative transition-transform duration-300 ${
+                    isStageActive ? 'scale-[1.02]' : ''
+                  }`}
                 >
-                  {/* 1. Perfect Square Aspect Ratio Image Box with Crisp Maroon Border & Hover Crossfade */}
-                  <div className="relative w-full aspect-square rounded-[18px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)] transition-all duration-300 group-hover:-translate-y-1">
+                  {/* 1. Square Aspect Ratio Image Box with Maroon Border & Hover Crossfade */}
+                  <div
+                    className={`relative w-full aspect-square rounded-[18px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 ${
+                      isStageActive
+                        ? 'shadow-[0_12px_28px_rgba(129,27,43,0.18)] ring-2 ring-[#811B2B]/40'
+                        : 'shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)]'
+                    }`}
+                  >
                     {/* Default Image */}
                     <img
                       src={cat.image}
@@ -404,11 +699,98 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                         </text>
                       </svg>
                     </div>
+
+                    {/* =====================================================================
+                        STAGE-SPECIFIC MICRO-ANIMATIONS ON CARDS (Strictly SVG, NO emojis)
+                        ===================================================================== */}
+                    {/* Stage 2: Flowers blooming crochet flower */}
+                    {cat.id === 'flowers' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_2s_infinite]">
+                          {SVG_ICONS.flower}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stage 2: Flower Pots swaying plant */}
+                    {cat.id === 'flower-pots' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#D9EEF5] border border-[#641623] shadow-md flex items-center justify-center origin-bottom animate-[wiggle_2.5s_infinite]">
+                          {SVG_ICONS.flowerPot}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stage 3: Bags hanging & swinging charm */}
+                    {cat.id === 'bags' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F5D76E] border border-[#641623] shadow-md flex items-center justify-center origin-top animate-[wiggle_2s_infinite]">
+                          {SVG_ICONS.bag}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stage 3: Keychains swinging charm */}
+                    {cat.id === 'keychains' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center origin-top animate-[wiggle_1.8s_infinite]">
+                          {SVG_ICONS.keychain}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stage 4: Plushies bouncing friend */}
+                    {cat.id === 'plushies' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F8D9D8] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_1.5s_infinite]">
+                          {SVG_ICONS.plushie}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stage 5: Home Decor cozy spark */}
+                    {cat.id === 'home-decor' && (
+                      <div
+                        className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
+                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                        }`}
+                      >
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[spin_6s_linear_infinite]">
+                          {SVG_ICONS.star}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* 2. Sleek 3D Offset Pill Button Matching the Card Width */}
                   <div className="w-full mt-2 sm:mt-3.5 flex justify-center">
-                    <div className="w-full py-1.5 sm:py-3 px-1.5 sm:px-5 rounded-full bg-[#F7BE44] border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_6px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-2.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-sm md:text-[15px] text-[#641623] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
+                    <div
+                      className={`w-full py-1.5 sm:py-3 px-1.5 sm:px-5 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_6px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-2.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-sm md:text-[15px] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_4px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none ${
+                        isStageActive
+                          ? 'bg-[#811B2B] text-white shadow-[0_3px_0_0_#380B12]'
+                          : 'bg-[#F7BE44] text-[#641623]'
+                      }`}
+                    >
                       <span className="scale-75 sm:scale-100 flex-shrink-0">{cat.icon}</span>
                       <span className="leading-tight pt-0.5 truncate">{cat.buttonLabel}</span>
                     </div>
@@ -443,49 +825,50 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
             ))}
           </div>
 
-          {/* Bottom Call to Action: Shop All Collections & Cute Mascot Doodle */}
-          <div className="relative mt-8 sm:mt-10 flex flex-col items-center justify-center">
-            <button
-              onClick={onShopAllClick}
-              className="group inline-flex flex-col items-center text-center cursor-pointer focus:outline-none"
-            >
-              <span className="font-['Fredoka'] font-bold text-sm sm:text-base md:text-lg text-[#641623] hover:opacity-80 transition-opacity flex items-center gap-1.5">
-                <span>Shop All Collections</span>
-                <span className="text-xs transition-transform group-hover:translate-x-1">▶</span>
-              </span>
-
-              {/* Cute Terracotta Wavy Squiggle Underline */}
-              <svg
-                viewBox="0 0 100 12"
-                className="w-24 sm:w-28 h-3 text-[#D96B43] mt-1 overflow-visible"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3.2"
-                strokeLinecap="round"
-              >
-                <path d="M 4 6 Q 16 0 28 6 T 52 6 T 76 6 T 96 6" />
+          {/* =========================================================================
+              STAGE 5: STITCHED YARN TRAIL & FINAL INVITATION STATION
+              ========================================================================= */}
+          <div className="relative mt-8 sm:mt-12 flex flex-col items-center justify-center text-center">
+            {/* Playful Stitched Yarn Trail connecting down to the Invitation */}
+            <div className="w-full max-w-[340px] sm:max-w-[480px] h-8 flex items-center justify-center mb-3 pointer-events-none">
+              <svg viewBox="0 0 400 30" className="w-full h-full overflow-visible" fill="none">
+                {/* Wavy stitched yarn thread in burgundy */}
+                <path
+                  d="M 10 15 Q 60 0, 110 15 T 210 15 T 310 15 T 390 15"
+                  stroke="#811B2B"
+                  strokeWidth="2.5"
+                  strokeDasharray="6 5"
+                  strokeLinecap="round"
+                />
+                {/* Cute daisy at center of trail */}
+                <circle cx="200" cy="15" r="4.5" fill="#F5D76E" stroke="#641623" strokeWidth="1.5" />
+                <circle cx="100" cy="15" r="3" fill="#FDA4AF" />
+                <circle cx="300" cy="15" r="3" fill="#7FE5BD" />
               </svg>
-            </button>
-
-            {/* Cute Whimsical Flower / Sparkle Accent in Bottom Right */}
-            <div className="absolute right-2 sm:right-6 bottom-0 pointer-events-none hidden sm:flex items-center gap-1 text-[#641623]/60">
-              <svg
-                className="w-6 h-6 sm:w-7 sm:h-7 text-[#641623]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="3" fill="#F7BE44" stroke="#641623" />
-                <path d="M12 3a2 2 0 0 0-2 2v2a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2z" fill="#FFFDF9" stroke="#641623" />
-                <path d="M12 17a2 2 0 0 0-2 2v2a2 2 0 0 0 4 0v-2a2 2 0 0 0-2-2z" fill="#FFFDF9" stroke="#641623" />
-                <path d="M3 12a2 2 0 0 0 2-2h2a2 2 0 0 0 0 4H5a2 2 0 0 0-2-2z" fill="#FFFDF9" stroke="#641623" />
-                <path d="M17 12a2 2 0 0 0 2-2h2a2 2 0 0 0 0 4h-2a2 2 0 0 0-2-2z" fill="#FFFDF9" stroke="#641623" />
-              </svg>
-              <span className="text-xs text-[#D96B43]">✦</span>
             </div>
+
+            {/* Final Invitation Speech Bubble */}
+            <div className="max-w-[560px] bg-[#FFF5CC] border-[2px] border-[#641623] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-[0_6px_20px_rgba(100,22,35,0.08)] mb-4 relative">
+              <p className="font-['Fredoka'] font-bold text-base sm:text-xl text-[#811B2B]">
+                &ldquo;There&apos;s something special waiting for you!&rdquo;
+              </p>
+              <p className="font-['Fredoka'] text-xs sm:text-sm text-[#641623]/80 mt-1">
+                Find your favourite little handmade thing.
+              </p>
+            </div>
+
+            {/* Clear Call-To-Action Button: Explore all collections */}
+            <button
+              onClick={handleAllClick}
+              className="group relative inline-flex items-center gap-2.5 py-3 sm:py-3.5 px-6 sm:px-8 rounded-full bg-[#F7BE44] hover:bg-[#F5D76E] border-[2.2px] border-[#641623] shadow-[0_5px_0_0_#641623] hover:shadow-[0_2px_0_0_#641623] hover:translate-y-[3px] active:translate-y-1 active:shadow-[0_0_0_0_#641623] transition-all duration-150 cursor-pointer focus:outline-none"
+            >
+              <span className="font-['Fredoka'] font-bold text-sm sm:text-base md:text-lg text-[#641623] tracking-wide">
+                Explore all collections
+              </span>
+              <span className="text-base sm:text-lg font-bold text-[#641623] transition-transform group-hover:translate-x-1">
+                →
+              </span>
+            </button>
           </div>
         </div>
       </section>
