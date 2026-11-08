@@ -12,6 +12,7 @@ import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
 import { DynamicScrollBackground } from './components/DynamicScrollBackground';
+import { ScrollReveal } from './components/ScrollReveal';
 
 // Mapping from landing page category IDs to Shop category names
 const CATEGORY_MAP: Record<string, string> = {
@@ -167,45 +168,49 @@ export default function App() {
 
             {/* Hero Landing Banner */}
             <div id="section-hero">
-              <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
-              <TrustBadges />
+              <ScrollReveal delay={0.05} yOffset={24}>
+                <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
+              </ScrollReveal>
+              <ScrollReveal delay={0.15} yOffset={28}>
+                <TrustBadges />
+              </ScrollReveal>
             </div>
 
             {/* Shop by Category (Scalloped Cloud Container, 3 Top, 3 Below) */}
-            <div id="section-categories">
+            <ScrollReveal id="section-categories" yOffset={44}>
               <CategoriesSection
                 onCategorySelect={(id) => {
                   const targetCat = CATEGORY_MAP[id] || id;
                   navigateTo('shop', targetCat);
                 }}
               />
-            </div>
+            </ScrollReveal>
 
             {/* Bestsellers Section (Yarn Ball Divider, 4-Point Sparkle Stars, Carousel) */}
-            <div id="section-bestsellers">
+            <ScrollReveal id="section-bestsellers" yOffset={44}>
               <BestsellersSection
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
                 onNotifyClick={(id) => navigateTo('product', id)}
               />
-            </div>
+            </ScrollReveal>
 
             {/* Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
-            <div id="section-story">
+            <ScrollReveal id="section-story" yOffset={44}>
               <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
-            </div>
+            </ScrollReveal>
 
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
-            <div id="section-occasions">
+            <ScrollReveal id="section-occasions" yOffset={44}>
               <ShopTheOccasionSection
                 onOccasionClick={(id) => navigateTo('shop', 'all')}
               />
-            </div>
+            </ScrollReveal>
 
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
-            <div id="section-reels">
+            <ScrollReveal id="section-reels" yOffset={44}>
               <ReelsSection />
-            </div>
+            </ScrollReveal>
           </div>
         ) : currentPage === 'shop' ? (
           /* =========================================================================
@@ -234,7 +239,9 @@ export default function App() {
       </main>
 
       {/* 4. Footer Section ("stay in the loop" newsletter + scalloped wave + brand links & legal) */}
-      <Footer onNavigate={navigateTo} />
+      <ScrollReveal yOffset={32}>
+        <Footer onNavigate={navigateTo} />
+      </ScrollReveal>
     </div>
   );
 }
