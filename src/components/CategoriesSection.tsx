@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface CategoryItem {
   id: string;
@@ -172,7 +173,7 @@ interface GuideStageInfo {
 // Crisp handmade SVGs for mascot accessory badges and card micro-animations (strictly NO emojis)
 const SVG_ICONS = {
   flower: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <circle cx="12" cy="12" r="3" fill="#F5D76E" />
       <path d="M12 3a2.2 2.2 0 0 0-2.2 2.2c0 1.2 2.2 2.8 2.2 2.8s2.2-1.6 2.2-2.8A2.2 2.2 0 0 0 12 3z" fill="#FDA4AF" />
       <path d="M12 21a2.2 2.2 0 0 0 2.2-2.2c0-1.2-2.2-2.8-2.2-2.8s-2.2 1.6-2.2 2.8A2.2 2.2 0 0 0 12 21z" fill="#FDA4AF" />
@@ -181,27 +182,27 @@ const SVG_ICONS = {
     </svg>
   ),
   flowerPot: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M6 10h12l-1.5 10h-9z" fill="#D9EEF5" />
       <path d="M12 10V5m-3 2c0-2 3-3 3-3s3 1 3 3" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ),
   bag: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="5" y="9" width="14" height="11" rx="2.5" fill="#FFF5CC" />
       <path d="M8 9V6a4 4 0 0 1 8 0v3" strokeWidth="2" />
       <circle cx="12" cy="14" r="1.5" fill="#811B2B" />
     </svg>
   ),
   keychain: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <circle cx="10" cy="8" r="4" fill="#F8D9D8" />
       <path d="M13 11l6 6m-2 0l2 2" strokeWidth="2" strokeLinecap="round" />
       <circle cx="10" cy="8" r="1.5" fill="#811B2B" />
     </svg>
   ),
   plushie: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <circle cx="8" cy="7" r="2.5" fill="#FFF5CC" />
       <circle cx="16" cy="7" r="2.5" fill="#FFF5CC" />
       <circle cx="12" cy="13" r="6" fill="#FFF5CC" />
@@ -211,18 +212,18 @@ const SVG_ICONS = {
     </svg>
   ),
   homeDecor: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M3 12l9-8 9 8v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="#FFF5CC" />
       <rect x="9" y="14" width="6" height="8" fill="#F5D76E" />
     </svg>
   ),
   star: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#F59E0B]" fill="currentColor">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F59E0B]" fill="currentColor">
       <path d="M12 0l3 8.5 8.5 2.5-8.5 3.5-3 8.5-3-8.5-8.5-3.5 8.5-2.5z" />
     </svg>
   ),
   heart: (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#811B2B]" fill="currentColor">
+    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="currentColor">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
     </svg>
   ),
@@ -231,9 +232,9 @@ const SVG_ICONS = {
 const GUIDE_STAGES: Record<string, GuideStageInfo> = {
   welcome: {
     id: 'welcome',
-    stepLabel: 'Welcome',
+    stepLabel: 'Welcome!',
     speech: "Hey! Let's find your little favourite.",
-    subtext: 'Scroll or tap any collection below to let your mascot guide you.',
+    subtext: 'Scroll or tap any collection to let me guide you.',
     accessoryIcon: SVG_ICONS.star,
   },
   flowers: {
@@ -241,7 +242,7 @@ const GUIDE_STAGES: Record<string, GuideStageInfo> = {
     categoryTarget: 'flowers',
     stepLabel: 'Flowers',
     speech: 'Flowers that keep your sweetest moments blooming.',
-    subtext: 'Handcrafted blooms that never wilt or fade away.',
+    subtext: 'Handcrafted blooms that never wilt or need watering.',
     accessoryIcon: SVG_ICONS.flower,
   },
   'flower-pots': {
@@ -249,7 +250,7 @@ const GUIDE_STAGES: Record<string, GuideStageInfo> = {
     categoryTarget: 'flower-pots',
     stepLabel: 'Flower Pots',
     speech: 'A little handmade happiness for every corner.',
-    subtext: 'Charming mini planters stitched with love for desk or shelf.',
+    subtext: 'Tiny desk buddies and cheerful windowsill greens.',
     accessoryIcon: SVG_ICONS.flowerPot,
   },
   bags: {
@@ -265,7 +266,7 @@ const GUIDE_STAGES: Record<string, GuideStageInfo> = {
     categoryTarget: 'keychains',
     stepLabel: 'Keychains',
     speech: 'Small charms, big personality.',
-    subtext: 'Cute backpack pendants and tactile yarn accessories.',
+    subtext: 'Cute backpack pendants and tactile yarn buddies.',
     accessoryIcon: SVG_ICONS.keychain,
   },
   plushies: {
@@ -309,12 +310,23 @@ const BOT_CLOUD_FILL =
 const BOT_CLOUD_STROKE =
   'M 0 25 C 32.5 53.0, 97.5 53.0, 130.0 25.0 C 157.5 48.0, 212.5 48.0, 240.0 25.0 C 277.5 53.0, 352.5 53.0, 390.0 25.0 C 420.0 48.0, 480.0 48.0, 510.0 25.0 C 545.0 53.0, 615.0 53.0, 650.0 25.0 C 682.5 48.0, 747.5 48.0, 780.0 25.0 C 810.0 53.0, 870.0 53.0, 900.0 25.0 C 937.5 48.0, 1012.5 48.0, 1050.0 25.0 C 1077.5 53.0, 1132.5 53.0, 1160.0 25.0 C 1195.0 48.0, 1265.0 48.0, 1300.0 25.0 C 1335.0 53.0, 1405.0 53.0, 1440.0 25.0';
 
+// Scalloped Puffy Cloud Path for Floating Speech Sticker
+const CLOUD_STICKER_PATH =
+  'M 25 105 A 42 42 0 0 1 55 35 A 48 48 0 0 1 130 18 A 52 52 0 0 1 210 12 A 50 50 0 0 1 290 20 A 44 44 0 0 1 350 45 A 44 44 0 0 1 380 110 A 44 44 0 0 1 345 170 A 48 48 0 0 1 270 198 A 50 50 0 0 1 190 202 A 48 48 0 0 1 110 198 A 44 44 0 0 1 50 170 A 42 42 0 0 1 25 105 Z';
+
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [scrollStage, setScrollStage] = useState<string>('welcome');
+  const [isCloudOpen, setIsCloudOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 640;
+    }
+    return true;
+  });
+  const [isSectionInView, setIsSectionInView] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState<number>(0);
@@ -331,8 +343,11 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       const rect = sectionRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
 
-      // Section entered top of viewport
-      if (rect.top > viewportHeight * 0.7) {
+      // Section entered viewport
+      const inView = rect.top < viewportHeight * 0.85 && rect.bottom > viewportHeight * 0.15;
+      setIsSectionInView(inView);
+
+      if (rect.top > viewportHeight * 0.65) {
         setScrollStage('welcome');
         return;
       }
@@ -346,7 +361,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         if (el) {
           const cardRect = el.getBoundingClientRect();
           const cardCenter = cardRect.top + cardRect.height / 2;
-          const targetCenter = viewportHeight * 0.55;
+          const targetCenter = viewportHeight * 0.5;
           const distance = Math.abs(cardCenter - targetCenter);
 
           if (cardRect.top < viewportHeight * 0.85 && cardRect.bottom > viewportHeight * 0.2) {
@@ -359,7 +374,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       }
 
       // Bottom invitation zone
-      if (rect.bottom < viewportHeight * 0.95 && rect.bottom > 0) {
+      if (rect.bottom < viewportHeight * 0.85 && rect.bottom > 0) {
         bestCategory = 'final';
       }
 
@@ -394,6 +409,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
   const handleStageSelect = (stageId: string) => {
     setScrollStage(stageId);
+    setIsCloudOpen(true);
     const cat = CATEGORIES.find((c) => c.id === stageId);
     if (cat && cardRefs.current[cat.id]) {
       cardRefs.current[cat.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -430,7 +446,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       </div>
 
       {/* 2. Main Cloud Body in Theme's Pastel Blue (#D4EFF4) */}
-      <section className="w-full bg-[#D4EFF4] py-3 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="w-full bg-[#D4EFF4] py-4 sm:py-7 md:py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Soft Ambient Floating Petals & Fairy Sparkles in the Category Cloud */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
           {/* Top-Left Floating Petal */}
@@ -482,11 +498,11 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
         </div>
 
-        <div className="w-full max-w-[1060px] mx-auto relative z-10">
-          {/* Header with Whimsical Radiant Dashes */}
-          <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 text-center">
-            {/* Small Friendly Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-xs mb-2">
+        <div className="w-full max-w-[1040px] mx-auto relative z-10">
+          {/* Header with Whimsical Radiant Dashes (Spacious & Clean) */}
+          <div className="flex flex-col items-center justify-center mb-5 sm:mb-8 text-center">
+            {/* Friendly Mascot Little Shopping Guide Pill */}
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-xs mb-2.5">
               <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
               <span className="font-['Fredoka'] font-semibold text-xs text-[#811B2B] tracking-wide">
                 Meet your little shopping guide!
@@ -530,83 +546,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
 
           {/* =========================================================================
-              MASCOT SHOPPING GUIDE STATION
-              Interactive Mascot Companion with Dynamic Speech Bubble
-              ========================================================================= */}
-          <div className="w-full mb-5 sm:mb-8 bg-[#FFFDF8] rounded-2xl sm:rounded-3xl border-[2px] border-[#641623] shadow-[0_6px_20px_rgba(100,22,35,0.08)] p-2.5 sm:p-5 transition-all duration-300">
-            <div className="flex flex-row items-center gap-2.5 sm:gap-6">
-              {/* Mascot Character Avatar Box */}
-              <div className="relative flex-shrink-0 flex items-center justify-center">
-                {/* Clean Cameo Arch Frame with Warm Gradient */}
-                <div className="w-16 h-20 sm:w-24 sm:h-28 md:w-30 md:h-34 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#FFF5CC] to-[#FFE8BF] border-[2px] border-[#641623] flex items-end justify-center overflow-hidden shadow-inner relative group">
-                  {/* Original Boy Mascot Character Portrait */}
-                  <img
-                    src="/mascot/guide-portrait.png"
-                    alt="Knotsnco Boy Shopping Guide"
-                    className="h-20 sm:h-28 md:h-34 w-auto object-contain select-none drop-shadow-sm transition-transform duration-300 transform hover:scale-105"
-                  />
-
-                  {/* Dynamic SVG Accessory Badge for Current Stage */}
-                  <div className="absolute top-1 right-1 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-white border border-[#641623] flex items-center justify-center shadow-xs animate-bounce">
-                    {currentStage.accessoryIcon}
-                  </div>
-                </div>
-              </div>
-
-              {/* Dynamic Speech Bubble */}
-              <div className="flex-1 min-w-0 text-left relative">
-                {/* Speech Bubble Arrow pointing toward Mascot */}
-                <div className="block absolute -left-2 top-6 sm:top-7 w-0 h-0 border-t-[6px] sm:border-t-[8px] border-t-transparent border-b-[6px] sm:border-b-[8px] border-b-transparent border-r-[8px] sm:border-r-[10px] border-r-[#FFF5CC] filter drop-shadow-[-1px_0_0_#641623]" />
-
-                <div className="bg-[#FFF5CC] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border-[1.8px] border-[#641623] relative">
-                  {/* Stage Tracker Pill & Guide Hint */}
-                  <div className="flex items-center justify-between gap-2 mb-0.5 sm:mb-1">
-                    <span className="inline-flex items-center gap-1 font-['Fredoka'] font-bold text-[10px] sm:text-xs text-[#811B2B] uppercase tracking-wider truncate">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#811B2B] flex-shrink-0" />
-                      {currentStage.stepLabel}
-                    </span>
-                    <span className="font-['Fredoka'] text-[10px] sm:text-[11px] text-[#641623]/60 italic hidden md:inline">
-                      hover or scroll cards to guide
-                    </span>
-                  </div>
-
-                  {/* Main Speech Sentence from Mascot */}
-                  <p className="font-['Fredoka'] font-bold text-xs sm:text-lg md:text-xl text-[#641623] leading-snug tracking-tight transition-all duration-300">
-                    &ldquo;{currentStage.speech}&rdquo;
-                  </p>
-
-                  {/* Subtitle / Descriptive Context */}
-                  <p className="font-['Fredoka'] text-[10px] sm:text-sm text-[#641623]/75 mt-0.5 leading-snug sm:leading-relaxed hidden xs:block">
-                    {currentStage.subtext}
-                  </p>
-
-                  {/* Quick Stage Navigation Chips */}
-                  <div className="mt-1.5 sm:mt-2.5 pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
-                    {CATEGORIES.map((cat) => {
-                      const isActive = activeStageId === cat.id;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => handleStageSelect(cat.id)}
-                          className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[11px] font-['Fredoka'] font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                            isActive
-                              ? 'bg-[#811B2B] text-white shadow-xs scale-105'
-                              : 'bg-white/80 text-[#641623] hover:bg-white border border-[#641623]/20'
-                          }`}
-                        >
-                          {cat.buttonLabel}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* =========================================================================
-              COLLECTION CARDS GRID (Mobile Carousel & Desktop 3x2 Grid)
+              COLLECTION CARDS GRID (Clean, Beautiful, Unobstructed)
+              Mobile Carousel (< lg) & Desktop 3x2 Grid (>= lg)
               ========================================================================= */}
           <div
             ref={scrollRef}
@@ -891,6 +832,177 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           />
         </svg>
       </div>
+
+      {/* =========================================================================
+          FLOATING MASCOT & CLOUDY STICKER GUIDE (Right Side Interactive Companion)
+          - Mounted via Portal to body so viewport positioning is 100% accurate
+          - Real boy mascot standing on the right
+          - Puffy cloudy sticker with live explanation comments
+          - Option to close the cloud sticker (only see mascot)
+          - Tap/click the mascot to reopen cloud comments anytime!
+          ========================================================================= */}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className={`fixed right-3 sm:right-6 md:right-8 bottom-4 sm:bottom-6 z-50 flex flex-col items-end pointer-events-auto transition-all duration-500 ease-out select-none ${
+              isSectionInView
+                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+                : 'opacity-0 translate-y-8 scale-90 pointer-events-none'
+            }`}
+            aria-live="polite"
+          >
+            {/* Puffy Cloudy Speech Sticker (Exact shape & aesthetic matching brand cloud) */}
+            <div
+              className={`transition-all duration-300 origin-bottom-right mb-1 ${
+                isCloudOpen
+                  ? 'opacity-100 scale-100 pointer-events-auto'
+                  : 'opacity-0 scale-75 pointer-events-none translate-y-4 h-0 overflow-hidden mb-0'
+              }`}
+            >
+              <div className="relative w-[300px] sm:w-[360px] md:w-[380px] h-[210px] sm:h-[220px] md:h-[230px] filter drop-shadow-[0_12px_28px_rgba(100,22,35,0.16)] select-none">
+                {/* SVG Puffy Cloud Silhouette */}
+                <svg
+                  viewBox="0 0 400 230"
+                  preserveAspectRatio="none"
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="floatingCloudGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#FFFFFF" />
+                      <stop offset="45%" stopColor="#F4FBFC" />
+                      <stop offset="100%" stopColor="#DCF2F6" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d={CLOUD_STICKER_PATH}
+                    fill="url(#floatingCloudGrad)"
+                    stroke="#641623"
+                    strokeWidth="2.5"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  />
+                </svg>
+
+                {/* Cute Floating Flower on Cloud Scallop */}
+                <div className="absolute top-1 left-7 sm:left-9 w-4 h-4 sm:w-5 sm:h-5 pointer-events-none z-20">
+                  <svg viewBox="0 0 24 24" className="w-full h-full drop-shadow-xs" fill="none">
+                    <circle cx="12" cy="12" r="3.2" fill="#F5D76E" stroke="#641623" strokeWidth="1.2" />
+                    <circle cx="12" cy="5.5" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
+                    <circle cx="12" cy="18.5" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
+                    <circle cx="5.5" cy="12" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
+                    <circle cx="18.5" cy="12" r="2.8" fill="#FDA4AF" stroke="#641623" strokeWidth="1" />
+                  </svg>
+                </div>
+
+                {/* Cloud Content Overlay */}
+                <div className="relative z-10 w-full h-full pt-5 pb-7 px-7 sm:pt-6 sm:pb-8 sm:px-9 flex flex-col justify-between">
+                  {/* Top Bar: Category Stage Pill + Hint + Close Button */}
+                  <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+                    <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FFF5CC] border border-[#641623]/25 shadow-2xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#811B2B] flex-shrink-0" />
+                      <span className="font-['Fredoka'] font-bold text-[10px] sm:text-[11px] text-[#811B2B] uppercase tracking-wider">
+                        {currentStage.stepLabel}
+                      </span>
+                      <span className="scale-85">{currentStage.accessoryIcon}</span>
+                    </div>
+
+                    <span className="hidden sm:inline-block font-['Fredoka'] italic text-[10px] text-[#641623]/60">
+                      hover or scroll cards to guide
+                    </span>
+
+                    {/* Close Cloud Button */}
+                    <button
+                      type="button"
+                      onClick={() => setIsCloudOpen(false)}
+                      title="Close cloud (keep mascot)"
+                      aria-label="Close cloud speech bubble"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#641623]/10 hover:bg-[#811B2B] text-[#641623] hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs font-bold"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* Main Speech Quote & Subtext */}
+                  <div>
+                    <p className="font-['Fredoka'] font-bold text-xs sm:text-[15px] md:text-base text-[#641623] leading-snug tracking-tight">
+                      &ldquo;{currentStage.speech}&rdquo;
+                    </p>
+                    <p className="font-['Fredoka'] text-[10px] sm:text-[11.5px] text-[#641623]/75 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-none">
+                      {currentStage.subtext}
+                    </p>
+                  </div>
+
+                  {/* Quick Category Chips inside Cloud */}
+                  <div className="pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 overflow-x-auto no-scrollbar">
+                    {CATEGORIES.map((cat) => {
+                      const isActive = activeStageId === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => handleStageSelect(cat.id)}
+                          className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-['Fredoka'] font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                            isActive
+                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-105'
+                              : 'bg-[#FFF5CC] text-[#641623] hover:bg-white border border-[#641623]/20'
+                          }`}
+                        >
+                          {cat.buttonLabel}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Connecting Cloud Puffs Linking Cloud to Mascot */}
+              <div className="flex flex-col items-center mr-12 sm:mr-16 -mt-2 -mb-2 z-20 pointer-events-none">
+                <div className="w-3.5 h-3.5 rounded-full bg-white border-[1.8px] border-[#641623] shadow-xs" />
+                <div className="w-2 h-2 rounded-full bg-white border-[1.5px] border-[#641623] mt-0.5 shadow-2xs" />
+              </div>
+            </div>
+
+            {/* Real Mascot Stand with Tap-To-Open / Re-open Cloud Button */}
+            <div className="relative flex flex-col items-center">
+              {/* Re-open Cloud Hint Bubble (Shown when Cloud is Closed) */}
+              {!isCloudOpen && (
+                <button
+                  type="button"
+                  onClick={() => setIsCloudOpen(true)}
+                  className="mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border-[1.8px] border-[#641623] shadow-md hover:scale-105 transition-transform cursor-pointer animate-bounce"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#811B2B] animate-ping" />
+                  <span className="font-['Fredoka'] font-bold text-[11px] text-[#811B2B]">
+                    Tap to open guide
+                  </span>
+                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#811B2B]" fill="currentColor">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Real Mascot Boy Character (Standing Cheerful & Waving) */}
+              <button
+                type="button"
+                onClick={() => setIsCloudOpen((prev) => !prev)}
+                title={isCloudOpen ? 'Click mascot to hide cloud' : 'Click mascot to view cloud guide'}
+                className="group relative cursor-pointer focus:outline-none focus:scale-105 transition-transform"
+              >
+                {/* Ground shadow beneath feet */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-2.5 rounded-full bg-[#641623]/25 blur-[2px] transition-transform group-hover:scale-110" />
+
+                {/* Mascot Real Image */}
+                <img
+                  src="/mascot/guide-fullbody.png"
+                  alt="Knotsnco Boy Mascot"
+                  className="h-28 sm:h-36 md:h-44 w-auto object-contain drop-shadow-[0_8px_16px_rgba(100,22,35,0.22)] select-none transition-transform duration-300 group-hover:scale-105 animate-[float_4s_ease-in-out_infinite]"
+                />
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
