@@ -115,6 +115,7 @@ const REELS_DATA: ReelItem[] = [
 ];
 
 export const ReelsSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
 
@@ -126,19 +127,37 @@ export const ReelsSection: React.FC = () => {
   // Active unmuted reel (null means all are muted)
   const [unmutedReelId, setUnmutedReelId] = useState<string | null>(null);
 
-  // Auto-play all videos on mount
+  // IntersectionObserver: only play videos when the Reels section is actually visible in the viewport
+  // This drastically saves mobile bandwidth, memory, and eliminates scrolling lag on mobile
   useEffect(() => {
-    Object.values(videoRefs.current).forEach((video) => {
-      if (video) {
-        video.muted = true;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Browsers may block if user hasn't interacted, muted ensures smooth autoplay
-          });
-        }
-      }
-    });
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            Object.values(videoRefs.current).forEach((video) => {
+              if (video && video.paused) {
+                video.muted = true;
+                const p = video.play();
+                if (p) p.catch(() => {});
+              }
+            });
+          } else {
+            Object.values(videoRefs.current).forEach((video) => {
+              if (video && !video.paused) {
+                video.pause();
+              }
+            });
+          }
+        });
+      },
+      { rootMargin: '100px 0px 100px 0px', threshold: 0.05 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   const togglePlay = (id: string, e: React.MouseEvent) => {
@@ -187,7 +206,7 @@ export const ReelsSection: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full bg-[#FAF4ED] py-12 md:py-16 overflow-hidden">
+    <section ref={sectionRef} className="relative w-full bg-[#FAF4ED] py-12 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header matching Reference 1 (media_1793693473509_aa9fe40d.jpg) */}
         <div className="flex items-center justify-between mb-5 sm:mb-8">
@@ -306,7 +325,7 @@ export const ReelsSection: React.FC = () => {
                     }}
                     src={reel.videoUrl}
                     poster={reel.posterUrl}
-                    autoPlay
+                    preload="metadata"
                     loop
                     muted
                     playsInline

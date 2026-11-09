@@ -40,8 +40,9 @@ export const DynamicScrollBackground: React.FC = () => {
     let mouseX = -1000;
     let mouseY = -1000;
 
-    // Handle high DPI
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Handle high DPI (capped for mobile performance to save battery & fill-rate)
+    const isMobile = width < 768;
+    const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
@@ -49,9 +50,11 @@ export const DynamicScrollBackground: React.FC = () => {
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.scale(dpr, dpr);
+      const isMob = width < 768;
+      const currentDpr = isMob ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = width * currentDpr;
+      canvas.height = height * currentDpr;
+      ctx.scale(currentDpr, currentDpr);
     };
 
     const handleScroll = () => {
@@ -88,7 +91,8 @@ export const DynamicScrollBackground: React.FC = () => {
       'lavender',
     ];
 
-    const particleCount = width < 768 ? 22 : 36;
+    // Ultra-lightweight particle count on mobile for butter-smooth touch scrolling
+    const particleCount = isMobile ? 8 : 28;
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {
@@ -337,15 +341,15 @@ export const DynamicScrollBackground: React.FC = () => {
 
   return (
     <>
-      {/* 1. Background Ambient Pastel Breathing Aura Blobs (z-0) */}
+      {/* 1. Background Ambient Pastel Breathing Aura Blobs (z-0, GPU-composited) */}
       <div
         className="fixed inset-0 w-full h-full pointer-events-none select-none overflow-hidden z-0"
         aria-hidden="true"
       >
-        <div className="absolute top-[5%] -left-[10%] w-[450px] sm:w-[600px] h-[450px] sm:h-[600px] rounded-full bg-[#FCE8ED]/50 blur-[90px] animate-pulse duration-[9000ms]" />
-        <div className="absolute top-[35%] -right-[12%] w-[420px] sm:w-[580px] h-[420px] sm:h-[580px] rounded-full bg-[#FEF9C3]/45 blur-[100px] animate-pulse duration-[11000ms]" />
-        <div className="absolute top-[65%] -left-[8%] w-[460px] sm:w-[620px] h-[460px] sm:h-[620px] rounded-full bg-[#F3E8FF]/40 blur-[95px] animate-pulse duration-[10000ms]" />
-        <div className="absolute top-[88%] -right-[10%] w-[400px] sm:w-[550px] h-[400px] sm:h-[550px] rounded-full bg-[#FFEDD5]/40 blur-[90px] animate-pulse duration-[12000ms]" />
+        <div className="absolute top-[5%] -left-[10%] w-[320px] sm:w-[600px] h-[320px] sm:h-[600px] rounded-full bg-[#FCE8ED]/40 blur-[40px] sm:blur-[90px] sm:animate-pulse duration-[9000ms] transform-gpu" />
+        <div className="absolute top-[35%] -right-[12%] w-[300px] sm:w-[580px] h-[300px] sm:h-[580px] rounded-full bg-[#FEF9C3]/35 blur-[40px] sm:blur-[100px] sm:animate-pulse duration-[11000ms] transform-gpu" />
+        <div className="absolute top-[65%] -left-[8%] w-[320px] sm:w-[620px] h-[320px] sm:h-[620px] rounded-full bg-[#F3E8FF]/30 blur-[40px] sm:blur-[95px] sm:animate-pulse duration-[10000ms] transform-gpu" />
+        <div className="absolute top-[88%] -right-[10%] w-[280px] sm:w-[550px] h-[280px] sm:h-[550px] rounded-full bg-[#FFEDD5]/30 blur-[40px] sm:blur-[90px] sm:animate-pulse duration-[12000ms] transform-gpu" />
       </div>
 
       {/* 2. Hardware-Accelerated Floating Petals & Fairy Sparkles (z-20, pointer-events-none) */}

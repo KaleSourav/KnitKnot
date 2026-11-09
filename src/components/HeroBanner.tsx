@@ -137,6 +137,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
                     className="w-full h-full object-cover select-none block"
                     loading={index === 0 ? 'eager' : 'lazy'}
                     fetchPriority={index === 0 ? 'high' : 'auto'}
+                    decoding={index === 0 ? 'sync' : 'async'}
                     draggable={false}
                   />
                 </picture>

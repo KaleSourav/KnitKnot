@@ -172,13 +172,13 @@ export default function App() {
 
             {/* Hero Landing Banner */}
             <div id="section-hero">
-              <ScrollReveal delay={0.05} yOffset={24} duration={1.2}>
+              <ScrollReveal delay={0.02} yOffset={16} duration={0.4}>
                 <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
               </ScrollReveal>
             </div>
 
             {/* Shop by Category (Scalloped Cloud Container, 3 Top, 3 Below) */}
-            <ScrollReveal id="section-categories" yOffset={50} duration={1.4}>
+            <ScrollReveal id="section-categories" yOffset={24} duration={0.45}>
               <CategoriesSection
                 onCategorySelect={(id) => {
                   const targetCat = CATEGORY_MAP[id] || id;
@@ -188,7 +188,7 @@ export default function App() {
             </ScrollReveal>
 
             {/* Bestsellers Section (Yarn Ball Divider, 4-Point Sparkle Stars, Carousel) */}
-            <ScrollReveal id="section-bestsellers" yOffset={50} duration={1.4}>
+            <ScrollReveal id="section-bestsellers" yOffset={24} duration={0.45}>
               <BestsellersSection
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
@@ -197,19 +197,19 @@ export default function App() {
             </ScrollReveal>
 
             {/* Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
-            <ScrollReveal id="section-story" yOffset={50} duration={1.4}>
+            <ScrollReveal id="section-story" yOffset={24} duration={0.45}>
               <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
             </ScrollReveal>
 
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
-            <ScrollReveal id="section-occasions" yOffset={50} duration={1.4}>
+            <ScrollReveal id="section-occasions" yOffset={24} duration={0.45}>
               <ShopTheOccasionSection
                 onOccasionClick={(id) => navigateTo('shop', 'all')}
               />
             </ScrollReveal>
 
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
-            <ScrollReveal id="section-reels" yOffset={50} duration={1.4}>
+            <ScrollReveal id="section-reels" yOffset={24} duration={0.45}>
               <ReelsSection />
             </ScrollReveal>
           </div>

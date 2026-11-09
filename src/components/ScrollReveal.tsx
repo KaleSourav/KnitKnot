@@ -14,31 +14,26 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   className = '',
   delay = 0,
-  yOffset = 48,
-  duration = 1.4, // Generous 1.4s organic, realistic fade
+  yOffset = 20,
+  duration = 0.45,
   id,
 }) => {
   return (
     <motion.div
       id={id}
-      initial={{ opacity: 0, y: yOffset, scale: 0.985 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.08, margin: '0px 0px -40px 0px' }}
+      initial={{ opacity: 0, y: yOffset }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.01, margin: '220px 0px 100px 0px' }}
       transition={{
         opacity: {
-          duration: duration,
+          duration: Math.min(duration, 0.5),
           delay,
-          ease: [0.25, 0.1, 0.25, 1.0], // Gentle, realistic sinusoidal fade
+          ease: [0.16, 1, 0.3, 1], // Crisp, modern Apple-style deceleration curve
         },
         y: {
-          duration: duration + 0.1,
+          duration: Math.min(duration, 0.5),
           delay,
-          ease: [0.22, 0.61, 0.36, 1.0], // Natural fluid rise
-        },
-        scale: {
-          duration: duration + 0.1,
-          delay,
-          ease: [0.22, 0.61, 0.36, 1.0],
+          ease: [0.16, 1, 0.3, 1],
         },
       }}
       className={`will-change-[opacity,transform] ${className}`}

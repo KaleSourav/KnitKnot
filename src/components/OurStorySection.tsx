@@ -71,6 +71,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                   alt="Handmade crochet flower hair clips detail"
                   className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -81,6 +82,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                   alt="Handmade crochet daisy potted plant"
                   className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -91,6 +93,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                   alt="Sunflower bouquet on warm studio table"
                   className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -101,6 +104,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                   alt="Authentic artisan craftswoman hands crocheting flower with golden hook"
                   className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -111,6 +115,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                   alt="Handcrafted vertical crochet tulip bouquet"
                   className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

@@ -254,7 +254,6 @@ export const SignatureYarnThread: React.FC = () => {
                   `translate(${pt.x}, ${pt.y}) rotate(${angle - 35}) scale(${scale})`
                 );
                 hookEl.style.display = 'block';
-                setTooltipPos({ x: pt.x, y: pt.y });
               } catch (e) {}
             } else {
               hookEl.style.display = 'none';
@@ -366,6 +365,7 @@ export const SignatureYarnThread: React.FC = () => {
   const handleBallClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setBallSpin((prev) => prev + 360);
+    setTooltipPos({ x: xStart, y: yStart });
     setActiveTooltip('Yarn unspooling! ♡');
     setTimeout(() => setActiveTooltip(null), 2000);
   };
@@ -373,6 +373,7 @@ export const SignatureYarnThread: React.FC = () => {
   const handleFlowerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setFlowerSpin(true);
+    setTooltipPos({ x: xFlower, y: yFlower });
     setActiveTooltip('Handmade with love ✿');
     setTimeout(() => setFlowerSpin(false), 900);
     setTimeout(() => setActiveTooltip(null), 2000);
@@ -381,6 +382,7 @@ export const SignatureYarnThread: React.FC = () => {
   const handleBowClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setBowBounce(true);
+    setTooltipPos({ x: xBow, y: yBow });
     setActiveTooltip('Tied with love 🎀');
     setTimeout(() => setBowBounce(false), 700);
     setTimeout(() => setActiveTooltip(null), 2000);

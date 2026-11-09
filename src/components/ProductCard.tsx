@@ -11,6 +11,14 @@ export interface ProductCardProps {
   className?: string;
 }
 
+const optimizeShopifyUrl = (url: string, width = 500) => {
+  if (!url) return url;
+  if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
+    return `${url}&width=${width}&format=webp`;
+  }
+  return url;
+};
+
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   isLiked = false,
@@ -125,27 +133,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <>
               {/* Primary Image */}
               <img
-                src={primaryImage}
+                src={optimizeShopifyUrl(primaryImage, 450)}
                 alt={product.name}
                 loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
                 }}
-                className={`w-full h-full object-cover select-none absolute inset-0 block transition-opacity duration-350 ease-in-out ${
+                className={`w-full h-full object-cover select-none absolute inset-0 block transition-opacity duration-300 ease-in-out ${
                   hasSecondaryImage ? 'group-hover:opacity-0' : ''
                 }`}
               />
 
-              {/* Secondary Product Image (Smooth 350ms Fade-in on Hover) */}
+              {/* Secondary Product Image (Smooth 300ms Fade-in on Hover) */}
               {hasSecondaryImage && (
                 <img
-                  src={secondaryImage!}
+                  src={optimizeShopifyUrl(secondaryImage!, 450)}
                   alt={`${product.name} alternate view`}
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
-                  className="w-full h-full object-cover select-none absolute inset-0 block opacity-0 transition-opacity duration-350 ease-in-out group-hover:opacity-100"
+                  className="w-full h-full object-cover select-none absolute inset-0 block opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
                 />
               )}
             </>

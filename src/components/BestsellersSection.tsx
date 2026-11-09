@@ -58,6 +58,14 @@ const BESTSELLERS: BestsellerProduct[] = [
   },
 ];
 
+const optimizeShopifyUrl = (url: string, width = 500) => {
+  if (!url) return url;
+  if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
+    return `${url}&width=${width}&format=webp`;
+  }
+  return url;
+};
+
 interface BestsellersSectionProps {
   onProductClick?: (productId: string) => void;
   onShopAllClick?: () => void;
@@ -246,7 +254,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                     <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:-translate-y-1.5 group-hover:rotate-[2deg] motion-reduce:transform-none">
                       {/* Default Image */}
                       <img
-                        src={item.image}
+                        src={optimizeShopifyUrl(item.image, 500)}
                         alt={item.name}
                         onError={(e) => {
                           const target = e.currentTarget;
@@ -254,15 +262,16 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                             target.src = item.fallbackImage;
                           }
                         }}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-350 ease-in-out select-none ${
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out select-none ${
                           isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
                         }`}
                         loading="lazy"
+                        decoding="async"
                       />
 
                       {/* Secondary Hover Image (Fades In on Hover) */}
                       <img
-                        src={item.hoverImage}
+                        src={optimizeShopifyUrl(item.hoverImage, 500)}
                         alt={`${item.name} alternate view`}
                         onError={(e) => {
                           const target = e.currentTarget;
@@ -270,10 +279,11 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                             target.src = item.fallbackImage;
                           }
                         }}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-350 ease-in-out select-none ${
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out select-none ${
                           isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                         }`}
                         loading="lazy"
+                        decoding="async"
                       />
                     </div>
 

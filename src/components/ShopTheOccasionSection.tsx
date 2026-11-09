@@ -230,24 +230,26 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
                   <img
                     src={item.image}
                     alt={item.title}
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
                       isHovered
                         ? 'opacity-0 scale-105'
                         : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-105'
                     }`}
                     loading="lazy"
+                    decoding="async"
                   />
 
                   {/* Secondary Alternate Image (Fades In Smoothly on Hover) */}
                   <img
                     src={item.hoverImage}
                     alt={`${item.title} alternate lifestyle view`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
                       isHovered
                         ? 'opacity-100 scale-105'
                         : 'opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105'
                     }`}
                     loading="lazy"
+                    decoding="async"
                   />
 
                   {/* Cute Occasion Floating Badge in Top-Right Corner */}

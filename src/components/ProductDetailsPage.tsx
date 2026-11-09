@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
 
+const optimizeShopifyUrl = (url?: string, width = 600) => {
+  if (!url) return '';
+  if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
+    return `${url}&width=${width}&format=webp`;
+  }
+  return url;
+};
+
 interface ProductDetailsPageProps {
   productId?: string | null;
   productHandle?: string | null;
@@ -681,8 +689,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               {/* Main Image Rendering (Strictly Shopify CDN image, or blank if none) */}
               {images.length > 0 && images[safeImageIndex] ? (
                 <img
-                  src={images[safeImageIndex]}
+                  src={optimizeShopifyUrl(images[safeImageIndex], 850)}
                   alt={product.name}
+                  decoding="async"
                   onError={(e) => {
                     // Gracefully hide broken image
                     (e.target as HTMLElement).style.display = 'none';
@@ -712,10 +721,11 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       }`}
                     >
                       <img
-                        src={imgUrl}
+                        src={optimizeShopifyUrl(imgUrl, 160)}
                         alt={`${product.name} thumbnail ${idx + 1}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           (e.target as HTMLElement).style.display = 'none';
                         }}
@@ -1398,7 +1408,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       {item.image || (item.images && item.images[0]) ? (
                         <>
                           <img
-                            src={item.image || (item.images && item.images[0])}
+                            src={optimizeShopifyUrl(item.image || (item.images && item.images[0]), 450)}
                             alt={item.name}
                             className={`w-full h-full object-cover select-none absolute inset-0 block transition-opacity duration-350 ease-in-out ${
                               item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0])
@@ -1406,13 +1416,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                                 : ''
                             }`}
                             loading="lazy"
+                            decoding="async"
                           />
                           {item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0]) && (
                             <img
-                              src={item.images[1]}
+                              src={optimizeShopifyUrl(item.images[1], 450)}
                               alt={`${item.name} alternate view`}
                               className="w-full h-full object-cover select-none absolute inset-0 block opacity-0 transition-opacity duration-350 ease-in-out group-hover:opacity-100"
                               loading="lazy"
+                              decoding="async"
                             />
                           )}
                         </>

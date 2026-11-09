@@ -413,6 +413,14 @@ const BOT_CLOUD_STROKE =
 const PUFFY_CLOUD_PATH =
   'M 15 80 C 15 45, 30 25, 50.0 20 C 60.0 5.0, 118.6 5.0, 128.6 20 C 138.6 10.0, 197.1 10.0, 207.1 20 C 217.1 5.0, 275.7 5.0, 285.7 20 C 295.7 10.0, 354.3 10.0, 364.3 20 C 374.3 5.0, 432.9 5.0, 442.9 20 C 452.9 10.0, 511.4 10.0, 521.4 20 C 531.4 5.0, 590.0 5.0, 600.0 20 C 610.0 10.0, 668.6 10.0, 678.6 20 C 688.6 5.0, 747.1 5.0, 757.1 20 C 767.1 10.0, 825.7 10.0, 835.7 20 C 845.7 5.0, 904.3 5.0, 914.3 20 C 924.3 10.0, 982.9 10.0, 992.9 20 C 1002.9 5.0, 1061.4 5.0, 1071.4 20 C 1081.4 10.0, 1140.0 10.0, 1150.0 20 C 1170.0 25, 1185.0 45, 1185.0 80 C 1185.0 115, 1170.0 135, 1150.0 140 C 1140.0 155.0, 1081.4 155.0, 1071.4 140 C 1061.4 150.0, 1002.9 150.0, 992.9 140 C 982.9 155.0, 924.3 155.0, 914.3 140 C 904.3 150.0, 845.7 150.0, 835.7 140 C 825.7 155.0, 767.1 155.0, 757.1 140 C 747.1 150.0, 688.6 150.0, 678.6 140 C 668.6 155.0, 610.0 155.0, 600.0 140 C 590.0 150.0, 531.4 150.0, 521.4 140 C 511.4 155.0, 452.9 155.0, 442.9 140 C 432.9 150.0, 374.3 150.0, 364.3 140 C 354.3 155.0, 295.7 155.0, 285.7 140 C 275.7 150.0, 217.1 150.0, 207.1 140 C 197.1 155.0, 138.6 155.0, 128.6 140 C 118.6 150.0, 60.0 150.0, 50.0 140 C 30 135, 15 115, 15 80 Z';
 
+const optimizeShopifyUrl = (url: string, width = 450) => {
+  if (!url) return url;
+  if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
+    return `${url}&width=${width}&format=webp`;
+  }
+  return url;
+};
+
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onCategorySelect,
   onShopAllClick,
@@ -428,45 +436,58 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   const activeStageId = hoveredCategory || scrollStage;
   const currentStage = GUIDE_STAGES[activeStageId] || GUIDE_STAGES.welcome;
 
-  // Track scroll position to update mascot guide stages smoothly
+  // Track scroll position to update mascot guide stages smoothly with RAF throttling
   useEffect(() => {
+    let ticking = false;
+
     const handleScrollObserver = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      if (ticking) return;
+      ticking = true;
 
-      if (rect.top > viewportHeight * 0.65) {
-        setScrollStage('welcome');
-        return;
-      }
+      requestAnimationFrame(() => {
+        ticking = false;
+        if (!sectionRef.current) return;
+        const rect = sectionRef.current.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
 
-      // Check card positions to highlight relevant category
-      let bestCategory = 'welcome';
-      let minDistance = Infinity;
+        // Skip completely if section is outside visible range
+        if (rect.bottom < -100 || rect.top > viewportHeight + 100) {
+          return;
+        }
 
-      for (const cat of CATEGORIES) {
-        const el = cardRefs.current[cat.id];
-        if (el) {
-          const cardRect = el.getBoundingClientRect();
-          const cardCenter = cardRect.top + cardRect.height / 2;
-          const targetCenter = viewportHeight * 0.5;
-          const distance = Math.abs(cardCenter - targetCenter);
+        if (rect.top > viewportHeight * 0.65) {
+          setScrollStage('welcome');
+          return;
+        }
 
-          if (cardRect.top < viewportHeight * 0.85 && cardRect.bottom > viewportHeight * 0.2) {
-            if (distance < minDistance) {
-              minDistance = distance;
-              bestCategory = cat.id;
+        // Check card positions to highlight relevant category
+        let bestCategory = 'welcome';
+        let minDistance = Infinity;
+
+        for (const cat of CATEGORIES) {
+          const el = cardRefs.current[cat.id];
+          if (el) {
+            const cardRect = el.getBoundingClientRect();
+            const cardCenter = cardRect.top + cardRect.height / 2;
+            const targetCenter = viewportHeight * 0.5;
+            const distance = Math.abs(cardCenter - targetCenter);
+
+            if (cardRect.top < viewportHeight * 0.85 && cardRect.bottom > viewportHeight * 0.2) {
+              if (distance < minDistance) {
+                minDistance = distance;
+                bestCategory = cat.id;
+              }
             }
           }
         }
-      }
 
-      // Bottom invitation zone
-      if (rect.bottom < viewportHeight * 0.85 && rect.bottom > 0) {
-        bestCategory = 'final';
-      }
+        // Bottom invitation zone
+        if (rect.bottom < viewportHeight * 0.85 && rect.bottom > 0) {
+          bestCategory = 'final';
+        }
 
-      setScrollStage(bestCategory);
+        setScrollStage(bestCategory);
+      });
     };
 
     window.addEventListener('scroll', handleScrollObserver, { passive: true });
@@ -761,22 +782,24 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   >
                     {/* Default Image */}
                     <img
-                      src={cat.image}
+                      src={optimizeShopifyUrl(cat.image, 450)}
                       alt={cat.buttonLabel}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out select-none ${
                         isHovered ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
                       }`}
                       loading="lazy"
+                      decoding="async"
                     />
 
                     {/* Secondary Alternate / Lifestyle Image (Fades In on Hover) */}
                     <img
-                      src={cat.hoverImage}
+                      src={optimizeShopifyUrl(cat.hoverImage, 450)}
                       alt={`${cat.buttonLabel} alternate view`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out select-none ${
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out select-none ${
                         isHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                       }`}
                       loading="lazy"
+                      decoding="async"
                     />
 
                     {/* Mint Green Scalloped Daisy Flower Badge in Top Right */}
