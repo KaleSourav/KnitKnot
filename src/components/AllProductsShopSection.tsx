@@ -286,7 +286,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
     selectedOccasions.length > 0;
 
   return (
-    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
+    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED]/85 text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
       {/* =========================================================================
           1. BREADCRUMB NAVIGATION ("home / shop all products")
          ========================================================================= */}

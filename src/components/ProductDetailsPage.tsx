@@ -534,7 +534,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   }, [product, images]);
 
   return (
-    <article className="relative w-full bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
+    <article className="relative w-full bg-[#FAF4ED]/85 text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
       {/* Toast Notification for Add to Cart */}
       {addedToast && (
         <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">

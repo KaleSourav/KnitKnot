@@ -40,9 +40,9 @@ export const DynamicScrollBackground: React.FC = () => {
     let mouseX = -1000;
     let mouseY = -1000;
 
-    // Handle high DPI (capped for mobile performance to save battery & fill-rate)
+    // Handle high DPI (balanced for crisp aesthetics and silky smooth performance)
     const isMobile = width < 768;
-    const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
@@ -51,7 +51,7 @@ export const DynamicScrollBackground: React.FC = () => {
       width = window.innerWidth;
       height = window.innerHeight;
       const isMob = width < 768;
-      const currentDpr = isMob ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2);
+      const currentDpr = isMob ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = width * currentDpr;
       canvas.height = height * currentDpr;
       ctx.scale(currentDpr, currentDpr);
@@ -79,20 +79,21 @@ export const DynamicScrollBackground: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Particle types pool for a cozy crochet garden aesthetic
+    // Balanced particle types pool: petals, stars, hearts, daisies & lavender
     const types: Particle['type'][] = [
       'petal-pink',
-      'petal-pink',
+      'sparkle', // fairy star/sparkle
+      'heart',   // cute crochet heart
       'petal-peach',
-      'daisy',
-      'sparkle',
-      'sparkle',
+      'daisy',   // mini daisy flower
+      'sparkle', // twinkle star
+      'petal-pink',
       'heart',
       'lavender',
     ];
 
-    // Ultra-lightweight particle count on mobile for butter-smooth touch scrolling
-    const particleCount = isMobile ? 8 : 28;
+    // Perfectly balanced particle count: cozy and lively without cluttering
+    const particleCount = isMobile ? 15 : 34;
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {

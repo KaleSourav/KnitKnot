@@ -157,6 +157,9 @@ export default function App() {
         cartCount={cartCount}
       />
 
+      {/* Global Whimsical Ambient Petals, Stars & Hearts Animation Across EVERY Page */}
+      <DynamicScrollBackground />
+
       {/* 3. Main Content: Dedicated Page Routing */}
       <main className="flex-1">
         {currentPage === 'home' ? (
@@ -164,9 +167,6 @@ export default function App() {
              LANDING PAGE VIEW (Home)
              ========================================================================= */
           <div className="relative w-full">
-            {/* Soothing Ambient Particle & Pastel Aura Background */}
-            <DynamicScrollBackground />
-
             {/* Signature Scroll-Responsive Yarn Thread Animation */}
             <SignatureYarnThread />
 
