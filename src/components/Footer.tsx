@@ -41,7 +41,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
-    <footer className="relative w-full bg-[#FAF4ED] text-white font-['Fredoka'] overflow-hidden pt-4">
+    <footer id="section-footer" className="relative w-full bg-[#FAF4ED] text-white font-['Fredoka'] overflow-hidden pt-4">
       {/* =========================================================================
           1. NEWSLETTER BANNER: "stay in the loop" (Full-Screen Scalloped Cloud Band)
          ========================================================================= */}

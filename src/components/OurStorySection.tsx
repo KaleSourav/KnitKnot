@@ -6,7 +6,7 @@ interface OurStorySectionProps {
 
 export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }) => {
   return (
-    <section className="w-full bg-[#FAF4ED] pt-4 sm:pt-6 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
+    <section id="section-story" className="w-full bg-[#FAF4ED] pt-4 sm:pt-6 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
       {/* 1. Golden Wavy Sine Divider at Top Transition from Bestsellers */}
       <div className="w-full overflow-hidden flex justify-center -mt-2 sm:-mt-4 mb-10 sm:mb-14 lg:mb-18" aria-hidden="true">
         <svg
