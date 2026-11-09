@@ -59,10 +59,72 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                 our story
               </button>
             </div>
+
+            {/* Mobile-Only Editorial Image Layout (Exact match to Reference: Top 2 Squares, Center Big Hero, Bottom Circle + Square) */}
+            <div className="lg:hidden mt-8 sm:mt-10 w-full flex flex-col gap-3 sm:gap-4 max-w-lg mx-auto">
+              {/* Row 1: Two Rounded Squares Side-by-Side */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+                {/* Top-Left Rounded Square */}
+                <div className="aspect-square rounded-[22px] overflow-hidden bg-[#F2EDE4] shadow-[0_4px_16px_rgba(100,22,35,0.06)] border border-[#641623]/8">
+                  <img
+                    src="/story/crochet_tile1.jpg"
+                    alt="Handmade crochet flower hair clips detail"
+                    className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                {/* Top-Right Rounded Square */}
+                <div className="aspect-square rounded-[22px] overflow-hidden bg-[#F2EDE4] shadow-[0_4px_16px_rgba(100,22,35,0.06)] border border-[#641623]/8">
+                  <img
+                    src="/story/crochet_tile2.jpg"
+                    alt="Handmade crochet daisy potted plant"
+                    className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Full-Width Prominent Big Hero Image */}
+              <div className="w-full aspect-[4/3.4] rounded-[28px] overflow-hidden bg-[#F2EDE4] shadow-[0_8px_24px_rgba(100,22,35,0.08)] border border-[#641623]/8">
+                <img
+                  src="/story/crochet_tile4.jpg"
+                  alt="Authentic artisan craftswoman hands crocheting flower with golden hook"
+                  className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              {/* Row 3: Circular Motif on Left + Rounded Square on Right */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full items-center">
+                {/* Bottom-Left Circle Image */}
+                <div className="aspect-square rounded-full overflow-hidden bg-[#F2EDE4] shadow-[0_4px_16px_rgba(100,22,35,0.06)] border border-[#641623]/8">
+                  <img
+                    src="/story/crochet_tile5.jpg"
+                    alt="Handcrafted vertical crochet tulip bouquet"
+                    className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                {/* Bottom-Right Rounded Square */}
+                <div className="aspect-square rounded-[22px] overflow-hidden bg-[#F2EDE4] shadow-[0_4px_16px_rgba(100,22,35,0.06)] border border-[#641623]/8">
+                  <img
+                    src="/story/crochet_tile3.jpg"
+                    alt="Sunflower bouquet on warm studio table"
+                    className="w-full h-full object-cover select-none transition-transform duration-500 hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Right Column: Full-Section 5-Tile Razor-Sharp Crochet Photo Grid */}
-          <div className="lg:col-span-7 w-full flex justify-center lg:justify-end">
+          {/* Right Column (Desktop Only): Full-Section 5-Tile Razor-Sharp Crochet Photo Grid */}
+          <div className="hidden lg:flex lg:col-span-7 w-full justify-center lg:justify-end">
             <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full max-w-[620px] xl:max-w-[660px]">
               {/* Tile 1: Top-Left Square (Handmade Flower Clips Detail) */}
               <div className="aspect-square rounded-[18px] sm:rounded-[22px] overflow-hidden bg-[#F2EDE4] shadow-sm">
