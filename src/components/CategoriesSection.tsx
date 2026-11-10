@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface CategoryItem {
   id: string;
@@ -321,20 +321,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeDot, setActiveDot] = useState<number>(0);
-
-  const handleCarouselScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      const maxScroll = scrollWidth - clientWidth;
-      if (maxScroll > 0) {
-        const progress = scrollLeft / maxScroll;
-        const dotIndex = Math.min(Math.max(0, Math.round(progress * 3)), 3);
-        setActiveDot(dotIndex);
-      }
-    }
-  };
 
   const handleAllClick = () => {
     if (onShopAllClick) {
@@ -458,14 +444,11 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
 
           {/* =========================================================================
-              COLLECTION CARDS 4-4 GRID (4 on Top Row, 4 on Bottom Row)
-              Mobile Carousel (< lg) & Desktop 4x2 Grid (>= lg)
+              COLLECTION CARDS GRID
+              Mobile: 2x2 Grid (grid-cols-2) with Big Cards
+              Desktop: 4x2 Grid (lg:grid-cols-4)
               ========================================================================= */}
-          <div
-            ref={scrollRef}
-            onScroll={handleCarouselScroll}
-            className="flex lg:grid lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6 overflow-x-auto lg:overflow-visible pb-3 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
-          >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6 pb-3 pt-1 px-1">
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
 
@@ -476,7 +459,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
-                  className="group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center relative transition-transform duration-300"
+                  className="group w-full cursor-pointer flex flex-col items-center relative transition-transform duration-300"
                 >
                   {/* 1. Square Aspect Ratio Image Box with Maroon Border & Hover Crossfade */}
                   <div className="relative w-full aspect-square rounded-[18px] sm:rounded-[26px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)]">
@@ -653,40 +636,15 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
                   {/* 2. Sleek 3D Offset Pill Button Matching the Card Width */}
                   <div className="w-full mt-2 sm:mt-3 flex justify-center">
-                    <div className="w-full py-1.5 sm:py-2.5 px-1.5 sm:px-3 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_5px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-1.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-xs md:text-[13px] uppercase transition-all duration-200 bg-[#F7BE44] group-hover:bg-[#F5D76E] text-[#641623] group-hover:translate-y-[2px] group-hover:shadow-[0_3px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
-                      <span className="scale-75 sm:scale-90 flex-shrink-0">{cat.icon}</span>
+                    <div className="w-full py-1.5 sm:py-2.5 px-2 sm:px-3 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_5px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-1.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[11px] sm:text-xs md:text-[13px] uppercase transition-all duration-200 bg-[#F7BE44] group-hover:bg-[#F5D76E] text-[#641623] group-hover:translate-y-[2px] group-hover:shadow-[0_3px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
+                      <span className="scale-80 sm:scale-90 flex-shrink-0">{cat.icon}</span>
                       <span className="leading-tight pt-0.5 truncate">{cat.buttonLabel}</span>
-                      <span className="text-[9px] sm:text-[11px] font-bold opacity-80 flex-shrink-0">({cat.count})</span>
+                      <span className="text-[9.5px] sm:text-[11px] font-bold opacity-80 flex-shrink-0">({cat.count})</span>
                     </div>
                   </div>
                 </div>
               );
             })}
-          </div>
-
-          {/* Mobile Pagination Indicator Dots */}
-          <div className="flex lg:hidden items-center justify-center gap-2 mt-3">
-            {[0, 1, 2, 3].map((idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  if (scrollRef.current) {
-                    const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
-                    scrollRef.current.scrollTo({
-                      left: (maxScroll / 2) * idx,
-                      behavior: 'smooth',
-                    });
-                  }
-                  setActiveDot(idx);
-                }}
-                className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-                  activeDot === idx
-                    ? 'bg-[#641623] scale-110'
-                    : 'border-2 border-[#641623]/40 bg-transparent'
-                }`}
-                aria-label={`Slide ${idx + 1}`}
-              />
-            ))}
           </div>
 
           {/* =========================================================================
