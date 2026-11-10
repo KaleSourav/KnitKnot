@@ -18,7 +18,7 @@ const BANNER_SLIDES: BannerSlide[] = [
     id: 'hero-main',
     src: '/hero-banner.png',
     webp: '/banners/hero-banner.webp',
-    alt: 'Handmade Crochet Bouquet - gifts that last forever',
+    alt: 'Little things, made with lots of love - Handmade crochet gifts, bouquets, plushies, bags and more',
     category: 'all',
   },
   {
@@ -142,15 +142,15 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
                   />
                 </picture>
 
-                {/* Subtle hover feedback over the button hotspot on hero-main slide */}
+                {/* Subtle hover feedback over the button hotspot on hero-main slide ("Explore Collections ->") */}
                 {slide.id === 'hero-main' && (
                   <div
                     className="absolute z-10 cursor-pointer rounded-full transition-all duration-200 pointer-events-none"
                     style={{
-                      left: '10.5%',
-                      top: '64%',
-                      width: '25.5%',
-                      height: '10%',
+                      left: '5.2%',
+                      top: '60.6%',
+                      width: '18.8%',
+                      height: '6.2%',
                     }}
                   >
                     <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-white/50 group-hover:bg-white/10 transition-all duration-200" />
