@@ -1,5 +1,23 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
+import {
+  SparkleIcon,
+  DaisyIcon,
+  YarnBallIcon,
+  CrochetHookIcon,
+  DaadiIcon,
+  LoveLetterIcon,
+  GiftBoxIcon,
+  BouquetIcon,
+  DeliveryTruckIcon,
+  LeafIcon,
+  ClockIcon,
+  FeatherDusterIcon,
+  DropletIcon,
+  SunIcon,
+  WiltedFlowerIcon,
+  CheckCircleIcon,
+} from './ArtisanIcons';
 
 const optimizeShopifyUrl = (url?: string, width = 600) => {
   if (!url) return '';
@@ -683,7 +701,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             <div className="relative aspect-square w-full rounded-[28px] sm:rounded-[32px] overflow-hidden bg-[#FAF2E8]/60 border border-[#641623]/10 shadow-[0_8px_28px_rgba(100,22,35,0.06)] group">
               {/* Overlaid Handmade Badge (Top Left) */}
               <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 z-20 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-[#641623]/15 text-[#641623] shadow-xs flex items-center gap-1.5 font-bold text-[11px] sm:text-xs">
-                <span>✨</span>
+                <SparkleIcon className="w-3.5 h-3.5 flex-shrink-0" />
                 <span className="uppercase tracking-wider">100% Handcrafted</span>
               </div>
 
@@ -919,16 +937,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             {/* 4 Feature Badges (Brand Trust Chips) */}
             <div className="flex items-center gap-2 flex-wrap mt-3.5">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
-                <span>🌸</span> 100% Handcrafted
+                <DaisyIcon className="w-3.5 h-3.5 flex-shrink-0" /> 100% Handcrafted
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
-                <span>✨</span> Everlasting Blooms
+                <SparkleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Everlasting Blooms
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
-                <span>🧶</span> Soft Milk-Cotton Yarn
+                <YarnBallIcon className="w-3.5 h-3.5 flex-shrink-0" /> Soft Milk-Cotton Yarn
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
-                <span>💌</span> Free Custom Gift Note
+                <LoveLetterIcon className="w-3.5 h-3.5 flex-shrink-0" /> Free Custom Gift Note
               </span>
             </div>
 
@@ -938,29 +956,29 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 HANDMADE SPECIFICATIONS
               </p>
               <div className="grid grid-cols-2 gap-2.5 sm:gap-3 text-xs sm:text-[13px]">
-                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
-                  <span className="text-base">🧵</span>
+                <div className="flex items-start gap-2.5 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <CrochetHookIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Material</p>
                     <p className="font-bold text-[#641623]">Soft Milk-Cotton Yarn</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
-                  <span className="text-base">👵</span>
+                <div className="flex items-start gap-2.5 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <DaadiIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Crafted By</p>
                     <p className="font-bold text-[#641623]">Surat Home Daadis</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
-                  <span className="text-base">💐</span>
+                <div className="flex items-start gap-2.5 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <BouquetIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Durability</p>
                     <p className="font-bold text-[#641623]">Never Wilts & Dust-Free</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
-                  <span className="text-base">🎁</span>
+                <div className="flex items-start gap-2.5 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <GiftBoxIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Packaging</p>
                     <p className="font-bold text-[#641623]">Gift-Ready Box & Card</p>
@@ -1043,13 +1061,13 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             {/* Free Delivery & Trust Bar */}
             <div className="mt-3.5 p-3 rounded-2xl bg-[#FFFDF9] border border-[#641623]/12 flex flex-col gap-1.5 text-xs text-[#641623]/85 shadow-2xs">
               <div className="flex items-center gap-2">
-                <span className="text-sm">🚚</span>
+                <DeliveryTruckIcon className="w-4 h-4 flex-shrink-0" />
                 <span>
                   <strong>Free Express Shipping</strong> on all orders above ₹1,999
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm">🎁</span>
+                <GiftBoxIcon className="w-4 h-4 flex-shrink-0" />
                 <span>
                   Every order includes a <strong>complimentary custom gift card</strong>
                 </span>
@@ -1266,7 +1284,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {activeBadgeStory === 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-base">🌸</span>
+                        <DaisyIcon className="w-4 h-4 flex-shrink-0" />
                         <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                           100% Stitched Knot-by-Knot with Milk-Cotton Yarn
                         </h4>
@@ -1275,9 +1293,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                         Every single flower petal, stem, and leaf in <span className="font-semibold text-[#641623]">{product.name}</span> is woven stitch-by-stitch by experienced artisans in Surat. We never use machine shortcuts or cheap plastics — just pure, tactile crochet art that takes an average of <strong>4.5 hours</strong> of patient craftsmanship.
                       </p>
                       <div className="flex flex-wrap gap-1.5 mt-2.5 text-[11px] font-semibold text-[#641623]">
-                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">🧶 4.5 Hours Handcrafting</span>
-                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">✨ Tight Double-Loop Stitch</span>
-                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">🌿 Zero Machine Production</span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">
+                          <ClockIcon className="w-3 h-3" /> 4.5 Hours Handcrafting
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">
+                          <CrochetHookIcon className="w-3 h-3" /> Tight Double-Loop Stitch
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">
+                          <LeafIcon className="w-3 h-3" /> Zero Machine Production
+                        </span>
                       </div>
                     </div>
                   )}
@@ -1286,20 +1310,24 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {activeBadgeStory === 1 && (
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-base">✨</span>
+                        <SparkleIcon className="w-4 h-4 flex-shrink-0" />
                         <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                           Everlasting Keepsake vs Fresh Cut Flowers
                         </h4>
                       </div>
                       <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
                         <div className="p-2.5 rounded-xl bg-[#FFF5F5] border border-red-200">
-                          <p className="font-bold text-red-700 text-[11px] uppercase tracking-wider mb-1">🥀 Fresh Bouquets</p>
+                          <p className="font-bold text-red-700 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <WiltedFlowerIcon className="w-3.5 h-3.5 flex-shrink-0" /> Fresh Bouquets
+                          </p>
                           <p className="text-[#2D2424]/80 text-[11px] leading-snug">
                             Wilts in 3-4 days, water turns murky, leaves a mess, and ends up in the bin.
                           </p>
                         </div>
                         <div className="p-2.5 rounded-xl bg-[#FCF7D1]/70 border border-[#C99814]/30">
-                          <p className="font-bold text-[#8C6B0D] text-[11px] uppercase tracking-wider mb-1">🌸 Knots & Co Keepsake</p>
+                          <p className="font-bold text-[#8C6B0D] text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <DaisyIcon className="w-3.5 h-3.5 flex-shrink-0" /> Knots & Co Keepsake
+                          </p>
                           <p className="text-[#2D2424]/90 text-[11px] leading-snug">
                             Stays vibrant for 5+ years, 100% dust-resistant, zero watering, treasured forever!
                           </p>
@@ -1312,7 +1340,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {activeBadgeStory === 2 && (
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-base">🎁</span>
+                        <GiftBoxIcon className="w-4 h-4 flex-shrink-0" />
                         <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                           Delightful Unboxing & Secret Gifting Ready
                         </h4>
@@ -1326,9 +1354,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           setActiveBadgeStory(null);
                         }}
                         type="button"
-                        className="mt-2 text-xs font-bold text-[#2B6CB0] underline cursor-pointer hover:text-[#1A4971]"
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#2B6CB0] underline cursor-pointer hover:text-[#1A4971]"
                       >
-                        💌 Add a complimentary handwritten card below ↓
+                        <LoveLetterIcon className="w-3.5 h-3.5 flex-shrink-0" /> Add a complimentary handwritten card below ↓
                       </button>
                     </div>
                   )}
@@ -1337,7 +1365,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {activeBadgeStory === 3 && (
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-base">👵</span>
+                        <DaadiIcon className="w-4 h-4 flex-shrink-0" />
                         <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                           Empowering 200+ Surat Daadis & Women Artisans
                         </h4>
@@ -1357,8 +1385,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             {/* Interactive "Personalize Your Gift" Complimentary Card Box */}
             <div className="mt-5 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#FFF9F5] to-[#FCEEF3] border border-[#641623]/15 shadow-2xs">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">💌</span>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-[#FCE2EB] border border-[#641623]/15 flex items-center justify-center flex-shrink-0">
+                    <LoveLetterIcon className="w-4 h-4" />
+                  </div>
                   <div>
                     <p className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                       Complimentary Handwritten Gift Card
@@ -1386,10 +1416,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       Quick ideas:
                     </span>
                     {[
-                      'Happy Birthday! 🎂',
+                      'Happy Birthday! ♡',
                       'Forever grateful for you ♡',
-                      'Happy Anniversary! 💐',
-                      'You make every day brighter 🌸',
+                      'Happy Anniversary! ♡',
+                      'You make every day brighter ♡',
                     ].map((chip, idx) => (
                       <button
                         key={idx}
@@ -1504,8 +1534,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#FCE2EB] flex items-center justify-center text-xs">
-                      🌸
+                    <span className="w-6 h-6 rounded-full bg-[#FCE2EB] flex items-center justify-center">
+                      <DaisyIcon className="w-3.5 h-3.5" />
                     </span>
                     <span>Product Details</span>
                   </div>
@@ -1554,18 +1584,18 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       <p className="font-['Fredoka'] font-bold text-xs text-[#641623] uppercase tracking-wider mb-1.5">
                         What's Included in Your Package:
                       </p>
-                      <ul className="space-y-1 text-xs text-[#2D2424]">
-                        <li className="flex items-center gap-1.5">
-                          <span className="text-green-600 font-bold">✓</span> Handcrafted crochet bouquet wrapped in florist paper
+                      <ul className="space-y-1.5 text-xs text-[#2D2424]">
+                        <li className="flex items-center gap-2">
+                          <CheckCircleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Handcrafted crochet bouquet wrapped in florist paper
                         </li>
-                        <li className="flex items-center gap-1.5">
-                          <span className="text-green-600 font-bold">✓</span> Elegant satin ribbon bow
+                        <li className="flex items-center gap-2">
+                          <CheckCircleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Elegant satin ribbon bow
                         </li>
-                        <li className="flex items-center gap-1.5">
-                          <span className="text-green-600 font-bold">✓</span> Sturdy protective gift transport box
+                        <li className="flex items-center gap-2">
+                          <CheckCircleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Sturdy protective gift transport box
                         </li>
-                        <li className="flex items-center gap-1.5">
-                          <span className="text-green-600 font-bold">✓</span> Complimentary handwritten greeting card (custom message)
+                        <li className="flex items-center gap-2">
+                          <CheckCircleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Complimentary handwritten greeting card (custom message)
                         </li>
                       </ul>
                     </div>
@@ -1582,8 +1612,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#FCF7D1] flex items-center justify-center text-xs">
-                      🧼
+                    <span className="w-6 h-6 rounded-full bg-[#FCF7D1] flex items-center justify-center">
+                      <FeatherDusterIcon className="w-3.5 h-3.5" />
                     </span>
                     <span>Care Instructions</span>
                   </div>
@@ -1610,29 +1640,30 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   <div className="px-4 sm:px-5 pb-4 pt-2 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-2.5 border-t border-[#641623]/10">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
-                        <span className="text-base mb-1 block">🪶</span>
+                        <FeatherDusterIcon className="w-4 h-4 mb-1.5" />
                         <p className="font-bold text-[#641623] text-xs">1. Monthly Dusting</p>
                         <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
                           Use a soft makeup brush or blowdryer on cool setting to keep dust away.
                         </p>
                       </div>
                       <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
-                        <span className="text-base mb-1 block">💧</span>
+                        <DropletIcon className="w-4 h-4 mb-1.5" />
                         <p className="font-bold text-[#641623] text-xs">2. Spot Dab Only</p>
                         <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
                           If stained, gently dab with a slightly damp cloth. Never submerge or machine wash!
                         </p>
                       </div>
                       <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
-                        <span className="text-base mb-1 block">☀️</span>
+                        <SunIcon className="w-4 h-4 mb-1.5" />
                         <p className="font-bold text-[#641623] text-xs">3. Room Display</p>
                         <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
                           Display in any vase or on your desk. Keep away from direct open flames.
                         </p>
                       </div>
                     </div>
-                    <p className="text-[11px] text-[#641623] italic font-medium bg-[#FFF9ED] p-2 rounded-lg border border-[#C99814]/20">
-                      ✨ Colorfast Milk-Cotton: Will retain 100% of its vibrant tones for years without fading.
+                    <p className="text-[11px] text-[#641623] italic font-medium bg-[#FFF9ED] p-2 rounded-lg border border-[#C99814]/20 flex items-center gap-1.5">
+                      <SparkleIcon className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>Colorfast Milk-Cotton: Will retain 100% of its vibrant tones for years without fading.</span>
                     </p>
                   </div>
                 )}
@@ -1647,8 +1678,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-full bg-[#D6E8EF] flex items-center justify-center text-xs">
-                      🚚
+                    <span className="w-6 h-6 rounded-full bg-[#D6E8EF] flex items-center justify-center">
+                      <DeliveryTruckIcon className="w-3.5 h-3.5" />
                     </span>
                     <span>Shipping & Delivery</span>
                   </div>
@@ -1698,7 +1729,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       {pincodeStatus === 'success' && pincodeDetails && (
                         <div className="mt-2.5 p-2 rounded-lg bg-[#E3F5E1] border border-[#236E38]/30 text-xs text-[#236E38]">
                           <p className="font-bold flex items-center gap-1.5">
-                            <span>🎉</span> Express Courier Available to {pincodeDetails.zone}!
+                            <CheckCircleIcon className="w-4 h-4 flex-shrink-0" />
+                            <span>Express Courier Available to {pincodeDetails.zone}!</span>
                           </p>
                           <p className="text-[11px] text-[#2D2424] mt-0.5">
                             Estimated delivery by <strong>{pincodeDetails.deliveryDate}</strong> with live tracking. Free shipping on orders above ₹1,999!
