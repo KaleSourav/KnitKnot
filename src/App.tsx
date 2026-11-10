@@ -232,14 +232,27 @@ export default function App() {
           /* =========================================================================
              DEDICATED PRODUCT DETAILS PAGE VIEW
              Exact Match to Reference: Gallery with Arrows & Wishlist, Stepper, Actions & Accordions
+             Followed by Reels Section & Why Choose Knots & Co cards right above Footer.
              ========================================================================= */
-          <ProductDetailsPage
-            productId={selectedProductId}
-            onNavigateHome={() => navigateTo('home')}
-            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
-            onNavigateProduct={(id) => navigateTo('product', id)}
-            onAddToCart={(_product, qty) => setCartCount((prev) => prev + qty)}
-          />
+          <div className="relative w-full">
+            <ProductDetailsPage
+              productId={selectedProductId}
+              onNavigateHome={() => navigateTo('home')}
+              onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+              onNavigateProduct={(id) => navigateTo('product', id)}
+              onAddToCart={(_product, qty) => setCartCount((prev) => prev + qty)}
+            />
+
+            {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
+            <ScrollReveal id="section-product-reels" yOffset={24} duration={0.45}>
+              <ReelsSection />
+            </ScrollReveal>
+
+            {/* Why Choose Knots & Co Section (Interactive Blue & Yellow Cards, Tilting & 3D Flip) */}
+            <ScrollReveal id="section-product-why-choose" yOffset={24} duration={0.45}>
+              <WhyChooseSection />
+            </ScrollReveal>
+          </div>
         )}
       </main>
 
