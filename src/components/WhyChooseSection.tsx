@@ -221,10 +221,10 @@ export const WhyChooseSection: React.FC = () => {
                       FRONT SIDE OF CARD
                       ======================================================== */}
                   <div
-                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2.5px] ${
+                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2px] transition-all duration-300 ${
                       isBlue
-                        ? 'bg-gradient-to-b from-[#3B66C4] via-[#4672D6] to-[#345DBA] text-white border-[#274B9E]/30'
-                        : 'bg-gradient-to-b from-[#F6BA35] via-[#F8C447] to-[#EEA820] text-[#54121E] border-[#D69213]/40'
+                        ? 'bg-gradient-to-b from-[#DEEEF5] via-[#D6E8EF] to-[#C9E0EC] text-[#641623] border-[#641623]/15 hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
+                        : 'bg-gradient-to-b from-[#FEFBE2] via-[#FCF7D1] to-[#F5EEBD] text-[#641623] border-[#641623]/15 hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
                     }`}
                     style={{ backfaceVisibility: 'hidden' }}
                   >
@@ -233,56 +233,38 @@ export const WhyChooseSection: React.FC = () => {
                       <svg
                         viewBox="0 0 300 450"
                         preserveAspectRatio="none"
-                        className="w-full h-full opacity-15"
+                        className={`w-full h-full opacity-35 ${
+                          isBlue ? 'text-[#B5D6E6]' : 'text-[#ECE09E]'
+                        }`}
                       >
                         <path
                           d="M -30 180 Q 80 120 180 200 T 350 220 L 350 480 L -30 480 Z"
                           fill="currentColor"
                         />
                         <circle cx="260" cy="80" r="70" fill="currentColor" opacity="0.4" />
-                        <circle cx="20" cy="380" r="90" fill="currentColor" opacity="0.3" />
+                        <circle cx="20" cy="380" r="90" fill="currentColor" opacity="0.35" />
                       </svg>
                     </div>
 
                     {/* Top Row: Number Badge + Category Subtitle + Mini Flip Icon */}
                     <div className="relative z-10 flex items-center justify-between w-full">
                       {/* Number Badge */}
-                      <div
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base shadow-md border ${
-                          isBlue
-                            ? 'bg-white text-[#345DBA] border-white/60'
-                            : 'bg-white text-[#54121E] border-white/80'
-                        }`}
-                      >
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base shadow-sm border border-[#641623]/20 bg-[#FFFDF9] text-[#641623]">
                         {card.number}
                       </div>
 
                       {/* Stat Pill */}
-                      <span
-                        className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm border ${
-                          isBlue
-                            ? 'bg-white/20 text-white border-white/30'
-                            : 'bg-white/35 text-[#54121E] border-[#54121E]/15'
-                        }`}
-                      >
+                      <span className="px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm border border-[#641623]/20 bg-[#FFFDF9]/85 text-[#641623]">
                         {card.statBadge}
                       </span>
                     </div>
 
                     {/* Card Content: Title & Description */}
                     <div className="relative z-10 mt-3 sm:mt-4 text-left">
-                      <h3
-                        className={`font-['Fredoka'] font-bold text-xl sm:text-2xl leading-tight tracking-tight ${
-                          isBlue ? 'text-white' : 'text-[#54121E]'
-                        }`}
-                      >
+                      <h3 className="font-['Fredoka'] font-bold text-xl sm:text-2xl leading-tight tracking-tight text-[#641623]">
                         {card.title}
                       </h3>
-                      <p
-                        className={`font-['Fredoka'] text-xs sm:text-[13px] leading-relaxed mt-2.5 font-medium ${
-                          isBlue ? 'text-white/90' : 'text-[#54121E]/90'
-                        }`}
-                      >
+                      <p className="font-['Fredoka'] text-xs sm:text-[13px] leading-relaxed mt-2.5 font-medium text-[#641623]/85">
                         {card.description}
                       </p>
                     </div>
@@ -292,13 +274,13 @@ export const WhyChooseSection: React.FC = () => {
                       <div className="relative group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                         {card.illustration === 'yarn' && (
                           /* Sticker 1: Yarn Ball & Crochet Hook */
-                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-xl ring-4 ring-white/70 flex items-center justify-center">
+                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#FFFDF9] p-2 shadow-md ring-4 ring-white/90 border border-[#641623]/15 flex items-center justify-center">
                             <svg viewBox="0 0 64 64" className="w-full h-full text-[#641623]" fill="none">
-                              <circle cx="32" cy="32" r="24" fill="#FAF4ED" stroke="#641623" strokeWidth="2.6" />
+                              <circle cx="32" cy="32" r="24" fill="#D6E8EF" stroke="#641623" strokeWidth="2.6" />
                               <path d="M 16 26 C 24 16, 40 18, 48 28" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
                               <path d="M 14 36 C 22 26, 42 27, 50 35" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
                               <path d="M 20 45 C 28 38, 38 39, 44 46" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
-                              <line x1="10" y1="54" x2="54" y2="10" stroke="#F7BE44" strokeWidth="4.5" strokeLinecap="round" />
+                              <line x1="10" y1="54" x2="54" y2="10" stroke="#FCF7D1" strokeWidth="4.5" strokeLinecap="round" />
                               <line x1="10" y1="54" x2="54" y2="10" stroke="#641623" strokeWidth="2.2" strokeLinecap="round" />
                               <circle cx="53" cy="11" r="2.5" fill="#641623" />
                             </svg>
@@ -307,10 +289,10 @@ export const WhyChooseSection: React.FC = () => {
 
                         {card.illustration === 'artisans' && (
                           /* Sticker 2: Grandma Daadi Smiling with Yarn */
-                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-xl ring-4 ring-white/70 flex items-center justify-center">
+                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#FFFDF9] p-2 shadow-md ring-4 ring-white/90 border border-[#641623]/15 flex items-center justify-center">
                             <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
                               {/* Background Circle */}
-                              <circle cx="32" cy="32" r="24" fill="#FAF4ED" stroke="#641623" strokeWidth="2.6" />
+                              <circle cx="32" cy="32" r="24" fill="#FCF7D1" stroke="#641623" strokeWidth="2.6" />
                               {/* Daadi Hair Bun */}
                               <circle cx="32" cy="18" r="9" fill="#E2E8F0" stroke="#641623" strokeWidth="2" />
                               <circle cx="32" cy="27" r="11" fill="#FFE4D6" stroke="#641623" strokeWidth="2" />
@@ -329,18 +311,18 @@ export const WhyChooseSection: React.FC = () => {
                               <circle cx="24" cy="30" r="1.5" fill="#F472B6" />
                               <circle cx="40" cy="30" r="1.5" fill="#F472B6" />
                               {/* Torso / Saree */}
-                              <path d="M 20 50 C 22 38, 42 38, 44 50 Z" fill="#F472B6" stroke="#641623" strokeWidth="2" />
+                              <path d="M 20 50 C 22 38, 42 38, 44 50 Z" fill="#D6E8EF" stroke="#641623" strokeWidth="2" />
                               {/* Tiny Heart */}
-                              <path d="M 32 45 C 30 42, 27 43, 27 45 C 27 48, 32 50, 32 50 C 32 50, 37 48, 37 45 C 37 43, 34 42, 32 45 Z" fill="#FFF" />
+                              <path d="M 32 45 C 30 42, 27 43, 27 45 C 27 48, 32 50, 32 50 C 32 50, 37 48, 37 45 C 37 43, 34 42, 32 45 Z" fill="#F472B6" />
                             </svg>
                           </div>
                         )}
 
                         {card.illustration === 'blooms' && (
                           /* Sticker 3: Everlasting Sunflower Bloom */
-                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-xl ring-4 ring-white/70 flex items-center justify-center">
+                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#FFFDF9] p-2 shadow-md ring-4 ring-white/90 border border-[#641623]/15 flex items-center justify-center">
                             <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-                              <circle cx="32" cy="32" r="24" fill="#FAF4ED" stroke="#641623" strokeWidth="2.6" />
+                              <circle cx="32" cy="32" r="24" fill="#D6E8EF" stroke="#641623" strokeWidth="2.6" />
                               {/* Sunflower Petals */}
                               <g fill="#F7BE44" stroke="#641623" strokeWidth="1.8">
                                 <circle cx="32" cy="19" r="5.5" />
@@ -364,11 +346,11 @@ export const WhyChooseSection: React.FC = () => {
 
                         {card.illustration === 'gifting' && (
                           /* Sticker 4: Gift Box Tied with Crochet Ribbon */
-                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-xl ring-4 ring-white/70 flex items-center justify-center">
+                          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#FFFDF9] p-2 shadow-md ring-4 ring-white/90 border border-[#641623]/15 flex items-center justify-center">
                             <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-                              <circle cx="32" cy="32" r="24" fill="#FAF4ED" stroke="#641623" strokeWidth="2.6" />
+                              <circle cx="32" cy="32" r="24" fill="#FCF7D1" stroke="#641623" strokeWidth="2.6" />
                               {/* Gift Box Base */}
-                              <rect x="20" y="28" width="24" height="20" rx="3" fill="#FFE4D6" stroke="#641623" strokeWidth="2.2" />
+                              <rect x="20" y="28" width="24" height="20" rx="3" fill="#D6E8EF" stroke="#641623" strokeWidth="2.2" />
                               {/* Lid */}
                               <rect x="18" y="23" width="28" height="6" rx="2" fill="#F472B6" stroke="#641623" strokeWidth="2.2" />
                               {/* Ribbon Vertical */}
@@ -385,13 +367,7 @@ export const WhyChooseSection: React.FC = () => {
 
                     {/* Bottom Action Hint Pill */}
                     <div className="relative z-10 w-full pt-2">
-                      <div
-                        className={`w-full py-2 px-3 rounded-full text-center text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm border ${
-                          isBlue
-                            ? 'bg-white/20 hover:bg-white text-white hover:text-[#345DBA] border-white/30'
-                            : 'bg-white/40 hover:bg-white text-[#54121E] border-[#54121E]/20'
-                        }`}
-                      >
+                      <div className="w-full py-2 px-3 rounded-full text-center text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm border border-[#641623]/25 bg-[#FFFDF9]/90 hover:bg-[#FFFDF9] text-[#641623]">
                         <span>tap to reveal perk</span>
                         <span className="text-sm">↺</span>
                       </div>
@@ -402,10 +378,10 @@ export const WhyChooseSection: React.FC = () => {
                       BACK SIDE OF CARD (REVEALED ON CLICK)
                       ======================================================== */}
                   <div
-                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2.5px] ${
+                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2px] ${
                       isBlue
-                        ? 'bg-gradient-to-b from-[#2E54A8] via-[#3863C6] to-[#2B4E9E] text-white border-[#274B9E]/30'
-                        : 'bg-gradient-to-b from-[#EAA824] via-[#F4B634] to-[#DF9714] text-[#54121E] border-[#D69213]/40'
+                        ? 'bg-gradient-to-b from-[#CEE3ED] via-[#C3DDE9] to-[#B6D6E4] text-[#641623] border-[#641623]/20'
+                        : 'bg-gradient-to-b from-[#F7F1C5] via-[#EFE7B1] to-[#E5DB9E] text-[#641623] border-[#641623]/20'
                     }`}
                     style={{
                       backfaceVisibility: 'hidden',
@@ -414,49 +390,25 @@ export const WhyChooseSection: React.FC = () => {
                   >
                     {/* Top Row: Number Badge + Close / Flip back icon */}
                     <div className="flex items-center justify-between w-full">
-                      <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shadow-md border ${
-                          isBlue
-                            ? 'bg-white text-[#345DBA] border-white/60'
-                            : 'bg-white text-[#54121E] border-white/80'
-                        }`}
-                      >
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-[#641623]/20 bg-[#FFFDF9] text-[#641623]">
                         {card.number}
                       </div>
 
-                      <span
-                        className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
-                          isBlue ? 'bg-white/20 text-white' : 'bg-white/35 text-[#54121E]'
-                        }`}
-                      >
+                      <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#FFFDF9]/85 text-[#641623] border border-[#641623]/15">
                         our promise ♡
                       </span>
                     </div>
 
                     {/* Perk Details */}
                     <div className="my-auto text-left py-2">
-                      <h4
-                        className={`font-['Fredoka'] font-bold text-lg sm:text-xl leading-tight ${
-                          isBlue ? 'text-white' : 'text-[#54121E]'
-                        }`}
-                      >
+                      <h4 className="font-['Fredoka'] font-bold text-lg sm:text-xl leading-tight text-[#641623]">
                         {card.perkTitle}
                       </h4>
-                      <p
-                        className={`font-['Fredoka'] text-xs sm:text-[13px] leading-relaxed mt-3 font-medium ${
-                          isBlue ? 'text-white/95' : 'text-[#54121E]/95'
-                        }`}
-                      >
+                      <p className="font-['Fredoka'] text-xs sm:text-[13px] leading-relaxed mt-3 font-medium text-[#641623]/90">
                         {card.perkDescription}
                       </p>
 
-                      <div
-                        className={`mt-4 p-3 rounded-2xl border ${
-                          isBlue
-                            ? 'bg-white/10 border-white/20 text-white'
-                            : 'bg-white/30 border-[#54121E]/15 text-[#54121E]'
-                        }`}
-                      >
+                      <div className="mt-4 p-3 rounded-2xl border bg-[#FFFDF9]/80 border-[#641623]/15 text-[#641623]">
                         <p className="text-[11px] font-bold tracking-wide">
                           Handmade with love in Surat, India. Every order directly supports our artisan family.
                         </p>
@@ -465,13 +417,7 @@ export const WhyChooseSection: React.FC = () => {
 
                     {/* Flip Back Pill */}
                     <div className="w-full pt-2">
-                      <div
-                        className={`w-full py-2 px-3 rounded-full text-center text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm border ${
-                          isBlue
-                            ? 'bg-white text-[#345DBA] border-white'
-                            : 'bg-white text-[#54121E] border-white'
-                        }`}
-                      >
+                      <div className="w-full py-2 px-3 rounded-full text-center text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm border border-[#641623]/25 bg-[#FFFDF9] text-[#641623]">
                         <span>tap to flip back</span>
                         <span className="text-sm">↺</span>
                       </div>
