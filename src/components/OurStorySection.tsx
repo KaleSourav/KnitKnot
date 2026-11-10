@@ -30,24 +30,32 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
           {/* Left Column: Brand Story in Our Font Language (Fredoka & Maroon #641623) */}
           <div className="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-24 pt-2 lg:pt-6">
             {/* Headline in Fredoka Font Language */}
-            <h2 className="font-['Fredoka'] font-black text-3xl sm:text-5xl md:text-6xl lg:text-[68px] text-[#641623] leading-[1.08] tracking-tight mb-5 sm:mb-8 select-none">
-              made by hand,<br />made with love.
+            <h2 className="font-['Fredoka'] font-black text-2xl sm:text-4xl md:text-5xl lg:text-[50px] text-[#641623] leading-[1.14] tracking-tight mb-5 sm:mb-7">
+              A Little Dream,<br />A Lot of Love <span className="text-[#811B2B]">♡</span>
             </h2>
 
             {/* Authentic Brand Story */}
-            <div className="font-['Fredoka'] font-medium text-sm sm:text-[18px] leading-[1.65] text-[#2D2424]/85 max-w-[480px] space-y-3.5 sm:space-y-4 mb-5 sm:mb-6">
+            <div className="font-['Fredoka'] font-medium text-sm sm:text-[17px] leading-[1.65] text-[#2D2424]/85 max-w-[500px] space-y-3 sm:space-y-3.5 mb-5 sm:mb-6">
               <p>
-                at knotsnco, our crochet pieces are lovingly handmade by a group of talented dadis in surat. each stitch carries their skill, care and years of craft, turning simple yarn into meaningful gifts that last forever.
+                It all began in 2019 with a 16-year-old and a big dream &mdash; to build something beautiful with crochet.
               </p>
               <p>
-                every petal, leaf, and plushie is looped by hand—never by machines. we believe the most cherished treasures aren&apos;t just made, they are felt and remembered.
+                What started as a love for yarn soon became something bigger. We met talented daadis and aunties who had incredible skills but few opportunities to showcase them.
+              </p>
+              <p>
+                So, we brought our worlds together, creating opportunities for them to work from home, earn independently and turn their passion into something special.
+              </p>
+              <p>
+                Today, we&apos;re a family of <strong className="font-bold text-[#641623]">200+ daadis, aunties and artisans</strong>, creating everything from colourful bouquets and plushies to bags and little handmade treasures.
+              </p>
+              <p>
+                And we&apos;re just getting started.
               </p>
             </div>
 
-            {/* Personal Sign-off */}
-            <div className="font-['Fredoka'] text-sm sm:text-[18px] leading-[1.5] text-[#2D2424]/85 mb-6 sm:mb-10">
-              <p>much love,</p>
-              <p className="mt-1 font-bold text-[#641623]">the dadis &amp; artisans at knotsnco</p>
+            {/* Welcome Tagline */}
+            <div className="font-['Fredoka'] text-sm sm:text-[17px] leading-[1.5] text-[#641623] font-bold mb-6 sm:mb-8">
+              <p>Welcome to Knots &amp; Co. &mdash; A little yarn, a lot of love. ♡</p>
             </div>
 
             {/* Clean Outline Pill Button in Brand Theme */}
