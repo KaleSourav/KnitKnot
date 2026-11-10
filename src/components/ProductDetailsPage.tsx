@@ -317,79 +317,56 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   // Extract a crisp 1-2 sentence friendly description for the top area
   const conciseSummary = useMemo(() => {
     if (!product.description) {
-      return `Handcrafted ${product.name} lovingly made with soft premium yarn, perfect to brighten any space.`;
+      return `Lovingly hand-crocheted ${product.name}, crafted with soft premium milk-cotton yarn.`;
     }
 
-    const raw = product.description.trim();
+    let text = product.description.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
 
-    // Check if there are bullet points like "• Premium Quality: The Bouquet Full Of Sunshine Is Handcrafted..."
-    if (raw.includes('•')) {
-      const parts = raw.split('•').filter((p) => p.trim().length > 0);
+    // 1. Cut at metadata squashes
+    const metaPattern = /(?:Product\s*Name\s*[:–-]|Category\s*[:–-]|Material\(s?\)\s*[:–-]|Dimensions\s*(?:\/\s*Size)?\s*[:–-]|Color\s*\/\s*Design|Handmade\s*Features|Craftsmanship\s*[:–-]|Ideal\s*For|Why\s*It(?:’|')?s\s*Special|Care\s*Instructions|Features\s*\/\s*Highlights)/i;
+    const match = text.search(metaPattern);
+    let hook = text;
+    if (match !== -1 && match > 5) {
+      hook = text.substring(0, match).trim();
+    }
+
+    // 2. If it contains bullets, take the first clear bullet
+    if (hook.includes('•')) {
+      const parts = hook.split('•').filter((p) => p.trim().length > 0);
       if (parts.length > 0) {
-        const first = parts[0].trim();
-        const cleaned = first.replace(/^[^:]+:\s*/i, '').trim();
-        return cleaned.endsWith('.') ? cleaned : `${cleaned}.`;
+        hook = parts[0].replace(/^[^:]+:\s*/i, '').trim();
       }
     }
 
-    // Cut off before bullet sections or features
-    let intro = raw;
-    for (const marker of ['Features:', 'Handmade', 'Perfect for:', 'Craftsmanship:']) {
-      const idx = intro.indexOf(marker);
-      if (idx !== -1 && idx > 20) {
-        intro = intro.substring(0, idx).trim();
-      }
+    // 3. Keep 1-2 clean sentences
+    const sentences = hook.split(/(?<=[.?!])\s+/).filter((s) => s.trim().length > 5);
+    if (sentences.length > 2) {
+      hook = sentences.slice(0, 2).join(' ');
+    } else if (sentences.length > 0) {
+      hook = sentences.join(' ');
     }
 
-    // Grab first 1-2 sentences
-    const sentences = intro.split(/(?<=[.?!])\s+/);
-    if (sentences.length > 0 && sentences[0].length > 15) {
-      return sentences.slice(0, 2).join(' ').trim();
+    hook = hook.replace(/[-–•,\s]+$/, '').trim();
+    if (hook.length > 5) {
+      hook = hook.charAt(0).toUpperCase() + hook.slice(1);
+      if (!hook.endsWith('.')) hook += '.';
+    } else {
+      hook = `Lovingly hand-crocheted ${product.name}, crafted with soft premium milk-cotton yarn.`;
     }
 
-    return intro;
+    return hook;
   }, [product.description, product.name]);
 
-  // Extract full details for the "Product Details" accordion
+  // Extract full clean details for the "Product Details" accordion
   const detailedBulletPoints = useMemo(() => {
-    if (!product.description) {
-      return [
-        { label: '100% Handcrafted', text: 'Stitched with love by our skilled crochet artisans and Dadis in Surat, India.' },
-        { label: 'Material', text: 'Premium combed milk cotton yarn with hypoallergenic filler and gentle wire armature.' },
-        { label: 'Everlasting Keepsake', text: 'Zero watering, zero wilting — retains its vibrant colors indefinitely.' },
-      ];
-    }
-
-    const raw = product.description.trim();
-
-    // If description has bullet points
-    if (raw.includes('•')) {
-      const parts = raw.split('•').filter((p) => p.trim().length > 0);
-      return parts.map((part) => {
-        const colonIdx = part.indexOf(':');
-        if (colonIdx !== -1) {
-          return {
-            label: part.substring(0, colonIdx).trim(),
-            text: part.substring(colonIdx + 1).trim(),
-          };
-        }
-        return { label: 'Feature', text: part.trim() };
-      });
-    }
-
-    // If description has star or hyphen list items
-    if (raw.includes('*') && raw.split('*').length > 2) {
-      const parts = raw.split('*').filter((p) => p.trim().length > 0);
-      return parts.map((part) => {
-        return { label: 'Handmade Feature', text: part.trim() };
-      });
-    }
-
     return [
-      { label: 'Handcrafted', text: raw },
-      { label: 'Care & Durability', text: 'Created with soft premium yarn for lasting warmth and cheerful charm.' },
+      { label: '100% Handcrafted', text: 'Stitched knot-by-knot by skilled women artisans and Daadis in Surat, India.' },
+      { label: 'Premium Material', text: 'Crafted with combed soft milk-cotton yarn with gentle internal shaping armature.' },
+      { label: 'Everlasting Keepsake', text: 'Retains vivid color and shape indefinitely — zero watering or wilting required.' },
+      { label: 'Ideal For', text: 'Birthdays, anniversaries, home aesthetic decor, or a warm heartfelt gift.' },
+      { label: 'Care Instructions', text: 'Gently spot clean with a soft damp cloth. Dust-resistant and durable.' },
     ];
-  }, [product.description]);
+  }, []);
 
   // Dynamic Design Details Cards (Matching Reference: "The Design Details")
   const designDetailCards = useMemo(() => {
@@ -610,6 +587,12 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <div className="w-full flex flex-col items-center">
             {/* Main Image Box */}
             <div className="relative aspect-square w-full rounded-[28px] sm:rounded-[32px] overflow-hidden bg-[#FAF2E8]/60 border border-[#641623]/10 shadow-[0_8px_28px_rgba(100,22,35,0.06)] group">
+              {/* Overlaid Handmade Badge (Top Left) */}
+              <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 z-20 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-[#641623]/15 text-[#641623] shadow-xs flex items-center gap-1.5 font-bold text-[11px] sm:text-xs">
+                <span>✨</span>
+                <span className="uppercase tracking-wider">100% Handcrafted</span>
+              </div>
+
               {/* Overlaid Wishlist Button (Top Right) */}
               <button
                 onClick={toggleWishlist}
@@ -741,6 +724,17 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               B. RIGHT COLUMN: PRODUCT TITLE, PRICE, ACTIONS & ACCORDIONS
              ===================================================================== */}
           <div className="w-full text-left flex flex-col">
+            {/* Top Category Pill & Stock Status */}
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-3 py-1 rounded-full bg-[#FAF2E8] border border-[#641623]/15 text-[#641623] font-['Fredoka'] font-bold text-xs uppercase tracking-wider">
+                {product.category}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                In stock & ready to ship
+              </span>
+            </div>
+
             {/* Title Row with Attached Cute Flower Doodle */}
             <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
               <h1 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl lg:text-4xl text-[#641623] tracking-tight leading-tight">
@@ -770,7 +764,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             </div>
 
             {/* Price & Savings Badge Row */}
-            <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap mt-2 sm:mt-3">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap mt-2 sm:mt-2.5">
               {/* Current Price */}
               <span className="font-['Fredoka'] font-black text-2xl sm:text-3xl lg:text-[32px] text-[#641623]">
                 ₹{currentPrice.toLocaleString('en-IN')}
@@ -783,7 +777,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </span>
               )}
 
-              {/* Discount Pill Badge: "Save ₹300 (19% off)" or preset discount */}
+              {/* Discount Pill Badge */}
               {savings > 0 ? (
                 <span className="px-3 py-1 rounded-full bg-[#FCE2EB] text-[#811B2B] font-['Fredoka'] font-semibold text-xs sm:text-sm">
                   Save ₹{savings.toLocaleString('en-IN')} ({savingsPct}% off)
@@ -793,10 +787,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   {product.discount}
                 </span>
               ) : null}
+
+              <span className="text-xs text-[#641623]/60 font-medium ml-1">
+                (Inclusive of all taxes)
+              </span>
             </div>
 
             {/* Rating Stars Row: ★★★★★ 4.8 (126 reviews) */}
-            <div className="flex items-center gap-2 mt-2.5 sm:mt-3 text-sm">
+            <div className="flex items-center gap-2 mt-2 sm:mt-2.5 text-sm">
               <div className="flex items-center gap-0.5 text-[#F7BE44]">
                 {[...Array(5)].map((_, i) => (
                   <svg
@@ -811,15 +809,74 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               <span className="text-xs sm:text-sm text-[#2D2424]/80 font-medium">
                 4.8 (126 reviews)
               </span>
+              <span className="text-[#641623]/40">•</span>
+              <span className="text-xs text-[#641623] font-semibold">
+                Verified Handmade ♡
+              </span>
             </div>
 
-            {/* Description Text */}
-            <p className="text-sm sm:text-base text-[#2D2424]/85 leading-relaxed mt-3.5 sm:mt-4">
-              {conciseSummary}
-            </p>
+            {/* Clean Heartfelt Description Callout Box */}
+            <div className="mt-3.5 p-3.5 sm:p-4 rounded-[20px] bg-[#FAF2E8]/80 border border-[#641623]/12 shadow-2xs">
+              <p className="text-sm sm:text-[15px] text-[#2D2424]/90 font-medium leading-relaxed italic">
+                "{conciseSummary}"
+              </p>
+            </div>
+
+            {/* 4 Feature Badges (Brand Trust Chips) */}
+            <div className="flex items-center gap-2 flex-wrap mt-3.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+                <span>🌸</span> 100% Handcrafted
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+                <span>✨</span> Everlasting Blooms
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+                <span>🧶</span> Soft Milk-Cotton Yarn
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+                <span>💌</span> Free Custom Gift Note
+              </span>
+            </div>
+
+            {/* Handmade Specs Card (Compact 4-Item Grid) */}
+            <div className="mt-4 p-3.5 sm:p-4 rounded-[22px] bg-[#FAF2E8] border border-[#641623]/15 shadow-2xs">
+              <p className="font-['Fredoka'] font-bold text-xs uppercase tracking-wider text-[#641623] mb-2.5">
+                HANDMADE SPECIFICATIONS
+              </p>
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 text-xs sm:text-[13px]">
+                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <span className="text-base">🧵</span>
+                  <div>
+                    <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Material</p>
+                    <p className="font-bold text-[#641623]">Soft Milk-Cotton Yarn</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <span className="text-base">👵</span>
+                  <div>
+                    <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Crafted By</p>
+                    <p className="font-bold text-[#641623]">Surat Home Daadis</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <span className="text-base">💐</span>
+                  <div>
+                    <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Durability</p>
+                    <p className="font-bold text-[#641623]">Never Wilts & Dust-Free</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 bg-[#FFFDF9] p-2.5 rounded-xl border border-[#641623]/10">
+                  <span className="text-base">🎁</span>
+                  <div>
+                    <p className="text-[#641623]/60 text-[10px] font-bold uppercase tracking-wider">Packaging</p>
+                    <p className="font-bold text-[#641623]">Gift-Ready Box & Card</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* QUANTITY Stepper Section */}
-            <div className="mt-5 sm:mt-6">
+            <div className="mt-4 sm:mt-5">
               <p className="font-['Fredoka'] font-bold text-xs uppercase tracking-wider text-[#641623] mb-2">
                 QUANTITY
               </p>
@@ -845,7 +902,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             </div>
 
             {/* Action Buttons: Add to Cart & Add to Wishlist */}
-            <div className="mt-5 sm:mt-6 space-y-3">
+            <div className="mt-4 sm:mt-5 space-y-2.5">
               {/* 1. Add to Cart Button */}
               <button
                 onClick={handleAddToCartClick}
@@ -872,10 +929,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               <button
                 onClick={toggleWishlist}
                 type="button"
-                className="w-full py-3.5 sm:py-4 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-[0.99] text-[#641623] font-['Fredoka'] font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 transition-all border border-[#641623]/15 shadow-2xs cursor-pointer"
+                className="w-full py-3 sm:py-3.5 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-[0.99] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all border border-[#641623]/15 shadow-2xs cursor-pointer"
               >
                 <svg
-                  className="w-5 h-5 text-[#641623]"
+                  className="w-4 h-4 text-[#641623]"
                   viewBox="0 0 24 24"
                   fill={isWishlist ? 'currentColor' : 'none'}
                   stroke="currentColor"
@@ -887,6 +944,22 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 </svg>
                 <span>{isWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
               </button>
+            </div>
+
+            {/* Free Delivery & Trust Bar */}
+            <div className="mt-3.5 p-3 rounded-2xl bg-[#FFFDF9] border border-[#641623]/12 flex flex-col gap-1.5 text-xs text-[#641623]/85 shadow-2xs">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">🚚</span>
+                <span>
+                  <strong>Free Express Shipping</strong> on all orders above ₹1,999
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">🎁</span>
+                <span>
+                  Every order includes a <strong>complimentary custom gift card</strong>
+                </span>
+              </div>
             </div>
 
             {/* Feature Trust Badges (Exact 4 Scalloped Rosette Badges from Reference) */}
