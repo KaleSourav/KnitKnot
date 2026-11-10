@@ -101,63 +101,112 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
         }
       `}</style>
 
-      {/* Full-width edge-to-edge Banner Slideshow (Zero white/cream gaps on sides) */}
+      {/* Mobile View: Dedicated Portrait Hero Image matching the Reference (namimatcha style) */}
       <div
-        className="relative w-full aspect-[16/9] sm:aspect-[2/1] overflow-hidden bg-[#F8EFE4] group select-none"
+        className="block sm:hidden relative w-full aspect-[1086/1448] overflow-hidden bg-[#FAF4ED] select-none cursor-pointer"
+        onClick={() => onShopClick?.('all')}
+        role="button"
+        tabIndex={0}
+        aria-label="Handmade Crochet Treasures with Love - Shop All Collections"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onShopClick?.('all');
+          }
+        }}
+      >
+        <picture>
+          <source srcSet="/banners/hero-banner-mobile.webp" type="image/webp" />
+          <img
+            src="/hero-banner-mobile.png"
+            alt="Handmade Crochet Treasures with Love - Little things, made with lots of love"
+            className="w-full h-full object-cover block select-none pointer-events-none"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            draggable={false}
+          />
+        </picture>
+
+        {/* Clickable Hotspot on the "Explore Collections →" Pill Button */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onShopClick?.('all');
+          }}
+          className="absolute z-20 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#811B2B] active:scale-95 transition-transform"
+          style={{
+            left: '4.6%',
+            top: '38.3%',
+            width: '36.4%',
+            height: '4.8%',
+          }}
+          aria-label="Explore Collections"
+        >
+          <span className="sr-only">Explore Collections</span>
+          {/* Subtle press / hover feedback */}
+          <span className="absolute inset-0 rounded-full border-2 border-transparent active:border-[#811B2B]/40 active:bg-white/20 transition-all duration-150" />
+        </button>
+      </div>
+
+      {/* Desktop View: Full-width Edge-to-Edge 4-Slide Carousel (2:1 aspect ratio) */}
+      <div
+        className="hidden sm:block relative w-full aspect-[2/1] overflow-hidden bg-[#F8EFE4] group select-none"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         {/* Stacked Slides with Smooth 1s Crossfade */}
-          {BANNER_SLIDES.map((slide, index) => {
-            const isActive = index === currentIndex;
-            return (
-              <div
-                key={slide.id}
-                className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out cursor-pointer ${
-                  isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-                }`}
-                onClick={() => onShopClick?.(slide.category)}
-                aria-hidden={!isActive}
-                role="button"
-                tabIndex={isActive ? 0 : -1}
-                aria-label={`Shop ${slide.alt}`}
-                onKeyDown={(e) => {
-                  if (isActive && (e.key === 'Enter' || e.key === ' ')) {
-                    e.preventDefault();
-                    onShopClick?.(slide.category);
-                  }
-                }}
-              >
-                <picture>
-                  <source srcSet={slide.webp} type="image/webp" />
-                  <img
-                    src={slide.src}
-                    alt={slide.alt}
-                    className="w-full h-full object-cover select-none block"
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    fetchPriority={index === 0 ? 'high' : 'auto'}
-                    decoding={index === 0 ? 'sync' : 'async'}
-                    draggable={false}
-                  />
-                </picture>
+        {BANNER_SLIDES.map((slide, index) => {
+          const isActive = index === currentIndex;
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out cursor-pointer ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+              onClick={() => onShopClick?.(slide.category)}
+              aria-hidden={!isActive}
+              role="button"
+              tabIndex={isActive ? 0 : -1}
+              aria-label={`Shop ${slide.alt}`}
+              onKeyDown={(e) => {
+                if (isActive && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  onShopClick?.(slide.category);
+                }
+              }}
+            >
+              <picture>
+                <source srcSet={slide.webp} type="image/webp" />
+                <img
+                  src={slide.src}
+                  alt={slide.alt}
+                  className="w-full h-full object-cover select-none block"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  decoding={index === 0 ? 'sync' : 'async'}
+                  draggable={false}
+                />
+              </picture>
 
-                {/* Subtle hover feedback over the button hotspot on hero-main slide ("Explore Collections ->") */}
-                {slide.id === 'hero-main' && (
-                  <div
-                    className="absolute z-10 cursor-pointer rounded-full transition-all duration-200 pointer-events-none"
-                    style={{
-                      left: '5.2%',
-                      top: '60.6%',
-                      width: '18.8%',
-                      height: '6.2%',
-                    }}
-                  >
-                    <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-white/50 group-hover:bg-white/10 transition-all duration-200" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              {/* Subtle hover feedback over the button hotspot on hero-main slide ("Explore Collections ->") */}
+              {slide.id === 'hero-main' && (
+                <div
+                  className="absolute z-10 cursor-pointer rounded-full transition-all duration-200 pointer-events-none"
+                  style={{
+                    left: '5.2%',
+                    top: '60.6%',
+                    width: '18.8%',
+                    height: '6.2%',
+                  }}
+                >
+                  <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-white/50 group-hover:bg-white/10 transition-all duration-200" />
+                </div>
+              )}
+            </div>
+          );
+        })}
 
           {/* Left Arrow Button */}
           <button

@@ -170,11 +170,9 @@ export default function App() {
             {/* Signature Scroll-Responsive Yarn Thread Animation */}
             <SignatureYarnThread />
 
-            {/* Hero Landing Banner */}
+            {/* Hero Landing Banner (Flush with announcement bar, instant LCP render) */}
             <div id="section-hero">
-              <ScrollReveal delay={0.02} yOffset={16} duration={0.4}>
-                <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
-              </ScrollReveal>
+              <HeroBanner onShopClick={(cat) => navigateTo('shop', cat || 'all')} />
             </div>
 
             {/* Shop by Category (Scalloped Cloud Container, 3 Top, 3 Below) */}
