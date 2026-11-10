@@ -94,7 +94,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 280;
+      const scrollAmount = scrollRef.current.clientWidth * 0.75;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
@@ -108,7 +108,10 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
       const maxScroll = scrollWidth - clientWidth;
       if (maxScroll <= 0) return;
       const progress = scrollLeft / maxScroll;
-      const dotIndex = Math.min(2, Math.max(0, Math.round(progress * 2)));
+      const dotIndex = Math.min(
+        BESTSELLERS.length - 1,
+        Math.max(0, Math.round(progress * (BESTSELLERS.length - 1)))
+      );
       setActiveDot(dotIndex);
     }
   };
@@ -217,7 +220,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="w-full flex items-stretch justify-start lg:justify-between gap-3 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-2 px-1 snap-x snap-mandatory"
+            className="w-full flex items-stretch justify-start lg:justify-between gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-2 px-1 snap-x snap-mandatory scroll-smooth"
           >
             {BESTSELLERS.map((item) => {
               const isHovered = hoveredCard === item.id;
@@ -229,7 +232,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                   onClick={() => onProductClick?.(item.id)}
                   onMouseEnter={() => setHoveredCard(item.id)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className="group flex-1 min-w-[160px] sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col items-start justify-between snap-center"
+                  className="group w-[72vw] max-w-[310px] flex-shrink-0 sm:w-auto sm:flex-1 sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col items-start justify-between snap-start sm:snap-center"
                 >
                   {/* 1. Tall Rounded Image Box with Crisp Border & Smooth Hover Crossfade */}
                   <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[20px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
@@ -398,53 +401,28 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
         </div>
 
         {/* 4. Carousel Pagination Indicator Dots */}
-        <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
-          <button
-            onClick={() => {
-              scrollRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
-              setActiveDot(0);
-            }}
-            className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
-              activeDot === 0
-                ? 'bg-[#641623] scale-110'
-                : 'border-2 border-[#641623] bg-transparent'
-            }`}
-            aria-label="Slide 1"
-          />
-          <button
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTo({
-                  left: (scrollRef.current.scrollWidth - scrollRef.current.clientWidth) / 2,
-                  behavior: 'smooth',
-                });
-              }
-              setActiveDot(1);
-            }}
-            className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
-              activeDot === 1
-                ? 'bg-[#641623] scale-110'
-                : 'border-2 border-[#641623] bg-transparent'
-            }`}
-            aria-label="Slide 2"
-          />
-          <button
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTo({
-                  left: scrollRef.current.scrollWidth,
-                  behavior: 'smooth',
-                });
-              }
-              setActiveDot(2);
-            }}
-            className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
-              activeDot === 2
-                ? 'bg-[#641623] scale-110'
-                : 'border-2 border-[#641623] bg-transparent'
-            }`}
-            aria-label="Slide 3"
-          />
+        <div className="flex items-center justify-center gap-2 mt-5 sm:mt-8">
+          {BESTSELLERS.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (scrollRef.current) {
+                  const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+                  scrollRef.current.scrollTo({
+                    left: (maxScroll / (BESTSELLERS.length - 1)) * idx,
+                    behavior: 'smooth',
+                  });
+                }
+                setActiveDot(idx);
+              }}
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all cursor-pointer ${
+                activeDot === idx
+                  ? 'bg-[#641623] scale-110'
+                  : 'border-[1.8px] sm:border-2 border-[#641623]/60 bg-transparent'
+              }`}
+              aria-label={`Slide ${idx + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
