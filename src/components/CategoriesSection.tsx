@@ -533,7 +533,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   };
 
   return (
-    <div ref={sectionRef} className="w-full relative mt-3 sm:mt-5 select-none">
+    <div ref={sectionRef} className="w-full relative mt-0 select-none">
       {/* 1. Top Puffy Cloud Scalloped Border with Clean Maroon Stroke */}
       <div className="w-full overflow-hidden leading-none -mb-[1px]">
         <svg

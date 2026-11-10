@@ -101,14 +101,13 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
         }
       `}</style>
 
-      <div className="w-full max-w-[1440px] mx-auto px-0 sm:px-4 lg:px-6 pt-2 sm:pt-3 pb-8">
-        {/* Banner Slideshow Container - Preserves exact layout, proportions, and styling */}
-        <div
-          className="relative w-full aspect-[2/1] overflow-hidden sm:rounded-2xl md:rounded-3xl shadow-[0_8px_30px_rgba(100,22,35,0.06)] bg-[#F8EFE4] group select-none"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Stacked Slides with Smooth 1s Crossfade */}
+      {/* Full-width edge-to-edge Banner Slideshow (Zero white/cream gaps on sides) */}
+      <div
+        className="relative w-full aspect-[16/9] sm:aspect-[2/1] overflow-hidden bg-[#F8EFE4] group select-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Stacked Slides with Smooth 1s Crossfade */}
           {BANNER_SLIDES.map((slide, index) => {
             const isActive = index === currentIndex;
             return (
@@ -220,7 +219,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
             })}
           </div>
         </div>
-      </div>
     </section>
   );
 };
