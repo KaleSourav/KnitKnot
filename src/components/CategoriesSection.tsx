@@ -217,17 +217,7 @@ const CATEGORIES: CategoryItem[] = [
   },
 ];
 
-interface GuideStageInfo {
-  id: string;
-  categoryTarget?: string;
-  stepLabel: string;
-  speech: string;
-  subtext: string;
-  accessoryIcon: React.ReactNode;
-  mascotPose?: string;
-}
-
-// Crisp handmade SVGs for mascot accessory badges and card micro-animations (strictly NO emojis)
+// Crisp handmade SVGs for card micro-animations (strictly NO emojis)
 const SVG_ICONS = {
   flower: (
     <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#811B2B]" fill="none" stroke="currentColor" strokeWidth="2">
@@ -302,97 +292,6 @@ const SVG_ICONS = {
   ),
 };
 
-const GUIDE_STAGES: Record<string, GuideStageInfo> = {
-  welcome: {
-    id: 'welcome',
-    stepLabel: 'Welcome!',
-    speech: "Hey! Let's find your little favourite.",
-    subtext: 'Scroll or tap any collection below to let your mascot guide you.',
-    accessoryIcon: SVG_ICONS.star,
-    mascotPose: '/mascot/guide-welcome.png',
-  },
-  flowers: {
-    id: 'flowers',
-    categoryTarget: 'flowers',
-    stepLabel: 'Flowers',
-    speech: 'Flowers that keep your sweetest moments blooming.',
-    subtext: '87 handcrafted blooms that never wilt or need watering.',
-    accessoryIcon: SVG_ICONS.flower,
-    mascotPose: '/mascot/guide-flower.png',
-  },
-  bouquets: {
-    id: 'bouquets',
-    categoryTarget: 'bouquets',
-    stepLabel: 'Bouquets',
-    speech: 'Everlasting bouquets wrapped with love & ribbons.',
-    subtext: '56 floral bunches ready for your sweetest celebrations.',
-    accessoryIcon: SVG_ICONS.bouquet,
-    mascotPose: '/mascot/guide-flower.png',
-  },
-  plushies: {
-    id: 'plushies',
-    categoryTarget: 'plushies',
-    stepLabel: 'Plushies',
-    speech: 'Tiny yarn-made friends, ready for big hugs.',
-    subtext: '33 soft amigurumi creatures hand-knitted by dadis.',
-    accessoryIcon: SVG_ICONS.plushie,
-    mascotPose: '/mascot/guide-plushie.png',
-  },
-  bags: {
-    id: 'bags',
-    categoryTarget: 'bags',
-    stepLabel: 'Bags',
-    speech: 'Carry a little creativity wherever you go.',
-    subtext: '21 hand-woven crochet shoulder bags and chunky totes.',
-    accessoryIcon: SVG_ICONS.bag,
-    mascotPose: '/mascot/guide-bag.png',
-  },
-  keychains: {
-    id: 'keychains',
-    categoryTarget: 'keychains',
-    stepLabel: 'Keychains',
-    speech: 'Small charms, big personality.',
-    subtext: '57 cute backpack pendants and tactile yarn buddies.',
-    accessoryIcon: SVG_ICONS.keychain,
-    mascotPose: '/mascot/guide-point.png',
-  },
-  'flower-pots': {
-    id: 'flower-pots',
-    categoryTarget: 'flower-pots',
-    stepLabel: 'Flower Pots',
-    speech: 'A little handmade happiness for every corner.',
-    subtext: '40 tiny desk buddies and cheerful windowsill greens.',
-    accessoryIcon: SVG_ICONS.flowerPot,
-    mascotPose: '/mascot/guide-flower.png',
-  },
-  'home-decor': {
-    id: 'home-decor',
-    categoryTarget: 'home-decor',
-    stepLabel: 'Home Decor',
-    speech: 'Cozy textures to make any space feel like home.',
-    subtext: '32 handmade details that make your style uniquely yours.',
-    accessoryIcon: SVG_ICONS.homeDecor,
-    mascotPose: '/mascot/guide-final.png',
-  },
-  accessories: {
-    id: 'accessories',
-    categoryTarget: 'accessories',
-    stepLabel: 'Accessories',
-    speech: 'Wearable handmade art to brighten every outfit.',
-    subtext: '28 floral clips, hair bows, gajras & bandanas.',
-    accessoryIcon: SVG_ICONS.accessory,
-    mascotPose: '/mascot/guide-point.png',
-  },
-  final: {
-    id: 'final',
-    stepLabel: 'Find Yours',
-    speech: "There's something special waiting for you!",
-    subtext: 'Find your favourite little handmade thing.',
-    accessoryIcon: SVG_ICONS.heart,
-    mascotPose: '/mascot/guide-final.png',
-  },
-};
-
 interface CategoriesSectionProps {
   onCategorySelect?: (categoryId: string) => void;
   onShopAllClick?: () => void;
@@ -409,10 +308,6 @@ const BOT_CLOUD_FILL =
 const BOT_CLOUD_STROKE =
   'M 0 25 C 32.5 53.0, 97.5 53.0, 130.0 25.0 C 157.5 48.0, 212.5 48.0, 240.0 25.0 C 277.5 53.0, 352.5 53.0, 390.0 25.0 C 420.0 48.0, 480.0 48.0, 510.0 25.0 C 545.0 53.0, 615.0 53.0, 650.0 25.0 C 682.5 48.0, 747.5 48.0, 780.0 25.0 C 810.0 53.0, 870.0 53.0, 900.0 25.0 C 937.5 48.0, 1012.5 48.0, 1050.0 25.0 C 1077.5 53.0, 1132.5 53.0, 1160.0 25.0 C 1195.0 48.0, 1265.0 48.0, 1300.0 25.0 C 1335.0 53.0, 1405.0 53.0, 1440.0 25.0';
 
-// Full-Width Scalloped Puffy Cloud Path (Image 1 Trust Badges Cloud Style)
-const PUFFY_CLOUD_PATH =
-  'M 15 80 C 15 45, 30 25, 50.0 20 C 60.0 5.0, 118.6 5.0, 128.6 20 C 138.6 10.0, 197.1 10.0, 207.1 20 C 217.1 5.0, 275.7 5.0, 285.7 20 C 295.7 10.0, 354.3 10.0, 364.3 20 C 374.3 5.0, 432.9 5.0, 442.9 20 C 452.9 10.0, 511.4 10.0, 521.4 20 C 531.4 5.0, 590.0 5.0, 600.0 20 C 610.0 10.0, 668.6 10.0, 678.6 20 C 688.6 5.0, 747.1 5.0, 757.1 20 C 767.1 10.0, 825.7 10.0, 835.7 20 C 845.7 5.0, 904.3 5.0, 914.3 20 C 924.3 10.0, 982.9 10.0, 992.9 20 C 1002.9 5.0, 1061.4 5.0, 1071.4 20 C 1081.4 10.0, 1140.0 10.0, 1150.0 20 C 1170.0 25, 1185.0 45, 1185.0 80 C 1185.0 115, 1170.0 135, 1150.0 140 C 1140.0 155.0, 1081.4 155.0, 1071.4 140 C 1061.4 150.0, 1002.9 150.0, 992.9 140 C 982.9 155.0, 924.3 155.0, 914.3 140 C 904.3 150.0, 845.7 150.0, 835.7 140 C 825.7 155.0, 767.1 155.0, 757.1 140 C 747.1 150.0, 688.6 150.0, 678.6 140 C 668.6 155.0, 610.0 155.0, 600.0 140 C 590.0 150.0, 531.4 150.0, 521.4 140 C 511.4 155.0, 452.9 155.0, 442.9 140 C 432.9 150.0, 374.3 150.0, 364.3 140 C 354.3 155.0, 295.7 155.0, 285.7 140 C 275.7 150.0, 217.1 150.0, 207.1 140 C 197.1 155.0, 138.6 155.0, 128.6 140 C 118.6 150.0, 60.0 150.0, 50.0 140 C 30 135, 15 115, 15 80 Z';
-
 const optimizeShopifyUrl = (url: string, width = 450) => {
   if (!url) return url;
   if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
@@ -426,74 +321,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const [scrollStage, setScrollStage] = useState<string>('welcome');
   const scrollRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState<number>(0);
-  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  // Active guide stage: hovered category takes immediate visual priority, otherwise scroll stage
-  const activeStageId = hoveredCategory || scrollStage;
-  const currentStage = GUIDE_STAGES[activeStageId] || GUIDE_STAGES.welcome;
-
-  // Track scroll position to update mascot guide stages smoothly with RAF throttling
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScrollObserver = () => {
-      if (ticking) return;
-      ticking = true;
-
-      requestAnimationFrame(() => {
-        ticking = false;
-        if (!sectionRef.current) return;
-        const rect = sectionRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        // Skip completely if section is outside visible range
-        if (rect.bottom < -100 || rect.top > viewportHeight + 100) {
-          return;
-        }
-
-        if (rect.top > viewportHeight * 0.65) {
-          setScrollStage('welcome');
-          return;
-        }
-
-        // Check card positions to highlight relevant category
-        let bestCategory = 'welcome';
-        let minDistance = Infinity;
-
-        for (const cat of CATEGORIES) {
-          const el = cardRefs.current[cat.id];
-          if (el) {
-            const cardRect = el.getBoundingClientRect();
-            const cardCenter = cardRect.top + cardRect.height / 2;
-            const targetCenter = viewportHeight * 0.5;
-            const distance = Math.abs(cardCenter - targetCenter);
-
-            if (cardRect.top < viewportHeight * 0.85 && cardRect.bottom > viewportHeight * 0.2) {
-              if (distance < minDistance) {
-                minDistance = distance;
-                bestCategory = cat.id;
-              }
-            }
-          }
-        }
-
-        // Bottom invitation zone
-        if (rect.bottom < viewportHeight * 0.85 && rect.bottom > 0) {
-          bestCategory = 'final';
-        }
-
-        setScrollStage(bestCategory);
-      });
-    };
-
-    window.addEventListener('scroll', handleScrollObserver, { passive: true });
-    handleScrollObserver();
-    return () => window.removeEventListener('scroll', handleScrollObserver);
-  }, []);
 
   const handleCarouselScroll = () => {
     if (scrollRef.current) {
@@ -501,26 +330,9 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       const maxScroll = scrollWidth - clientWidth;
       if (maxScroll > 0) {
         const progress = scrollLeft / maxScroll;
-        const dotIndex = Math.min(Math.max(0, Math.round(progress * 2)), 2);
+        const dotIndex = Math.min(Math.max(0, Math.round(progress * 3)), 3);
         setActiveDot(dotIndex);
-
-        // Map mobile horizontal carousel position to category stages
-        const approxCategoryIndex = Math.min(
-          CATEGORIES.length - 1,
-          Math.floor((scrollLeft / maxScroll) * CATEGORIES.length)
-        );
-        if (CATEGORIES[approxCategoryIndex]) {
-          setScrollStage(CATEGORIES[approxCategoryIndex].id);
-        }
       }
-    }
-  };
-
-  const handleStageSelect = (stageId: string) => {
-    setScrollStage(stageId);
-    const cat = CATEGORIES.find((c) => c.id === stageId);
-    if (cat && cardRefs.current[cat.id]) {
-      cardRefs.current[cat.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
@@ -533,7 +345,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   };
 
   return (
-    <div ref={sectionRef} className="w-full relative mt-0 select-none">
+    <div className="w-full relative mt-0 select-none">
       {/* 1. Top Puffy Cloud Scalloped Border with Clean Maroon Stroke */}
       <div className="w-full overflow-hidden leading-none -mb-[1px]">
         <svg
@@ -608,7 +420,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
         <div className="w-full max-w-[1240px] mx-auto relative z-10">
           {/* Header with Whimsical Radiant Dashes (Spacious & Clean) */}
-          <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 text-center">
+          <div className="flex flex-col items-center justify-center mb-6 sm:mb-8 md:mb-10 text-center">
             <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 text-center">
               {/* Left Radiant Dashes */}
               <svg
@@ -646,106 +458,6 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           </div>
 
           {/* =========================================================================
-              SOFT PUFFY SCALLOPED CLOUD MASCOT GUIDE BANNER (Combines Image 1 & 2)
-              - Soft pastel-blue puffy scalloped cloud container matching TrustBadges
-              - Real Boy Mascot Portrait on left with dynamic accessory badge
-              - Interactive Speech card on right with live stage comments & 8 category chips
-              ========================================================================= */}
-          <div className="relative w-full mb-6 sm:mb-8 select-none">
-            <div className="relative w-full flex items-center px-3 sm:px-7 md:px-9 py-3 sm:py-5 min-h-[110px] sm:min-h-[140px] md:min-h-[160px]">
-              {/* Puffy Scalloped Cloud Background (Same as Image 1 Trust Badges) */}
-              <svg
-                viewBox="0 0 1200 160"
-                preserveAspectRatio="none"
-                className="absolute inset-0 w-full h-full select-none pointer-events-none drop-shadow-[0_6px_20px_rgba(100,22,35,0.06)]"
-                aria-hidden="true"
-              >
-                <defs>
-                  <linearGradient id="mascotCloudGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#EBF8FA" />
-                    <stop offset="60%" stopColor="#D9F2F6" />
-                    <stop offset="100%" stopColor="#C5EAF2" />
-                  </linearGradient>
-                  <filter id="mascotCloudShadow" x="-5%" y="-10%" width="110%" height="135%">
-                    <feDropShadow dx="0" dy="5" stdDeviation="8" floodColor="#641623" floodOpacity="0.05" />
-                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#8ED5E3" floodOpacity="0.5" />
-                  </filter>
-                </defs>
-                <path
-                  d={PUFFY_CLOUD_PATH}
-                  fill="url(#mascotCloudGrad)"
-                  filter="url(#mascotCloudShadow)"
-                />
-              </svg>
-
-              {/* Horizontal Mascot Stand + Speech Bubble Card */}
-              <div className="relative z-10 w-full flex flex-row items-center gap-2.5 sm:gap-4 md:gap-6">
-                {/* Mascot Cameo Box */}
-                <div className="flex-shrink-0 flex items-center justify-center relative">
-                  <div className="relative w-16 h-20 sm:w-22 sm:h-26 md:w-28 md:h-30 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#FFFDF8] to-[#FFF5CC] border-[1.8px] sm:border-[2px] border-[#641623] shadow-sm flex items-end justify-center overflow-hidden group">
-                    <img
-                      src={currentStage.mascotPose || '/mascot/guide-portrait.png'}
-                      alt="Knotsnco Boy Shopping Guide"
-                      className="h-16 sm:h-22 md:h-28 w-auto object-contain select-none drop-shadow-sm transition-transform duration-300 transform group-hover:scale-108"
-                    />
-                    {/* Dynamic Accessory Badge */}
-                    <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#641623] flex items-center justify-center shadow-xs animate-bounce">
-                      {currentStage.accessoryIcon}
-                    </div>
-                  </div>
-
-                  {/* Speech Arrow */}
-                  <div className="absolute -right-1.5 sm:-right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] sm:border-t-[7px] border-t-transparent border-b-[5px] sm:border-b-[7px] border-b-transparent border-r-[7px] sm:border-r-[9px] border-r-[#FFFDF8] filter drop-shadow-[-1px_0_0_#641623] z-20" />
-                </div>
-
-                {/* Speech Bubble Card */}
-                <div className="flex-1 min-w-0 bg-[#FFFDF8] rounded-xl sm:rounded-2xl md:rounded-3xl p-2.5 sm:p-3.5 md:p-4.5 border-[1.6px] sm:border-[1.8px] border-[#641623] shadow-xs">
-                  <div className="flex items-center justify-between gap-1.5 mb-0.5 sm:mb-1">
-                    <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full bg-[#811B2B] text-[#FFFDF8] font-bold text-[9.5px] sm:text-xs uppercase tracking-wider shadow-xs">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#F5D76E] flex-shrink-0" />
-                      {currentStage.stepLabel}
-                    </span>
-                    <span className="text-[9.5px] sm:text-[11px] text-[#641623]/60 italic hidden md:inline">
-                      hover or click cards to guide
-                    </span>
-                  </div>
-
-                  {/* Main Quote */}
-                  <p className="font-['Fredoka'] font-bold text-xs sm:text-base md:text-xl text-[#641623] leading-snug tracking-tight transition-all duration-300">
-                    &ldquo;{currentStage.speech}&rdquo;
-                  </p>
-
-                  {/* Subtitle */}
-                  <p className="font-['Fredoka'] text-[10px] sm:text-xs text-[#641623]/75 mt-0.5 hidden xs:block">
-                    {currentStage.subtext}
-                  </p>
-
-                  {/* Quick Stage Navigation Chips (All 8 Categories) */}
-                  <div className="mt-1.5 sm:mt-2.5 pt-1.5 sm:pt-2 border-t border-[#641623]/15 flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
-                    {CATEGORIES.map((cat) => {
-                      const isActive = activeStageId === cat.id;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => handleStageSelect(cat.id)}
-                          className={`px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[11px] font-['Fredoka'] font-bold whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
-                            isActive
-                              ? 'bg-[#811B2B] text-[#FFFDF8] shadow-xs scale-102'
-                              : 'bg-[#FFF5CC] text-[#641623] hover:bg-[#FFE8BF] border border-[#641623]/25'
-                          }`}
-                        >
-                          {cat.buttonLabel} ({cat.count})
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* =========================================================================
               COLLECTION CARDS 4-4 GRID (4 on Top Row, 4 on Bottom Row)
               Mobile Carousel (< lg) & Desktop 4x2 Grid (>= lg)
               ========================================================================= */}
@@ -756,30 +468,18 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           >
             {CATEGORIES.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
-              const isStageActive = activeStageId === cat.id;
 
               return (
                 <div
                   key={cat.id}
-                  ref={(el) => {
-                    cardRefs.current[cat.id] = el;
-                  }}
                   title={`${cat.buttonLabel} (${cat.count})`}
                   onClick={() => onCategorySelect?.(cat.id)}
                   onMouseEnter={() => setHoveredCategory(cat.id)}
                   onMouseLeave={() => setHoveredCategory(null)}
-                  className={`group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center relative transition-transform duration-300 ${
-                    isStageActive ? 'scale-[1.02]' : ''
-                  }`}
+                  className="group flex-shrink-0 w-[152px] sm:w-[200px] lg:w-auto snap-center cursor-pointer flex flex-col items-center relative transition-transform duration-300"
                 >
                   {/* 1. Square Aspect Ratio Image Box with Maroon Border & Hover Crossfade */}
-                  <div
-                    className={`relative w-full aspect-square rounded-[18px] sm:rounded-[26px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 ${
-                      isStageActive
-                        ? 'shadow-[0_12px_28px_rgba(129,27,43,0.18)] ring-2 ring-[#811B2B]/40'
-                        : 'shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)]'
-                    }`}
-                  >
+                  <div className="relative w-full aspect-square rounded-[18px] sm:rounded-[26px] overflow-hidden border-[1.8px] sm:border-[2.2px] border-[#641623] bg-white transition-all duration-300 group-hover:-translate-y-1 shadow-[0_4px_14px_rgba(100,22,35,0.06)] group-hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)]">
                     {/* Default Image */}
                     <img
                       src={optimizeShopifyUrl(cat.image, 450)}
@@ -844,13 +544,13 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     </div>
 
                     {/* =====================================================================
-                        STAGE-SPECIFIC MICRO-ANIMATIONS ON CARDS (Strictly SVG, NO emojis)
+                        HOVER MICRO-ANIMATIONS ON CARDS (Strictly SVG, NO emojis)
                         ===================================================================== */}
                     {/* Flowers blooming crochet flower */}
                     {cat.id === 'flowers' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_2s_infinite]">
@@ -863,7 +563,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'bouquets' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_2s_infinite]">
@@ -876,7 +576,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'flower-pots' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#D9EEF5] border border-[#641623] shadow-md flex items-center justify-center origin-bottom animate-[wiggle_2.5s_infinite]">
@@ -889,7 +589,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'bags' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F5D76E] border border-[#641623] shadow-md flex items-center justify-center origin-top animate-[wiggle_2s_infinite]">
@@ -902,7 +602,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'keychains' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center origin-top animate-[wiggle_1.8s_infinite]">
@@ -915,7 +615,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'plushies' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F8D9D8] border border-[#641623] shadow-md flex items-center justify-center animate-[bounce_1.5s_infinite]">
@@ -928,7 +628,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'home-decor' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFF5CC] border border-[#641623] shadow-md flex items-center justify-center animate-[spin_6s_linear_infinite]">
@@ -941,7 +641,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                     {cat.id === 'accessories' && (
                       <div
                         className={`absolute bottom-2 left-2 z-20 pointer-events-none transition-all duration-300 ${
-                          isStageActive || isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                          isHovered ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                         }`}
                       >
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FDA4AF] border border-[#641623] shadow-md flex items-center justify-center animate-[wiggle_2s_infinite]">
@@ -953,13 +653,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 
                   {/* 2. Sleek 3D Offset Pill Button Matching the Card Width */}
                   <div className="w-full mt-2 sm:mt-3 flex justify-center">
-                    <div
-                      className={`w-full py-1.5 sm:py-2.5 px-1.5 sm:px-3 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_5px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-1.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-xs md:text-[13px] uppercase transition-all duration-200 group-hover:translate-y-[2px] group-hover:shadow-[0_3px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none ${
-                        isStageActive
-                          ? 'bg-[#811B2B] text-white shadow-[0_3px_0_0_#380B12]'
-                          : 'bg-[#F7BE44] text-[#641623]'
-                      }`}
-                    >
+                    <div className="w-full py-1.5 sm:py-2.5 px-1.5 sm:px-3 rounded-full border-[1.8px] sm:border-[2.2px] border-[#641623] shadow-[0_3px_0_0_#641623] sm:shadow-[0_5px_0_0_#641623] flex items-center justify-center gap-1 sm:gap-1.5 text-center font-['Fredoka'] font-black tracking-wide sm:tracking-wider text-[10px] sm:text-xs md:text-[13px] uppercase transition-all duration-200 bg-[#F7BE44] group-hover:bg-[#F5D76E] text-[#641623] group-hover:translate-y-[2px] group-hover:shadow-[0_3px_0_0_#641623] active:translate-y-1 active:shadow-[0_1px_0_0_#641623] select-none">
                       <span className="scale-75 sm:scale-90 flex-shrink-0">{cat.icon}</span>
                       <span className="leading-tight pt-0.5 truncate">{cat.buttonLabel}</span>
                       <span className="text-[9px] sm:text-[11px] font-bold opacity-80 flex-shrink-0">({cat.count})</span>
