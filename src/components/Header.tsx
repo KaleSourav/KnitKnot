@@ -60,320 +60,232 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header
-      className={
-        currentPage === 'home'
-          ? 'relative w-full sm:knots-header-stripes sm:border-b sm:border-[#E2D8C3]/50 h-0 sm:h-auto'
-          : 'relative w-full knots-header-stripes border-b border-[#E2D8C3]/50'
-      }
-    >
-      {/* Standard Header (Rendered on desktop always, and on mobile only for non-home pages) */}
-      <div className={currentPage === 'home' ? 'hidden sm:block' : 'block'}>
-        {/* Top Navbar Row: Absolute Center Logo for 100% Balanced Mobile & Desktop View */}
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-2.5 sm:pb-3 flex items-center justify-between relative min-h-[58px] sm:min-h-[70px]">
-          {/* Left: Hamburger Menu Icon */}
-          <div className="flex-1 flex items-center justify-start z-20">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-1.5 sm:p-2 -ml-1 text-[#641623] hover:opacity-80 transition-transform active:scale-95 focus:outline-none cursor-pointer"
-              aria-label="Toggle navigation menu"
-              title="Open Menu"
+    <header className="relative w-full knots-header-stripes border-b border-[#E2D8C3]/50">
+      {/* Top Navbar Row: Absolute Center Logo for 100% Balanced Mobile & Desktop View */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-2.5 sm:pb-3 flex items-center justify-between relative min-h-[58px] sm:min-h-[70px]">
+        {/* Left: Hamburger Menu Icon */}
+        <div className="flex-1 flex items-center justify-start z-20">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="p-1.5 sm:p-2 -ml-1 text-[#641623] hover:opacity-80 transition-transform active:scale-95 focus:outline-none cursor-pointer"
+            aria-label="Toggle navigation menu"
+            title="Open Menu"
+          >
+            <svg
+              className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
+              viewBox="0 0 28 28"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
             >
-              <svg
-                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
-                viewBox="0 0 28 28"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              >
-                <line x1="4" y1="7" x2="24" y2="7" />
-                <line x1="4" y1="14" x2="24" y2="14" />
-                <line x1="4" y1="21" x2="24" y2="21" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Center: Brand Logo + Subtitle (Mathematically Centered via Absolute Translation) */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center text-center z-10 pointer-events-auto">
-            <a
-              href="#/"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate?.('home');
-              }}
-              className="inline-block transition-transform hover:scale-[1.03] active:scale-97 cursor-pointer"
-            >
-              <img
-                src="/logo-knotsnco.png"
-                alt="knotsnco."
-                className="h-8 sm:h-11 md:h-13 w-auto object-contain drop-shadow-sm select-none"
-              />
-            </a>
-            <span className="text-[#641623] font-['Fredoka'] font-semibold text-[10px] sm:text-xs md:text-sm tracking-wide lowercase -mt-0.5 sm:mt-0.5 whitespace-nowrap select-none">
-              everything crochet
-            </span>
-          </div>
-
-          {/* Right: Actions (Search, Profile, Cart) */}
-          <div className="flex-1 flex items-center justify-end gap-1 sm:gap-2.5 md:gap-3.5 text-[#641623] z-20">
-            {/* Search Icon */}
-            <button
-              onClick={onSearchClick}
-              className="p-1.5 sm:p-2 hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
-              aria-label="Search products"
-              title="Search"
-            >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </button>
-
-            {/* User Profile Icon */}
-            <button
-              className="p-1.5 sm:p-2 hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
-              aria-label="My Account"
-              title="Account"
-            >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </button>
-
-            {/* Cart Bag Icon with Cute Badge */}
-            <button
-              onClick={onCartClick}
-              className="p-1.5 sm:p-2 relative hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
-              aria-label="Shopping Cart"
-              title="Cart"
-            >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-
-              {/* Cute Little Heart Badge */}
-              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-4 h-4 rounded-full bg-[#641623] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
-                {cartCount > 0 ? (
-                  cartCount
-                ) : (
-                  <svg
-                    className="w-2.5 h-2.5 fill-current"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                )}
-              </span>
-            </button>
-          </div>
+              <line x1="4" y1="7" x2="24" y2="7" />
+              <line x1="4" y1="14" x2="24" y2="14" />
+              <line x1="4" y1="21" x2="24" y2="21" />
+            </svg>
+          </button>
         </div>
 
-        {/* Floating Pill Navigation Bar: [Shop all] [Story] [Contact us] [More] */}
-        <div className="w-full relative z-20 -mb-4 px-2 sm:px-4 flex justify-center">
-          <div className="inline-flex items-center gap-1 sm:gap-2 bg-[#FFFDF6] border-[1.8px] border-[#641623]/25 rounded-full px-2 sm:px-4 py-1 sm:py-1.5 shadow-[0_6px_20px_rgba(100,22,35,0.08)] max-w-full overflow-x-auto no-scrollbar">
-            
-            {/* 1. Shop all */}
-            <button
-              type="button"
-              onClick={() => onNavigate?.('shop', 'all')}
-              className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer select-none whitespace-nowrap ${
-                currentPage === 'shop' && (!activeCategory || activeCategory === 'all')
-                  ? 'bg-[#811B2B] text-white shadow-xs scale-102'
-                  : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
-              }`}
-            >
-              <svg
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:-rotate-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-              <span>Shop all</span>
-            </button>
-
-            {/* 2. Story (Redirects/Scrolls to "Made by Hand, Made with Love" Section) */}
-            <button
-              type="button"
-              onClick={handleStoryClick}
-              className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
-            >
-              <svg
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-              <span>Story</span>
-            </button>
-
-            {/* 3. Contact us (Redirects/Scrolls to Footer) */}
-            <button
-              type="button"
-              onClick={handleContactClick}
-              className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
-            >
-              <svg
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:-translate-y-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                <circle cx="9" cy="10" r="1" fill="currentColor" />
-                <circle cx="12" cy="10" r="1" fill="currentColor" />
-                <circle cx="15" cy="10" r="1" fill="currentColor" />
-              </svg>
-              <span>Contact us</span>
-            </button>
-
-            {/* 4. More (Opens Left Side Navigation Menu Drawer) */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
-            >
-              {/* Cute 4-Petal Daisy Flower Icon that spins on hover */}
-              <svg
-                className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:rotate-90 group-hover:scale-115"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 2a3.5 3.5 0 00-3.5 3.5c0 .35.05.69.15 1A3.5 3.5 0 005.15 8.1 3.5 3.5 0 003.5 12 3.5 3.5 0 005.15 15.9a3.5 3.5 0 003.5 1.6c-.1.31-.15.65-.15 1A3.5 3.5 0 0012 22a3.5 3.5 0 003.5-3.5c0-.35-.05-.69-.15-1a3.5 3.5 0 003.5-1.6A3.5 3.5 0 0020.5 12a3.5 3.5 0 00-1.65-3.9 3.5 3.5 0 00-3.5-1.6c.1-.31.15-.65.15-1A3.5 3.5 0 0012 2zm0 7a3 3 0 100 6 3 3 0 000-6z" />
-              </svg>
-              <span>More</span>
-              <svg
-                className="w-3 h-3 text-[#641623]/70 transition-transform duration-200 group-hover:translate-x-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Floating Overlay Header (Only on Home Landing Page, Mobile < sm, exactly matching Reference) */}
-      {currentPage === 'home' && (
-        <div className="sm:hidden absolute top-3 left-0 w-full px-3.5 z-30 flex items-center justify-between pointer-events-auto">
-          {/* Left: Brand Logo Card */}
+        {/* Center: Brand Logo + Subtitle (Mathematically Centered via Absolute Translation) */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center text-center z-10 pointer-events-auto">
           <a
             href="#/"
             onClick={(e) => {
               e.preventDefault();
               onNavigate?.('home');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="h-11 px-3.5 bg-white/95 backdrop-blur-md rounded-2xl border border-[#641623]/15 shadow-[0_4px_14px_rgba(100,22,35,0.12)] flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
-            aria-label="knotsnco home"
+            className="inline-block transition-transform hover:scale-[1.03] active:scale-97 cursor-pointer"
           >
             <img
               src="/logo-knotsnco.png"
               alt="knotsnco."
-              className="h-6 w-auto object-contain"
+              className="h-8 sm:h-11 md:h-13 w-auto object-contain drop-shadow-sm select-none"
             />
           </a>
-
-          {/* Right: Actions (Cart Button + Hamburger Menu Button) */}
-          <div className="flex items-center gap-2">
-            {/* Cart Bag Button */}
-            <button
-              type="button"
-              onClick={onCartClick}
-              className="w-11 h-11 bg-white/95 backdrop-blur-md rounded-2xl border border-[#641623]/15 shadow-[0_4px_14px_rgba(100,22,35,0.12)] flex items-center justify-center text-[#641623] relative active:scale-95 transition-transform cursor-pointer"
-              aria-label="Shopping Cart"
-            >
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-              {/* Cute Heart Badge */}
-              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#811B2B] text-white text-[9px] font-bold flex items-center justify-center shadow-xs">
-                {cartCount > 0 ? (
-                  cartCount
-                ) : (
-                  <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                )}
-              </span>
-            </button>
-
-            {/* Hamburger Menu Button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              className="w-11 h-11 bg-white/95 backdrop-blur-md rounded-2xl border border-[#641623]/15 shadow-[0_4px_14px_rgba(100,22,35,0.12)] flex items-center justify-center text-[#641623] active:scale-95 transition-transform cursor-pointer"
-              aria-label="Toggle navigation menu"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-              >
-                <line x1="4" y1="7" x2="20" y2="7" />
-                <line x1="4" y1="12" x2="20" y2="12" />
-                <line x1="4" y1="17" x2="20" y2="17" />
-              </svg>
-            </button>
-          </div>
+          <span className="text-[#641623] font-['Fredoka'] font-semibold text-[10px] sm:text-xs md:text-sm tracking-wide lowercase -mt-0.5 sm:mt-0.5 whitespace-nowrap select-none">
+            everything crochet
+          </span>
         </div>
-      )}
+
+        {/* Right: Actions (Search, Profile, Cart) */}
+        <div className="flex-1 flex items-center justify-end gap-1 sm:gap-2.5 md:gap-3.5 text-[#641623] z-20">
+          {/* Search Icon */}
+          <button
+            onClick={onSearchClick}
+            className="p-1.5 sm:p-2 hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
+            aria-label="Search products"
+            title="Search"
+          >
+            <svg
+              className="w-5 h-5 sm:w-6 sm:h-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+
+          {/* User Profile Icon */}
+          <button
+            className="p-1.5 sm:p-2 hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
+            aria-label="My Account"
+            title="Account"
+          >
+            <svg
+              className="w-5 h-5 sm:w-6 sm:h-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
+
+          {/* Cart Bag Icon with Cute Badge */}
+          <button
+            onClick={onCartClick}
+            className="p-1.5 sm:p-2 relative hover:opacity-80 transition-transform active:scale-95 cursor-pointer"
+            aria-label="Shopping Cart"
+            title="Cart"
+          >
+            <svg
+              className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+
+            {/* Cute Little Heart Badge */}
+            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-4 h-4 rounded-full bg-[#641623] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+              {cartCount > 0 ? (
+                cartCount
+              ) : (
+                <svg
+                  className="w-2.5 h-2.5 fill-current"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+              )}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Floating Pill Navigation Bar: [Shop all] [Story] [Contact us] [More] (Present on both Mobile & Desktop) */}
+      <div className="w-full relative z-20 -mb-4 px-2 sm:px-4 flex justify-center">
+        <div className="inline-flex items-center gap-1 sm:gap-2 bg-[#FFFDF6] border-[1.8px] border-[#641623]/25 rounded-full px-2 sm:px-4 py-1 sm:py-1.5 shadow-[0_6px_20px_rgba(100,22,35,0.08)] max-w-full overflow-x-auto no-scrollbar">
+          
+          {/* 1. Shop all */}
+          <button
+            type="button"
+            onClick={() => onNavigate?.('shop', 'all')}
+            className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer select-none whitespace-nowrap ${
+              currentPage === 'shop' && (!activeCategory || activeCategory === 'all')
+                ? 'bg-[#811B2B] text-white shadow-xs scale-102'
+                : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
+            }`}
+          >
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:-rotate-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <span>Shop all</span>
+          </button>
+
+          {/* 2. Story (Redirects/Scrolls to "Made by Hand, Made with Love" Section) */}
+          <button
+            type="button"
+            onClick={handleStoryClick}
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
+          >
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+            <span>Story</span>
+          </button>
+
+          {/* 3. Contact us (Redirects/Scrolls to Footer) */}
+          <button
+            type="button"
+            onClick={handleContactClick}
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
+          >
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:-translate-y-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              <circle cx="9" cy="10" r="1" fill="currentColor" />
+              <circle cx="12" cy="10" r="1" fill="currentColor" />
+              <circle cx="15" cy="10" r="1" fill="currentColor" />
+            </svg>
+            <span>Contact us</span>
+          </button>
+
+          {/* 4. More (Opens Left Side Navigation Menu Drawer) */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
+          >
+            {/* Cute 4-Petal Daisy Flower Icon that spins on hover */}
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:rotate-90 group-hover:scale-115"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M12 2a3.5 3.5 0 00-3.5 3.5c0 .35.05.69.15 1A3.5 3.5 0 005.15 8.1 3.5 3.5 0 003.5 12 3.5 3.5 0 005.15 15.9a3.5 3.5 0 003.5 1.6c-.1.31-.15.65-.15 1A3.5 3.5 0 0012 22a3.5 3.5 0 003.5-3.5c0-.35-.05-.69-.15-1a3.5 3.5 0 003.5-1.6A3.5 3.5 0 0020.5 12a3.5 3.5 0 00-1.65-3.9 3.5 3.5 0 00-3.5-1.6c.1-.31.15-.65.15-1A3.5 3.5 0 0012 2zm0 7a3 3 0 100 6 3 3 0 000-6z" />
+            </svg>
+            <span>More</span>
+            <svg
+              className="w-3 h-3 text-[#641623]/70 transition-transform duration-200 group-hover:translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
       {/* Left-Side Navigation Menu Drawer (Slide-Over) */}
       {mobileMenuOpen && (
