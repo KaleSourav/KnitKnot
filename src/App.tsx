@@ -7,6 +7,7 @@ import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
 import { OurStorySection } from './components/OurStorySection';
 import { ReelsSection } from './components/ReelsSection';
+import { WhyChooseSection } from './components/WhyChooseSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
@@ -209,6 +210,11 @@ export default function App() {
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
             <ScrollReveal id="section-reels" yOffset={24} duration={0.45}>
               <ReelsSection />
+            </ScrollReveal>
+
+            {/* Why Choose Knots & Co Section (Interactive Blue & Yellow Cards, Tilting & 3D Flip) */}
+            <ScrollReveal id="section-why-choose" yOffset={24} duration={0.45}>
+              <WhyChooseSection />
             </ScrollReveal>
           </div>
         ) : currentPage === 'shop' ? (
