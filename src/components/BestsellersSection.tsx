@@ -1,10 +1,16 @@
 import React, { useState, useRef } from 'react';
 
+interface BestsellerBadge {
+  line1: string;
+  line2: string;
+  bgColor: string;
+}
+
 interface BestsellerProduct {
   id: string;
   name: string;
   price: string;
-  badge?: string;
+  badge?: BestsellerBadge;
   image: string;
   hoverImage: string;
   fallbackImage: string;
@@ -15,7 +21,7 @@ const BESTSELLERS: BestsellerProduct[] = [
     id: 'gid://shopify/Product/8502150037567',
     name: 'Mini Red Rose Garden Bouquet',
     price: 'Rs. 1,000',
-    badge: 'COMING SOON',
+    badge: { line1: 'BEST', line2: 'SELLER', bgColor: '#7FE5BD' },
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DlhI_qXJ_1791261174851_7ircqgdvvz7aeb1.jpg?v=1793949938',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DlhI_qXJ_1791261175003_kd00cx2qr19tfk9.jpg?v=1793949938',
     fallbackImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DlhI_qXJ_1791261174851_7ircqgdvvz7aeb1.jpg?v=1793949938',
@@ -24,7 +30,7 @@ const BESTSELLERS: BestsellerProduct[] = [
     id: 'gid://shopify/Product/8502148530239',
     name: 'Heart Plushie',
     price: 'Rs. 1,800',
-    badge: 'COMING SOON',
+    badge: { line1: 'MOST', line2: 'LOVED', bgColor: '#F9A8D4' },
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_S1joXZHQ_1791261165706_rszy83chhrcpyp6.jpg?v=1793949900',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_S1joXZHQ_1791261166017_p8avr2g8cr99e96.jpg?v=1793949900',
     fallbackImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_S1joXZHQ_1791261165706_rszy83chhrcpyp6.jpg?v=1793949900',
@@ -33,7 +39,7 @@ const BESTSELLERS: BestsellerProduct[] = [
     id: 'gid://shopify/Product/8473635291199',
     name: 'Pink Lotus',
     price: 'Rs. 900',
-    badge: 'COMING SOON',
+    badge: { line1: 'TOP', line2: 'PICK', bgColor: '#FDE047' },
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/k940KGAH_2OT96H05C8_2026-09-29_1.jpg?v=1793949796',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/k940KGAH_QN8I4BTIYD_2026-09-29_2.jpg?v=1793949795',
     fallbackImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/k940KGAH_2OT96H05C8_2026-09-29_1.jpg?v=1793949796',
@@ -42,7 +48,7 @@ const BESTSELLERS: BestsellerProduct[] = [
     id: 'gid://shopify/Product/8502149513279',
     name: 'Photo Frame Pink',
     price: 'Rs. 700',
-    badge: 'COMING SOON',
+    badge: { line1: 'HOT', line2: 'FAV', bgColor: '#FDBA74' },
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_bFk5rglw_1791261162907_jr33ya3o5a6mhpf.jpg?v=1793949927',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_bFk5rglw_1791261163165_8q5mx6tdf8ukcz5.jpg?v=1793949927',
     fallbackImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_bFk5rglw_1791261162907_jr33ya3o5a6mhpf.jpg?v=1793949927',
@@ -51,7 +57,7 @@ const BESTSELLERS: BestsellerProduct[] = [
     id: 'gid://shopify/Product/8473638109247',
     name: 'Blue Daisy Tote',
     price: 'Rs. 1,930',
-    badge: 'COMING SOON',
+    badge: { line1: 'BEST', line2: 'SELLER', bgColor: '#93C5FD' },
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__s4EYMjW_1791261175302_gf0hgngr2qf7xx0_ec0964c6-7d75-43cf-9d67-aaef8b426210.jpg?v=1793949725',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__s4EYMjW_1791261175407_iud6c5vtahfi0d3_d19dcb3c-3c92-484f-b0f5-222dad16d457.jpg?v=1793949726',
     fallbackImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__s4EYMjW_1791261175302_gf0hgngr2qf7xx0_ec0964c6-7d75-43cf-9d67-aaef8b426210.jpg?v=1793949725',
@@ -69,6 +75,7 @@ const optimizeShopifyUrl = (url: string, width = 500) => {
 interface BestsellersSectionProps {
   onProductClick?: (productId: string) => void;
   onShopAllClick?: () => void;
+  onAddToCart?: (productId: string) => void;
   onNotifyClick?: (productId: string) => void;
   initialHoveredId?: string | null;
 }
@@ -76,13 +83,23 @@ interface BestsellersSectionProps {
 export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
   onProductClick,
   onShopAllClick,
+  onAddToCart,
   onNotifyClick,
   initialHoveredId = null,
 }) => {
   const [activeDot, setActiveDot] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<string | null>(initialHoveredId);
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+  const [addedId, setAddedId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleAddToCart = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setAddedId(id);
+    setTimeout(() => setAddedId(null), 1800);
+    onAddToCart?.(id);
+    onNotifyClick?.(id);
+  };
 
   const toggleWishlist = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -290,12 +307,12 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                       />
                     </div>
 
-                    {/* Mint Green Scalloped Daisy Flower Badge ("COMING SOON") in Top Right */}
+                    {/* Scalloped Daisy Flower Badge in Top Right */}
                     {item.badge && (
                       <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                         <svg viewBox="0 0 50 50" className="w-10 h-10 sm:w-11 sm:h-11">
                           {/* 5 Petal Lobes */}
-                          <g fill="#7FE5BD" stroke="#2D2424" strokeWidth="2.2">
+                          <g fill={item.badge.bgColor} stroke="#2D2424" strokeWidth="2.2">
                             <circle cx="25" cy="14" r="9.5" />
                             <circle cx="35.5" cy="21.6" r="9.5" />
                             <circle cx="31.5" cy="34" r="9.5" />
@@ -303,7 +320,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                             <circle cx="14.5" cy="21.6" r="9.5" />
                           </g>
                           {/* Center Fill */}
-                          <circle cx="25" cy="25" r="12.5" fill="#7FE5BD" />
+                          <circle cx="25" cy="25" r="12.5" fill={item.badge.bgColor} />
                           {/* Badge Text */}
                           <text
                             x="25"
@@ -315,7 +332,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                             fontFamily="Fredoka, sans-serif"
                             letterSpacing="0.02em"
                           >
-                            COMING
+                            {item.badge.line1}
                           </text>
                           <text
                             x="25"
@@ -327,26 +344,27 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
                             fontFamily="Fredoka, sans-serif"
                             letterSpacing="0.02em"
                           >
-                            SOON
+                            {item.badge.line2}
                           </text>
                         </svg>
                       </div>
                     )}
 
-                    {/* Slide-Up Pill Button ("NOTIFY ME") on Hover */}
+                    {/* Slide-Up Pill Button ("ADD TO CART") on Hover */}
                     <div className="absolute bottom-3 sm:bottom-3.5 left-0 right-0 z-20 flex items-center justify-center px-4">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onNotifyClick?.(item.id);
-                        }}
-                        className={`w-full py-2.5 px-4 bg-[#2D2424] text-white font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-lg transition-all duration-300 ease-out hover:bg-[#641623] hover:scale-102 active:scale-95 cursor-pointer text-center ${
+                        onClick={(e) => handleAddToCart(e, item.id)}
+                        className={`w-full py-2.5 px-4 font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-lg transition-all duration-300 ease-out hover:scale-102 active:scale-95 cursor-pointer text-center ${
+                          addedId === item.id
+                            ? 'bg-[#7FE5BD] text-[#2D2424]'
+                            : 'bg-[#2D2424] text-white hover:bg-[#641623]'
+                        } ${
                           isHovered
                             ? 'opacity-100 translate-y-0 pointer-events-auto'
                             : 'opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto'
                         }`}
                       >
-                        NOTIFY ME
+                        {addedId === item.id ? 'ADDED! ♡' : 'ADD TO CART'}
                       </button>
                     </div>
                   </div>

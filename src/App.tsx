@@ -191,7 +191,7 @@ export default function App() {
               <BestsellersSection
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
-                onNotifyClick={(id) => navigateTo('product', id)}
+                onAddToCart={() => setCartCount((prev) => prev + 1)}
               />
             </ScrollReveal>
 
