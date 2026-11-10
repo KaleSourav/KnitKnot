@@ -273,6 +273,74 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }));
   };
 
+  // Interactive Badges tab (0: Handmade with love, 1: Soft & Long-lasting, 2: Gift-Ready Packaging, 3: Made by our Dadis)
+  const [activeBadgeStory, setActiveBadgeStory] = useState<number | null>(null);
+
+  // Live Pincode Estimator State
+  const [pincodeInput, setPincodeInput] = useState<string>('');
+  const [pincodeStatus, setPincodeStatus] = useState<'idle' | 'checking' | 'success' | 'error'>('idle');
+  const [pincodeDetails, setPincodeDetails] = useState<{
+    zone: string;
+    deliveryDate: string;
+  } | null>(null);
+
+  // Complimentary Handwritten Gift Card Personalizer
+  const [isGiftNoteOpen, setIsGiftNoteOpen] = useState<boolean>(false);
+  const [giftRecipient, setGiftRecipient] = useState<string>('');
+  const [giftMessage, setGiftMessage] = useState<string>('');
+  const [giftSender, setGiftSender] = useState<string>('');
+  const [giftNoteSaved, setGiftNoteSaved] = useState<boolean>(false);
+
+  // Handle Pincode Check
+  const handleCheckPincode = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const cleanPin = pincodeInput.trim();
+    if (!/^\d{6}$/.test(cleanPin)) {
+      setPincodeStatus('error');
+      setPincodeDetails(null);
+      return;
+    }
+    setPincodeStatus('checking');
+    setTimeout(() => {
+      const now = new Date();
+      let daysToAdd = 3;
+      let zoneName = 'India Express Delivery';
+      if (cleanPin.startsWith('395') || cleanPin.startsWith('394')) {
+        zoneName = 'Surat Artisan Hub';
+        daysToAdd = 1;
+      } else if (cleanPin.startsWith('400') || cleanPin.startsWith('411')) {
+        zoneName = 'Mumbai / Pune Region';
+        daysToAdd = 2;
+      } else if (cleanPin.startsWith('110') || cleanPin.startsWith('122') || cleanPin.startsWith('201')) {
+        zoneName = 'Delhi NCR';
+        daysToAdd = 2;
+      } else if (cleanPin.startsWith('560')) {
+        zoneName = 'Bengaluru';
+        daysToAdd = 2;
+      } else if (cleanPin.startsWith('500')) {
+        zoneName = 'Hyderabad';
+        daysToAdd = 2;
+      }
+
+      const deliveryDateObj = new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+      const options: Intl.DateTimeFormatOptions = { weekday: 'short', month: 'short', day: 'numeric' };
+      const formattedDate = deliveryDateObj.toLocaleDateString('en-IN', options);
+
+      setPincodeDetails({
+        zone: zoneName,
+        deliveryDate: formattedDate,
+      });
+      setPincodeStatus('success');
+    }, 350);
+  };
+
+  const handleSaveGiftNote = () => {
+    setGiftNoteSaved(true);
+    setTimeout(() => {
+      setGiftNoteSaved(false);
+    }, 2800);
+  };
+
   const handlePrevImage = () => {
     if (images.length <= 1) return;
     setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -962,139 +1030,431 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               </div>
             </div>
 
-            {/* Feature Trust Badges (Exact 4 Scalloped Rosette Badges from Reference) */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-3 mt-7 sm:mt-8 pt-2 text-center">
-              {/* 1. Handmade with love */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
-                  {/* Scalloped 8-petal Rosette background */}
-                  <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs">
-                    <path
-                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
-                      fill="#FFFDF9"
-                      stroke="#641623"
-                      strokeWidth="1.6"
-                    />
-                  </svg>
-                  {/* Icon: Hand holding heart */}
-                  <svg
-                    className="relative z-10 w-5 h-5 sm:w-6 sm:h-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                  </svg>
-                </div>
-                <span className="text-[10px] sm:text-xs font-semibold text-[#641623] mt-2 leading-tight">
-                  Handmade<br />with love
+            {/* Feature Trust Badges (Interactive 4 Scalloped Rosette Badges) */}
+            <div className="mt-7 sm:mt-8 pt-2">
+              <div className="flex items-center justify-between mb-2.5 px-1">
+                <span className="font-['Fredoka'] font-bold text-xs uppercase tracking-wider text-[#641623]/80">
+                  OUR ARTISAN PROMISE
+                </span>
+                <span className="text-[11px] font-medium text-[#641623]/60">
+                  Tap any badge to explore story ♡
                 </span>
               </div>
 
-              {/* 2. Soft & Long-lasting */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
-                  {/* Scalloped 8-petal Rosette background */}
-                  <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs">
-                    <path
-                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
-                      fill="#FFFDF9"
-                      stroke="#641623"
-                      strokeWidth="1.6"
-                    />
-                  </svg>
-                  {/* Icon: Yarn Skein */}
-                  <svg
-                    className="relative z-10 w-5 h-5 sm:w-6 sm:h-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="8" />
-                    <path d="M12 4a8 8 0 0 0 0 16" />
-                    <path d="M4.5 9h15" />
-                    <path d="M4.5 15h15" />
-                  </svg>
-                </div>
-                <span className="text-[10px] sm:text-xs font-semibold text-[#641623] mt-2 leading-tight">
-                  Soft &<br />Long-lasting
-                </span>
+              <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+                {/* 1. Handmade with love */}
+                <button
+                  type="button"
+                  onClick={() => setActiveBadgeStory(activeBadgeStory === 0 ? null : 0)}
+                  className={`flex flex-col items-center group cursor-pointer transition-all duration-200 active:scale-95 ${
+                    activeBadgeStory === 0 ? '-translate-y-1' : 'hover:-translate-y-0.5'
+                  }`}
+                  aria-label="Handmade with love story"
+                >
+                  <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
+                    {/* Scalloped 8-petal Rosette background with dynamic active glow */}
+                    <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs transition-all duration-300">
+                      <path
+                        d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
+                        fill={activeBadgeStory === 0 ? '#FCE2EB' : '#FFFDF9'}
+                        stroke={activeBadgeStory === 0 ? '#D96B7D' : '#641623'}
+                        strokeWidth={activeBadgeStory === 0 ? '2.2' : '1.6'}
+                      />
+                    </svg>
+                    {/* Icon: Heart */}
+                    <svg
+                      className={`relative z-10 w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200 ${
+                        activeBadgeStory === 0 ? 'scale-110 text-[#D96B7D]' : 'group-hover:scale-105'
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill={activeBadgeStory === 0 ? 'currentColor' : 'none'}
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                    </svg>
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-semibold mt-2 leading-tight transition-colors ${
+                    activeBadgeStory === 0 ? 'text-[#D96B7D] font-bold' : 'text-[#641623]'
+                  }`}>
+                    Handmade<br />with love
+                  </span>
+                  {activeBadgeStory === 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D96B7D] mt-1 animate-pulse" />
+                  )}
+                </button>
+
+                {/* 2. Soft & Long-lasting */}
+                <button
+                  type="button"
+                  onClick={() => setActiveBadgeStory(activeBadgeStory === 1 ? null : 1)}
+                  className={`flex flex-col items-center group cursor-pointer transition-all duration-200 active:scale-95 ${
+                    activeBadgeStory === 1 ? '-translate-y-1' : 'hover:-translate-y-0.5'
+                  }`}
+                  aria-label="Soft & Long-lasting story"
+                >
+                  <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
+                    <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs transition-all duration-300">
+                      <path
+                        d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
+                        fill={activeBadgeStory === 1 ? '#FCF7D1' : '#FFFDF9'}
+                        stroke={activeBadgeStory === 1 ? '#C99814' : '#641623'}
+                        strokeWidth={activeBadgeStory === 1 ? '2.2' : '1.6'}
+                      />
+                    </svg>
+                    {/* Icon: Yarn Skein */}
+                    <svg
+                      className={`relative z-10 w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200 ${
+                        activeBadgeStory === 1 ? 'scale-110 text-[#8C6B0D]' : 'group-hover:scale-105'
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="8" />
+                      <path d="M12 4a8 8 0 0 0 0 16" />
+                      <path d="M4.5 9h15" />
+                      <path d="M4.5 15h15" />
+                    </svg>
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-semibold mt-2 leading-tight transition-colors ${
+                    activeBadgeStory === 1 ? 'text-[#8C6B0D] font-bold' : 'text-[#641623]'
+                  }`}>
+                    Soft &<br />Long-lasting
+                  </span>
+                  {activeBadgeStory === 1 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C99814] mt-1 animate-pulse" />
+                  )}
+                </button>
+
+                {/* 3. Gift-Ready Packaging */}
+                <button
+                  type="button"
+                  onClick={() => setActiveBadgeStory(activeBadgeStory === 2 ? null : 2)}
+                  className={`flex flex-col items-center group cursor-pointer transition-all duration-200 active:scale-95 ${
+                    activeBadgeStory === 2 ? '-translate-y-1' : 'hover:-translate-y-0.5'
+                  }`}
+                  aria-label="Gift-Ready Packaging story"
+                >
+                  <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
+                    <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs transition-all duration-300">
+                      <path
+                        d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
+                        fill={activeBadgeStory === 2 ? '#D6E8EF' : '#FFFDF9'}
+                        stroke={activeBadgeStory === 2 ? '#2B6CB0' : '#641623'}
+                        strokeWidth={activeBadgeStory === 2 ? '2.2' : '1.6'}
+                      />
+                    </svg>
+                    {/* Icon: Gift box with bow */}
+                    <svg
+                      className={`relative z-10 w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200 ${
+                        activeBadgeStory === 2 ? 'scale-110 text-[#2B6CB0]' : 'group-hover:scale-105'
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 12 20 22 4 22 4 12" />
+                      <rect x="2" y="7" width="20" height="5" rx="1" />
+                      <line x1="12" y1="22" x2="12" y2="7" />
+                      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                    </svg>
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-semibold mt-2 leading-tight transition-colors ${
+                    activeBadgeStory === 2 ? 'text-[#2B6CB0] font-bold' : 'text-[#641623]'
+                  }`}>
+                    Gift-Ready<br />Packaging
+                  </span>
+                  {activeBadgeStory === 2 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2B6CB0] mt-1 animate-pulse" />
+                  )}
+                </button>
+
+                {/* 4. Made by our Dadis */}
+                <button
+                  type="button"
+                  onClick={() => setActiveBadgeStory(activeBadgeStory === 3 ? null : 3)}
+                  className={`flex flex-col items-center group cursor-pointer transition-all duration-200 active:scale-95 ${
+                    activeBadgeStory === 3 ? '-translate-y-1' : 'hover:-translate-y-0.5'
+                  }`}
+                  aria-label="Made by our Dadis story"
+                >
+                  <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
+                    <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs transition-all duration-300">
+                      <path
+                        d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
+                        fill={activeBadgeStory === 3 ? '#E3F5E1' : '#FFFDF9'}
+                        stroke={activeBadgeStory === 3 ? '#236E38' : '#641623'}
+                        strokeWidth={activeBadgeStory === 3 ? '2.2' : '1.6'}
+                      />
+                    </svg>
+                    {/* Icon: Leaf */}
+                    <svg
+                      className={`relative z-10 w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200 ${
+                        activeBadgeStory === 3 ? 'scale-110 text-[#236E38]' : 'group-hover:scale-105'
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg>
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-semibold mt-2 leading-tight transition-colors ${
+                    activeBadgeStory === 3 ? 'text-[#236E38] font-bold' : 'text-[#641623]'
+                  }`}>
+                    Made by<br />our Dadis
+                  </span>
+                  {activeBadgeStory === 3 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#236E38] mt-1 animate-pulse" />
+                  )}
+                </button>
               </div>
 
-              {/* 3. Gift-Ready Packaging */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
-                  {/* Scalloped 8-petal Rosette background */}
-                  <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs">
-                    <path
-                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 42.19 16.47 Z"
-                      fill="#FFFDF9"
-                      stroke="#641623"
-                      strokeWidth="1.6"
-                    />
-                  </svg>
-                  {/* Icon: Gift box with bow */}
-                  <svg
-                    className="relative z-10 w-5 h-5 sm:w-6 sm:h-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+              {/* Dynamic Interactive Story Drawer */}
+              {activeBadgeStory !== null && (
+                <div className="mt-3.5 p-3.5 sm:p-4 rounded-2xl bg-[#FFFDF9] border border-[#641623]/15 shadow-sm transition-all duration-300 relative text-left">
+                  <button
+                    onClick={() => setActiveBadgeStory(null)}
+                    type="button"
+                    className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-[#641623]/5 hover:bg-[#641623]/10 text-[#641623] flex items-center justify-center text-xs font-bold cursor-pointer"
+                    aria-label="Close story drawer"
                   >
-                    <polyline points="20 12 20 22 4 22 4 12" />
-                    <rect x="2" y="7" width="20" height="5" rx="1" />
-                    <line x1="12" y1="22" x2="12" y2="7" />
-                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
-                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
-                  </svg>
+                    ✕
+                  </button>
+
+                  {/* Story 0: Handmade with Love */}
+                  {activeBadgeStory === 0 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-base">🌸</span>
+                        <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
+                          100% Stitched Knot-by-Knot with Milk-Cotton Yarn
+                        </h4>
+                      </div>
+                      <p className="text-xs text-[#2D2424]/85 leading-relaxed">
+                        Every single flower petal, stem, and leaf in <span className="font-semibold text-[#641623]">{product.name}</span> is woven stitch-by-stitch by experienced artisans in Surat. We never use machine shortcuts or cheap plastics — just pure, tactile crochet art that takes an average of <strong>4.5 hours</strong> of patient craftsmanship.
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-2.5 text-[11px] font-semibold text-[#641623]">
+                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">🧶 4.5 Hours Handcrafting</span>
+                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">✨ Tight Double-Loop Stitch</span>
+                        <span className="px-2 py-0.5 rounded-full bg-[#FCE2EB] border border-[#641623]/10">🌿 Zero Machine Production</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Story 1: Soft & Long-lasting */}
+                  {activeBadgeStory === 1 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-base">✨</span>
+                        <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
+                          Everlasting Keepsake vs Fresh Cut Flowers
+                        </h4>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+                        <div className="p-2.5 rounded-xl bg-[#FFF5F5] border border-red-200">
+                          <p className="font-bold text-red-700 text-[11px] uppercase tracking-wider mb-1">🥀 Fresh Bouquets</p>
+                          <p className="text-[#2D2424]/80 text-[11px] leading-snug">
+                            Wilts in 3-4 days, water turns murky, leaves a mess, and ends up in the bin.
+                          </p>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-[#FCF7D1]/70 border border-[#C99814]/30">
+                          <p className="font-bold text-[#8C6B0D] text-[11px] uppercase tracking-wider mb-1">🌸 Knots & Co Keepsake</p>
+                          <p className="text-[#2D2424]/90 text-[11px] leading-snug">
+                            Stays vibrant for 5+ years, 100% dust-resistant, zero watering, treasured forever!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Story 2: Gift-Ready Packaging */}
+                  {activeBadgeStory === 2 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-base">🎁</span>
+                        <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
+                          Delightful Unboxing & Secret Gifting Ready
+                        </h4>
+                      </div>
+                      <p className="text-xs text-[#2D2424]/85 leading-relaxed">
+                        Each bouquet arrives packed in our custom sturdy pastel gift box with soft floral tissue wrapping, satin ribbon bow, and <strong>zero price tags or invoice inside</strong> — making it 100% ready to surprise your loved ones!
+                      </p>
+                      <button
+                        onClick={() => {
+                          setIsGiftNoteOpen(true);
+                          setActiveBadgeStory(null);
+                        }}
+                        type="button"
+                        className="mt-2 text-xs font-bold text-[#2B6CB0] underline cursor-pointer hover:text-[#1A4971]"
+                      >
+                        💌 Add a complimentary handwritten card below ↓
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Story 3: Made by our Dadis */}
+                  {activeBadgeStory === 3 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-base">👵</span>
+                        <h4 className="font-['Fredoka'] font-bold text-sm text-[#641623]">
+                          Empowering 200+ Surat Daadis & Women Artisans
+                        </h4>
+                      </div>
+                      <p className="text-xs text-[#2D2424]/85 leading-relaxed">
+                        Knots & Co was founded to give elderly grandmothers and homemakers in Surat a platform to earn fair, independent incomes from the comfort of their homes. Your purchase directly supports their families and keeps traditional crochet alive.
+                      </p>
+                      <p className="text-[11px] italic text-[#641623] mt-2 font-medium">
+                        "When you receive Knots & Co, you hold a grandmother's blessings in your hands ♡"
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <span className="text-[10px] sm:text-xs font-semibold text-[#641623] mt-2 leading-tight">
-                  Gift-Ready<br />Packaging
-                </span>
+              )}
+            </div>
+
+            {/* Interactive "Personalize Your Gift" Complimentary Card Box */}
+            <div className="mt-5 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#FFF9F5] to-[#FCEEF3] border border-[#641623]/15 shadow-2xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">💌</span>
+                  <div>
+                    <p className="font-['Fredoka'] font-bold text-sm text-[#641623]">
+                      Complimentary Handwritten Gift Card
+                    </p>
+                    <p className="text-[11px] text-[#641623]/70">
+                      Personalize a handwritten note for your box (Free ₹0)
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsGiftNoteOpen(!isGiftNoteOpen)}
+                  className="px-3 py-1.5 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-95 text-[#641623] font-['Fredoka'] font-bold text-xs cursor-pointer border border-[#641623]/15 shadow-2xs transition-all"
+                >
+                  {isGiftNoteOpen ? 'Close Note ✕' : giftRecipient || giftMessage ? 'Edit Note ✎' : '+ Add Note'}
+                </button>
               </div>
 
-              {/* 4. Made by our Dadis */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-[#641623]">
-                  {/* Scalloped 8-petal Rosette background */}
-                  <svg viewBox="0 0 48 48" className="absolute inset-0 w-full h-full drop-shadow-2xs">
-                    <path
-                      d="M 42.19 16.47 A 8 8 0 0 1 42.19 31.53 A 8 8 0 0 1 31.53 42.19 A 8 8 0 0 1 16.47 42.19 A 8 8 0 0 1 5.81 31.53 A 8 8 0 0 1 5.81 16.47 A 8 8 0 0 1 16.47 5.81 A 8 8 0 0 1 31.53 5.81 A 8 8 0 0 1 42.19 16.47 Z"
-                      fill="#FFFDF9"
-                      stroke="#641623"
-                      strokeWidth="1.6"
+              {/* Collapsible Card Creator */}
+              {isGiftNoteOpen && (
+                <div className="mt-3.5 pt-3 border-t border-[#641623]/10 space-y-3">
+                  {/* Quick preset chips */}
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="text-[10px] font-bold text-[#641623]/60 uppercase tracking-wider self-center">
+                      Quick ideas:
+                    </span>
+                    {[
+                      'Happy Birthday! 🎂',
+                      'Forever grateful for you ♡',
+                      'Happy Anniversary! 💐',
+                      'You make every day brighter 🌸',
+                    ].map((chip, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setGiftMessage(chip)}
+                        className="text-[11px] px-2.5 py-1 rounded-full bg-white/90 hover:bg-white text-[#641623] border border-[#641623]/15 cursor-pointer transition-all active:scale-95"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#641623]/70 mb-1">
+                        To (Recipient Name)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Ananya / Mumma"
+                        value={giftRecipient}
+                        onChange={(e) => setGiftRecipient(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#641623]/20 text-[#641623] placeholder-[#641623]/40 focus:outline-none focus:ring-1 focus:ring-[#641623]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#641623]/70 mb-1">
+                        From (Your Name)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Rohan"
+                        value={giftSender}
+                        onChange={(e) => setGiftSender(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#641623]/20 text-[#641623] placeholder-[#641623]/40 focus:outline-none focus:ring-1 focus:ring-[#641623]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#641623]/70 mb-1">
+                      Your Heartfelt Message
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. Wishing you a year as everlasting and beautiful as these flowers! Lots of love ♡"
+                      value={giftMessage}
+                      onChange={(e) => setGiftMessage(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#641623]/20 text-[#641623] placeholder-[#641623]/40 focus:outline-none focus:ring-1 focus:ring-[#641623] text-xs resize-none"
                     />
-                  </svg>
-                  {/* Icon: Gentle leaf with veins */}
-                  <svg
-                    className="relative z-10 w-5 h-5 sm:w-6 sm:h-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-                  </svg>
+                  </div>
+
+                  {/* Real-time Vintage Postcard Live Preview */}
+                  <div className="p-3.5 rounded-xl bg-[#FAF3E8] border border-dashed border-[#641623]/30 shadow-inner relative text-left">
+                    <div className="flex justify-between items-start mb-2 border-b border-[#641623]/10 pb-1.5">
+                      <span className="text-[10px] uppercase font-bold tracking-widest text-[#641623]/60">
+                        POSTCARD LIVE PREVIEW
+                      </span>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#641623]/10 text-[#641623]">
+                        SURAT ARTISAN COURIER
+                      </span>
+                    </div>
+                    <p className="text-xs font-semibold text-[#641623] italic">
+                      Dearest {giftRecipient || '[Recipient Name]'},
+                    </p>
+                    <p className="text-xs text-[#2D2424] my-2 leading-relaxed italic">
+                      "{giftMessage || 'Your message will be lovingly handwritten with archival ink on this vintage card...'}"
+                    </p>
+                    <p className="text-right text-xs font-semibold text-[#641623] italic">
+                      — With love, {giftSender || '[Your Name]'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <p className="text-[11px] text-[#641623]/70">
+                      Written with dip fountain ink on recycled seed paper.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleSaveGiftNote}
+                      className="px-4 py-1.5 rounded-full bg-[#641623] hover:bg-[#7D1D2E] text-[#FFFDF9] font-['Fredoka'] font-bold text-xs cursor-pointer active:scale-95 transition-all shadow-2xs"
+                    >
+                      {giftNoteSaved ? '✓ Card Saved!' : 'Save Note ♡'}
+                    </button>
+                  </div>
                 </div>
-                <span className="text-[10px] sm:text-xs font-semibold text-[#641623] mt-2 leading-tight">
-                  Made by<br />our Dadis
-                </span>
-              </div>
+              )}
             </div>
 
             {/* Cute Wavy Ribbon Divider */}
-            <div className="w-full flex justify-end mt-4 mb-3 pr-2 pointer-events-none">
+            <div className="w-full flex justify-end mt-4 mb-2 pr-2 pointer-events-none">
               <svg
                 viewBox="0 0 120 16"
                 className="w-24 sm:w-28 h-3 text-[#D96B7D]"
@@ -1107,114 +1467,237 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               </svg>
             </div>
 
-            {/* 3 Collapsible Accordions (Product Details, Care, Shipping) */}
+            {/* 3 Interactive Accordions (Product Details, Care, Shipping) */}
             <div className="space-y-2.5 sm:space-y-3 mt-1">
               {/* 1. Product Details Accordion */}
-              <div className="rounded-[18px] sm:rounded-[20px] bg-[#F7E5EE] border border-[#641623]/10 overflow-hidden transition-all">
+              <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
                 <button
                   onClick={() => toggleAccordion('details')}
                   type="button"
                   aria-expanded={openAccordions.details}
-                  className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
+                  className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
-                  <span>Product Details</span>
-                  <svg
-                    className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
-                      openAccordions.details ? 'rotate-180' : ''
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-[#FCE2EB] flex items-center justify-center text-xs">
+                      🌸
+                    </span>
+                    <span>Product Details</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#FCE2EB] text-[#641623] font-medium">
+                      100% Milk Cotton
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
+                        openAccordions.details ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
                 </button>
                 {openAccordions.details && (
-                  <div className="px-5 pb-4 pt-1 text-xs sm:text-sm text-[#2D2424]/85 leading-relaxed space-y-2 border-t border-[#641623]/5">
-                    {detailedBulletPoints.map((item, i) => (
-                      <p key={i}>
-                        • <strong>{item.label}:</strong> {item.text}
+                  <div className="px-4 sm:px-5 pb-4 pt-2 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-3 border-t border-[#641623]/10">
+                    {/* Visual Specs Grid */}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <p className="font-bold text-[#641623] text-[10px] uppercase tracking-wider">Height & Spread</p>
+                        <p className="text-[#2D2424]">Approx. 38cm (15") tall</p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <p className="font-bold text-[#641623] text-[10px] uppercase tracking-wider">Yarn Grade</p>
+                        <p className="text-[#2D2424]">5-Ply Combed Milk Cotton</p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <p className="font-bold text-[#641623] text-[10px] uppercase tracking-wider">Internal Core</p>
+                        <p className="text-[#2D2424]">Flexible Bendable Stem</p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <p className="font-bold text-[#641623] text-[10px] uppercase tracking-wider">Weight</p>
+                        <p className="text-[#2D2424]">Ultra-light ~240g</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="font-['Fredoka'] font-bold text-xs text-[#641623] uppercase tracking-wider mb-1.5">
+                        What's Included in Your Package:
                       </p>
-                    ))}
+                      <ul className="space-y-1 text-xs text-[#2D2424]">
+                        <li className="flex items-center gap-1.5">
+                          <span className="text-green-600 font-bold">✓</span> Handcrafted crochet bouquet wrapped in florist paper
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <span className="text-green-600 font-bold">✓</span> Elegant satin ribbon bow
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <span className="text-green-600 font-bold">✓</span> Sturdy protective gift transport box
+                        </li>
+                        <li className="flex items-center gap-1.5">
+                          <span className="text-green-600 font-bold">✓</span> Complimentary handwritten greeting card (custom message)
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* 2. Care Instructions Accordion */}
-              <div className="rounded-[18px] sm:rounded-[20px] bg-[#F7E5EE] border border-[#641623]/10 overflow-hidden transition-all">
+              <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
                 <button
                   onClick={() => toggleAccordion('care')}
                   type="button"
                   aria-expanded={openAccordions.care}
-                  className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
+                  className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
-                  <span>Care Instructions</span>
-                  <svg
-                    className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
-                      openAccordions.care ? 'rotate-180' : ''
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-[#FCF7D1] flex items-center justify-center text-xs">
+                      🧼
+                    </span>
+                    <span>Care Instructions</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#FCF7D1] text-[#8C6B0D] font-medium">
+                      Zero Water Needed
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
+                        openAccordions.care ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
                 </button>
                 {openAccordions.care && (
-                  <div className="px-5 pb-4 pt-1 text-xs sm:text-sm text-[#2D2424]/85 leading-relaxed space-y-2 border-t border-[#641623]/5">
-                    <p>
-                      • <strong>Spot Clean Only:</strong> Gently dab any dusty spot with a soft, slightly damp cloth.
-                    </p>
-                    <p>
-                      • <strong>Do Not Submerge:</strong> Avoid machine washing or soaking in water to maintain the structural yarn stitch.
-                    </p>
-                    <p>
-                      • <strong>Display:</strong> Keep in a cool, dry room away from direct open flames and extreme dampness.
+                  <div className="px-4 sm:px-5 pb-4 pt-2 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-2.5 border-t border-[#641623]/10">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <span className="text-base mb-1 block">🪶</span>
+                        <p className="font-bold text-[#641623] text-xs">1. Monthly Dusting</p>
+                        <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
+                          Use a soft makeup brush or blowdryer on cool setting to keep dust away.
+                        </p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <span className="text-base mb-1 block">💧</span>
+                        <p className="font-bold text-[#641623] text-xs">2. Spot Dab Only</p>
+                        <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
+                          If stained, gently dab with a slightly damp cloth. Never submerge or machine wash!
+                        </p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white border border-[#641623]/10">
+                        <span className="text-base mb-1 block">☀️</span>
+                        <p className="font-bold text-[#641623] text-xs">3. Room Display</p>
+                        <p className="text-[11px] text-[#2D2424]/80 mt-0.5">
+                          Display in any vase or on your desk. Keep away from direct open flames.
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-[#641623] italic font-medium bg-[#FFF9ED] p-2 rounded-lg border border-[#C99814]/20">
+                      ✨ Colorfast Milk-Cotton: Will retain 100% of its vibrant tones for years without fading.
                     </p>
                   </div>
                 )}
               </div>
 
-              {/* 3. Shipping & Returns Accordion */}
-              <div className="rounded-[18px] sm:rounded-[20px] bg-[#F7E5EE] border border-[#641623]/10 overflow-hidden transition-all">
+              {/* 3. Shipping & Returns Accordion with Live Pincode Estimator */}
+              <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
                 <button
                   onClick={() => toggleAccordion('shipping')}
                   type="button"
                   aria-expanded={openAccordions.shipping}
-                  className="w-full py-3 sm:py-3.5 px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#F2D7E4] transition-colors"
+                  className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
                 >
-                  <span>Shipping & Returns</span>
-                  <svg
-                    className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
-                      openAccordions.shipping ? 'rotate-180' : ''
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-[#D6E8EF] flex items-center justify-center text-xs">
+                      🚚
+                    </span>
+                    <span>Shipping & Delivery</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#D6E8EF] text-[#2B6CB0] font-medium">
+                      Free Above ₹1,999
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
+                        openAccordions.shipping ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
                 </button>
                 {openAccordions.shipping && (
-                  <div className="px-5 pb-4 pt-1 text-xs sm:text-sm text-[#2D2424]/85 leading-relaxed space-y-2 border-t border-[#641623]/5">
-                    <p>
-                      • <strong>Free Shipping:</strong> Complimentary courier delivery across India on orders above ₹1,999.
-                    </p>
-                    <p>
-                      • <strong>Dispatch:</strong> Carefully crafted and dispatched within 24 to 48 hours with live tracking.
-                    </p>
-                    <p>
-                      • <strong>Gift Packaging:</strong> Dispatched in sturdy, eco-conscious gift boxes with custom handwritten gift cards.
-                    </p>
+                  <div className="px-4 sm:px-5 pb-4 pt-2 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-3 border-t border-[#641623]/10">
+                    {/* Live Pincode Delivery Estimator */}
+                    <div className="p-3 rounded-xl bg-white border border-[#641623]/15">
+                      <p className="font-['Fredoka'] font-bold text-xs text-[#641623] uppercase tracking-wider mb-1.5">
+                        Check Estimated Delivery Date:
+                      </p>
+                      <form onSubmit={handleCheckPincode} className="flex gap-2">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          placeholder="Enter 6-digit Pincode (e.g. 400001)"
+                          value={pincodeInput}
+                          onChange={(e) => setPincodeInput(e.target.value.replace(/\D/g, ''))}
+                          className="flex-1 px-3 py-1.5 rounded-lg border border-[#641623]/25 text-xs text-[#641623] placeholder-[#641623]/40 focus:outline-none focus:ring-1 focus:ring-[#641623]"
+                        />
+                        <button
+                          type="submit"
+                          className="px-3.5 py-1.5 rounded-lg bg-[#641623] hover:bg-[#7D1D2E] text-white font-['Fredoka'] font-bold text-xs cursor-pointer active:scale-95 transition-all"
+                        >
+                          {pincodeStatus === 'checking' ? 'Checking...' : 'Check'}
+                        </button>
+                      </form>
+
+                      {pincodeStatus === 'success' && pincodeDetails && (
+                        <div className="mt-2.5 p-2 rounded-lg bg-[#E3F5E1] border border-[#236E38]/30 text-xs text-[#236E38]">
+                          <p className="font-bold flex items-center gap-1.5">
+                            <span>🎉</span> Express Courier Available to {pincodeDetails.zone}!
+                          </p>
+                          <p className="text-[11px] text-[#2D2424] mt-0.5">
+                            Estimated delivery by <strong>{pincodeDetails.deliveryDate}</strong> with live tracking. Free shipping on orders above ₹1,999!
+                          </p>
+                        </div>
+                      )}
+
+                      {pincodeStatus === 'error' && (
+                        <p className="mt-2 text-[11px] text-red-600 font-medium">
+                          Please enter a valid 6-digit Indian pincode.
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5 text-xs text-[#2D2424]">
+                      <p>
+                        • <strong>Dispatch Window:</strong> Dispatches within 24 to 48 hours directly from our Surat studio.
+                      </p>
+                      <p>
+                        • <strong>Live Tracking:</strong> Real-time SMS & WhatsApp updates with courier tracking link.
+                      </p>
+                      <p>
+                        • <strong>100% Safe Transit Guarantee:</strong> In the rare event of transit damage, we send an immediate free replacement!
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
