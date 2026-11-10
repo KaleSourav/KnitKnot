@@ -18,6 +18,15 @@ interface ProductDetailsPageProps {
   onAddToCart?: (product: ShopProduct, quantity: number) => void;
 }
 
+const RECOMMENDED_BADGES = [
+  { line1: 'BEST', line2: 'SELLER', bgColor: '#7FE5BD' },
+  { line1: 'MOST', line2: 'LOVED', bgColor: '#F9A8D4' },
+  { line1: 'TOP', line2: 'PICK', bgColor: '#FDE047' },
+  { line1: 'HOT', line2: 'FAV', bgColor: '#FDBA74' },
+  { line1: 'POPULAR', line2: 'GIFT', bgColor: '#93C5FD' },
+  { line1: 'DAADI', line2: 'SPECIAL', bgColor: '#FED7AA' },
+];
+
 export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   productId,
   productHandle,
@@ -219,17 +228,34 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
   // Carousel track ref and scroll controls for "You might also like"
   const carouselTrackRef = useRef<HTMLDivElement>(null);
+  const [addedRecommendedId, setAddedRecommendedId] = useState<string | null>(null);
+  const [recommendedActiveDot, setRecommendedActiveDot] = useState<number>(0);
+
+  const handleRecommendedScroll = () => {
+    if (carouselTrackRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselTrackRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll <= 0) return;
+      const progress = scrollLeft / maxScroll;
+      const dotCount = Math.min(6, recommendedBouquets.length);
+      const dotIndex = Math.min(
+        dotCount - 1,
+        Math.max(0, Math.round(progress * (dotCount - 1)))
+      );
+      setRecommendedActiveDot(dotIndex);
+    }
+  };
 
   const handleCarouselPrev = () => {
     if (carouselTrackRef.current) {
-      const scrollAmount = Math.max(220, Math.round(carouselTrackRef.current.clientWidth * 0.75));
+      const scrollAmount = Math.max(260, Math.round(carouselTrackRef.current.clientWidth * 0.75));
       carouselTrackRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
   };
 
   const handleCarouselNext = () => {
     if (carouselTrackRef.current) {
-      const scrollAmount = Math.max(220, Math.round(carouselTrackRef.current.clientWidth * 0.75));
+      const scrollAmount = Math.max(260, Math.round(carouselTrackRef.current.clientWidth * 0.75));
       carouselTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -1860,17 +1886,19 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       </section>
 
       {/* =========================================================================
-          4. "YOU MIGHT ALSO LIKE" SECTION (Exact Match to Reference Image)
-          Heart-accented title, circular carousel arrows, 4 bouquet cards in view,
-          bottom-left handcrafted yellow flower and bottom-right pink yarn ball with heart loop trail.
+          4. "YOU MIGHT ALSO LIKE" SECTION
+          Matches BestsellersSection & ShopTheOccasionSection card scale:
+          Big, bold, tall aspect-[3/4] sm:aspect-[4/5.1] cards, 72vw on mobile with
+          peeking second card, crisp border, scalloped badge, quick add to cart, and
+          heartwarming Knots & Co vector decorations.
          ========================================================================= */}
-      <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-12 sm:pb-12 overflow-hidden">
+      <section className="relative w-full max-w-[1340px] mx-auto px-4 sm:px-8 lg:px-10 pt-8 sm:pt-12 pb-16 sm:pb-24 overflow-x-clip">
         {/* Section Heading: ♥ You might also like ♥ */}
         <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mb-6 sm:mb-8 text-[#641623]">
           <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-[#641623] flex-shrink-0" viewBox="0 0 24 24">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#641623]">
+          <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl tracking-tight text-[#641623]">
             You might also like
           </h2>
           <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-[#641623] flex-shrink-0" viewBox="0 0 24 24">
@@ -1878,21 +1906,21 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </svg>
         </div>
 
-        {/* Carousel Container with Left/Right Arrow Buttons */}
-        <div className="relative flex items-center justify-center gap-2.5 sm:gap-4">
+        {/* Carousel Container with Left/Right Arrow Buttons (Desktop) */}
+        <div className="relative w-full">
           {/* Previous Arrow Button */}
           <button
             type="button"
             onClick={handleCarouselPrev}
             aria-label="Previous products"
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-[#641623]/25 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
           >
             <svg
-              className="w-4 h-4 sm:w-5 sm:h-5"
+              className="w-5 h-5"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.5"
+              strokeWidth="2.6"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -1900,14 +1928,17 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             </svg>
           </button>
 
-          {/* Scrollable Track / Grid */}
+          {/* Scrollable Track / Grid (Matches Bestsellers & Occasion scale) */}
           <div
             ref={carouselTrackRef}
-            className="flex-1 flex gap-3.5 sm:gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-0.5"
+            onScroll={handleRecommendedScroll}
+            className="w-full flex items-stretch justify-start gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-3 px-1 snap-x snap-mandatory scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {recommendedBouquets.map((item) => {
+            {recommendedBouquets.map((item, idx) => {
               const isItemWishlist = !!wishlistMap[item.id];
+              const badge = RECOMMENDED_BADGES[idx % RECOMMENDED_BADGES.length];
+
               return (
                 <div
                   key={item.id}
@@ -1919,16 +1950,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="w-[calc(50%-7px)] sm:w-[calc(33.333%-12px)] lg:w-[calc(25%-15px)] flex-shrink-0 snap-start flex flex-col items-center text-center group cursor-pointer relative z-10"
+                  className="group w-[72vw] max-w-[310px] sm:max-w-none flex-shrink-0 sm:w-[270px] md:w-[285px] lg:w-[calc(25%-15px)] cursor-pointer flex flex-col items-start justify-between snap-start relative z-10"
                 >
-                  {/* Peach / Beige Image Card (Matching Reference Landscape Aspect Ratio ~4/3) */}
-                  <div className="relative aspect-[4/3] w-full rounded-[22px] sm:rounded-[26px] overflow-hidden bg-[#F4ECE1] border border-[#641623]/10 transition-all duration-300 group-hover:shadow-[0_8px_24px_rgba(100,22,35,0.08)]">
+                  {/* 1. Tall Rounded Image Box with Crisp Border & Aspect Ratio matching Bestsellers */}
+                  <div className="relative w-full aspect-[3/4] sm:aspect-[4/5.1] rounded-[20px] sm:rounded-[28px] overflow-hidden border-[1.8px] sm:border-2 border-[#2D2424] bg-white shadow-sm transition-all duration-300">
                     {/* Cute Knotsnco Decorative Pop-in Element on Hover */}
                     <div
-                      className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 pointer-events-none transition-all duration-300 ease-out transform scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 group-hover:rotate-12"
+                      className="absolute top-2.5 left-2.5 z-20 pointer-events-none transition-all duration-300 ease-out transform scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 group-hover:rotate-12"
                       aria-hidden="true"
                     >
-                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#FFF5CC] border border-[#811B2B]/20 shadow-sm flex items-center justify-center p-1">
+                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#FFF5CC] border border-[#811B2B]/20 shadow-sm flex items-center justify-center p-1">
                         <svg viewBox="0 0 24 24" className="w-full h-full text-[#811B2B]">
                           <circle cx="12" cy="7" r="3" fill="currentColor" opacity="0.9" />
                           <circle cx="16.5" cy="10" r="3" fill="currentColor" opacity="0.9" />
@@ -1940,31 +1971,12 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       </div>
                     </div>
 
-                    {/* Top-Right Heart Wishlist Button */}
-                    <button
-                      type="button"
-                      onClick={(e) => toggleCardWishlist(item.id, e)}
-                      aria-label={isItemWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-                      className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#641623]/15 shadow-2xs flex items-center justify-center text-[#641623] z-20 hover:scale-110 active:scale-95 transition-all cursor-pointer"
-                    >
-                      <svg
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
-                          isItemWishlist ? 'fill-[#641623] text-[#641623]' : 'fill-none text-[#641623]'
-                        }`}
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                      >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
-
-                    {/* Animated Product Image Container: 1.04 scale, lift, 2-deg rotation */}
-                    <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:-translate-y-1 group-hover:rotate-[2deg] motion-reduce:transform-none">
+                    {/* Animated Image Wrapper: 1.04 scale, lift, 2-deg rotation */}
+                    <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-[1.04] group-hover:-translate-y-1.5 group-hover:rotate-[2deg] motion-reduce:transform-none">
                       {item.image || (item.images && item.images[0]) ? (
                         <>
                           <img
-                            src={optimizeShopifyUrl(item.image || (item.images && item.images[0]), 450)}
+                            src={optimizeShopifyUrl(item.image || (item.images && item.images[0]), 500)}
                             alt={item.name}
                             className={`w-full h-full object-cover select-none absolute inset-0 block transition-opacity duration-350 ease-in-out ${
                               item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0])
@@ -1976,7 +1988,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           />
                           {item.images && item.images.length > 1 && item.images[1] !== (item.image || item.images[0]) && (
                             <img
-                              src={optimizeShopifyUrl(item.images[1], 450)}
+                              src={optimizeShopifyUrl(item.images[1], 500)}
                               alt={`${item.name} alternate view`}
                               className="w-full h-full object-cover select-none absolute inset-0 block opacity-0 transition-opacity duration-350 ease-in-out group-hover:opacity-100"
                               loading="lazy"
@@ -1985,22 +1997,120 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           )}
                         </>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[#641623]/40">
+                        <div className="w-full h-full flex items-center justify-center text-[#641623]/40 bg-[#FAF4ED]">
                           <span className="text-xs">No image</span>
                         </div>
                       )}
                     </div>
+
+                    {/* Scalloped Daisy Flower Badge in Top Right */}
+                    <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+                      <svg viewBox="0 0 50 50" className="w-10 h-10 sm:w-11 sm:h-11">
+                        <g fill={badge.bgColor} stroke="#2D2424" strokeWidth="2.2">
+                          <circle cx="25" cy="14" r="9.5" />
+                          <circle cx="35.5" cy="21.6" r="9.5" />
+                          <circle cx="31.5" cy="34" r="9.5" />
+                          <circle cx="18.5" cy="34" r="9.5" />
+                          <circle cx="14.5" cy="21.6" r="9.5" />
+                        </g>
+                        <circle cx="25" cy="25" r="12.5" fill={badge.bgColor} />
+                        <text
+                          x="25"
+                          y="22.5"
+                          textAnchor="middle"
+                          fontSize="6.5"
+                          fontWeight="800"
+                          fill="#2D2424"
+                          fontFamily="Fredoka, sans-serif"
+                          letterSpacing="0.02em"
+                        >
+                          {badge.line1}
+                        </text>
+                        <text
+                          x="25"
+                          y="30.5"
+                          textAnchor="middle"
+                          fontSize="6.5"
+                          fontWeight="800"
+                          fill="#2D2424"
+                          fontFamily="Fredoka, sans-serif"
+                          letterSpacing="0.02em"
+                        >
+                          {badge.line2}
+                        </text>
+                      </svg>
+                    </div>
+
+                    {/* Slide-Up Pill Button ("ADD TO CART") on Hover */}
+                    <div className="absolute bottom-3 sm:bottom-3.5 left-0 right-0 z-20 flex items-center justify-center px-4">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddToCart?.(item, 1);
+                          setAddedRecommendedId(item.id);
+                          setTimeout(() => setAddedRecommendedId(null), 1800);
+                        }}
+                        className={`w-full py-2.5 px-4 font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wider uppercase rounded-full shadow-lg transition-all duration-300 ease-out hover:scale-102 active:scale-95 cursor-pointer text-center ${
+                          addedRecommendedId === item.id
+                            ? 'bg-[#7FE5BD] text-[#2D2424]'
+                            : 'bg-[#2D2424] text-white hover:bg-[#641623]'
+                        } opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto`}
+                      >
+                        {addedRecommendedId === item.id ? 'ADDED! ♡' : 'ADD TO CART'}
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Product Title */}
-                  <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-2.5 sm:mt-3 group-hover:text-[#8E283A] transition-colors leading-snug line-clamp-1 max-w-[95%]">
-                    {item.name}
-                  </h3>
+                  {/* 2. Product Information Below Image (Left-Aligned + Price + Wishlist Heart) */}
+                  <div className="w-full mt-3 px-1 flex flex-col items-start text-left">
+                    {/* Title */}
+                    <h3 className="font-['Fredoka'] font-bold text-sm sm:text-[15px] text-[#2D2424] leading-snug line-clamp-2 group-hover:text-[#641623] transition-colors">
+                      {item.name}
+                    </h3>
 
-                  {/* Product Price */}
-                  <p className="font-bold text-xs sm:text-sm md:text-base text-[#641623] mt-0.5">
-                    ₹{item.price.toLocaleString('en-IN')}
-                  </p>
+                    {/* Price & Wishlist Row */}
+                    <div className="mt-1.5 flex items-center justify-between w-full">
+                      <span className="font-['Fredoka'] font-bold text-sm sm:text-base text-[#2D2424]">
+                        Rs. {item.price.toLocaleString('en-IN')}
+                      </span>
+                      {/* Wishlist Heart Icon */}
+                      <button
+                        type="button"
+                        onClick={(e) => toggleCardWishlist(item.id, e)}
+                        className="text-[#2D2424] hover:text-[#641623] transition-colors focus:outline-none cursor-pointer"
+                        aria-label={isItemWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                      >
+                        {isItemWishlist ? (
+                          <svg className="w-4 h-4 text-[#641623] fill-current" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Mobile Quick Add to Cart Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAddToCart?.(item, 1);
+                        setAddedRecommendedId(item.id);
+                        setTimeout(() => setAddedRecommendedId(null), 1800);
+                      }}
+                      className={`sm:hidden w-full mt-2.5 py-2 px-4 font-['Fredoka'] font-bold text-xs tracking-wider uppercase rounded-full border border-[#2D2424] shadow-2xs active:scale-95 transition-all cursor-pointer text-center ${
+                        addedRecommendedId === item.id
+                          ? 'bg-[#7FE5BD] text-[#2D2424]'
+                          : 'bg-[#2D2424] text-white'
+                      }`}
+                    >
+                      {addedRecommendedId === item.id ? 'ADDED! ♡' : 'ADD TO CART'}
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -2011,14 +2121,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             type="button"
             onClick={handleCarouselNext}
             aria-label="Next products"
-            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white border border-[#641623]/25 shadow-xs flex items-center justify-center text-[#641623] hover:border-[#641623] hover:bg-[#641623] hover:text-white transition-all cursor-pointer flex-shrink-0 z-20"
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
           >
             <svg
-              className="w-4 h-4 sm:w-5 sm:h-5"
+              className="w-5 h-5"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.5"
+              strokeWidth="2.6"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -2027,8 +2137,32 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           </button>
         </div>
 
+        {/* Mobile Dot Pagination Indicator */}
+        <div className="flex sm:hidden items-center justify-center gap-2 mt-5">
+          {recommendedBouquets.slice(0, 6).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (carouselTrackRef.current) {
+                  const target = carouselTrackRef.current.children[idx] as HTMLElement;
+                  if (target) {
+                    carouselTrackRef.current.scrollTo({
+                      left: target.offsetLeft - 16,
+                      behavior: 'smooth',
+                    });
+                  }
+                }
+              }}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                recommendedActiveDot === idx ? 'w-6 bg-[#641623]' : 'w-2 bg-[#641623]/25'
+              }`}
+              aria-label={`Go to product ${idx + 1}`}
+            />
+          ))}
+        </div>
+
         {/* Bottom Left Handcrafted Flower Illustration (Pure Vector SVG) */}
-        <div className="absolute bottom-1 -left-1 sm:bottom-0 sm:left-1 w-16 h-16 sm:w-28 sm:h-28 md:w-32 md:h-32 pointer-events-none select-none z-0">
+        <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-4 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 pointer-events-none select-none z-0">
           <svg viewBox="0 0 140 140" className="w-full h-full drop-shadow-2xs" fill="none">
             {/* Stem */}
             <path d="M 90,105 Q 98,122 102,136" stroke="#381A1F" strokeWidth="2.2" strokeLinecap="round" />
@@ -2089,7 +2223,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         </div>
 
         {/* Bottom Right Pink Yarn Ball with Heart Thread (Pure Vector SVG) */}
-        <div className="absolute bottom-1 right-0 sm:bottom-0 sm:right-1 w-28 sm:w-44 md:w-52 h-14 sm:h-20 md:h-24 pointer-events-none select-none z-0 flex items-end justify-end">
+        <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-4 w-28 sm:w-40 md:w-44 h-14 sm:h-16 md:h-20 pointer-events-none select-none z-0 flex items-end justify-end">
           <svg viewBox="0 0 220 90" className="w-full h-full drop-shadow-2xs" fill="none">
             {/* Dainty Continuous Heart Trail matching ref */}
             <path
