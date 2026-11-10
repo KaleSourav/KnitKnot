@@ -205,15 +205,16 @@ export const WhyChooseSection: React.FC = () => {
               <div
                 key={card.number}
                 onClick={() => toggleFlip(index)}
-                className={`group flex-shrink-0 w-[76vw] max-w-[310px] sm:w-[260px] md:w-[280px] lg:w-auto h-[410px] sm:h-[440px] md:h-[460px] cursor-pointer snap-start lg:snap-none transition-all duration-500 ease-out transform ${card.rotation} hover:rotate-0 hover:-translate-y-3 hover:scale-[1.03] hover:z-20`}
-                style={{ perspective: '1000px' }}
+                className={`group flex-shrink-0 w-[76vw] max-w-[310px] sm:w-[260px] md:w-[280px] lg:w-auto h-[410px] sm:h-[440px] md:h-[460px] cursor-pointer snap-start lg:snap-none transition-all duration-500 ease-out ${card.rotation} lg:hover:rotate-0 lg:hover:-translate-y-3 lg:hover:scale-[1.03] hover:z-20`}
+                style={{ perspective: '1200px' }}
                 title="Click to flip card"
               >
                 {/* 3D Flip Wrapper */}
                 <div
-                  className="relative w-full h-full rounded-[28px] sm:rounded-[32px] transition-transform duration-500 ease-out shadow-[0_8px_24px_rgba(100,22,35,0.08)] hover:shadow-[0_20px_35px_rgba(100,22,35,0.18)]"
+                  className="relative w-full h-full rounded-[28px] sm:rounded-[32px] transition-transform duration-500 ease-out shadow-[0_8px_24px_rgba(100,22,35,0.08)] lg:hover:shadow-[0_20px_35px_rgba(100,22,35,0.18)]"
                   style={{
                     transformStyle: 'preserve-3d',
+                    WebkitTransformStyle: 'preserve-3d',
                     transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
                   }}
                 >
@@ -221,12 +222,22 @@ export const WhyChooseSection: React.FC = () => {
                       FRONT SIDE OF CARD
                       ======================================================== */}
                   <div
-                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2px] transition-all duration-300 ${
+                    className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[32px] p-5 sm:p-6 flex flex-col justify-between overflow-hidden border-[2px] ${
                       isBlue
-                        ? 'bg-gradient-to-b from-[#DEEEF5] via-[#D6E8EF] to-[#C9E0EC] text-[#641623] border-[#641623]/15 hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
-                        : 'bg-gradient-to-b from-[#FEFBE2] via-[#FCF7D1] to-[#F5EEBD] text-[#641623] border-[#641623]/15 hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
+                        ? 'bg-gradient-to-b from-[#DEEEF5] via-[#D6E8EF] to-[#C9E0EC] text-[#641623] border-[#641623]/15 lg:hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
+                        : 'bg-gradient-to-b from-[#FEFBE2] via-[#FCF7D1] to-[#F5EEBD] text-[#641623] border-[#641623]/15 lg:hover:border-[#641623]/35 shadow-[0_8px_24px_rgba(100,22,35,0.06)]'
                     }`}
-                    style={{ backfaceVisibility: 'hidden' }}
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                      transform: 'rotateY(0deg) translateZ(1px)',
+                      opacity: isFlipped ? 0 : 1,
+                      visibility: isFlipped ? 'hidden' : 'visible',
+                      pointerEvents: isFlipped ? 'none' : 'auto',
+                      transition: isFlipped
+                        ? 'opacity 0.14s ease 0.14s, visibility 0s linear 0.28s'
+                        : 'opacity 0.14s ease 0.14s, visibility 0s linear 0s',
+                    }}
                   >
                     {/* Wavy Background Shapes (Inspired by Reference) */}
                     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -385,7 +396,14 @@ export const WhyChooseSection: React.FC = () => {
                     }`}
                     style={{
                       backfaceVisibility: 'hidden',
-                      transform: 'rotateY(180deg)',
+                      WebkitBackfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg) translateZ(1px)',
+                      opacity: isFlipped ? 1 : 0,
+                      visibility: isFlipped ? 'visible' : 'hidden',
+                      pointerEvents: isFlipped ? 'auto' : 'none',
+                      transition: isFlipped
+                        ? 'opacity 0.14s ease 0.14s, visibility 0s linear 0s'
+                        : 'opacity 0.14s ease 0.14s, visibility 0s linear 0.28s',
                     }}
                   >
                     {/* Top Row: Number Badge + Close / Flip back icon */}
