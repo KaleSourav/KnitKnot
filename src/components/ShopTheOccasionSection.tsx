@@ -9,12 +9,20 @@ export interface OccasionItem {
   badgeIcon: React.ReactNode;
 }
 
+const optimizeShopifyUrl = (url: string, width = 600) => {
+  if (!url) return url;
+  if (url.includes('cdn.shopify.com') && !url.includes('&width=')) {
+    return `${url}&width=${width}&format=webp`;
+  }
+  return url;
+};
+
 const OCCASIONS: OccasionItem[] = [
   {
     id: 'birthdays',
     title: 'birthdays',
-    image: '/occasions/birthdays.jpg',
-    hoverImage: '/occasions/birthdays-hover.jpg',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166417_3l7oukh265vjtjy.jpg?v=1793949872',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/xikgsXR6_5B4G6VHD2M_2026-09-29_1.jpg?v=1793949925',
     badgeLabel: 'celebrate',
     badgeIcon: (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#641623]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -28,8 +36,8 @@ const OCCASIONS: OccasionItem[] = [
   {
     id: 'anniversaries',
     title: 'anniversaries',
-    image: '/occasions/anniversaries.jpg',
-    hoverImage: '/occasions/anniversaries-hover.jpg',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DlhI_qXJ_1791261174851_7ircqgdvvz7aeb1.jpg?v=1793949938',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DlhI_qXJ_1791261175003_kd00cx2qr19tfk9.jpg?v=1793949938',
     badgeLabel: 'with love',
     badgeIcon: (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#641623]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -40,8 +48,8 @@ const OCCASIONS: OccasionItem[] = [
   {
     id: 'thank-you',
     title: 'thank you',
-    image: '/occasions/thank-you.jpg',
-    hoverImage: '/occasions/thank-you-hover.jpg',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ILJ324gG_1791261175791_15gnocsy0dnjr8n_45d62cde-a8e0-4c17-9471-f089eb29e55f.jpg?v=1793949837',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ILJ324gG_1791261175343_ztlyg0gy5cuo0oj_5ae25ddc-e1d8-4523-b019-019923f9150e.jpg?v=1793949837',
     badgeLabel: 'gratitude',
     badgeIcon: (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#641623]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -53,8 +61,8 @@ const OCCASIONS: OccasionItem[] = [
   {
     id: 'just-because',
     title: 'just because',
-    image: '/occasions/just-because.jpg',
-    hoverImage: '/occasions/just-because-hover.jpg',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_S1joXZHQ_1791261165706_rszy83chhrcpyp6.jpg?v=1793949900',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_S1joXZHQ_1791261166017_p8avr2g8cr99e96.jpg?v=1793949900',
     badgeLabel: 'pure joy',
     badgeIcon: (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#641623]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -68,8 +76,8 @@ const OCCASIONS: OccasionItem[] = [
   {
     id: 'festive-gifting',
     title: 'festive gifting',
-    image: '/occasions/festive-gifting.jpg',
-    hoverImage: '/occasions/festive-gifting-hover.jpg',
+    image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_INJ8CYwF_1791261129050_t23x12y0o5x1sxc.jpg?v=1793949838',
+    hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_INJ8CYwF_1791261131333_t5pf6tavljt99xs.jpg?v=1793949839',
     badgeLabel: 'special',
     badgeIcon: (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#641623]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -94,38 +102,40 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState<number>(0);
 
-  const handleScroll = () => {
+  const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      const progress = scrollLeft / (scrollWidth - clientWidth);
-      if (progress < 0.25) setActiveDot(0);
-      else if (progress < 0.75) setActiveDot(1);
-      else setActiveDot(2);
+      const scrollAmount = scrollRef.current.clientWidth * 0.75;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
     }
   };
 
-  const scrollToSection = (index: number) => {
+  const handleScroll = () => {
     if (scrollRef.current) {
-      const { scrollWidth, clientWidth } = scrollRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
       const maxScroll = scrollWidth - clientWidth;
-      scrollRef.current.scrollTo({
-        left: (maxScroll / 2) * index,
-        behavior: 'smooth',
-      });
-      setActiveDot(index);
+      if (maxScroll <= 0) return;
+      const progress = scrollLeft / maxScroll;
+      const dotIndex = Math.min(
+        OCCASIONS.length - 1,
+        Math.max(0, Math.round(progress * (OCCASIONS.length - 1)))
+      );
+      setActiveDot(dotIndex);
     }
   };
 
   return (
-    <section className="w-full bg-[#FAF4ED] py-8 sm:py-12 lg:py-16 overflow-hidden font-['Fredoka']">
-      <div className="w-full max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 1. Top Whimsical Wavy Stitched Line with Smiling 5-Petal Flower Divider (Wave Structure) */}
-        <div className="w-full flex justify-center mb-6 sm:mb-8" aria-hidden="true">
+    <section className="w-full bg-[#FAF4ED] pt-3 pb-10 sm:pt-5 sm:pb-14 overflow-hidden font-['Fredoka']">
+      <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 1. Top Whimsical Wavy Stitched Line with Smiling 5-Petal Flower Divider */}
+        <div className="w-full flex justify-center mb-4 sm:mb-6" aria-hidden="true">
           <svg
             viewBox="0 0 1200 48"
             fill="none"
             preserveAspectRatio="xMidYMid meet"
-            className="w-full max-w-[960px] h-9 sm:h-12 overflow-visible select-none"
+            className="w-full max-w-[960px] h-8 sm:h-11 overflow-visible select-none"
           >
             {/* Left Curvy Wavy Dashed Stitch Line */}
             <path
@@ -139,22 +149,15 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
 
             {/* Center Smiling 5-Petal Flower Mascot */}
             <g transform="translate(600, 24)" className="cursor-pointer group">
-              {/* 5 Rounded Petals */}
               <circle cx="0" cy="-11" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
               <circle cx="10.5" cy="-3.5" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
               <circle cx="6.5" cy="9" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
               <circle cx="-6.5" cy="9" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
               <circle cx="-10.5" cy="-3.5" r="7.5" fill="#F7BE44" stroke="#641623" strokeWidth="2.4" strokeLinejoin="round" />
-
-              {/* Inner Center Circle */}
               <circle cx="0" cy="0" r="8.5" fill="#FFF9F2" stroke="#641623" strokeWidth="2.4" />
-
-              {/* Smiling Face Details */}
               <circle cx="-2.6" cy="-1.5" r="1.3" fill="#641623" />
               <circle cx="2.6" cy="-1.5" r="1.3" fill="#641623" />
               <path d="M -2.2 2 Q 0 4.2 2.2 2" fill="none" stroke="#641623" strokeWidth="1.6" strokeLinecap="round" />
-
-              {/* Rosy Cheeks */}
               <circle cx="-4.8" cy="0.5" r="1.1" fill="#F472B6" />
               <circle cx="4.8" cy="0.5" r="1.1" fill="#F472B6" />
             </g>
@@ -172,8 +175,7 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
         </div>
 
         {/* 2. Heading with Whimsical Radiant Dashes: \ | /  shop the occasion  / | \ */}
-        <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mb-8 sm:mb-10 text-center">
-          {/* Left Radiant Dashes */}
+        <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 mb-5 sm:mb-7 text-center">
           <svg
             className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0"
             viewBox="0 0 32 32"
@@ -187,12 +189,10 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
             <line x1="14" y1="23" x2="6" y2="27" />
           </svg>
 
-          {/* Exact Heading */}
           <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl text-[#641623] tracking-tight">
             shop the occasion
           </h2>
 
-          {/* Right Radiant Dashes */}
           <svg
             className="w-4 h-4 sm:w-5 sm:h-5 text-[#641623] flex-shrink-0"
             viewBox="0 0 32 32"
@@ -207,118 +207,137 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
           </svg>
         </div>
 
-        {/* 3. The 5 Occasion Cards Grid with Smooth Horizontal Snap on Mobile */}
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex lg:grid lg:grid-cols-5 gap-4 sm:gap-5 lg:gap-6 overflow-x-auto lg:overflow-visible pb-4 pt-1 px-1 no-scrollbar snap-x snap-mandatory"
-        >
-          {OCCASIONS.map((item) => {
-            const isHovered = hoveredCard === item.id;
+        {/* 3. The 5 Occasion Cards - Mobile Matches Bestsellers View (w-[72vw], Card 2 Peeking) */}
+        <div className="relative w-full">
+          {/* Left Arrow Button (Desktop only) */}
+          <button
+            onClick={() => scroll('left')}
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            aria-label="Previous occasions"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
 
-            return (
-              <div
-                key={item.id}
-                onClick={() => onOccasionClick?.(item.id)}
-                onMouseEnter={() => setHoveredCard(item.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-                className="group flex-shrink-0 w-[185px] sm:w-[220px] lg:w-auto snap-center cursor-pointer flex flex-col rounded-[22px] sm:rounded-[28px] bg-[#FAF2E8]/80 hover:bg-[#FAF2E8] border-[2px] border-[#641623]/12 hover:border-[#641623]/30 shadow-[0_4px_16px_rgba(100,22,35,0.05)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.12)] hover:-translate-y-1.5 transition-all duration-300 overflow-hidden select-none"
-              >
-                {/* Image Container with Smooth Crossfade and Zoom on Hover */}
-                <div className="relative w-full aspect-[4/3.9] overflow-hidden rounded-t-[20px] sm:rounded-t-[26px] bg-white/60">
-                  {/* Default Primary Image */}
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
-                      isHovered
-                        ? 'opacity-0 scale-105'
-                        : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-105'
-                    }`}
-                    loading="lazy"
-                    decoding="async"
-                  />
+          {/* Cards Scroll Container */}
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="w-full flex items-stretch justify-start lg:justify-between gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-2 px-1 snap-x snap-mandatory scroll-smooth"
+          >
+            {OCCASIONS.map((item) => {
+              const isHovered = hoveredCard === item.id;
 
-                  {/* Secondary Alternate Image (Fades In Smoothly on Hover) */}
-                  <img
-                    src={item.hoverImage}
-                    alt={`${item.title} alternate lifestyle view`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
-                      isHovered
-                        ? 'opacity-100 scale-105'
-                        : 'opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105'
-                    }`}
-                    loading="lazy"
-                    decoding="async"
-                  />
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => onOccasionClick?.(item.id)}
+                  onMouseEnter={() => setHoveredCard(item.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="group w-[72vw] max-w-[310px] flex-shrink-0 sm:w-auto sm:flex-1 sm:min-w-[210px] md:min-w-[230px] lg:min-w-[240px] cursor-pointer flex flex-col snap-start sm:snap-center rounded-[24px] sm:rounded-[28px] bg-[#FAF2E8]/90 hover:bg-[#FAF2E8] border-[2px] border-[#641623]/15 hover:border-[#641623]/35 shadow-[0_4px_16px_rgba(100,22,35,0.06)] hover:shadow-[0_12px_28px_rgba(100,22,35,0.14)] hover:-translate-y-1.5 transition-all duration-300 overflow-hidden select-none"
+                >
+                  {/* Image Container with Real Knots & Co Product Images */}
+                  <div className="relative w-full aspect-[3/3.8] sm:aspect-[4/4.8] lg:aspect-[4/5] overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] bg-white">
+                    {/* Default Primary Real Product Image */}
+                    <img
+                      src={optimizeShopifyUrl(item.image, 600)}
+                      alt={item.title}
+                      className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
+                        isHovered
+                          ? 'opacity-0 scale-105'
+                          : 'opacity-100 scale-100 group-hover:opacity-0 group-hover:scale-105'
+                      }`}
+                      loading="lazy"
+                      decoding="async"
+                    />
 
-                  {/* Cute Occasion Floating Badge in Top-Right Corner */}
-                  <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 bg-white/90 backdrop-blur-sm px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-[#641623]/15 shadow-sm flex items-center gap-1 sm:gap-1.5 transition-transform duration-300 group-hover:scale-108 group-hover:bg-white">
-                    <span className="scale-80 sm:scale-100">{item.badgeIcon}</span>
-                    <span className="text-[9px] sm:text-[11px] font-bold text-[#641623] tracking-wide uppercase">
-                      {item.badgeLabel}
-                    </span>
+                    {/* Secondary Real Product Image (Hover View) */}
+                    <img
+                      src={optimizeShopifyUrl(item.hoverImage, 600)}
+                      alt={`${item.title} alternate view`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out ${
+                        isHovered
+                          ? 'opacity-100 scale-105'
+                          : 'opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105'
+                      }`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+
+                    {/* Cute Occasion Floating Badge in Top-Right Corner */}
+                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-10 bg-white/95 backdrop-blur-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-[#641623]/15 shadow-sm flex items-center gap-1.5 transition-transform duration-300 group-hover:scale-105 group-hover:bg-white">
+                      <span className="scale-90 sm:scale-100">{item.badgeIcon}</span>
+                      <span className="text-[10px] sm:text-[11px] font-bold text-[#641623] tracking-wide uppercase">
+                        {item.badgeLabel}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Bottom Occasion Pill Banner */}
+                  <div className="w-full p-2.5 sm:p-3.5 flex justify-center items-center bg-[#FAF2E8]">
+                    <div className="w-full py-2 sm:py-2.5 px-3 sm:px-4 rounded-full bg-[#FFFDF9] group-hover:bg-[#F7BE44] border-[1.8px] sm:border-2 border-[#641623]/25 group-hover:border-[#641623] shadow-sm flex items-center justify-center gap-1.5 transition-all duration-300">
+                      <span className="font-['Fredoka'] font-bold text-sm sm:text-base text-[#641623] capitalize tracking-wide leading-none pt-0.5 whitespace-nowrap">
+                        {item.title}
+                      </span>
+                      {/* Animated Arrow on Hover */}
+                      <svg
+                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#641623] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden sm:block"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Bottom Occasion Pill Banner */}
-                <div className="w-full p-2 sm:p-3 flex justify-center items-center bg-[#FAF2E8]/60">
-                  <div className="w-full py-1.5 sm:py-2.5 px-2.5 sm:px-3 rounded-full bg-[#FFFDF9] group-hover:bg-[#F7BE44] border-[1.8px] border-[#641623]/20 group-hover:border-[#641623] shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 transition-all duration-300">
-                    <span className="font-['Fredoka'] font-bold text-xs sm:text-base text-[#641623] capitalize tracking-wide leading-none pt-0.5 whitespace-nowrap">
-                      {item.title}
-                    </span>
-                    {/* Animated Arrow on Hover */}
-                    <svg
-                      className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#641623] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden sm:block"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {/* Right Arrow Button (Desktop only) */}
+          <button
+            onClick={() => scroll('right')}
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            aria-label="Next occasions"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
 
-        {/* 4. Mobile Carousel Pagination Dots */}
-        <div className="flex lg:hidden items-center justify-center gap-2 mt-5">
-          <button
-            onClick={() => scrollToSection(0)}
-            className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-              activeDot === 0
-                ? 'bg-[#641623] w-6'
-                : 'bg-[#641623]/30 hover:bg-[#641623]/60'
-            }`}
-            aria-label="Slide 1"
-          />
-          <button
-            onClick={() => scrollToSection(1)}
-            className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-              activeDot === 1
-                ? 'bg-[#641623] w-6'
-                : 'bg-[#641623]/30 hover:bg-[#641623]/60'
-            }`}
-            aria-label="Slide 2"
-          />
-          <button
-            onClick={() => scrollToSection(2)}
-            className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
-              activeDot === 2
-                ? 'bg-[#641623] w-6'
-                : 'bg-[#641623]/30 hover:bg-[#641623]/60'
-            }`}
-            aria-label="Slide 3"
-          />
+        {/* 4. Carousel Pagination Indicator Dots (Matching Bestsellers) */}
+        <div className="flex items-center justify-center gap-2 mt-5 sm:mt-8">
+          {OCCASIONS.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (scrollRef.current) {
+                  const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+                  scrollRef.current.scrollTo({
+                    left: (maxScroll / (OCCASIONS.length - 1)) * idx,
+                    behavior: 'smooth',
+                  });
+                }
+                setActiveDot(idx);
+              }}
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all cursor-pointer ${
+                activeDot === idx
+                  ? 'bg-[#641623] scale-110'
+                  : 'border-[1.8px] sm:border-2 border-[#641623]/50 bg-transparent'
+              }`}
+              aria-label={`Occasion ${idx + 1}`}
+            />
+          ))}
         </div>
 
-        {/* 5. Golden Wavy Sine Divider at Bottom (Reference) */}
-        <div className="w-full overflow-hidden flex justify-center mt-8 sm:mt-12" aria-hidden="true">
+        {/* 5. Golden Wavy Sine Divider at Bottom */}
+        <div className="w-full overflow-hidden flex justify-center mt-6 sm:mt-10" aria-hidden="true">
           <svg
             viewBox="0 0 1440 24"
             fill="none"
