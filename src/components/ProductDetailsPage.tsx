@@ -33,7 +33,8 @@ interface ProductDetailsPageProps {
   onNavigateHome?: () => void;
   onNavigateShop?: (category?: string) => void;
   onNavigateProduct?: (productId: string) => void;
-  onAddToCart?: (product: ShopProduct, quantity: number) => void;
+  onAddToCart?: (product: ShopProduct, quantity: number) => void | Promise<void>;
+  onBuyNow?: (product: ShopProduct, quantity: number) => void | Promise<void>;
 }
 
 const RECOMMENDED_BADGES = [
@@ -52,6 +53,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onNavigateShop,
   onNavigateProduct,
   onAddToCart,
+  onBuyNow,
 }) => {
   // Find product from Shopify data with robust matching (ID, shopifyId, handle, title)
   const product: ShopProduct = useMemo(() => {
@@ -117,6 +119,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
   const [addedToast, setAddedToast] = useState<boolean>(false);
+  const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
+  const [isBuyingNow, setIsBuyingNow] = useState<boolean>(false);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Safe image index guard in case image count shrinks
@@ -395,15 +399,35 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleAddToCartClick = () => {
-    onAddToCart?.(product, quantity);
-    setAddedToast(true);
-    if (toastTimeoutRef.current) {
-      clearTimeout(toastTimeoutRef.current);
+  const handleAddToCartClick = async () => {
+    if (isAddingToCart) return;
+    setIsAddingToCart(true);
+    try {
+      await onAddToCart?.(product, quantity);
+      setAddedToast(true);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => setAddedToast(false), 2400);
+    } catch (err) {
+      console.error('Add to cart failed:', err);
+      // Still show toast — count was updated optimistically
+      setAddedToast(true);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => setAddedToast(false), 2400);
+    } finally {
+      setIsAddingToCart(false);
     }
-    toastTimeoutRef.current = setTimeout(() => {
-      setAddedToast(false);
-    }, 2400);
+  };
+
+  const handleBuyNow = async () => {
+    if (isBuyingNow) return;
+    setIsBuyingNow(true);
+    try {
+      await onBuyNow?.(product, quantity);
+    } catch (err) {
+      console.error('Buy Now failed:', err);
+    } finally {
+      setIsBuyingNow(false);
+    }
   };
 
   useEffect(() => {
@@ -1013,38 +1037,84 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons: Add to Cart & Add to Wishlist */}
+            {/* Action Buttons: Add to Cart & Buy Now */}
             <div className="mt-4 sm:mt-5 space-y-2.5">
               {/* 1. Add to Cart Button */}
               <button
                 onClick={handleAddToCartClick}
                 type="button"
-                className="w-full py-3.5 sm:py-4 rounded-full bg-[#641623] hover:bg-[#52121c] active:scale-[0.99] text-white font-['Fredoka'] font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 transition-all shadow-[0_4px_16px_rgba(100,22,35,0.2)] cursor-pointer"
+                disabled={isAddingToCart}
+                className="w-full py-3.5 sm:py-4 rounded-full bg-[#641623] hover:bg-[#52121c] active:scale-[0.99] text-white font-['Fredoka'] font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 transition-all shadow-[0_4px_16px_rgba(100,22,35,0.2)] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <svg
-                  className="w-5 h-5 text-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                </svg>
-                <span>Add to Cart</span>
+                {isAddingToCart ? (
+                  <>
+                    <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                    </svg>
+                    <span>Adding...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-5 h-5 text-white"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="9" cy="21" r="1" />
+                      <circle cx="20" cy="21" r="1" />
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    <span>Add to Cart</span>
+                  </>
+                )}
               </button>
 
-              {/* 2. Add to Wishlist Button */}
+              {/* 2. Buy Now Button — creates cart & redirects to Shopify checkout */}
+              <button
+                onClick={handleBuyNow}
+                type="button"
+                disabled={isBuyingNow}
+                className="w-full py-3 sm:py-3.5 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-[0.99] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all border border-[#641623]/15 shadow-2xs cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isBuyingNow ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                    </svg>
+                    <span>Redirecting...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-4 h-4 text-[#641623]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    <span>Buy Now</span>
+                  </>
+                )}
+              </button>
+
+              {/* 3. Add to Wishlist — subtle text link below */}
               <button
                 onClick={toggleWishlist}
                 type="button"
-                className="w-full py-3 sm:py-3.5 rounded-full bg-[#FFE9A7] hover:bg-[#FDD874] active:scale-[0.99] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all border border-[#641623]/15 shadow-2xs cursor-pointer"
+                className="w-full py-2 text-[#641623]/65 font-['Fredoka'] font-medium text-sm flex items-center justify-center gap-1.5 hover:text-[#641623] transition-colors cursor-pointer"
               >
                 <svg
-                  className="w-4 h-4 text-[#641623]"
+                  className="w-3.5 h-3.5"
                   viewBox="0 0 24 24"
                   fill={isWishlist ? 'currentColor' : 'none'}
                   stroke="currentColor"
@@ -1054,7 +1124,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 >
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-                <span>{isWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
+                <span>{isWishlist ? '♡ In Wishlist' : '♡ Add to Wishlist'}</span>
               </button>
             </div>
 

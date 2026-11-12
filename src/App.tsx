@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { CartProvider, useCart } from './context/CartContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
@@ -28,8 +29,8 @@ const CATEGORY_MAP: Record<string, string> = {
   'accessories': 'Accessories',
 };
 
-export default function App() {
-  const [cartCount, setCartCount] = useState<number>(0);
+function AppInner() {
+  const { cartCount, addToShopifyCart, buyNow, incrementCount } = useCart();
 
   // Client-side page routing: 'home' | 'shop' | 'product'
   const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
@@ -191,7 +192,7 @@ export default function App() {
               <BestsellersSection
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
-                onAddToCart={() => setCartCount((prev) => prev + 1)}
+                onAddToCart={() => incrementCount(1)}
               />
             </ScrollReveal>
 
@@ -225,7 +226,7 @@ export default function App() {
           <AllProductsShopSection
             initialCategory={selectedCategory}
             onProductClick={(id) => navigateTo('product', id)}
-            onAddToCart={() => setCartCount((prev) => prev + 1)}
+            onAddToCart={() => incrementCount(1)}
             onNavigateHome={() => navigateTo('home')}
           />
         ) : (
@@ -240,7 +241,21 @@ export default function App() {
               onNavigateHome={() => navigateTo('home')}
               onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
               onNavigateProduct={(id) => navigateTo('product', id)}
-              onAddToCart={(_product, qty) => setCartCount((prev) => prev + qty)}
+              onAddToCart={async (product, qty) => {
+                if (product.variantId) {
+                  await addToShopifyCart(product.variantId, qty);
+                } else {
+                  incrementCount(qty);
+                }
+              }}
+              onBuyNow={async (product, qty) => {
+                if (product.variantId) {
+                  await buyNow(product.variantId, qty);
+                } else {
+                  // Fallback: open Shopify store in new tab if no variantId
+                  window.open('https://knotsnco.myshopify.com', '_blank', 'noopener');
+                }
+              }}
             />
 
             {/* Reels / Community Section ("from our community ♡" + Instagram Link + Autoplaying 9:16 Video Cards) */}
@@ -261,5 +276,13 @@ export default function App() {
         <Footer onNavigate={navigateTo} />
       </ScrollReveal>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <CartProvider>
+      <AppInner />
+    </CartProvider>
   );
 }
