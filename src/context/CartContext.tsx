@@ -1,45 +1,79 @@
 /**
- * CartContext — Shopify Storefront Cart State
- * Persists cartId + checkoutUrl in localStorage.
- * Exposes: cartCount, cartId, checkoutUrl, addToShopifyCart, buyNow
+ * CartContext — Shopify Storefront Cart State & Operations
+ * Manages live cart lines, subtotal, totalQuantity, checkoutUrl, and slide-over drawer visibility.
  */
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { shopifyFetch } from '../services/shopify';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface CartLine {
-  merchandiseId: string;
+export interface CartItemDetails {
+  lineId: string;
+  variantId: string;
+  title: string;
+  subtitle?: string;
+  price: number;
   quantity: number;
+  image: string;
+  handle?: string;
 }
 
-interface ShopifyCart {
-  id: string;
-  checkoutUrl: string;
-  totalQuantity: number;
+export interface CartCost {
+  subtotal: number;
+  total: number;
+  currencyCode: string;
 }
 
-interface CartCreateResponse {
-  cartCreate: {
-    cart: ShopifyCart | null;
-    userErrors: Array<{ field: string[]; message: string }>;
-  };
+interface CartContextValue {
+  cartCount: number;
+  cartId: string | null;
+  checkoutUrl: string | null;
+  items: CartItemDetails[];
+  cost: CartCost;
+  isLoading: boolean;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+  addToShopifyCart: (variantId: string, quantity: number) => Promise<number>;
+  updateLineQuantity: (lineId: string, quantity: number) => Promise<void>;
+  removeLine: (lineId: string) => Promise<void>;
+  buyNow: (variantId: string, quantity: number) => Promise<void>;
+  proceedToCheckout: () => void;
+  incrementCount: (qty?: number) => void;
 }
 
-interface CartLinesAddResponse {
-  cartLinesAdd: {
-    cart: ShopifyCart | null;
-    userErrors: Array<{ field: string[]; message: string }>;
-  };
-}
-
-// ─── GraphQL ─────────────────────────────────────────────────────────────────
+// ─── GraphQL Snippets ────────────────────────────────────────────────────────
 
 const CART_FIELDS = `
   id
   checkoutUrl
   totalQuantity
+  cost {
+    subtotalAmount { amount currencyCode }
+    totalAmount { amount currencyCode }
+  }
+  lines(first: 30) {
+    edges {
+      node {
+        id
+        quantity
+        merchandise {
+          ... on ProductVariant {
+            id
+            title
+            price { amount currencyCode }
+            product {
+              id
+              title
+              handle
+              featuredImage { url altText }
+            }
+          }
+        }
+      }
+    }
+  }
 `;
 
 const CART_CREATE_MUTATION = `
@@ -60,121 +94,322 @@ const CART_LINES_ADD_MUTATION = `
   }
 `;
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+const CART_LINES_UPDATE_MUTATION = `
+  mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
+      cart { ${CART_FIELDS} }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_LINES_REMOVE_MUTATION = `
+  mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart { ${CART_FIELDS} }
+      userErrors { field message }
+    }
+  }
+`;
+
+const GET_CART_QUERY = `
+  query getCart($id: ID!) {
+    cart(id: $id) {
+      ${CART_FIELDS}
+    }
+  }
+`;
+
+// ─── Raw GraphQL Types ───────────────────────────────────────────────────────
+
+interface RawShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  cost: {
+    subtotalAmount: { amount: string; currencyCode: string };
+    totalAmount: { amount: string; currencyCode: string };
+  };
+  lines: {
+    edges: Array<{
+      node: {
+        id: string;
+        quantity: number;
+        merchandise: {
+          id: string;
+          title: string;
+          price: { amount: string; currencyCode: string };
+          product: {
+            id: string;
+            title: string;
+            handle: string;
+            featuredImage?: { url: string; altText?: string | null };
+          };
+        };
+      };
+    }>;
+  };
+}
+
+// ─── LocalStorage Keys ───────────────────────────────────────────────────────
 
 const LS_CART_ID = 'knotsnco_cart_id';
 const LS_CART_URL = 'knotsnco_cart_url';
 const LS_CART_QTY = 'knotsnco_cart_qty';
 
-function readLocalCart(): { cartId: string | null; checkoutUrl: string | null; qty: number } {
-  try {
-    return {
-      cartId: localStorage.getItem(LS_CART_ID),
-      checkoutUrl: localStorage.getItem(LS_CART_URL),
-      qty: parseInt(localStorage.getItem(LS_CART_QTY) || '0', 10) || 0,
-    };
-  } catch {
-    return { cartId: null, checkoutUrl: null, qty: 0 };
-  }
-}
+// ─── Parser Helper ───────────────────────────────────────────────────────────
 
-function saveLocalCart(cart: ShopifyCart) {
-  try {
-    localStorage.setItem(LS_CART_ID, cart.id);
-    localStorage.setItem(LS_CART_URL, cart.checkoutUrl);
-    localStorage.setItem(LS_CART_QTY, String(cart.totalQuantity));
-  } catch {}
+function parseShopifyCart(raw: RawShopifyCart): {
+  items: CartItemDetails[];
+  cost: CartCost;
+  totalQuantity: number;
+} {
+  const items: CartItemDetails[] = (raw.lines?.edges || []).map((edge) => {
+    const node = edge.node;
+    const merch = node.merchandise;
+    const product = merch.product;
+    return {
+      lineId: node.id,
+      variantId: merch.id,
+      title: product?.title || 'Crochet Artisan Item',
+      subtitle: merch.title && merch.title !== 'Default Title' ? merch.title : undefined,
+      price: parseFloat(merch.price.amount) || 0,
+      quantity: node.quantity,
+      image: product?.featuredImage?.url || '',
+      handle: product?.handle,
+    };
+  });
+
+  const cost: CartCost = {
+    subtotal: parseFloat(raw.cost?.subtotalAmount?.amount) || 0,
+    total: parseFloat(raw.cost?.totalAmount?.amount) || 0,
+    currencyCode: raw.cost?.totalAmount?.currencyCode || 'INR',
+  };
+
+  return { items, cost, totalQuantity: raw.totalQuantity || 0 };
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
-interface CartContextValue {
-  cartCount: number;
-  cartId: string | null;
-  checkoutUrl: string | null;
-  /** Add item to Shopify cart. Returns updated totalQuantity. */
-  addToShopifyCart: (variantId: string, quantity: number) => Promise<number>;
-  /** Create a fresh one-item cart and redirect to Shopify checkout. */
-  buyNow: (variantId: string, quantity: number) => Promise<void>;
-  /** Increment local count without API (fallback for products without variantId). */
-  incrementCount: (qty?: number) => void;
-}
-
 const CartContext = createContext<CartContextValue | null>(null);
 
-// ─── Provider ─────────────────────────────────────────────────────────────────
-
 export function CartProvider({ children }: { children: ReactNode }) {
-  const local = readLocalCart();
-  const [cartId, setCartId] = useState<string | null>(local.cartId);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(local.checkoutUrl);
-  const [cartCount, setCartCount] = useState<number>(local.qty);
-
-  /** Internal: create a brand new Shopify cart */
-  const createCart = useCallback(async (lines: CartLine[]): Promise<ShopifyCart> => {
-    const data = await shopifyFetch<CartCreateResponse>(CART_CREATE_MUTATION, { lines });
-    const cart = data.cartCreate?.cart;
-    const errors = data.cartCreate?.userErrors;
-    if (!cart) {
-      const msg = errors?.map((e) => e.message).join(', ') || 'Could not create Shopify cart';
-      throw new Error(msg);
+  const [cartId, setCartId] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(LS_CART_ID);
+    } catch {
+      return null;
     }
-    return cart;
+  });
+
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(LS_CART_URL);
+    } catch {
+      return null;
+    }
+  });
+
+  const [cartCount, setCartCount] = useState<number>(() => {
+    try {
+      return parseInt(localStorage.getItem(LS_CART_QTY) || '0', 10) || 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  const [items, setItems] = useState<CartItemDetails[]>([]);
+  const [cost, setCost] = useState<CartCost>({ subtotal: 0, total: 0, currencyCode: 'INR' });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+
+  const openCart = useCallback(() => setIsCartOpen(true), []);
+  const closeCart = useCallback(() => setIsCartOpen(false), []);
+
+  const saveCartToStorage = useCallback((raw: RawShopifyCart) => {
+    try {
+      localStorage.setItem(LS_CART_ID, raw.id);
+      localStorage.setItem(LS_CART_URL, raw.checkoutUrl);
+      localStorage.setItem(LS_CART_QTY, String(raw.totalQuantity));
+    } catch {}
   }, []);
 
-  /** Internal: add lines to existing cart */
-  const addLinesToCart = useCallback(async (id: string, lines: CartLine[]): Promise<ShopifyCart> => {
-    const data = await shopifyFetch<CartLinesAddResponse>(CART_LINES_ADD_MUTATION, {
-      cartId: id,
-      lines,
-    });
-    const cart = data.cartLinesAdd?.cart;
-    const errors = data.cartLinesAdd?.userErrors;
-    if (!cart) {
-      const msg = errors?.map((e) => e.message).join(', ') || 'Could not add to Shopify cart';
-      throw new Error(msg);
-    }
-    return cart;
+  const clearCartFromStorage = useCallback(() => {
+    try {
+      localStorage.removeItem(LS_CART_ID);
+      localStorage.removeItem(LS_CART_URL);
+      localStorage.removeItem(LS_CART_QTY);
+    } catch {}
+    setCartId(null);
+    setCheckoutUrl(null);
+    setCartCount(0);
+    setItems([]);
+    setCost({ subtotal: 0, total: 0, currencyCode: 'INR' });
   }, []);
 
-  /** Public: Add to cart (creates cart on first use, otherwise appends) */
+  const applyCart = useCallback(
+    (raw: RawShopifyCart) => {
+      setCartId(raw.id);
+      setCheckoutUrl(raw.checkoutUrl);
+      setCartCount(raw.totalQuantity);
+      saveCartToStorage(raw);
+
+      const parsed = parseShopifyCart(raw);
+      setItems(parsed.items);
+      setCost(parsed.cost);
+    },
+    [saveCartToStorage]
+  );
+
+  // Sync with Shopify Cart on initial load
+  useEffect(() => {
+    if (!cartId) return;
+
+    let isMounted = true;
+    async function loadCart() {
+      try {
+        const data = await shopifyFetch<{ cart: RawShopifyCart | null }>(GET_CART_QUERY, { id: cartId });
+        if (!isMounted) return;
+        if (data.cart) {
+          applyCart(data.cart);
+        } else {
+          // Cart likely expired on Shopify side
+          clearCartFromStorage();
+        }
+      } catch {
+        // Network or API error; keep local state for now
+      }
+    }
+
+    loadCart();
+    return () => {
+      isMounted = false;
+    };
+  }, [cartId, applyCart, clearCartFromStorage]);
+
+  /** Add item to Shopify Cart */
   const addToShopifyCart = useCallback(
     async (variantId: string, quantity: number): Promise<number> => {
-      const lines: CartLine[] = [{ merchandiseId: variantId, quantity }];
-      let cart: ShopifyCart;
+      setIsLoading(true);
+      try {
+        const lines = [{ merchandiseId: variantId, quantity }];
+        let activeCart: RawShopifyCart | null = null;
 
-      if (cartId) {
-        try {
-          cart = await addLinesToCart(cartId, lines);
-        } catch {
-          // Cart may have expired — create a fresh one
-          cart = await createCart(lines);
+        if (cartId) {
+          try {
+            const res = await shopifyFetch<{
+              cartLinesAdd: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+            }>(CART_LINES_ADD_MUTATION, { cartId, lines });
+
+            if (res.cartLinesAdd?.cart) {
+              activeCart = res.cartLinesAdd.cart;
+            }
+          } catch {
+            // Cart might have expired, will create fresh cart below
+          }
         }
-      } else {
-        cart = await createCart(lines);
+
+        if (!activeCart) {
+          const res = await shopifyFetch<{
+            cartCreate: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+          }>(CART_CREATE_MUTATION, { lines });
+
+          activeCart = res.cartCreate?.cart || null;
+        }
+
+        if (!activeCart) {
+          throw new Error('Failed to update Shopify cart');
+        }
+
+        applyCart(activeCart);
+        return activeCart.totalQuantity;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cartId, applyCart]
+  );
+
+  /** Update quantity of an existing line item */
+  const updateLineQuantity = useCallback(
+    async (lineId: string, quantity: number) => {
+      if (!cartId) return;
+      setIsLoading(true);
+      try {
+        if (quantity <= 0) {
+          const res = await shopifyFetch<{
+            cartLinesRemove: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+          }>(CART_LINES_REMOVE_MUTATION, { cartId, lineIds: [lineId] });
+          if (res.cartLinesRemove?.cart) {
+            applyCart(res.cartLinesRemove.cart);
+          }
+        } else {
+          const res = await shopifyFetch<{
+            cartLinesUpdate: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+          }>(CART_LINES_UPDATE_MUTATION, {
+            cartId,
+            lines: [{ id: lineId, quantity }],
+          });
+          if (res.cartLinesUpdate?.cart) {
+            applyCart(res.cartLinesUpdate.cart);
+          }
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cartId, applyCart]
+  );
+
+  /** Remove line item completely */
+  const removeLine = useCallback(
+    async (lineId: string) => {
+      if (!cartId) return;
+      setIsLoading(true);
+      try {
+        const res = await shopifyFetch<{
+          cartLinesRemove: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+        }>(CART_LINES_REMOVE_MUTATION, { cartId, lineIds: [lineId] });
+        if (res.cartLinesRemove?.cart) {
+          applyCart(res.cartLinesRemove.cart);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cartId, applyCart]
+  );
+
+  /** Buy Now: creates a dedicated single-checkout cart and directly redirects */
+  const buyNow = useCallback(async (variantId: string, quantity: number) => {
+    setIsLoading(true);
+    try {
+      const res = await shopifyFetch<{
+        cartCreate: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+      }>(CART_CREATE_MUTATION, {
+        lines: [{ merchandiseId: variantId, quantity }],
+      });
+
+      const freshCart = res.cartCreate?.cart;
+      if (!freshCart || !freshCart.checkoutUrl) {
+        throw new Error('Failed to generate Shopify checkout URL');
       }
 
-      setCartId(cart.id);
-      setCheckoutUrl(cart.checkoutUrl);
-      setCartCount(cart.totalQuantity);
-      saveLocalCart(cart);
-      return cart.totalQuantity;
-    },
-    [cartId, createCart, addLinesToCart]
-  );
+      // Direct redirection to Shopify's secure hosted payment page
+      window.location.href = freshCart.checkoutUrl;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  /** Public: Buy Now — ephemeral cart → redirect to checkout */
-  const buyNow = useCallback(
-    async (variantId: string, quantity: number): Promise<void> => {
-      const lines: CartLine[] = [{ merchandiseId: variantId, quantity }];
-      const cart = await createCart(lines);
-      // Redirect immediately to Shopify's hosted checkout
-      window.location.href = cart.checkoutUrl;
-    },
-    [createCart]
-  );
+  /** Redirect to checkout URL for current active cart */
+  const proceedToCheckout = useCallback(() => {
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
+  }, [checkoutUrl]);
 
-  /** Fallback count increment (no Shopify API — used when variantId unavailable) */
+  /** Fallback count increment */
   const incrementCount = useCallback((qty = 1) => {
     setCartCount((prev) => {
       const next = prev + qty;
@@ -187,14 +422,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ cartCount, cartId, checkoutUrl, addToShopifyCart, buyNow, incrementCount }}
+      value={{
+        cartCount,
+        cartId,
+        checkoutUrl,
+        items,
+        cost,
+        isLoading,
+        isCartOpen,
+        openCart,
+        closeCart,
+        addToShopifyCart,
+        updateLineQuantity,
+        removeLine,
+        buyNow,
+        proceedToCheckout,
+        incrementCount,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
 }
-
-// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);

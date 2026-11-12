@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useCart } from '../context/CartContext';
 import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
 import {
   SparkleIcon,
@@ -122,6 +123,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   const [isBuyingNow, setIsBuyingNow] = useState<boolean>(false);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { openCart } = useCart();
 
   // Safe image index guard in case image count shrinks
   const safeImageIndex = activeImageIndex < images.length ? activeImageIndex : 0;
@@ -650,21 +652,33 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     <article className="relative w-full bg-[#FAF4ED]/85 text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
       {/* Toast Notification for Add to Cart */}
       {addedToast && (
-        <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
-          <svg
-            className="w-5 h-5 text-[#F7BE44] flex-shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-xl flex items-center justify-between gap-3 animate-bounce">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <svg
+              className="w-5 h-5 text-[#F7BE44] flex-shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span className="font-medium text-xs sm:text-sm truncate">
+              Added {quantity} {quantity > 1 ? 'items' : 'item'} to bag!
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              setAddedToast(false);
+              openCart();
+            }}
+            type="button"
+            className="px-3 py-1 rounded-full bg-[#FAF4ED] text-[#641623] font-bold text-xs uppercase tracking-wider hover:bg-[#FFE485] active:scale-95 transition-all flex-shrink-0 cursor-pointer"
           >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span className="font-medium text-sm">
-            Added {quantity} {quantity > 1 ? 'items' : 'item'} to cart!
-          </span>
+            View Bag →
+          </button>
         </div>
       )}
 

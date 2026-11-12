@@ -194,3 +194,4 @@ export const CheckCircleIcon: React.FC<IconProps> = ({ className = 'w-4 h-4' }) 
     <polyline points="8.5 12.2 11 14.7 15.8 9.5" stroke="#236E38" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
