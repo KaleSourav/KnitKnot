@@ -13,6 +13,13 @@ interface BannerSlide {
   category: string;
 }
 
+interface MobileBannerSlide {
+  id: string;
+  src: string;
+  alt: string;
+  category: string;
+}
+
 const BANNER_SLIDES: BannerSlide[] = [
   {
     id: 'hero-main',
@@ -44,11 +51,87 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
 ];
 
-const SLIDE_DURATION_MS = 5000; // Exact 5-second automatic rotation
+// Exact 11-slide sequence requested for mobile landing page
+const MOBILE_BANNER_SLIDES: MobileBannerSlide[] = [
+  {
+    id: 'mob-1',
+    src: '/banners-mobile/banner-mobile-1.jpg',
+    alt: 'Handmade crochet treasures - 100% handcrafted with love by Knots & Co',
+    category: 'all',
+  },
+  {
+    id: 'mob-2',
+    src: '/banners-mobile/banner-mobile-2.jpg',
+    alt: 'Handcrafted crochet flower bouquets and gifts',
+    category: 'Bouquets',
+  },
+  {
+    id: 'mob-3',
+    src: '/banners-mobile/banner-mobile-3.jpg',
+    alt: 'Handmade crochet plushies and accessories',
+    category: 'Plushies',
+  },
+  {
+    id: 'mob-4',
+    src: '/banners-mobile/banner-mobile-4.jpg',
+    alt: 'Everlasting crochet blooms collection',
+    category: 'Flowers',
+  },
+  {
+    id: 'mob-5',
+    src: '/banners-mobile/banner-mobile-5.jpg',
+    alt: 'Crochet desk decor and flower pots',
+    category: 'Flower Pots',
+  },
+  {
+    id: 'mob-6',
+    src: '/banners-mobile/banner-mobile-6.jpg',
+    alt: 'Adorable handmade crochet bag charms and keychains',
+    category: 'Keychains',
+  },
+  {
+    id: 'mob-7',
+    src: '/banners-mobile/banner-mobile-7.jpg',
+    alt: 'Knots & Co artisan collection',
+    category: 'all',
+  },
+  {
+    id: 'mob-8',
+    src: '/banners-mobile/banner-mobile-8.jpg',
+    alt: 'Handmade crochet gifts for loved ones',
+    category: 'all',
+  },
+  {
+    id: 'mob-9',
+    src: '/banners-mobile/banner-mobile-9.jpg',
+    alt: 'Crafted with premium soft combed cotton yarn',
+    category: 'all',
+  },
+  {
+    id: 'mob-10',
+    src: '/banners-mobile/banner-mobile-10.jpg',
+    alt: 'Special handcrafted crochet occasions gifts',
+    category: 'all',
+  },
+  {
+    id: 'mob-11',
+    src: '/banners-mobile/banner-mobile-11.jpg',
+    alt: 'Made by hand, made with love - Knots & Co',
+    category: 'all',
+  },
+];
+
+const SLIDE_DURATION_MS = 5000; // Desktop: 5-second rotation
+const MOBILE_SLIDE_DURATION_MS = 4500; // Mobile: 4.5-second rotation
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
+
+  // Mobile slideshow state & swipe handling
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const mobileTouchStartX = useRef<number | null>(null);
+  const mobileHasSwiped = useRef<boolean>(false);
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % BANNER_SLIDES.length);
@@ -62,7 +145,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
     setCurrentIndex(index);
   }, []);
 
-  // Automatic slideshow loop: reliably triggers every 5 seconds without stopping on mouse hover
+  // Desktop automatic slideshow loop: 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       goToNext();
@@ -71,7 +154,46 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
     return () => clearInterval(timer);
   }, [currentIndex, goToNext]);
 
+  // Mobile automatic slideshow loop: 4.5 seconds with crossfade
+  const goToNextMobile = useCallback(() => {
+    setMobileIndex((prev) => (prev + 1) % MOBILE_BANNER_SLIDES.length);
+  }, []);
+
+  const goToPrevMobile = useCallback(() => {
+    setMobileIndex((prev) => (prev - 1 + MOBILE_BANNER_SLIDES.length) % MOBILE_BANNER_SLIDES.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      goToNextMobile();
+    }, MOBILE_SLIDE_DURATION_MS);
+
+    return () => clearInterval(timer);
+  }, [mobileIndex, goToNextMobile]);
+
   // Handle touch swiping on mobile
+  const handleMobileTouchStart = (e: React.TouchEvent) => {
+    mobileTouchStartX.current = e.touches[0].clientX;
+    mobileHasSwiped.current = false;
+  };
+
+  const handleMobileTouchEnd = (e: React.TouchEvent) => {
+    if (mobileTouchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = mobileTouchStartX.current - touchEndX;
+
+    if (Math.abs(diff) > 35) {
+      mobileHasSwiped.current = true;
+      if (diff > 0) {
+        goToNextMobile();
+      } else {
+        goToPrevMobile();
+      }
+    }
+    mobileTouchStartX.current = null;
+  };
+
+  // Handle touch swiping on desktop/tablet
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -101,53 +223,99 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
         }
       `}</style>
 
-      {/* Mobile View: Dedicated Portrait Hero Image matching the Reference (namimatcha style) */}
+      {/* Mobile View: 11-Slide Automatic Carousel with Silky Crossfade Transition */}
       <div
-        className="block sm:hidden relative w-full aspect-[1086/1448] overflow-hidden bg-[#FAF4ED] select-none cursor-pointer"
-        onClick={() => onShopClick?.('all')}
-        role="button"
-        tabIndex={0}
-        aria-label="Handmade Crochet Treasures with Love - Shop All Collections"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onShopClick?.('all');
-          }
-        }}
+        className="block sm:hidden relative w-full aspect-[1086/1448] overflow-hidden bg-[#FAF4ED] select-none"
+        onTouchStart={handleMobileTouchStart}
+        onTouchEnd={handleMobileTouchEnd}
       >
-        <picture>
-          <source srcSet="/banners/hero-banner-mobile.webp" type="image/webp" />
-          <img
-            src="/hero-banner-mobile.png"
-            alt="Handmade Crochet Treasures with Love - Little things, made with lots of love"
-            className="w-full h-full object-cover block select-none pointer-events-none"
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
-            draggable={false}
-          />
-        </picture>
+        {/* Stacked Mobile Slides with Crossfade */}
+        {MOBILE_BANNER_SLIDES.map((slide, index) => {
+          const isActive = index === mobileIndex;
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out cursor-pointer ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+              onClick={() => {
+                if (!mobileHasSwiped.current) {
+                  onShopClick?.(slide.category || 'all');
+                }
+              }}
+              aria-hidden={!isActive}
+              role="button"
+              tabIndex={isActive ? 0 : -1}
+              aria-label={slide.alt}
+              onKeyDown={(e) => {
+                if (isActive && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  onShopClick?.(slide.category || 'all');
+                }
+              }}
+            >
+              <img
+                src={slide.src}
+                alt={slide.alt}
+                className="w-full h-full object-cover select-none block"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                decoding={index === 0 ? 'sync' : 'async'}
+                draggable={false}
+              />
+            </div>
+          );
+        })}
 
-        {/* Clickable Hotspot on the "Explore Collections →" Pill Button */}
+        {/* Left Arrow Button for Mobile */}
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            onShopClick?.('all');
+            goToPrevMobile();
           }}
-          className="absolute z-20 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#811B2B] active:scale-95 transition-transform"
-          style={{
-            left: '4.6%',
-            top: '38.3%',
-            width: '36.4%',
-            height: '4.8%',
-          }}
-          aria-label="Explore Collections"
+          aria-label="Previous mobile banner"
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/70 hover:bg-white text-[#641623] shadow-xs backdrop-blur-xs flex items-center justify-center transition-all active:scale-90 cursor-pointer"
         >
-          <span className="sr-only">Explore Collections</span>
-          {/* Subtle press / hover feedback */}
-          <span className="absolute inset-0 rounded-full border-2 border-transparent active:border-[#811B2B]/40 active:bg-white/20 transition-all duration-150" />
+          <ChevronLeft className="w-4 h-4 stroke-[2.4]" />
         </button>
+
+        {/* Right Arrow Button for Mobile */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            goToNextMobile();
+          }}
+          aria-label="Next mobile banner"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/70 hover:bg-white text-[#641623] shadow-xs backdrop-blur-xs flex items-center justify-center transition-all active:scale-90 cursor-pointer"
+        >
+          <ChevronRight className="w-4 h-4 stroke-[2.4]" />
+        </button>
+
+        {/* 11 Slide Indicator Dots for Mobile */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/55 backdrop-blur-md border border-white/40 shadow-2xs pointer-events-auto">
+          {MOBILE_BANNER_SLIDES.map((slide, index) => {
+            const isActive = index === mobileIndex;
+            return (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMobileIndex(index);
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={isActive ? 'true' : 'false'}
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer overflow-hidden ${
+                  isActive
+                    ? 'w-4 bg-[#641623]'
+                    : 'w-1.5 bg-[#641623]/30 hover:bg-[#641623]/60'
+                }`}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* Desktop View: Full-width Edge-to-Edge 4-Slide Carousel (2:1 aspect ratio) */}
