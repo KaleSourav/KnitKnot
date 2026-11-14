@@ -4,9 +4,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop' | 'product';
+  currentPage?: 'home' | 'shop' | 'product' | 'artisans';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop' | 'product', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,16 +31,16 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'accessories', label: 'accessories', count: 28, category: 'Accessories' },
   ];
 
-  // Smooth scroll handler for "Artisans" section (The Hands Behind Every Stitch)
+  // Smooth scroll handler for "Story" section on Homepage
   const handleStoryClick = () => {
     if (currentPage !== 'home') {
       onNavigate?.('home');
       setTimeout(() => {
-        const el = document.getElementById('section-artisans') || document.getElementById('section-story');
+        const el = document.getElementById('section-story');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     } else {
-      const el = document.getElementById('section-artisans') || document.getElementById('section-story');
+      const el = document.getElementById('section-story');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
@@ -218,24 +218,40 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Shop all</span>
           </button>
 
-          {/* 2. Artisans (Redirects/Scrolls to "The Hands Behind Every Stitch" Section) */}
+          {/* 2. Behind The Stitches (Dedicated Artisan Story Page) */}
           <button
             type="button"
-            onClick={handleStoryClick}
-            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
-            title="The Hands Behind Every Stitch - Our Artisans"
+            onClick={() => onNavigate?.('artisans')}
+            className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer select-none whitespace-nowrap ${
+              currentPage === 'artisans'
+                ? 'bg-[#811B2B] text-white shadow-xs scale-102'
+                : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
+            }`}
+            title="Behind The Stitches - Our Artisans (200+)"
           >
             <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12"
+              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12 ${
+                currentPage === 'artisans' ? 'text-white' : 'text-[#811B2B]'
+              }`}
               viewBox="0 0 24 24"
               fill="currentColor"
             >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>Artisans</span>
+            <span>Behind The Stitches</span>
           </button>
 
-          {/* 3. Contact us (Redirects/Scrolls to Footer) */}
+          {/* 3. Story (Scrolls to Brand Story on Homepage) */}
+          <button
+            type="button"
+            onClick={handleStoryClick}
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
+            title="Knots & Co. Brand Story"
+          >
+            <span>Story</span>
+          </button>
+
+          {/* 4. Contact us (Redirects/Scrolls to Footer) */}
           <button
             type="button"
             onClick={handleContactClick}
@@ -381,7 +397,34 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xs opacity-70">→</span>
               </button>
 
-              {/* Our Artisans & Story (The Hands Behind Every Stitch) */}
+              {/* Behind The Stitches (Dedicated Artisan Story Page) */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigate?.('artisans');
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between cursor-pointer group ${
+                  currentPage === 'artisans'
+                    ? 'bg-[#811B2B] text-white shadow-xs'
+                    : 'text-[#641623] hover:bg-[#FFF5CC]'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg
+                    className={`w-5 h-5 transition-transform duration-200 group-hover:scale-120 group-hover:rotate-12 ${
+                      currentPage === 'artisans' ? 'text-white' : 'text-[#811B2B]'
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                  <span>behind the stitches</span>
+                </span>
+                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
+              </button>
+
+              {/* Our Story (Knots & Co Brand Story on Homepage) */}
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -390,12 +433,12 @@ export const Header: React.FC<HeaderProps> = ({
                 className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between text-[#641623] hover:bg-[#FFF5CC] cursor-pointer group"
               >
                 <span className="flex items-center gap-2.5">
-                  <svg className="w-5 h-5 text-[#811B2B] transition-transform duration-200 group-hover:scale-120 group-hover:rotate-12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  <svg className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
-                  <span>our artisans &amp; story</span>
+                  <span>our story</span>
                 </span>
-                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
+                <span className="text-xs opacity-70">→</span>
               </button>
 
               {/* Contact Us */}

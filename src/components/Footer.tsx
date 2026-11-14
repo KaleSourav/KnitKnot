@@ -24,7 +24,7 @@ const FOOTER_SCALLOP_WAVE =
   'L 1440,60 Z';
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'shop' | 'product', category?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans', category?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
@@ -346,9 +346,26 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-2 text-sm sm:text-base text-white/80 lowercase">
                   <li>
-                    <a href="#story" className="hover:text-white transition-colors duration-150">
+                    <button
+                      onClick={() => onNavigate?.('artisans')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      behind the stitches (200+)
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        onNavigate?.('home');
+                        setTimeout(() => {
+                          const el = document.getElementById('section-story');
+                          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 150);
+                      }}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
                       our story
-                    </a>
+                    </button>
                   </li>
                   <li>
                     <a href="#custom" className="hover:text-white transition-colors duration-150">

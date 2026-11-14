@@ -8,7 +8,8 @@ import { HeroBanner } from './components/HeroBanner';
 import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
-import { TheHandsBehindEveryStitchSection } from './components/TheHandsBehindEveryStitchSection';
+import { OurStorySection } from './components/OurStorySection';
+import { BehindTheStitchesPage } from './components/BehindTheStitchesPage';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
@@ -35,12 +36,13 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
+      if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
       return 'home';
     }
     return 'home';
@@ -102,6 +104,9 @@ function AppInner() {
         } else {
           setSelectedCategory('all');
         }
+      } else if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) {
+        setCurrentPage('artisans');
+        setSelectedProductId(null);
       } else {
         setCurrentPage('home');
         setSelectedProductId(null);
@@ -113,7 +118,7 @@ function AppInner() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -133,6 +138,9 @@ function AppInner() {
     } else if (page === 'product') {
       setSelectedProductId(param);
       window.location.hash = `/product?id=${encodeURIComponent(param)}`;
+    } else if (page === 'artisans') {
+      setSelectedProductId(null);
+      window.location.hash = '/behind-the-stitches';
     }
 
     // Scroll smoothly to top on page change
@@ -206,8 +214,10 @@ function AppInner() {
               />
             </ScrollReveal>
 
-            {/* Storytelling Section: The Hands Behind Every Stitch (Nanis, Daadis, Aunties & Artisans) */}
-            <TheHandsBehindEveryStitchSection onStoryClick={() => navigateTo('shop', 'all')} />
+            {/* Storytelling Section: Original Knots & Co Brand Story ("A Little Dream, A Lot of Love ♡") */}
+            <ScrollReveal id="section-story" yOffset={24} duration={0.45}>
+              <OurStorySection onStoryClick={() => navigateTo('artisans')} />
+            </ScrollReveal>
 
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
             <ScrollReveal id="section-occasions" yOffset={24} duration={0.45}>
@@ -242,6 +252,15 @@ function AppInner() {
               }
             }}
             onNavigateHome={() => navigateTo('home')}
+          />
+        ) : currentPage === 'artisans' ? (
+          /* =========================================================================
+             DEDICATED BEHIND THE STITCHES PAGE VIEW
+             Celebrating Nanis, Daadis, Aunties & Artisans ("Every stitch has a story.")
+             ========================================================================= */
+          <BehindTheStitchesPage
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
           />
         ) : (
           /* =========================================================================
