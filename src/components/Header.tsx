@@ -31,16 +31,16 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'accessories', label: 'accessories', count: 28, category: 'Accessories' },
   ];
 
-  // Smooth scroll handler for "Story" section (Made by Hand, Made with Love)
+  // Smooth scroll handler for "Artisans" section (The Hands Behind Every Stitch)
   const handleStoryClick = () => {
     if (currentPage !== 'home') {
       onNavigate?.('home');
       setTimeout(() => {
-        const el = document.getElementById('section-story');
+        const el = document.getElementById('section-artisans') || document.getElementById('section-story');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 150);
     } else {
-      const el = document.getElementById('section-story');
+      const el = document.getElementById('section-artisans') || document.getElementById('section-story');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
@@ -218,11 +218,12 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Shop all</span>
           </button>
 
-          {/* 2. Story (Redirects/Scrolls to "Made by Hand, Made with Love" Section) */}
+          {/* 2. Artisans (Redirects/Scrolls to "The Hands Behind Every Stitch" Section) */}
           <button
             type="button"
             onClick={handleStoryClick}
             className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
+            title="The Hands Behind Every Stitch - Our Artisans"
           >
             <svg
               className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#811B2B] transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12"
@@ -231,7 +232,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>Story</span>
+            <span>Artisans</span>
           </button>
 
           {/* 3. Contact us (Redirects/Scrolls to Footer) */}
@@ -380,7 +381,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xs opacity-70">→</span>
               </button>
 
-              {/* Our Story (Made by Hand, Made with Love) */}
+              {/* Our Artisans & Story (The Hands Behind Every Stitch) */}
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -392,9 +393,9 @@ export const Header: React.FC<HeaderProps> = ({
                   <svg className="w-5 h-5 text-[#811B2B] transition-transform duration-200 group-hover:scale-120 group-hover:rotate-12" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
-                  <span>our story</span>
+                  <span>our artisans &amp; story</span>
                 </span>
-                <span className="text-xs opacity-70">→</span>
+                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
               </button>
 
               {/* Contact Us */}

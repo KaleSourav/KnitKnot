@@ -8,7 +8,7 @@ import { HeroBanner } from './components/HeroBanner';
 import { CategoriesSection } from './components/CategoriesSection';
 import { BestsellersSection } from './components/BestsellersSection';
 import { ShopTheOccasionSection } from './components/ShopTheOccasionSection';
-import { OurStorySection } from './components/OurStorySection';
+import { TheHandsBehindEveryStitchSection } from './components/TheHandsBehindEveryStitchSection';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
@@ -206,10 +206,8 @@ function AppInner() {
               />
             </ScrollReveal>
 
-            {/* Storytelling Section: Made by Hand, Made with Love (2-Column Collage + Craft Washi Tape & Knots) */}
-            <ScrollReveal id="section-story" yOffset={24} duration={0.45}>
-              <OurStorySection onStoryClick={() => console.log('Our story clicked')} />
-            </ScrollReveal>
+            {/* Storytelling Section: The Hands Behind Every Stitch (Nanis, Daadis, Aunties & Artisans) */}
+            <TheHandsBehindEveryStitchSection onStoryClick={() => navigateTo('shop', 'all')} />
 
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
             <ScrollReveal id="section-occasions" yOffset={24} duration={0.45}>
