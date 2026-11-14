@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { ProductProvider, useProducts } from './context/ProductContext';
 import { CartProvider, useCart } from './context/CartContext';
 import { CartDrawer } from './components/CartDrawer';
-import { ALL_PRODUCTS } from './data/allProductsData';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { HeroBanner } from './components/HeroBanner';
@@ -33,6 +33,7 @@ const CATEGORY_MAP: Record<string, string> = {
 
 function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
+  const { products } = useProducts();
 
   // Client-side page routing: 'home' | 'shop' | 'product'
   const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product'>(() => {
@@ -195,7 +196,7 @@ function AppInner() {
                 onProductClick={(id) => navigateTo('product', id)}
                 onShopAllClick={() => navigateTo('shop', 'all')}
                 onAddToCart={async (productId) => {
-                  const p = ALL_PRODUCTS.find((item) => item.id === productId || item.shopifyId === productId);
+                  const p = products.find((item) => item.id === productId || item.shopifyId === productId);
                   if (p?.variantId) {
                     await addToShopifyCart(p.variantId, 1);
                   } else {
@@ -299,8 +300,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <CartProvider>
-      <AppInner />
-    </CartProvider>
+    <ProductProvider>
+      <CartProvider>
+        <AppInner />
+      </CartProvider>
+    </ProductProvider>
   );
 }

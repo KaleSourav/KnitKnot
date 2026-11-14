@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useCart } from '../context/CartContext';
-import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
+import { useProducts } from '../context/ProductContext';
+import { ShopProduct } from '../data/allProductsData';
 import {
   SparkleIcon,
   DaisyIcon,
@@ -56,7 +57,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onAddToCart,
   onBuyNow,
 }) => {
-  // Find product from Shopify data with robust matching (ID, shopifyId, handle, title)
+  const { products, fetchSingleProduct } = useProducts();
+
+  // Find product from live Shopify data with robust matching (ID, shopifyId, handle, title)
   const product: ShopProduct = useMemo(() => {
     const safeDecode = (val?: string | null) => {
       if (!val) return '';
@@ -71,7 +74,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     const rawHandle = safeDecode(productHandle);
 
     if (rawTarget) {
-      const found = ALL_PRODUCTS.find((p) => {
+      const found = products.find((p) => {
         if (p.id === rawTarget || p.shopifyId === rawTarget) return true;
         if (p.handle && (p.handle === rawTarget || p.handle.toLowerCase() === rawTarget.toLowerCase())) return true;
         // Handle suffix matching (e.g. 'bouquet-full-of-sunshine' matching 'flowers-bouquet-full-of-sunshine')
@@ -83,7 +86,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }
 
     if (rawHandle) {
-      const found = ALL_PRODUCTS.find((p) => {
+      const found = products.find((p) => {
         if (p.handle && (p.handle === rawHandle || p.handle.toLowerCase() === rawHandle.toLowerCase())) return true;
         if (p.handle && (p.handle.endsWith(rawHandle) || rawHandle.endsWith(p.handle))) return true;
         return false;
@@ -92,19 +95,27 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }
 
     // Default fallback: Hero bouquet "Bouquet Full Of Sunshine" (or first bouquet with images)
-    const sunshine = ALL_PRODUCTS.find((p) => p.handle === 'flowers-bouquet-full-of-sunshine');
+    const sunshine = products.find((p) => p.handle === 'flowers-bouquet-full-of-sunshine');
     if (sunshine) return sunshine;
 
     const featured =
-      ALL_PRODUCTS.find(
+      products.find(
         (p) =>
           p.category === 'Bouquets' &&
           p.images &&
           p.images.length > 0 &&
           p.originalPrice
-      ) || ALL_PRODUCTS[0];
+      ) || products[0];
     return featured;
-  }, [productId, productHandle]);
+  }, [productId, productHandle, products]);
+
+  // Real-time single-item auto-sync with Shopify Storefront API
+  useEffect(() => {
+    const target = productId || productHandle;
+    if (target) {
+      fetchSingleProduct(target);
+    }
+  }, [productId, productHandle, fetchSingleProduct]);
 
   // Gallery Images from Shopify CDN only
   const images = useMemo(() => {
@@ -211,7 +222,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       return false;
     };
 
-    const valid = ALL_PRODUCTS.filter(
+    const valid = products.filter(
       (p) =>
         p.id !== product.id &&
         p.handle !== product.handle &&
@@ -248,7 +259,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     const uniqueShowcase = Array.from(new Set(showcase));
     const rest = valid.filter((p) => !uniqueShowcase.some((s) => s.id === p.id));
     return [...uniqueShowcase, ...rest].slice(0, 20);
-  }, [product]);
+  }, [product, products]);
 
   // Carousel track ref and scroll controls for "You might also like"
   const carouselTrackRef = useRef<HTMLDivElement>(null);

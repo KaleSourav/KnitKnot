@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ALL_PRODUCTS, ShopProduct } from '../data/allProductsData';
+import { ShopProduct } from '../data/allProductsData';
+import { useProducts } from '../context/ProductContext';
 import { ProductCard } from './ProductCard';
 
 interface AllProductsShopSectionProps {
@@ -69,10 +70,13 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const [selectedOccasions, setSelectedOccasions] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('featured');
 
+  // Live products automatically synced from Shopify Storefront API
+  const { products, isSyncing, refreshProducts } = useProducts();
+
   // Dynamic counts derived from real Shopify products with normalized categories
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const p of ALL_PRODUCTS) {
+    for (const p of products) {
       const normCat = normalizeCategory(p.category);
       counts[normCat] = (counts[normCat] || 0) + 1;
       if (p.rawCategory) {
@@ -83,10 +87,10 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
       }
     }
     return counts;
-  }, []);
+  }, [products]);
 
-  const inStockCount = useMemo(() => ALL_PRODUCTS.filter((p) => p.inStock).length, []);
-  const outOfStockCount = useMemo(() => ALL_PRODUCTS.filter((p) => !p.inStock).length, []);
+  const inStockCount = useMemo(() => products.filter((p) => p.inStock).length, [products]);
+  const outOfStockCount = useMemo(() => products.filter((p) => !p.inStock).length, [products]);
 
   // Sync when initialCategory prop changes from outside (e.g. navbar click)
   useEffect(() => {
@@ -206,7 +210,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
 
   // Filter & Sort Logic
   const filteredProducts = useMemo(() => {
-    let result = [...ALL_PRODUCTS];
+    let result = [...products];
 
     // Category filter with normalized comparison
     if (selectedCategories.length > 0) {
@@ -270,6 +274,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
 
     return result;
   }, [
+    products,
     selectedCategories,
     maxPrice,
     selectedAvailability,

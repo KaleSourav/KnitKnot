@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
+import { useProducts } from '../context/ProductContext';
 
 interface BestsellerBadge {
   line1: string;
@@ -87,11 +88,29 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
   onNotifyClick,
   initialHoveredId = null,
 }) => {
+  const { products } = useProducts();
   const [activeDot, setActiveDot] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<string | null>(initialHoveredId);
   const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
   const [addedId, setAddedId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Dynamic bestsellers reflecting live Shopify prices and titles
+  const dynamicBestsellers = useMemo(() => {
+    return BESTSELLERS.map((b) => {
+      const match = products.find((p) => p.id === b.id || p.shopifyId === b.id);
+      if (match) {
+        return {
+          ...b,
+          name: match.name,
+          price: `Rs. ${match.price.toLocaleString('en-IN')}`,
+          image: match.image || b.image,
+          fallbackImage: match.image || b.fallbackImage,
+        };
+      }
+      return b;
+    });
+  }, [products]);
 
   const handleAddToCart = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -126,8 +145,8 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
       if (maxScroll <= 0) return;
       const progress = scrollLeft / maxScroll;
       const dotIndex = Math.min(
-        BESTSELLERS.length - 1,
-        Math.max(0, Math.round(progress * (BESTSELLERS.length - 1)))
+        dynamicBestsellers.length - 1,
+        Math.max(0, Math.round(progress * (dynamicBestsellers.length - 1)))
       );
       setActiveDot(dotIndex);
     }
@@ -239,7 +258,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
             onScroll={handleScroll}
             className="w-full flex items-stretch justify-start lg:justify-between gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-2 px-1 snap-x snap-mandatory scroll-smooth"
           >
-            {BESTSELLERS.map((item) => {
+            {dynamicBestsellers.map((item) => {
               const isHovered = hoveredCard === item.id;
 
               return (
@@ -420,14 +439,14 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
 
         {/* 4. Carousel Pagination Indicator Dots */}
         <div className="flex items-center justify-center gap-2 mt-5 sm:mt-8">
-          {BESTSELLERS.map((_, idx) => (
+          {dynamicBestsellers.map((_, idx) => (
             <button
               key={idx}
               onClick={() => {
                 if (scrollRef.current) {
                   const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
                   scrollRef.current.scrollTo({
-                    left: (maxScroll / (BESTSELLERS.length - 1)) * idx,
+                    left: (maxScroll / (dynamicBestsellers.length - 1)) * idx,
                     behavior: 'smooth',
                   });
                 }
