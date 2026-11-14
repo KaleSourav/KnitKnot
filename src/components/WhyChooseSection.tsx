@@ -169,8 +169,11 @@ export const WhyChooseSection: React.FC = () => {
               <line x1="14" y1="23" x2="6" y2="27" />
             </svg>
 
-            <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] tracking-tight lowercase">
-              why choose knotsnco
+            {/* Heading in Dual-Font Pairing (Fredoka + Flowing Cursive Script) */}
+            <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] tracking-tight">
+              <span>why </span>
+              <span className="font-script text-[1.22em] text-[#811B2B] font-normal lowercase px-1 inline-block -rotate-2">choose</span>
+              <span> knots &amp; co</span>
             </h2>
 
             <svg

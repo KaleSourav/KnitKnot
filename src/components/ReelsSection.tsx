@@ -210,10 +210,12 @@ export const ReelsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header matching Reference 1 (media_1793693473509_aa9fe40d.jpg) */}
         <div className="flex items-center justify-between mb-5 sm:mb-8">
-          {/* Left Title: "from our community ♡" */}
+          {/* Left Title: "from our community ♡" with Dual-Font Pairing */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
-            <h2 className="text-lg sm:text-3xl md:text-4xl font-bold text-[#641623] tracking-tight lowercase whitespace-nowrap">
-              from our community
+            <h2 className="font-['Fredoka'] text-lg sm:text-3xl md:text-4xl font-bold text-[#641623] tracking-tight whitespace-nowrap">
+              <span>from </span>
+              <span className="font-script text-[1.22em] text-[#811B2B] font-normal lowercase px-1 inline-block -rotate-2">our</span>
+              <span> community</span>
             </h2>
             {/* Outline Heart SVG matching reference ♡ */}
             <svg

@@ -422,9 +422,11 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 <line x1="14" y1="23" x2="6" y2="27" />
               </svg>
 
-              {/* Heading in Exact Brand Font */}
-              <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] lowercase tracking-tight whitespace-nowrap">
-                shop by category
+              {/* Heading in Dual-Font Pairing (Fredoka + Flowing Cursive Script) */}
+              <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] text-[#641623] tracking-tight whitespace-nowrap">
+                <span>shop </span>
+                <span className="font-script text-[1.25em] text-[#811B2B] font-normal lowercase px-1 inline-block -rotate-2">by</span>
+                <span> category</span>
               </h2>
 
               {/* Right Radiant Dashes */}

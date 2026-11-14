@@ -16,6 +16,15 @@
   }
 }
 
+/* Two-font collaboration styles inspired by boutique handmade aesthetic */
+.font-script {
+  font-family: 'Satisfy', cursive, sans-serif;
+}
+
+.font-dancing {
+  font-family: 'Dancing Script', cursive, sans-serif;
+}
+
 /* Header vertical stripes matching Screenshot 2026-11-02 at 7.53.20 PM */
 .knots-header-stripes {
   background-color: #FBF8CF;

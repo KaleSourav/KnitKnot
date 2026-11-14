@@ -17,8 +17,8 @@ export const AnnouncementBar: React.FC = () => {
         />
       </svg>
 
-      <span className="font-semibold text-center lowercase tracking-wide">
-        free shipping on orders above ₹1999
+      <span className="font-semibold text-center tracking-wide">
+        <span className="font-script text-[1.25em] font-normal text-[#FBF8CF] pr-1 inline-block -rotate-1">free shipping</span> on orders above ₹1999
       </span>
 
       {/* Right 5-petal daisy icon */}

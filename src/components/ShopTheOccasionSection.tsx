@@ -189,8 +189,11 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
             <line x1="14" y1="23" x2="6" y2="27" />
           </svg>
 
+          {/* Heading in Dual-Font Pairing (Fredoka + Flowing Cursive Script like "The candles") */}
           <h2 className="font-['Fredoka'] font-bold text-2xl sm:text-3xl md:text-4xl text-[#641623] tracking-tight">
-            shop the occasion
+            <span>shop </span>
+            <span className="font-script text-[1.25em] text-[#811B2B] font-normal lowercase px-1 inline-block -rotate-2">the</span>
+            <span> occasion</span>
           </h2>
 
           <svg

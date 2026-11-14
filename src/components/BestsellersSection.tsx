@@ -211,9 +211,10 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
               <path d="M 12 1.5 Q 12 12 22.5 12 Q 12 12 12 22.5 Q 12 12 1.5 12 Q 12 12 12 1.5 Z" />
             </svg>
 
-            {/* Heading in Exact Lowercase, Font & Color */}
-            <h2 className="font-['Fredoka'] font-bold text-3xl sm:text-4xl md:text-5xl text-[#641623] lowercase tracking-tight">
-              bestsellers
+            {/* Heading in Dual-Font Pairing (Fredoka + Flowing Cursive Script like "The candles") */}
+            <h2 className="font-['Fredoka'] font-bold text-3xl sm:text-4xl md:text-5xl text-[#641623] tracking-tight">
+              <span className="font-script font-normal text-[1.18em] text-[#811B2B] lowercase mr-2 sm:mr-3 inline-block -rotate-2">our</span>
+              <span>bestsellers</span>
             </h2>
 
             {/* Right 4-Point Sparkle Star */}

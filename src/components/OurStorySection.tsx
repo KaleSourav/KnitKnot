@@ -29,9 +29,15 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 xl:gap-20 items-start">
           {/* Left Column: Brand Story in Our Font Language (Fredoka & Maroon #641623) */}
           <div className="lg:col-span-5 flex flex-col justify-start lg:sticky lg:top-24 pt-2 lg:pt-6">
-            {/* Headline in Fredoka Font Language */}
-            <h2 className="font-['Fredoka'] font-black text-2xl sm:text-4xl md:text-5xl lg:text-[50px] text-[#641623] leading-[1.14] tracking-tight mb-5 sm:mb-7">
-              A Little Dream,<br />A Lot of Love <span className="text-[#811B2B]">♡</span>
+            {/* Headline in Dual-Font Pairing (Fredoka + Flowing Cursive Script) */}
+            <h2 className="font-['Fredoka'] font-black text-2xl sm:text-4xl md:text-5xl lg:text-[50px] text-[#641623] leading-[1.18] tracking-tight mb-5 sm:mb-7">
+              <span>A Little </span>
+              <span className="font-script font-normal text-[1.18em] text-[#811B2B] inline-block -rotate-2">Dream</span>,
+              <br />
+              <span>A Lot </span>
+              <span className="font-script font-normal text-[1.18em] text-[#811B2B] inline-block -rotate-2">of</span>
+              <span> Love </span>
+              <span className="text-[#811B2B] font-normal text-[0.9em]">♡</span>
             </h2>
 
             {/* Authentic Brand Story */}
@@ -53,9 +59,9 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
               </p>
             </div>
 
-            {/* Welcome Tagline */}
+            {/* Welcome Tagline with Dual Font Accent */}
             <div className="font-['Fredoka'] text-sm sm:text-[17px] leading-[1.5] text-[#641623] font-bold mb-6 sm:mb-8">
-              <p>Welcome to Knots &amp; Co. &mdash; A little yarn, a lot of love. ♡</p>
+              <p>Welcome to Knots &amp; Co. &mdash; <span className="font-script font-normal text-[1.25em] text-[#811B2B]">a little yarn, a lot of love.</span> ♡</p>
             </div>
 
             {/* Clean Outline Pill Button in Brand Theme */}
