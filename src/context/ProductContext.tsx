@@ -426,3 +426,4 @@ export function useProducts(): ProductContextValue {
   if (!ctx) throw new Error('useProducts must be used inside <ProductProvider>');
   return ctx;
 }
+

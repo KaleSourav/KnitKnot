@@ -308,3 +308,4 @@ syncCatalog().catch(err => {
   console.error('❌ Failed to sync Shopify products:', err);
   process.exit(1);
 });
+
