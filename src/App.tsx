@@ -12,6 +12,7 @@ import { OurStorySection } from './components/OurStorySection';
 import { BehindTheStitchesPage } from './components/BehindTheStitchesPage';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
+import { CorporateGiftingSection } from './components/CorporateGiftingSection';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
@@ -234,6 +235,11 @@ function AppInner() {
             {/* Why Choose Knots & Co Section (Interactive Blue & Yellow Cards, Tilting & 3D Flip) */}
             <ScrollReveal id="section-why-choose" yOffset={24} duration={0.45}>
               <WhyChooseSection />
+            </ScrollReveal>
+
+            {/* B2B & Corporate Gifting Section ("REQUEST A QUOTE") */}
+            <ScrollReveal id="section-b2b" yOffset={24} duration={0.45}>
+              <CorporateGiftingSection />
             </ScrollReveal>
           </div>
         ) : currentPage === 'shop' ? (

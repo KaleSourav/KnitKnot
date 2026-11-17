@@ -59,6 +59,29 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  // Smooth scroll handler for "Request a Quote" / B2B Corporate Gifting
+  const handleQuoteClick = () => {
+    setMobileMenuOpen(false);
+    if (currentPage !== 'home') {
+      onNavigate?.('home');
+      setTimeout(() => {
+        const el = document.getElementById('section-b2b');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const input = document.getElementById('b2b-name');
+          if (input) setTimeout(() => input.focus(), 600);
+        }
+      }, 200);
+    } else {
+      const el = document.getElementById('section-b2b');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const input = document.getElementById('b2b-name');
+        if (input) setTimeout(() => input.focus(), 600);
+      }
+    }
+  };
+
   return (
     <header className="relative w-full knots-header-stripes border-b border-[#E2D8C3]/50">
       {/* Top Navbar Row: Absolute Center Logo for 100% Balanced Mobile & Desktop View */}
@@ -241,7 +264,18 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Behind The Stitches</span>
           </button>
 
-          {/* 3. Story (Scrolls to Brand Story on Homepage) */}
+          {/* 3. Request a Quote (Corporate Gifting) */}
+          <button
+            type="button"
+            onClick={handleQuoteClick}
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide bg-[#FFF5CC] text-[#811B2B] hover:bg-[#811B2B] hover:text-white hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap border border-[#811B2B]/25 shadow-xs"
+            title="Request a Quote - Corporate & Bulk Gifting"
+          >
+            <span className="text-xs sm:text-sm">✨</span>
+            <span>Request a Quote</span>
+          </button>
+
+          {/* 4. Story (Scrolls to Brand Story on Homepage) */}
           <button
             type="button"
             onClick={handleStoryClick}
@@ -422,6 +456,20 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>behind the stitches</span>
                 </span>
                 <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
+              </button>
+
+              {/* Request a Quote (Corporate & Bulk Gifting) */}
+              <button
+                onClick={handleQuoteClick}
+                className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between text-[#811B2B] bg-[#FFF5CC]/80 hover:bg-[#FFF5CC] border border-[#811B2B]/20 cursor-pointer group shadow-xs"
+              >
+                <span className="flex items-center gap-2.5">
+                  <span className="text-lg">✨</span>
+                  <span>request a quote (b2b)</span>
+                </span>
+                <span className="text-xs text-[#811B2B] font-bold bg-white px-2 py-0.5 rounded-full border border-[#811B2B]/20">
+                  bulk quote →
+                </span>
               </button>
 
               {/* Our Story (Knots & Co Brand Story on Homepage) */}
