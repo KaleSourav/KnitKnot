@@ -268,10 +268,10 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={handleQuoteClick}
-            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide bg-[#FFF5CC] text-[#811B2B] hover:bg-[#811B2B] hover:text-white hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap border border-[#811B2B]/25 shadow-xs"
+            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
             title="Request a Quote - Corporate & Bulk Gifting"
           >
-            <span className="text-xs sm:text-sm">✨</span>
+            <span className="text-xs sm:text-sm transition-transform duration-200 group-hover:scale-115">✨</span>
             <span>Request a Quote</span>
           </button>
 
@@ -461,13 +461,13 @@ export const Header: React.FC<HeaderProps> = ({
               {/* Request a Quote (Corporate & Bulk Gifting) */}
               <button
                 onClick={handleQuoteClick}
-                className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between text-[#811B2B] bg-[#FFF5CC]/80 hover:bg-[#FFF5CC] border border-[#811B2B]/20 cursor-pointer group shadow-xs"
+                className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between text-[#641623] hover:bg-[#FFF5CC] cursor-pointer group"
               >
                 <span className="flex items-center gap-2.5">
-                  <span className="text-lg">✨</span>
+                  <span className="text-lg transition-transform duration-200 group-hover:scale-115">✨</span>
                   <span>request a quote (b2b)</span>
                 </span>
-                <span className="text-xs text-[#811B2B] font-bold bg-white px-2 py-0.5 rounded-full border border-[#811B2B]/20">
+                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">
                   bulk quote →
                 </span>
               </button>
