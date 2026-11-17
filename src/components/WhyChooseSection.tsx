@@ -20,12 +20,12 @@ const REASONS: ReasonCard[] = [
     description:
       'Every single petal, plushie, and knot is patiently crocheted by hand. No factory machines, no shortcuts — just genuine warmth in every stitch.',
     type: 'blue',
-    rotationDesktop: 'lg:-rotate-[7deg]',
+    rotationDesktop: 'lg:-rotate-[6deg]',
     rotationMobile: '-rotate-[2deg]',
     zIndex: 'z-10',
     overlapDesktop: '',
-    contentPaddingDesktop: 'lg:pr-10 xl:pr-14',
-    titleMaxWidthDesktop: 'max-w-[240px] xl:max-w-[280px]',
+    contentPaddingDesktop: 'lg:pr-14 xl:pr-18 2xl:pr-20',
+    titleMaxWidthDesktop: 'max-w-[260px] xl:max-w-[310px] 2xl:max-w-[340px]',
   },
   {
     number: '02',
@@ -33,12 +33,12 @@ const REASONS: ReasonCard[] = [
     description:
       'Your orders bring flexible, independent work to 200+ daadis and aunties across homes in India, giving their golden skills the pride they deserve.',
     type: 'yellow',
-    rotationDesktop: 'lg:-rotate-[2.5deg]',
+    rotationDesktop: 'lg:-rotate-[2deg]',
     rotationMobile: 'rotate-[1.5deg]',
     zIndex: 'z-30',
-    overlapDesktop: 'lg:-ml-8 xl:-ml-12 2xl:-ml-14',
+    overlapDesktop: 'lg:-ml-12 xl:-ml-16 2xl:-ml-20',
     contentPaddingDesktop: '',
-    titleMaxWidthDesktop: 'max-w-[280px] xl:max-w-[320px]',
+    titleMaxWidthDesktop: 'max-w-[300px] xl:max-w-[360px] 2xl:max-w-[390px]',
   },
   {
     number: '03',
@@ -46,12 +46,12 @@ const REASONS: ReasonCard[] = [
     description:
       'Real flowers wither away in a few days. Our crochet treasures stay vibrant year after year — a forever keepsake of your sweetest moments.',
     type: 'blue',
-    rotationDesktop: 'lg:rotate-[2.5deg]',
+    rotationDesktop: 'lg:rotate-[2deg]',
     rotationMobile: '-rotate-[1.5deg]',
     zIndex: 'z-20',
-    overlapDesktop: 'lg:-ml-8 xl:-ml-12 2xl:-ml-14',
-    contentPaddingDesktop: 'lg:pl-10 xl:pl-14',
-    titleMaxWidthDesktop: 'max-w-[240px] xl:max-w-[280px]',
+    overlapDesktop: 'lg:-ml-12 xl:-ml-16 2xl:-ml-20',
+    contentPaddingDesktop: 'lg:pl-14 xl:pl-18 2xl:pl-20',
+    titleMaxWidthDesktop: 'max-w-[260px] xl:max-w-[310px] 2xl:max-w-[340px]',
   },
   {
     number: '04',
@@ -59,12 +59,12 @@ const REASONS: ReasonCard[] = [
     description:
       'Packed like a parcel from home with custom handwritten note cards, lovely ribbon wraps, and bespoke color choices for every celebration.',
     type: 'yellow',
-    rotationDesktop: 'lg:rotate-[7deg]',
+    rotationDesktop: 'lg:rotate-[6deg]',
     rotationMobile: 'rotate-[2deg]',
     zIndex: 'z-10',
-    overlapDesktop: 'lg:-ml-8 xl:-ml-12 2xl:-ml-14',
-    contentPaddingDesktop: 'lg:pl-9 xl:pl-12',
-    titleMaxWidthDesktop: 'max-w-[240px] xl:max-w-[280px]',
+    overlapDesktop: 'lg:-ml-12 xl:-ml-16 2xl:-ml-20',
+    contentPaddingDesktop: 'lg:pl-12 xl:pl-16 2xl:pl-18',
+    titleMaxWidthDesktop: 'max-w-[260px] xl:max-w-[310px] 2xl:max-w-[340px]',
   },
 ];
 
@@ -99,8 +99,8 @@ export const WhyChooseSection: React.FC = () => {
   };
 
   return (
-    <section className="w-full bg-[#FAF4ED] pt-6 pb-14 sm:pt-8 sm:pb-20 overflow-hidden font-['Fredoka'] select-none">
-      <div className="w-full max-w-[1600px] 2xl:max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+    <section className="w-full bg-[#FAF4ED] pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden font-['Fredoka'] select-none">
+      <div className="w-full max-w-[1760px] 2xl:max-w-[1880px] mx-auto px-2 sm:px-4 lg:px-6">
         {/* 1. Whimsical Curvy Dashed Stitch Divider */}
         <div className="w-full flex justify-center mb-4 sm:mb-6" aria-hidden="true">
           <svg
@@ -197,7 +197,7 @@ export const WhyChooseSection: React.FC = () => {
               return (
                 <div
                   key={card.number}
-                  className={`group relative flex-shrink-0 w-[84vw] max-w-[340px] sm:w-[320px] md:w-[350px] lg:w-[315px] xl:w-[365px] 2xl:w-[410px] h-[480px] sm:h-[510px] lg:h-[530px] xl:h-[570px] 2xl:h-[600px] rounded-[32px] sm:rounded-[36px] xl:rounded-[42px] p-6 sm:p-7 xl:p-9 flex flex-col justify-between overflow-hidden border border-[#641623]/15 transition-all duration-300 ease-out snap-center lg:snap-none ${card.zIndex} ${card.overlapDesktop} ${card.rotationMobile} ${card.rotationDesktop} lg:hover:rotate-0 lg:hover:-translate-y-5 lg:hover:scale-[1.03] lg:hover:z-50 shadow-[0_16px_36px_rgba(100,22,35,0.09)] lg:hover:shadow-[0_26px_55px_rgba(100,22,35,0.2)] cursor-default ${
+                  className={`group relative flex-shrink-0 w-[86vw] max-w-[360px] sm:w-[350px] md:w-[370px] lg:w-[335px] xl:w-[395px] 2xl:w-[440px] h-[500px] sm:h-[530px] lg:h-[540px] xl:h-[590px] 2xl:h-[630px] rounded-[34px] sm:rounded-[38px] xl:rounded-[44px] p-6 sm:p-8 xl:p-10 flex flex-col justify-between overflow-hidden border border-[#641623]/15 transition-all duration-300 ease-out snap-center lg:snap-none ${card.zIndex} ${card.overlapDesktop} ${card.rotationMobile} ${card.rotationDesktop} lg:hover:rotate-0 lg:hover:-translate-y-6 lg:hover:scale-[1.03] lg:hover:z-50 shadow-[0_18px_42px_rgba(100,22,35,0.09)] lg:hover:shadow-[0_28px_60px_rgba(100,22,35,0.22)] cursor-default ${
                     isBlue
                       ? 'bg-gradient-to-b from-[#E2F0F6] via-[#D6EBF4] to-[#C9E4EF] text-[#641623]'
                       : 'bg-gradient-to-b from-[#FFF9DA] via-[#FEF4C5] to-[#FCEEB2] text-[#641623]'
@@ -286,18 +286,18 @@ export const WhyChooseSection: React.FC = () => {
                   {/* Top Area: Badge + Title + (Card 2 Description) */}
                   <div className={`relative z-10 flex flex-col text-left ${card.contentPaddingDesktop}`}>
                     {/* Top-Left Circular Number Badge */}
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 xl:w-12 xl:h-12 rounded-full flex items-center justify-center font-black text-sm sm:text-base xl:text-lg shadow-sm ring-1 ring-[#641623]/10 bg-[#FFFDF9] text-[#641623]">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 xl:w-14 xl:h-14 rounded-full flex items-center justify-center font-black text-sm sm:text-base xl:text-lg shadow-sm ring-1 ring-[#641623]/10 bg-[#FFFDF9] text-[#641623]">
                       {card.number}
                     </div>
 
                     {/* Card Title */}
-                    <h3 className={`font-['Fredoka'] font-black text-[24px] sm:text-[27px] lg:text-[28px] xl:text-[33px] 2xl:text-[36px] leading-[1.08] tracking-tight text-[#641623] mt-3.5 sm:mt-5 ${card.titleMaxWidthDesktop}`}>
+                    <h3 className={`font-['Fredoka'] font-black text-[26px] sm:text-[30px] lg:text-[31px] xl:text-[36px] 2xl:text-[40px] leading-[1.08] tracking-tight text-[#641623] mt-4 sm:mt-5 ${card.titleMaxWidthDesktop}`}>
                       {card.title}
                     </h3>
 
                     {/* On Card 2: Description sits right underneath title, followed by bottom sticker */}
                     {isCard2 && (
-                      <p className="font-['Fredoka'] text-xs sm:text-[13px] xl:text-[14px] 2xl:text-[15px] leading-relaxed text-[#641623]/85 mt-2.5 sm:mt-3 font-medium max-w-[260px] xl:max-w-[300px]">
+                      <p className="font-['Fredoka'] text-[13px] sm:text-sm xl:text-[15px] 2xl:text-base leading-relaxed text-[#641623]/85 mt-3 sm:mt-4 font-medium max-w-[280px] xl:max-w-[340px]">
                         {card.description}
                       </p>
                     )}
@@ -305,18 +305,18 @@ export const WhyChooseSection: React.FC = () => {
 
                   {/* On Card 2: Die-Cut Cutout Sticker Popping Out at the Bottom Edge */}
                   {isCard2 ? (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 sm:translate-y-2 pointer-events-none select-none z-20 w-[92%] max-w-[290px] sm:max-w-[320px] xl:max-w-[360px] 2xl:max-w-[390px] flex justify-center items-end">
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 sm:translate-y-2 pointer-events-none select-none z-20 w-[94%] max-w-[320px] sm:max-w-[360px] xl:max-w-[400px] 2xl:max-w-[440px] flex justify-center items-end">
                       <img
                         src="/story/crochet-sticker-card2.png"
                         alt="Handmade crochet craft sticker"
-                        className="w-full h-auto object-contain drop-shadow-[0_16px_28px_rgba(100,22,35,0.22)] transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-auto object-contain drop-shadow-[0_18px_32px_rgba(100,22,35,0.22)] transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
                       />
                     </div>
                   ) : (
                     /* On Cards 1, 3, 4: Spacious Middle Area & Description Sits at the Bottom */
                     <div className={`relative z-10 mt-auto pt-4 text-left ${card.contentPaddingDesktop}`}>
-                      <p className="font-['Fredoka'] text-xs sm:text-[13px] xl:text-[14px] 2xl:text-[15px] leading-relaxed text-[#641623]/85 font-medium">
+                      <p className="font-['Fredoka'] text-[13px] sm:text-sm xl:text-[15px] 2xl:text-base leading-relaxed text-[#641623]/85 font-medium">
                         {card.description}
                       </p>
                     </div>
