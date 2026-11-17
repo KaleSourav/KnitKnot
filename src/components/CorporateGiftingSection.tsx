@@ -127,7 +127,6 @@ export const CorporateGiftingSection: React.FC = () => {
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const activeOccasion = OCCASIONS.find((o) => o.id === selectedOccasion) || OCCASIONS[0];
 
@@ -547,46 +546,12 @@ export const CorporateGiftingSection: React.FC = () => {
           </div>
         </div>
 
-        {/* 6. THE SHOWSTOPPER: "REQUEST A QUOTE" CARD WITH HANGING MASCOT HOLDING THE CARD RIM */}
-        <div id="b2b-quote-card" className="w-full max-w-2xl mx-auto pt-36 sm:pt-44 relative">
+        {/* 6. "REQUEST A QUOTE" CARD */}
+        <div id="b2b-quote-card" className="w-full max-w-2xl mx-auto pt-6 sm:pt-8 relative">
           {/* Card Container with Retro Border & Drop Shadow */}
-          <div className="bg-[#FFFDF9] rounded-[32px] sm:rounded-[38px] border-[2.5px] border-[#641623] p-6 sm:p-9 shadow-[0_16px_40px_rgba(100,22,35,0.12)] text-left relative">
-            {/* =========================================================================
-                THE RECREATED BACKGROUNDLESS MASCOT HANGING ON THE CARD RIM
-                Hands visually gripping/holding onto the top rim of the quote card!
-               ========================================================================= */}
-            <div className="absolute -top-[172px] sm:-top-[202px] right-4 sm:right-10 z-30 pointer-events-auto flex flex-col items-center group">
-              {/* Playful Floating Speech Bubble */}
-              <div className="mb-1 bg-[#FFF5CC] text-[#811B2B] px-3.5 py-1.5 rounded-2xl rounded-br-none border-2 border-[#811B2B]/30 shadow-md flex items-center gap-1.5 animate-bounce">
-                <Sparkles className="w-3.5 h-3.5 text-[#E5A93C] flex-shrink-0" />
-                <span className="text-[11px] sm:text-xs font-bold whitespace-nowrap">
-                  {isTyping
-                    ? 'Yay! 200+ daadis are ready to crochet! 🧶'
-                    : 'Always spreading love with flowers forever ♡'}
-                </span>
-              </div>
-
-              {/* Mascot Character Body (Backgroundless Cutout) */}
-              <div className="relative w-36 h-36 sm:w-44 sm:h-44 transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
-                <img
-                  src="/mascot/mascot-character-vibrant.png"
-                  alt="Knots & Co Mascot Hanging on Quote Card"
-                  className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(100,22,35,0.22)] select-none pointer-events-none"
-                />
-
-                {/* Cute Clamping Hands / Paws holding on to the top border of the card! */}
-                <div
-                  title="Holding onto the card!"
-                  className="absolute -bottom-2 left-8 w-6.5 h-5 bg-[#FFEFE5] border-2 border-[#641623] rounded-full shadow-xs z-40 transform -rotate-12 group-hover:-translate-y-0.5 transition-transform"
-                />
-                <div
-                  title="Holding onto the card!"
-                  className="absolute -bottom-2 right-11 w-6.5 h-5 bg-[#FFEFE5] border-2 border-[#641623] rounded-full shadow-xs z-40 transform rotate-12 group-hover:-translate-y-0.5 transition-transform"
-                />
-              </div>
-            </div>
+          <div className="bg-[#FFFDF9] rounded-[32px] sm:rounded-[38px] border-[2.5px] border-[#641623] p-6 sm:p-9 shadow-[0_16px_40px_rgba(100,22,35,0.12)] text-left relative overflow-hidden">
             {/* Top Form Header */}
-            <div className="text-center mb-6 sm:mb-8 pr-12 sm:pr-0">
+            <div className="text-center mb-6 sm:mb-8">
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#DEEEF5] border border-[#641623]/15 text-[#641623] text-[11px] font-bold uppercase mb-2">
                 <Sparkles className="w-3 h-3 text-[#811B2B]" />
                 <span>custom corporate inquiry</span>
@@ -674,8 +639,6 @@ export const CorporateGiftingSection: React.FC = () => {
                       placeholder="e.g. Ananya Sharma"
                       value={formData.name}
                       onChange={handleChange}
-                      onFocus={() => setIsTyping(true)}
-                      onBlur={() => setIsTyping(false)}
                       className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors"
                     />
                     <User className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -701,8 +664,6 @@ export const CorporateGiftingSection: React.FC = () => {
                         placeholder="ananya@company.com"
                         value={formData.email}
                         onChange={handleChange}
-                        onFocus={() => setIsTyping(true)}
-                        onBlur={() => setIsTyping(false)}
                         className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors"
                       />
                       <Mail className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -725,8 +686,6 @@ export const CorporateGiftingSection: React.FC = () => {
                         placeholder="+91 98765 43210"
                         value={formData.phone}
                         onChange={handleChange}
-                        onFocus={() => setIsTyping(true)}
-                        onBlur={() => setIsTyping(false)}
                         className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors"
                       />
                       <Phone className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -751,8 +710,6 @@ export const CorporateGiftingSection: React.FC = () => {
                       placeholder="e.g. Google India / Razorpay"
                       value={formData.company}
                       onChange={handleChange}
-                      onFocus={() => setIsTyping(true)}
-                      onBlur={() => setIsTyping(false)}
                       className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors"
                     />
                     <Building className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -796,8 +753,6 @@ export const CorporateGiftingSection: React.FC = () => {
                       placeholder="e.g. 100 pcs"
                       value={formData.quantity}
                       onChange={handleChange}
-                      onFocus={() => setIsTyping(true)}
-                      onBlur={() => setIsTyping(false)}
                       className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors"
                     />
                     <Package className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -820,8 +775,6 @@ export const CorporateGiftingSection: React.FC = () => {
                       placeholder="Occasion, target delivery date, branding ideas, custom flower preference, or multi-address shipping..."
                       value={formData.details}
                       onChange={handleChange}
-                      onFocus={() => setIsTyping(true)}
-                      onBlur={() => setIsTyping(false)}
                       className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none font-['Fredoka'] text-sm sm:text-base text-[#641623] placeholder-[#641623]/40 shadow-xs transition-colors resize-none"
                     />
                     <MessageSquare className="w-4 h-4 text-[#811B2B] absolute left-3.5 top-4 pointer-events-none" />
