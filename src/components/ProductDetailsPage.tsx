@@ -532,28 +532,28 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           tag: 'Realistic Flowers',
           description: 'Handcrafted petals with thoughtful detail.',
           imageUrl: images[0] || undefined,
-          crop: { width: 230, height: 230, x: -15, y: -10 },
+          objectPosition: 'center 15%',
         },
         {
           id: 'sunflower-vase',
           tag: 'Crochet Vase',
           description: 'A sturdy, textured vase that adds charm.',
           imageUrl: images[0] || undefined,
-          crop: { width: 230, height: 230, x: -15, y: -30 },
+          objectPosition: 'center 85%',
         },
         {
           id: 'sunflower-blooms',
           tag: 'Mixed Blooms',
           description: 'A lovely mix of sunflowers and daisies.',
           imageUrl: images[1] || images[0] || undefined,
-          crop: { width: 230, height: 230, x: -15, y: -15 },
+          objectPosition: 'center 40%',
         },
         {
           id: 'sunflower-size',
           tag: 'Perfect Size',
           description: 'Ideal for desks, shelves or gifting.',
           imageUrl: images[0] || undefined,
-          crop: { width: 200, height: 200, x: 0, y: 0 },
+          objectPosition: 'center center',
         },
       ];
     }
@@ -618,31 +618,26 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       ];
     }
 
-    // Assign images and crops
+    // Assign images and positions
     if (images.length === 0) {
       return tags.map((t, idx) => ({
         id: `detail-${idx}`,
         tag: t.tag,
         description: t.desc,
         imageUrl: undefined,
-        crop: { width: 200, height: 200, x: 0, y: 0 },
+        objectPosition: 'center center',
       }));
     }
 
     if (images.length === 1) {
-      // Natural focal crops for single image
-      const crops = [
-        { width: 240, height: 240, x: -20, y: -20 },
-        { width: 250, height: 250, x: -25, y: -65 },
-        { width: 240, height: 240, x: -20, y: -10 },
-        { width: 190, height: 190, x: 5, y: 5 },
-      ];
+      // Natural focal positions for single image
+      const positions = ['center 15%', 'center 85%', 'center 40%', 'center center'];
       return tags.map((t, idx) => ({
         id: `detail-${idx}`,
         tag: t.tag,
         description: t.desc,
         imageUrl: images[0],
-        crop: crops[idx],
+        objectPosition: positions[idx],
       }));
     }
 
@@ -654,7 +649,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         tag: t.tag,
         description: t.desc,
         imageUrl: img,
-        crop: { width: 200, height: 200, x: 0, y: 0 },
+        objectPosition: 'center center',
       };
     });
   }, [product, images]);
@@ -1862,7 +1857,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       {/* =========================================================================
           3. THE DESIGN DETAILS SECTION (Exact Match to Reference Image)
           Full-width scalloped cloud banner in pastel lilac (#EBD8E7),
-          top 5-petal flower badge, doodle spark rays, 8-lobed rosette frames,
+          top 5-petal flower badge, doodle spark rays, borderless curved square frames,
           butter-yellow pills & centered captions.
          ========================================================================= */}
       <section className="relative w-full mt-12 sm:mt-16 mb-4">
@@ -1943,45 +1938,26 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
           {/* 4 Feature Cards: 2-Col on Mobile, 4-Col on Desktop */}
           <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 items-start justify-items-center">
-            {designDetailCards.map((card, idx) => {
-              const clipId = `rosette-clip-${card.id}-${idx}`;
+            {designDetailCards.map((card) => {
               return (
                 <div key={card.id} className="flex flex-col items-center text-center group w-full">
-                  {/* Rosette Frame with Overlapping Butter-Yellow Pill */}
-                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48">
-                    <svg
-                      viewBox="0 0 200 200"
-                      className="w-full h-full drop-shadow-[0_4px_12px_rgba(100,22,35,0.08)]"
-                    >
-                      <defs>
-                        <clipPath id={clipId}>
-                          <path d="M 169.68 71.14 A 30 30 0 0 1 169.68 128.86 A 30 30 0 0 1 128.86 169.68 A 30 30 0 0 1 71.14 169.68 A 30 30 0 0 1 30.32 128.86 A 30 30 0 0 1 30.32 71.14 A 30 30 0 0 1 71.14 30.32 A 30 30 0 0 1 128.86 30.32 A 30 30 0 0 1 169.68 71.14 Z" />
-                        </clipPath>
-                      </defs>
-                      {/* Outer White Rosette Frame */}
-                      <path
-                        d="M 174.08 69.32 A 32 32 0 0 1 174.08 130.68 A 32 32 0 0 1 130.68 174.08 A 32 32 0 0 1 69.32 174.08 A 32 32 0 0 1 25.92 130.68 A 32 32 0 0 1 25.92 69.32 A 32 32 0 0 1 69.32 25.92 A 32 32 0 0 1 130.68 25.92 A 32 32 0 0 1 174.08 69.32 Z"
-                        fill="#FFFFFF"
-                      />
-                      {/* Inner Image / Blank Pastel Background */}
+                  {/* Square Format Image with Curved Edges & No Borders */}
+                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 aspect-square">
+                    <div className="w-full h-full rounded-[22px] sm:rounded-[28px] overflow-hidden shadow-[0_6px_20px_rgba(100,22,35,0.08)] bg-[#FAF4ED]">
                       {card.imageUrl ? (
-                        <image
-                          href={card.imageUrl}
-                          width={card.crop.width}
-                          height={card.crop.height}
-                          x={card.crop.x}
-                          y={card.crop.y}
-                          preserveAspectRatio="xMidYMid slice"
-                          clipPath={`url(#${clipId})`}
-                          className="transition-transform duration-500 group-hover:scale-105"
+                        <img
+                          src={card.imageUrl}
+                          alt={card.tag}
+                          style={{ objectPosition: card.objectPosition || 'center' }}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 select-none"
+                          loading="lazy"
                         />
                       ) : (
-                        <g clipPath={`url(#${clipId})`}>
-                          <rect width="200" height="200" fill="#FAF4ED" />
-                          <circle cx="100" cy="100" r="32" fill="#EBD8E7" opacity="0.6" />
-                        </g>
+                        <div className="w-full h-full flex items-center justify-center bg-[#FAF4ED]">
+                          <div className="w-14 h-14 rounded-full bg-[#EBD8E7]/60" />
+                        </div>
                       )}
-                    </svg>
+                    </div>
 
                     {/* Butter-Yellow Pill Badge Overlapping Bottom */}
                     <div className="absolute -bottom-2.5 sm:-bottom-3 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
