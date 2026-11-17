@@ -39,6 +39,123 @@ interface ProductDetailsPageProps {
   onBuyNow?: (product: ShopProduct, quantity: number) => void | Promise<void>;
 }
 
+// ─── 8 Core Knotsnco Collections Classifier ──────────────────────────────────
+// Maps every product to its canonical collection out of the 8 store collections:
+// 1. Flowers (87)
+// 2. Bouquets (56)
+// 3. Plushies (33)
+// 4. Bags (21)
+// 5. Keychains (57)
+// 6. Flower Pots (40)
+// 7. Home Decor (32)
+// 8. Accessories (28)
+const RAW_CATEGORY_TO_COLLECTION: Record<string, string> = {
+  flowers: 'Flowers',
+  fillers: 'Flowers',
+  bouquets: 'Bouquets',
+  keychains: 'Keychains',
+  'bag charms': 'Keychains',
+  'flower pots': 'Flower Pots',
+  vases: 'Flower Pots',
+  bags: 'Bags',
+  plushies: 'Plushies',
+  characters: 'Plushies',
+  standees: 'Home Decor',
+  'fridge magnets': 'Home Decor',
+  'home decor': 'Home Decor',
+  'hair accessories': 'Accessories',
+  earrings: 'Accessories',
+  bandanas: 'Accessories',
+};
+
+const CATEGORY_NAME_TO_COLLECTION: Record<string, string> = {
+  flowers: 'Flowers',
+  flower: 'Flowers',
+  bouquets: 'Bouquets',
+  bouquet: 'Bouquets',
+  keychains: 'Keychains',
+  keychain: 'Keychains',
+  'flower pots': 'Flower Pots',
+  'flower pot': 'Flower Pots',
+  vases: 'Flower Pots',
+  vase: 'Flower Pots',
+  bags: 'Bags',
+  bag: 'Bags',
+  plushies: 'Plushies',
+  plushie: 'Plushies',
+  characters: 'Plushies',
+  character: 'Plushies',
+  'home decor': 'Home Decor',
+  standees: 'Home Decor',
+  standee: 'Home Decor',
+  accessories: 'Accessories',
+  accessory: 'Accessories',
+};
+
+export function getProductCollection(p: { category?: string; rawCategory?: string; name?: string }): string {
+  const raw = (p.rawCategory || '').trim().toLowerCase();
+  if (raw && RAW_CATEGORY_TO_COLLECTION[raw]) {
+    return RAW_CATEGORY_TO_COLLECTION[raw];
+  }
+
+  const cat = (p.category || '').trim().toLowerCase();
+  if (cat && CATEGORY_NAME_TO_COLLECTION[cat]) {
+    return CATEGORY_NAME_TO_COLLECTION[cat];
+  }
+
+  // Fallback pattern matching on title/handle
+  const title = (p.name || '').toLowerCase();
+  if (title.includes('gajra') || title.includes('clip') || title.includes('earring') || title.includes('bandana') || title.includes('hair') || title.includes('scrunchie')) {
+    return 'Accessories';
+  }
+  if (title.includes('keychain') || title.includes('bag charm') || (title.includes('charm') && !title.includes('bouquet'))) {
+    return 'Keychains';
+  }
+  if (title.includes('flower pot') || title.includes('vase') || title.includes(' pot') || title.endsWith('pot')) {
+    return 'Flower Pots';
+  }
+  if (title.includes('standee') || title.includes('magnet') || title.includes('car hanging') || title.includes('coaster') || title.includes('decor')) {
+    return 'Home Decor';
+  }
+  if (title.includes('tote') || title.includes('sling bag') || title.includes('handbag') || (title.includes('bag') && !title.includes('charm'))) {
+    return 'Bags';
+  }
+  if (title.includes('plushie') || title.includes('amigurumi') || title.includes('chenille') || title.includes('kitty') || title.includes('penguin') || title.includes('doll')) {
+    return 'Plushies';
+  }
+  if (title.includes('bouquet')) {
+    return 'Bouquets';
+  }
+
+  return 'Flowers';
+}
+
+/**
+ * Deterministically shuffles an array based on a seed string (e.g. product ID or handle).
+ * Ensures every individual product page receives its own unique, fresh shuffle
+ * of same-category items, while remaining consistent across re-renders.
+ */
+function seededShuffle<T>(items: T[], seedStr: string): T[] {
+  const arr = [...items];
+  let seed = 0;
+  for (let i = 0; i < seedStr.length; i++) {
+    seed = ((seed << 5) - seed + seedStr.charCodeAt(i)) & 0xffffffff;
+  }
+
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) & 0xffffffff;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) & 0xffffffff;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296.0;
+  };
+
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 const RECOMMENDED_BADGES = [
   { line1: 'BEST', line2: 'SELLER', bgColor: '#7FE5BD' },
   { line1: 'MOST', line2: 'LOVED', bgColor: '#F9A8D4' },
@@ -209,57 +326,34 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     } catch {}
   };
 
-  // Recommendations for "You might also like" - strictly authentic bouquets from store catalog
-  const recommendedBouquets = useMemo(() => {
-    const isTrueBouquet = (p: ShopProduct) => {
-      const name = p.name.toLowerCase();
-      // Exclude keychains, charms, pots, loose leaves/packs, magnets, accessories
-      if (p.category === 'Keychains' || name.includes('charm') || name.includes('keychain')) return false;
-      if (p.category === 'Flower Pots' || name.includes(' pot') || name.includes('pot ') || name.endsWith('pot')) return false;
-      if (name.includes('leaf') || name.includes('pack of') || name.includes('magnet') || name.includes('earring') || name.includes('stud') || name.includes('tote') || name.includes('bag')) return false;
-      if (p.category === 'Bouquets') return true;
-      if (name.includes('bouquet')) return true;
-      return false;
-    };
+  // Canonical collection of the viewed product (one of the 8 store collections)
+  const currentCollection = useMemo(() => getProductCollection(product), [product]);
 
-    const valid = products.filter(
-      (p) =>
-        p.id !== product.id &&
-        p.handle !== product.handle &&
-        isTrueBouquet(p) &&
-        p.images &&
-        p.images.length > 0 &&
-        typeof p.price === 'number'
-    );
+  // Recommendations for "You might also like" - Strictly same category & shuffled per product
+  const relatedProducts = useMemo(() => {
+    // 1. Filter candidates strictly from the exact same category
+    const sameCategoryCandidates = products.filter((p) => {
+      // Exclude currently viewed product
+      if (p.id === product.id) return false;
+      if (p.handle && product.handle && p.handle === product.handle) return false;
+      if (p.name && product.name && p.name.toLowerCase() === product.name.toLowerCase()) return false;
 
-    // Prioritize 4 showcase bouquets matching the reference image:
-    // Slot 1: Tulip Bouquet
-    const tulip =
-      valid.find((p) => p.handle === 'flowers-mini-crochet-tulip-valley') ||
-      valid.find((p) => p.name.toLowerCase().includes('tulip'));
-    // Slot 2: Lavender Bouquet
-    const lavender =
-      valid.find((p) => p.handle === 'flowers-lavender-sunshine-lily-bouquet') ||
-      valid.find((p) => p.name.toLowerCase().includes('lavender'));
-    // Slot 3: Rose Bouquet
-    const rose =
-      valid.find((p) => p.handle === 'flowers-mini-red-rose-garden-bouquet') ||
-      valid.find((p) => p.handle === 'flowers-shaded-rose-bouquet') ||
-      valid.find((p) => p.name.toLowerCase().includes('rose'));
-    // Slot 4: Daisy / Bloom Bouquet
-    const daisy =
-      valid.find((p) => p.handle === 'flowers-mini-pure-bloom-bouquet') ||
-      valid.find((p) => p.handle === 'flowers-pink-daisy') ||
-      valid.find((p) => p.name.toLowerCase().includes('daisy') || p.name.toLowerCase().includes('bloom'));
+      // Must have valid image and price
+      const hasImg = !!(p.image || (p.images && p.images.length > 0));
+      if (!hasImg) return false;
+      if (typeof p.price !== 'number' || p.price <= 0) return false;
 
-    const showcase = [tulip, lavender, rose, daisy].filter(
-      (p): p is ShopProduct => p !== undefined && p.id !== product.id && p.handle !== product.handle
-    );
-    // Deduplicate in case a bouquet matched multiple slots
-    const uniqueShowcase = Array.from(new Set(showcase));
-    const rest = valid.filter((p) => !uniqueShowcase.some((s) => s.id === p.id));
-    return [...uniqueShowcase, ...rest].slice(0, 20);
-  }, [product, products]);
+      // Strictly match the current product's category
+      return getProductCollection(p) === currentCollection;
+    });
+
+    // 2. Deterministically shuffle per product using its id/handle so each product page has its own unique, fresh order
+    const seed = `${product.id || ''}-${product.handle || ''}-${product.name || ''}`;
+    const shuffled = seededShuffle(sameCategoryCandidates, seed);
+
+    // Limit to up to 20 products for a snappy, rich carousel
+    return shuffled.slice(0, 20);
+  }, [product, products, currentCollection]);
 
   // Carousel track ref and scroll controls for "You might also like"
   const carouselTrackRef = useRef<HTMLDivElement>(null);
@@ -272,7 +366,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
       const maxScroll = scrollWidth - clientWidth;
       if (maxScroll <= 0) return;
       const progress = scrollLeft / maxScroll;
-      const dotCount = Math.min(6, recommendedBouquets.length);
+      const dotCount = Math.min(6, relatedProducts.length);
       const dotIndex = Math.min(
         dotCount - 1,
         Math.max(0, Math.round(progress * (dotCount - 1)))
@@ -2038,7 +2132,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             className="w-full flex items-stretch justify-start gap-3.5 sm:gap-4 md:gap-5 overflow-x-auto no-scrollbar py-3 px-1 snap-x snap-mandatory scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {recommendedBouquets.map((item, idx) => {
+            {relatedProducts.map((item, idx) => {
               const isItemWishlist = !!wishlistMap[item.id];
               const badge = RECOMMENDED_BADGES[idx % RECOMMENDED_BADGES.length];
 
@@ -2242,7 +2336,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
         {/* Mobile Dot Pagination Indicator */}
         <div className="flex sm:hidden items-center justify-center gap-2 mt-5">
-          {recommendedBouquets.slice(0, 6).map((_, idx) => (
+          {relatedProducts.slice(0, 6).map((_, idx) => (
             <button
               key={idx}
               onClick={() => {
