@@ -4,7 +4,7 @@ import {
   STEM_CATEGORIES,
   FLOWER_STEMS,
 } from '../../data/bouquetFlowers';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface FlowerCrateShelfProps {
   selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
@@ -14,42 +14,18 @@ interface FlowerCrateShelfProps {
   hasNote: boolean;
 }
 
-// Map each stem to its appropriate photorealistic crate asset
-const getCrateImageForStem = (stem: FlowerStem, index: number): string => {
-  const cat = stem.category.toLowerCase();
-  const name = stem.name.toLowerCase();
-  const color = (stem.color || '').toLowerCase();
+// 6 distinct vibrant retro milk crates matching Petal Post
+const CRATE_VARIETIES = [
+  '/boutique/crate_pink_roses.png',     // Hot Pink crate
+  '/boutique/crate_yellow_blooms.png',   // Retro Orange crate
+  '/boutique/crate_red_tulips.png',      // Milk White crate
+  '/boutique/crate_white_daisies.png',   // Magenta crate
+  '/boutique/crate_purple_lavender.png', // Amber Orange crate
+  '/boutique/crate_blue_bells.png',      // Baby Blue crate
+];
 
-  if (cat.includes('rose')) {
-    if (name.includes('red') || color.includes('maroon') || color.includes('red')) {
-      return '/boutique/crate_red_tulips.png';
-    }
-    if (name.includes('yellow') || color.includes('yellow')) {
-      return '/boutique/crate_yellow_blooms.png';
-    }
-    if (name.includes('white') || name.includes('cream') || name.includes('off white')) {
-      return '/boutique/crate_white_daisies.png';
-    }
-    if (name.includes('lilac') || color.includes('purple')) {
-      return '/boutique/crate_purple_lavender.png';
-    }
-    return '/boutique/crate_pink_roses.png';
-  }
-  if (cat.includes('sunflower')) return '/boutique/crate_yellow_blooms.png';
-  if (cat.includes('tulip')) return '/boutique/crate_red_tulips.png';
-  if (cat.includes('dais')) return '/boutique/crate_white_daisies.png';
-  if (cat.includes('lavender')) return '/boutique/crate_purple_lavender.png';
-  if (cat.includes('filler') || cat.includes('foliage')) return '/boutique/crate_blue_bells.png';
-
-  const crateOptions = [
-    '/boutique/crate_pink_roses.png',
-    '/boutique/crate_yellow_blooms.png',
-    '/boutique/crate_red_tulips.png',
-    '/boutique/crate_white_daisies.png',
-    '/boutique/crate_purple_lavender.png',
-    '/boutique/crate_blue_bells.png',
-  ];
-  return crateOptions[index % crateOptions.length];
+const getCrateImageForIndex = (index: number): string => {
+  return CRATE_VARIETIES[index % CRATE_VARIETIES.length];
 };
 
 export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
@@ -68,14 +44,9 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
       ? FLOWER_STEMS
       : FLOWER_STEMS.filter((s) => s.category === activeCategory);
 
-  const totalStemsCount = Object.values(selectedFlowers).reduce(
-    (acc, it) => acc + it.quantity,
-    0
-  );
-
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const distance = direction === 'left' ? -360 : 360;
+      const distance = direction === 'left' ? -380 : 380;
       scrollRef.current.scrollBy({ left: distance, behavior: 'smooth' });
     }
   };
@@ -124,14 +95,14 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
       </div>
 
       {/* ── The Flower Shelf (Items sit directly ON the shelf board) ── */}
-      <div className="relative w-full pt-1 pb-1">
+      <div className="relative w-full pt-2 pb-1">
         <div
           ref={scrollRef}
-          className="flex items-end gap-3 sm:gap-5 overflow-x-auto no-scrollbar px-4 sm:px-8 pb-1 scroll-smooth"
+          className="flex items-end gap-3 sm:gap-6 overflow-x-auto no-scrollbar px-4 sm:px-8 pt-3 pb-1 scroll-smooth"
         >
           {filteredStems.map((stem, index) => {
             const count = selectedFlowers[stem.variantId]?.quantity || 0;
-            const crateImage = getCrateImageForStem(stem, index);
+            const crateImage = getCrateImageForIndex(index);
             const flowerSrc = stem.cutoutImage || stem.image;
 
             return (
@@ -139,18 +110,18 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
                 key={stem.variantId}
                 data-crate-stem={stem.variantId}
                 onClick={() => onAddFlower(stem)}
-                className="group flex-shrink-0 flex flex-col items-center relative w-[118px] sm:w-[130px] select-none cursor-pointer"
+                className="group flex-shrink-0 flex flex-col items-center relative w-[124px] sm:w-[138px] select-none cursor-pointer"
               >
                 {/* ── Black Circular Quantity Badge (above crate, like Petal Post) ── */}
                 {count > 0 && (
-                  <div className="absolute -top-2 -right-1 z-30 flex items-center gap-0.5">
+                  <div className="absolute -top-2.5 -right-1 z-30 flex items-center gap-0.5">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         onRemoveFlower(stem.variantId);
                       }}
-                      title="Remove one stem"
+                      title="Click to remove one stem"
                       className="w-6 h-6 rounded-full bg-[#111827] text-white font-['Fredoka'] font-black text-xs flex items-center justify-center shadow-lg border-2 border-white hover:bg-[#811B2B] transition-colors cursor-pointer"
                     >
                       {count}
@@ -160,8 +131,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
 
                 {/* ── PHOTOREALISTIC MILK CRATE WITH OVERFLOWING LUSH BLOOMS ── */}
                 <div
-                  onClick={() => onAddFlower(stem)}
-                  className="relative cursor-pointer w-[114px] sm:w-[126px] h-[120px] sm:h-[132px] flex items-end justify-center transition-all duration-200 group-hover:-translate-y-2 active:scale-95 drop-shadow-[0_12px_18px_rgba(0,0,0,0.22)]"
+                  className="relative w-[120px] sm:w-[134px] h-[126px] sm:h-[140px] flex items-end justify-center transition-all duration-200 group-hover:-translate-y-2 active:scale-95 drop-shadow-[0_14px_22px_rgba(0,0,0,0.24)]"
                   title={`Click to pick ${stem.name} (+₹${stem.price})`}
                 >
                   {/* Photorealistic Crate with zinc bucket and lush crochet bouquet */}
@@ -172,9 +142,9 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
                     className="w-full h-full object-contain pointer-events-none select-none transition-transform group-hover:scale-105"
                   />
 
-                  {/* Accurate Single Bloom Preview Pin in front for exact variety identifier */}
+                  {/* Variety Identification Bloom Icon */}
                   <div
-                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white/90 p-0.5 shadow-md border border-[#811B2B]/20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white/95 p-0.5 shadow-md border border-[#811B2B]/20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                     title={stem.name}
                   >
                     <img
@@ -186,10 +156,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
                 </div>
 
                 {/* ── BOUTIQUE SHELF HANGING PRICE TAG (Matching Petal Post) ── */}
-                <div
-                  onClick={() => onAddFlower(stem)}
-                  className="mt-1.5 w-[110px] sm:w-[122px] bg-[#FFFDF9] border border-[#E2DBD0] rounded-sm py-1 px-1.5 shadow-xs flex flex-col items-center text-center cursor-pointer hover:border-[#811B2B]/40 hover:bg-[#FFFBEA] transition-colors"
-                >
+                <div className="mt-1.5 w-[116px] sm:w-[130px] bg-[#FFFDF9] border border-[#E2DBD0] rounded-sm py-1 px-1.5 shadow-xs flex flex-col items-center text-center cursor-pointer hover:border-[#811B2B]/40 hover:bg-[#FFFBEA] transition-colors">
                   <span className="font-['Fredoka'] text-[11px] font-bold text-[#4A1521] truncate max-w-full leading-tight">
                     {stem.name}
                   </span>
@@ -204,7 +171,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
 
         {/* ── 3D Hot-Pink Shelf Board ── */}
         <div
-          className="w-full h-3 sm:h-3.5 relative shadow-md"
+          className="w-full h-3.5 sm:h-4 relative shadow-md"
           style={{
             background: 'linear-gradient(to bottom, #F43F5E 0%, #E11D48 60%, #BE123C 100%)',
             borderTop: '1px solid #FDA4AF',
