@@ -48,7 +48,7 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
   // If user has chosen ribbon AND has at least 1 flower, bouquet wraps into a cone!
   const isWrapped = hasRibbonChosen && totalCount > 0;
 
-  // Natural fan arrangement for flower blossoms on open paper
+  // Natural fan arrangement for flower blossoms on open paper (Snug, lush bunch matching Petal Post)
   const getUnwrappedStemStyle = (index: number, total: number): React.CSSProperties => {
     if (total === 0) return {};
     if (total === 1) {
@@ -61,16 +61,16 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
 
     const spread = Math.min(total - 1, 10);
     const progress = spread === 0 ? 0.5 : index / spread;
-    // Fan angle between -26deg and +26deg
-    const angleRange = Math.min(52, 16 + spread * 3.6);
+    // Fan angle between -20deg and +20deg (snug florist fan)
+    const angleRange = Math.min(40, 14 + spread * 3.0);
     const angle = -angleRange / 2 + progress * angleRange;
 
-    // Horizontal spread from -85px to +85px
-    const xRange = Math.min(170, 24 + spread * 15);
+    // Horizontal spread from -55px to +55px (tightly gathered florist bunch matching reference)
+    const xRange = Math.min(115, 20 + spread * 11);
     const xOffset = -xRange / 2 + progress * xRange;
 
     // Arch height: center blooms sit higher
-    const archOffset = (1 - Math.pow((progress - 0.5) * 2, 2)) * 26;
+    const archOffset = (1 - Math.pow((progress - 0.5) * 2, 2)) * 22;
 
     return {
       transform: `translateX(${xOffset}px) translateY(${-archOffset}px) rotate(${angle}deg)`,
@@ -119,18 +119,33 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               with resting white-gloved hand (Matching Annie's Petal Post)
              ══════════════════════════════════════════════════════════════ */
           <div className="relative flex flex-col items-center justify-center pb-2 animate-fadeIn">
-            {/* Flat diamond open wrapping sheet */}
-            <div className="relative w-[300px] h-[300px] drop-shadow-[0_20px_35px_rgba(0,0,0,0.24)] transition-transform duration-300 hover:scale-[1.02]">
+            {/* Flat diamond open wrapping sheet with centered radiant backlight */}
+            <div className="relative w-[300px] h-[300px] flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]">
+              {/* Luminous yellow radial halo (100% locked to paper center) */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(254, 240, 138, 0.7) 0%, rgba(250, 204, 21, 0.45) 45%, rgba(245, 158, 11, 0.15) 70%, transparent 85%)',
+                  filter: 'blur(24px)',
+                  transform: 'scale(1.15)',
+                }}
+              />
+
               <img
                 src="/boutique/wrapping-paper-open.png"
                 alt="Open wrapping paper sheet"
-                className="w-full h-full object-contain pointer-events-none select-none"
+                className="relative z-10 w-full h-full object-contain pointer-events-none select-none"
+                style={{
+                  filter:
+                    'drop-shadow(0 0 16px rgba(254, 240, 138, 0.95)) drop-shadow(0 0 32px rgba(250, 204, 21, 0.85)) drop-shadow(0 0 50px rgba(234, 179, 8, 0.5)) drop-shadow(0 16px 28px rgba(0,0,0,0.22))',
+                }}
               />
             </div>
 
             {/* Photorealistic White Gloved Hand resting on paper */}
             <div
-              className="absolute pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)]"
+              className="absolute pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] z-15"
               style={{
                 width: '130px',
                 height: '150px',
@@ -147,7 +162,7 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
             </div>
 
             {/* Instruction Bubble */}
-            <div className="absolute -bottom-2 inset-x-0 flex justify-center pointer-events-none">
+            <div className="absolute -bottom-2 inset-x-0 flex justify-center pointer-events-none z-20">
               <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B] bg-white/95 px-4 py-1.5 rounded-full shadow-md border border-[#811B2B]/20">
                 Pick flowers from the shelf above to build your bouquet ♡
               </span>
@@ -159,15 +174,30 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               with green stems converging and gloved hand holding stems
              ══════════════════════════════════════════════════════════════ */
           <>
-            {/* Open diamond wrapping paper sheet underneath */}
+            {/* Open diamond wrapping paper sheet underneath with perfectly centered radiant halo */}
             <div
-              className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
+              className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none flex items-center justify-center"
               style={{ width: '310px', height: '310px' }}
             >
+              {/* Luminous sunny-yellow radiant backlight halo (100% centered on paper) */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(254, 240, 138, 0.75) 0%, rgba(250, 204, 21, 0.5) 45%, rgba(245, 158, 11, 0.18) 70%, transparent 85%)',
+                  filter: 'blur(26px)',
+                  transform: 'scale(1.18)',
+                }}
+              />
+
               <img
                 src="/boutique/wrapping-paper-open.png"
                 alt="Open wrapping paper"
-                className="w-full h-full object-contain drop-shadow-[0_18px_32px_rgba(0,0,0,0.22)] pointer-events-none"
+                className="relative z-10 w-full h-full object-contain pointer-events-none"
+                style={{
+                  filter:
+                    'drop-shadow(0 0 16px rgba(254, 240, 138, 0.95)) drop-shadow(0 0 32px rgba(250, 204, 21, 0.85)) drop-shadow(0 0 50px rgba(234, 179, 8, 0.5)) drop-shadow(0 16px 28px rgba(0,0,0,0.22))',
+                }}
               />
             </div>
 
@@ -186,7 +216,7 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
                 {flowerInstances.slice(0, 16).map((_, idx) => {
                   const spread = Math.min(flowerInstances.length - 1, 10);
                   const progress = spread === 0 ? 0.5 : idx / spread;
-                  const xRange = Math.min(160, 20 + spread * 14);
+                  const xRange = Math.min(115, 20 + spread * 11);
                   const startX = 120 + (progress - 0.5) * xRange;
                   return (
                     <line
@@ -196,16 +226,31 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
                       x2="120"
                       y2="105"
                       stroke="#3B6B22"
-                      strokeWidth="2.8"
+                      strokeWidth="3.2"
                       strokeLinecap="round"
-                      opacity="0.9"
+                      opacity="0.95"
                     />
                   );
                 })}
               </svg>
             </div>
 
-            {/* Flowers fanning out on the open paper (Nestled directly on yellow paper) */}
+            {/* ── Luminous Soft Bloom behind flower heads ── */}
+            <div
+              className="absolute pointer-events-none z-18 rounded-full"
+              style={{
+                bottom: '95px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '180px',
+                height: '130px',
+                background:
+                  'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.75) 0%, rgba(254, 240, 138, 0.5) 45%, rgba(250, 204, 21, 0.2) 75%, transparent 90%)',
+                filter: 'blur(16px)',
+              }}
+            />
+
+            {/* Flowers fanning out on the open paper (Nestled directly on yellow paper with glowing luminous pop) */}
             <div
               className="absolute bottom-[65px] left-1/2 pointer-events-none z-20"
               style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
@@ -227,7 +272,11 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
                     <img
                       src={flower.cutoutImage || flower.image}
                       alt={flower.name}
-                      className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_10px_18px_rgba(0,0,0,0.25)]"
+                      className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-300 hover:scale-105"
+                      style={{
+                        filter:
+                          'brightness(1.08) contrast(1.06) saturate(1.15) drop-shadow(0 0 10px rgba(255, 245, 180, 0.7)) drop-shadow(0 0 20px rgba(254, 224, 71, 0.4)) drop-shadow(0 12px 20px rgba(0,0,0,0.25))',
+                      }}
                     />
                   </div>
                 );
@@ -251,10 +300,10 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               />
             </div>
 
-            {/* Subtitle guidance text */}
-            <div className="absolute -bottom-1 inset-x-0 flex justify-center z-30">
-              <span className="font-['Fredoka'] text-[11px] font-bold text-[#811B2B] bg-white/95 px-4 py-1.5 rounded-full shadow-sm border border-[#811B2B]/20">
-                Choose a ribbon on the right to wrap your bouquet 🎀
+            {/* ── Small White Stem Count Pill at bottom tip of paper (Matching Petal Post reference) ── */}
+            <div className="absolute -bottom-1.5 inset-x-0 flex justify-center z-30 pointer-events-none">
+              <span className="font-['Fredoka'] text-[11px] font-bold text-[#811B2B] bg-white/95 px-3.5 py-1 rounded-full shadow-md border border-[#811B2B]/20">
+                {totalCount} {totalCount === 1 ? 'stem' : 'stems'}
               </span>
             </div>
           </>
@@ -304,7 +353,11 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
                     <img
                       src={flower.cutoutImage || flower.image}
                       alt={flower.name}
-                      className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_10px_18px_rgba(0,0,0,0.25)]"
+                      className="w-full h-full object-contain select-none pointer-events-none"
+                      style={{
+                        filter:
+                          'brightness(1.08) contrast(1.06) saturate(1.15) drop-shadow(0 0 10px rgba(255, 245, 180, 0.7)) drop-shadow(0 0 20px rgba(254, 224, 71, 0.4)) drop-shadow(0 10px 18px rgba(0,0,0,0.28))',
+                      }}
                     />
                   </div>
                 );
@@ -334,15 +387,30 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               </div>
             )}
 
-            {/* Photorealistic Folded Crepe Paper Cone (z-20) */}
+            {/* Photorealistic Folded Crepe Paper Cone (z-20) with centered radiant backlight */}
             <div
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]"
               style={{ width: '235px', height: '280px' }}
             >
+              {/* Luminous yellow radial halo (100% locked to cone center) */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(ellipse at center, rgba(254, 240, 138, 0.75) 0%, rgba(250, 204, 21, 0.45) 50%, transparent 80%)',
+                  filter: 'blur(22px)',
+                  transform: 'scale(1.15)',
+                }}
+              />
+
               <img
                 src="/boutique/wrapping-paper-cone.png"
                 alt="Wrapped bouquet crepe cone"
-                className="w-full h-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] pointer-events-none"
+                className="relative z-10 w-full h-full object-contain pointer-events-none"
+                style={{
+                  filter:
+                    'drop-shadow(0 0 16px rgba(254, 240, 138, 0.9)) drop-shadow(0 0 35px rgba(250, 204, 21, 0.65)) drop-shadow(0 18px 32px rgba(0,0,0,0.28))',
+                }}
               />
             </div>
 

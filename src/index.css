@@ -45,3 +45,22 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes pulseGlow {
+  0% {
+    transform: translateX(-50%) scale(0.96);
+    opacity: 0.82;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scale(0.96);
+    opacity: 0.82;
+  }
+}
+
+.animate-pulseGlow {
+  animation: pulseGlow 3.5s ease-in-out infinite;
+}
