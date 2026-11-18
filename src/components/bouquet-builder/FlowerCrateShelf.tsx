@@ -14,18 +14,30 @@ interface FlowerCrateShelfProps {
   hasNote: boolean;
 }
 
-// 6 distinct vibrant retro milk crates matching Petal Post
-const CRATE_VARIETIES = [
-  '/boutique/crate_pink_roses.png',     // Hot Pink crate
-  '/boutique/crate_yellow_blooms.png',   // Retro Orange crate
-  '/boutique/crate_red_tulips.png',      // Milk White crate
-  '/boutique/crate_white_daisies.png',   // Magenta crate
-  '/boutique/crate_purple_lavender.png', // Amber Orange crate
-  '/boutique/crate_blue_bells.png',      // Baby Blue crate
-];
+// Color-coordinated photorealistic retro milk crates matching Petal Post
+const getCrateImageForStem = (stem: FlowerStem): string => {
+  const color = stem.color;
+  const name = stem.name.toLowerCase();
 
-const getCrateImageForIndex = (index: number): string => {
-  return CRATE_VARIETIES[index % CRATE_VARIETIES.length];
+  if (color === 'Maroon' || name.includes('red') || name.includes('maroon') || name.includes('thai')) {
+    return '/boutique/crate_red_tulips.png'; // Rich crimson/red blooms in milk crate
+  }
+  if (color === 'Off White' || name.includes('off white') || name.includes('white') || name.includes('jasmine')) {
+    return '/boutique/crate_white_daisies.png'; // Crisp ivory/off-white blooms in milk crate
+  }
+  if (color === 'Butter Yellow' || name.includes('yellow') || name.includes('sunflower') || name.includes('marigold')) {
+    return '/boutique/crate_yellow_blooms.png'; // Sunburst butter-yellow blooms in milk crate
+  }
+  if (color === 'Pastel Lilac' || name.includes('purple') || name.includes('lilac') || name.includes('lavender')) {
+    return '/boutique/crate_purple_lavender.png'; // Royal purple/lilac blooms in milk crate
+  }
+  if (color === 'Sky Blue' || name.includes('blue') || name.includes('delphinium') || name.includes('sky')) {
+    return '/boutique/crate_blue_bells.png'; // Bright sky blue blooms in milk crate
+  }
+  if (color === 'Green' || name.includes('leaf') || name.includes('foliage') || name.includes('sage') || name.includes('monster')) {
+    return '/boutique/crate_green_foliage.png'; // Lush green foliage in milk crate
+  }
+  return '/boutique/crate_pink_roses.png'; // Pastel pink blooms in milk crate
 };
 
 export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
@@ -102,7 +114,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
         >
           {filteredStems.map((stem, index) => {
             const count = selectedFlowers[stem.variantId]?.quantity || 0;
-            const crateImage = getCrateImageForIndex(index);
+            const crateImage = getCrateImageForStem(stem);
             const flowerSrc = stem.cutoutImage || stem.image;
 
             return (
@@ -156,11 +168,11 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
                 </div>
 
                 {/* ── BOUTIQUE SHELF HANGING PRICE TAG (Matching Petal Post) ── */}
-                <div className="mt-1.5 w-[116px] sm:w-[130px] bg-[#FFFDF9] border border-[#E2DBD0] rounded-sm py-1 px-1.5 shadow-xs flex flex-col items-center text-center cursor-pointer hover:border-[#811B2B]/40 hover:bg-[#FFFBEA] transition-colors">
-                  <span className="font-['Fredoka'] text-[11px] font-bold text-[#4A1521] truncate max-w-full leading-tight">
+                <div className="mt-1.5 w-[116px] sm:w-[130px] min-h-[46px] bg-[#FFFDF9] border border-[#E2DBD0] rounded-sm py-1 px-1.5 shadow-xs flex flex-col justify-between items-center text-center cursor-pointer hover:border-[#811B2B]/40 hover:bg-[#FFFBEA] transition-colors">
+                  <span className="font-['Fredoka'] text-[10.5px] font-bold text-[#4A1521] leading-tight text-center line-clamp-2">
                     {stem.name}
                   </span>
-                  <span className="font-mono text-[11px] font-black text-[#811B2B] mt-0.5 tabular-nums">
+                  <span className="font-mono text-[11px] font-black text-[#811B2B] tabular-nums">
                     ₹{stem.price.toLocaleString('en-IN')}
                   </span>
                 </div>
