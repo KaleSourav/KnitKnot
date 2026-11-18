@@ -5,20 +5,15 @@ import {
   RibbonOption,
   WRAPPING_OPTIONS,
 } from '../../data/bouquetFlowers';
-import { Sparkles, Trash2, Edit3, Heart } from 'lucide-react';
+import { Trash2, FileText } from 'lucide-react';
 
 interface LiveBouquetCounterProps {
   selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
   wrapping: WrappingOption;
   ribbon: RibbonOption;
-  note: {
-    recipient: string;
-    message: string;
-    sender: string;
-    cardStyle: string;
-    isTucked: boolean;
-  };
-  onSelectWrapping: (wrap: WrappingOption) => void;
+  giftNote: string;
+  recipientName: string;
+  onSelectWrapping: (w: WrappingOption) => void;
   onOpenNoteModal: () => void;
   onClearBouquet: () => void;
 }
@@ -27,12 +22,13 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
   selectedFlowers,
   wrapping,
   ribbon,
-  note,
+  giftNote,
+  recipientName,
   onSelectWrapping,
   onOpenNoteModal,
   onClearBouquet,
 }) => {
-  // Flatten stems into individual visual flower instances for the bouquet fan
+  // Flatten stems into individual visual flower instances
   const flowerInstances: FlowerStem[] = [];
   Object.values(selectedFlowers).forEach(({ flower, quantity }) => {
     for (let i = 0; i < quantity; i++) {
@@ -42,254 +38,348 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
 
   const totalCount = flowerInstances.length;
 
-  // Compute fan layout angles and offsets for up to 18 visible stems
-  const getStemTransform = (index: number, total: number) => {
-    if (total === 1) return { rotate: 0, x: 0, y: 0, scale: 1, z: 10 };
+  // Compute natural fan arrangement for flower blossoms
+  const getStemStyle = (index: number, total: number): React.CSSProperties => {
+    if (total === 0) return {};
+    if (total === 1) {
+      return {
+        transform: 'rotate(0deg) scale(1.05)',
+        transformOrigin: 'bottom center',
+        zIndex: 10,
+      };
+    }
 
-    // Spread angles from -32deg to +32deg
-    const progress = index / (total - 1); // 0 to 1
-    const angle = -32 + progress * 64; // e.g. -32 to +32
-    const xOffset = (progress - 0.5) * 110; // -55px to +55px
-    // Center stems sit higher, edge stems slightly lower
-    const yCurve = Math.abs(progress - 0.5) * 28;
-    // Stagger depth
-    const zIndex = 10 + (index % 5);
+    const spread = Math.min(total - 1, 11);
+    const progress = spread === 0 ? 0.5 : index / spread;
+    // Angle fan between -28deg and +28deg
+    const angleRange = Math.min(56, 18 + spread * 3.8);
+    const angle = -angleRange / 2 + progress * angleRange;
+
+    // Horizontal spread from -80px to +80px
+    const xRange = Math.min(150, 30 + spread * 12);
+    const xOffset = -xRange / 2 + progress * xRange;
+
+    // Arch height: center flowers sit higher, edges slightly lower
+    const archOffset = (1 - Math.pow((progress - 0.5) * 2, 2)) * 22;
 
     return {
-      rotate: angle,
-      x: xOffset,
-      y: yCurve,
-      scale: 0.95 + (index % 2) * 0.08,
-      z: zIndex,
+      transform: `translateX(${xOffset}px) translateY(${-archOffset}px) rotate(${angle}deg)`,
+      transformOrigin: 'bottom center',
+      zIndex: Math.round(10 + (1 - Math.abs(progress - 0.5)) * 10),
     };
   };
 
   return (
-    <div className="relative w-full max-w-[460px] mx-auto flex flex-col items-center select-none">
-      {/* ── Bouquet Visual Stage ── */}
-      <div className="relative w-full h-[360px] sm:h-[420px] flex items-end justify-center overflow-visible">
-        {/* Soft Radial Backlight */}
+    <div className="relative w-full max-w-[440px] lg:max-w-[480px] mx-auto flex flex-col items-center select-none">
+      {/* ── Bouquet Stage ── */}
+      <div
+        className="relative w-full flex items-end justify-center"
+        style={{ height: '360px' }}
+      >
+        {/* Soft colored glow behind bouquet */}
         <div
-          className="absolute inset-x-12 bottom-12 h-64 rounded-full blur-3xl opacity-35 pointer-events-none transition-colors duration-500"
+          className="absolute inset-x-12 bottom-0 h-52 rounded-full blur-3xl opacity-35 pointer-events-none transition-colors duration-500"
           style={{ backgroundColor: wrapping.colorHex }}
         />
 
-        {/* ── 1. The Flowers Layer (Blooming inside the wrap) ── */}
-        <div className="absolute inset-x-0 bottom-24 sm:bottom-28 h-[240px] sm:h-[290px] flex items-end justify-center pointer-events-none">
-          {totalCount === 0 ? (
-            /* Empty State Encouragement */
-            <div className="flex flex-col items-center justify-center text-center p-6 bg-white/70 backdrop-blur-xs rounded-2xl border-2 border-dashed border-[#641623]/25 max-w-[280px] shadow-xs pointer-events-auto mb-10 animate-pulse">
-              <span className="text-3xl mb-1.5">🌸</span>
+        {totalCount === 0 ? (
+          /* Empty state */
+          <div className="absolute inset-0 flex flex-col items-center justify-center pb-8">
+            <div
+              className="flex flex-col items-center justify-center text-center px-6 py-8 rounded-3xl border-2 border-dashed border-[#811B2B]/25 max-w-[270px] shadow-sm"
+              style={{ background: 'rgba(255,255,255,0.65)' }}
+            >
+              <div className="text-4xl mb-2">🌸</div>
               <p className="font-['Fredoka'] font-bold text-sm text-[#641623]">
                 Your bouquet is empty!
               </p>
               <p className="font-['Fredoka'] text-xs text-[#641623]/70 mt-1 leading-relaxed">
-                Click any crochet blooms on the shelf above to arrange them here ♡
+                Tap flowers on the shelf above to start arranging your bouquet ♡
               </p>
             </div>
-          ) : (
-            /* Flower Fan Arrangement */
-            flowerInstances.slice(0, 20).map((flower, idx) => {
-              const { rotate, x, y, scale, z } = getStemTransform(idx, totalCount);
-
-              return (
-                <div
-                  key={`${flower.variantId}-${idx}`}
-                  style={{
-                    transform: `translate(${x}px, ${y}px) rotate(${rotate}deg) scale(${scale})`,
-                    transformOrigin: 'bottom center',
-                    zIndex: z,
-                  }}
-                  className="absolute bottom-6 w-28 h-40 sm:w-36 sm:h-48 transition-all duration-300 ease-out filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.14)]"
-                >
-                  <img
-                    src={flower.image}
-                    alt={flower.name}
-                    className="w-full h-full object-contain select-none"
-                  />
-                </div>
-              );
-            })
-          )}
-
-          {/* ── 2. Tucked Greeting Card (Visible in Bouquet) ── */}
-          {note.isTucked && note.message && (
-            <div
-              onClick={onOpenNoteModal}
-              className="absolute top-2 right-4 z-40 transform rotate-12 hover:rotate-6 hover:scale-105 transition-all duration-200 cursor-pointer pointer-events-auto group"
-              title="Click to view/edit handwritten note"
-            >
-              <div className="bg-[#FFFCEB] border-2 border-[#811B2B] rounded-xl p-2.5 shadow-md w-32 text-left">
-                <div className="flex items-center justify-between border-b border-[#811B2B]/20 pb-1 mb-1">
-                  <span className="text-[10px] font-bold text-[#811B2B] uppercase tracking-wider truncate">
-                    {note.recipient ? `To: ${note.recipient}` : 'Gift Note'}
-                  </span>
-                  <Edit3 className="w-3 h-3 text-[#811B2B] group-hover:scale-115 transition-transform" />
-                </div>
-                <p className="font-script text-xs text-[#641623] truncate leading-tight">
-                  &ldquo;{note.message}&rdquo;
-                </p>
-                {note.sender && (
-                  <span className="font-script text-[11px] text-[#811B2B] block text-right mt-0.5">
-                    — {note.sender}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ── 3. Wrapping Paper Cone / Fold (Center Counter Anchor) ── */}
-        <div className="relative w-[280px] sm:w-[330px] h-[190px] sm:h-[220px] z-20 flex items-center justify-center">
-          <svg
-            viewBox="0 0 320 220"
-            fill="none"
-            className="w-full h-full filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)] overflow-visible"
-          >
-            {/* Background wrap fold left */}
-            <path
-              d="M 20 20 L 160 210 L 80 40 Z"
-              fill={wrapping.foldColor}
-              stroke={wrapping.borderColor}
-              strokeWidth="2.2"
-              className="transition-colors duration-300"
-            />
-            {/* Background wrap fold right */}
-            <path
-              d="M 300 20 L 160 210 L 240 40 Z"
-              fill={wrapping.foldColor}
-              stroke={wrapping.borderColor}
-              strokeWidth="2.2"
-              className="transition-colors duration-300"
-            />
-            {/* Main Center Fold Wrapping Paper */}
-            <path
-              d="M 30 25 C 90 60, 160 40, 290 25 L 175 212 C 168 218, 152 218, 145 212 Z"
-              fill={wrapping.colorHex}
-              stroke={wrapping.borderColor}
-              strokeWidth="2.5"
-              className="transition-colors duration-300"
-            />
-            {/* Layered Overlapping Front Flap */}
-            <path
-              d="M 50 38 Q 160 85 270 38 L 165 210 L 155 210 Z"
-              fill={wrapping.foldColor}
-              fillOpacity="0.45"
-              className="transition-colors duration-300"
-            />
-            {/* Decorative Scallop Stitch Rim Line on Wrap */}
-            <path
-              d="M 45 32 Q 160 70 275 32"
-              stroke="#641623"
-              strokeWidth="1.8"
-              strokeDasharray="6 4"
-              strokeLinecap="round"
-              className="opacity-40"
-            />
-          </svg>
-
-          {/* ── 4. Ribbon Bow (Tied at the Cinch of the Wrap) ── */}
-          <div className="absolute bottom-5 sm:bottom-6 z-30 flex flex-col items-center pointer-events-none transform -translate-y-1">
-            {/* Ribbon Knot & Bow SVG */}
-            <svg
-              viewBox="0 0 120 70"
-              fill="none"
-              className="w-24 sm:w-28 h-14 sm:h-16 filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.18)]"
-            >
-              {/* Left Bow Loop */}
-              <path
-                d="M 60 30 C 40 10, 10 15, 20 35 C 28 48, 52 38, 60 30 Z"
-                fill={ribbon.colorHex}
-                stroke="#641623"
-                strokeWidth="2"
-                className="transition-colors duration-300"
-              />
-              {/* Right Bow Loop */}
-              <path
-                d="M 60 30 C 80 10, 110 15, 100 35 C 92 48, 68 38, 60 30 Z"
-                fill={ribbon.colorHex}
-                stroke="#641623"
-                strokeWidth="2"
-                className="transition-colors duration-300"
-              />
-              {/* Center Bow Knot */}
-              <circle
-                cx="60"
-                cy="30"
-                r="7"
-                fill={ribbon.colorHex}
-                stroke="#641623"
-                strokeWidth="2"
-                className="transition-colors duration-300"
-              />
-              {/* Ribbon Tails */}
-              <path
-                d="M 57 35 Q 48 55 42 66"
-                stroke={ribbon.colorHex}
-                strokeWidth="6"
-                strokeLinecap="round"
-                className="transition-colors duration-300"
-              />
-              <path
-                d="M 63 35 Q 72 55 78 66"
-                stroke={ribbon.colorHex}
-                strokeWidth="6"
-                strokeLinecap="round"
-                className="transition-colors duration-300"
-              />
-            </svg>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* ════════════════════════════════════════════
+                1. BACK WRAPPING PAPER (behind flowers, z-10)
+                ════════════════════════════════════════════ */}
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
+              style={{ width: '250px', height: '220px' }}
+            >
+              <svg viewBox="0 0 250 220" fill="none" className="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
+                {/* Back Left Wing */}
+                <path
+                  d="M 15 25 L 125 210 L 65 80 Z"
+                  fill={wrapping.foldColor}
+                  stroke={wrapping.borderColor}
+                  strokeWidth="1.8"
+                  className="transition-colors duration-500"
+                />
+                {/* Back Right Wing */}
+                <path
+                  d="M 235 25 L 125 210 L 185 80 Z"
+                  fill={wrapping.foldColor}
+                  stroke={wrapping.borderColor}
+                  strokeWidth="1.8"
+                  className="transition-colors duration-500"
+                />
+                {/* Back Top Fan Panel */}
+                <path
+                  d="M 25 35 Q 125 15 225 35 L 195 100 Q 125 80 55 100 Z"
+                  fill={wrapping.colorHex}
+                  fillOpacity="0.85"
+                  className="transition-colors duration-500"
+                />
+              </svg>
+            </div>
+
+            {/* ════════════════════════════════════════════
+                2. STEM CONVERGENCE (green lines, z-15)
+                ════════════════════════════════════════════ */}
+            <div
+              className="absolute pointer-events-none z-15"
+              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '110px' }}
+            >
+              <svg viewBox="0 0 200 110" fill="none" className="w-full h-full">
+                {flowerInstances.slice(0, 14).map((_, idx) => {
+                  const spread = Math.min(flowerInstances.length - 1, 11);
+                  const progress = spread === 0 ? 0.5 : idx / spread;
+                  const xRange = Math.min(130, 20 + spread * 11);
+                  const startX = 100 + (progress - 0.5) * xRange;
+                  return (
+                    <line
+                      key={idx}
+                      x1={startX}
+                      y1="0"
+                      x2="100"
+                      y2="105"
+                      stroke="#4E7C30"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      opacity="0.85"
+                    />
+                  );
+                })}
+              </svg>
+            </div>
+
+            {/* ════════════════════════════════════════════
+                3. TUCKED GIFT CARD (z-18, peeking out)
+                ════════════════════════════════════════════ */}
+            {giftNote && (
+              <div
+                onClick={onOpenNoteModal}
+                className="absolute z-18 cursor-pointer transform -rotate-6 hover:-rotate-3 transition-transform duration-200"
+                style={{ bottom: '135px', left: 'calc(50% + 40px)' }}
+                title="Click to view/edit note"
+              >
+                <div className="bg-[#FFFDF9] border border-[#811B2B]/30 rounded-md px-2.5 py-1.5 shadow-md flex items-center gap-1">
+                  <FileText className="w-3 h-3 text-[#811B2B]" />
+                  <span className="font-['Fredoka'] text-[10px] font-bold text-[#811B2B] max-w-[70px] truncate">
+                    {recipientName || 'Gift note'}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* ════════════════════════════════════════════
+                4. FLOWER BLOOMS (fan arrangement, z-20)
+                ════════════════════════════════════════════ */}
+            <div
+              className="absolute bottom-[115px] left-1/2 pointer-events-none z-20"
+              style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
+            >
+              {flowerInstances.slice(0, 16).map((flower, idx) => {
+                const style = getStemStyle(idx, Math.min(flowerInstances.length, 16));
+                return (
+                  <div
+                    key={`${flower.variantId}-${idx}`}
+                    className="absolute transition-all duration-400 ease-out"
+                    style={{
+                      ...style,
+                      width: '105px',
+                      height: '140px',
+                      left: '-52px',
+                      bottom: '0',
+                    }}
+                  >
+                    <img
+                      src={flower.cutoutImage || flower.image}
+                      alt={flower.name}
+                      className="w-full h-full object-contain select-none pointer-events-none"
+                      style={{
+                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.22))',
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ════════════════════════════════════════════
+                5. FRONT WRAPPING CONE (covers bottom stems, z-25)
+                ════════════════════════════════════════════ */}
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-25 pointer-events-none"
+              style={{ width: '250px', height: '185px' }}
+            >
+              <svg viewBox="0 0 250 185" fill="none" className="w-full h-full drop-shadow-[0_8px_18px_rgba(0,0,0,0.14)]">
+                {/* Main Front Cone */}
+                <path
+                  d="M 22 28 C 75 58 125 42 228 28 L 136 180 C 130 186 120 186 114 180 Z"
+                  fill={wrapping.colorHex}
+                  stroke={wrapping.borderColor}
+                  strokeWidth="2.2"
+                  className="transition-colors duration-500"
+                />
+                {/* Top Crease Highlight */}
+                <path
+                  d="M 28 34 Q 125 70 222 34"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  opacity="0.4"
+                />
+                {/* Decorative Stitching on Rim */}
+                <path
+                  d="M 34 40 Q 125 74 216 40"
+                  stroke={wrapping.borderColor}
+                  strokeWidth="1.5"
+                  strokeDasharray="5 3"
+                  strokeLinecap="round"
+                  opacity="0.55"
+                />
+                {/* Front Overlap Shading Flap */}
+                <path
+                  d="M 45 48 Q 125 88 205 48 L 132 178 L 118 178 Z"
+                  fill={wrapping.foldColor}
+                  fillOpacity="0.32"
+                  className="transition-colors duration-500"
+                />
+              </svg>
+            </div>
+
+            {/* ════════════════════════════════════════════
+                6. RIBBON BOW (on wrap cinch, z-30)
+                ════════════════════════════════════════════ */}
+            <div
+              className="absolute z-30 pointer-events-none"
+              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)' }}
+            >
+              <svg viewBox="0 0 110 70" fill="none" className="w-24 h-16"
+                style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.22))' }}
+              >
+                {/* Left bow loop */}
+                <path
+                  d="M 55 32 C 36 12 6 16 16 36 C 24 50 48 42 55 32 Z"
+                  fill={ribbon.colorHex}
+                  stroke="#5A1218"
+                  strokeWidth="1.5"
+                  className="transition-colors duration-300"
+                />
+                {/* Right bow loop */}
+                <path
+                  d="M 55 32 C 74 12 104 16 94 36 C 86 50 62 42 55 32 Z"
+                  fill={ribbon.colorHex}
+                  stroke="#5A1218"
+                  strokeWidth="1.5"
+                  className="transition-colors duration-300"
+                />
+                {/* Center knot */}
+                <ellipse
+                  cx="55"
+                  cy="32"
+                  rx="7"
+                  ry="6"
+                  fill={ribbon.colorHex}
+                  stroke="#5A1218"
+                  strokeWidth="2"
+                  className="transition-colors duration-300"
+                />
+                {/* Inner sheen on knot */}
+                <ellipse cx="52" cy="30" rx="3" ry="2.5" fill="white" opacity="0.3" />
+                {/* Left ribbon tail */}
+                <path
+                  d="M 50 36 C 42 46 34 54 28 66 L 38 64 C 44 56 50 48 52 38 Z"
+                  fill={ribbon.colorHex}
+                  stroke="#5A1218"
+                  strokeWidth="1.2"
+                  opacity="0.9"
+                  className="transition-colors duration-300"
+                />
+                {/* Right ribbon tail */}
+                <path
+                  d="M 60 36 C 68 46 76 54 82 66 L 72 64 C 66 56 60 48 58 38 Z"
+                  fill={ribbon.colorHex}
+                  stroke="#5A1218"
+                  strokeWidth="1.2"
+                  opacity="0.9"
+                  className="transition-colors duration-300"
+                />
+              </svg>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* ── Bouquet Controls & Wrapping Swatches Row ── */}
-      <div className="w-full mt-3 bg-white/90 backdrop-blur-xs rounded-2xl border border-[#641623]/15 p-3 sm:p-4 shadow-xs flex flex-col gap-2.5">
-        {/* Top Status Row */}
-        <div className="flex items-center justify-between text-xs font-bold text-[#641623]">
-          <span className="flex items-center gap-1.5">
-            <Heart className="w-3.5 h-3.5 text-[#811B2B] fill-[#811B2B]" />
-            <span>
-              {totalCount} {totalCount === 1 ? 'stem' : 'stems'} selected
-            </span>
+      {/* ── Status pill + Clear action ── */}
+      {totalCount > 0 && (
+        <div className="flex items-center gap-2 mt-3 mb-1">
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/70 border border-[#811B2B]/20 font-['Fredoka'] font-bold text-xs text-[#811B2B] shadow-xs">
+            <span>♥</span> {totalCount} {totalCount === 1 ? 'stem' : 'stems'}
           </span>
+          <button
+            type="button"
+            onClick={onClearBouquet}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/50 hover:bg-white/90 text-[#811B2B]/70 hover:text-[#811B2B] border border-transparent hover:border-[#811B2B]/20 text-[11px] font-medium transition-all cursor-pointer"
+            title="Clear all stems from bouquet"
+          >
+            <Trash2 className="w-3 h-3" />
+            Clear
+          </button>
+        </div>
+      )}
 
-          {totalCount > 0 && (
-            <button
-              type="button"
-              onClick={onClearBouquet}
-              className="text-[#811B2B] hover:text-[#641623] hover:underline flex items-center gap-1 text-[11px] cursor-pointer"
-            >
-              <Trash2 className="w-3 h-3" />
-              <span>Clear blooms</span>
-            </button>
-          )}
+      {/* ── Wrapping Paper Swatches Selector ── */}
+      <div className="w-full mt-3 flex flex-col items-center">
+        <div className="flex items-center justify-between w-full max-w-[360px] px-1 mb-1.5">
+          <span className="font-['Fredoka'] font-black text-[11px] uppercase tracking-wider text-[#641623]/80">
+            Wrapping Paper:
+          </span>
+          <span className="font-['Fredoka'] text-xs font-bold text-[#811B2B]">
+            {wrapping.name}
+          </span>
         </div>
 
-        {/* Wrapping Paper Swatch Picker */}
-        <div className="flex items-center justify-between pt-2 border-t border-[#641623]/10">
-          <span className="text-[11px] sm:text-xs font-bold text-[#641623]/80 uppercase tracking-wider">
-            Paper: <span className="text-[#811B2B]">{wrapping.name}</span>
-          </span>
-
-          <div className="flex items-center gap-1.5">
-            {WRAPPING_OPTIONS.map((wrap) => {
-              const isSelected = wrap.id === wrapping.id;
-              return (
-                <button
-                  key={wrap.id}
-                  type="button"
-                  onClick={() => onSelectWrapping(wrap)}
-                  style={{ backgroundColor: wrap.colorHex }}
-                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 transition-all cursor-pointer shadow-xs ${
-                    isSelected
-                      ? 'border-[#811B2B] scale-115 ring-2 ring-[#811B2B]/30'
-                      : 'border-white/80 hover:scale-110'
-                  }`}
-                  title={wrap.name}
-                />
-              );
-            })}
-          </div>
+        <div className="flex items-center justify-center gap-2.5 p-2 rounded-2xl bg-white/40 border border-[#811B2B]/15 backdrop-blur-xs">
+          {WRAPPING_OPTIONS.map((w) => {
+            const isSelected = w.id === wrapping.id;
+            return (
+              <button
+                key={w.id}
+                type="button"
+                onClick={() => onSelectWrapping(w)}
+                className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full transition-all duration-200 cursor-pointer ${
+                  isSelected
+                    ? 'ring-2 ring-[#811B2B] ring-offset-2 scale-110 shadow-sm'
+                    : 'hover:scale-105 opacity-85 hover:opacity-100'
+                }`}
+                style={{
+                  backgroundColor: w.colorHex,
+                  border: `2px solid ${w.borderColor}`,
+                }}
+                title={w.name}
+                aria-label={`Select ${w.name} wrapping paper`}
+              >
+                {isSelected && (
+                  <span className="absolute inset-0 flex items-center justify-center text-[10px] text-[#811B2B]">
+                    ✓
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ export interface FlowerStem {
   category: string;
   price: number;
   image: string;
+  cutoutImage?: string;
   color: string;
   description: string;
 }

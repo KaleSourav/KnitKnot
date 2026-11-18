@@ -184,17 +184,26 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#FFFDF9] font-['Fredoka'] select-none relative pb-24 sm:pb-16 overflow-x-hidden">
+    <div
+      className="w-full min-h-screen font-['Fredoka'] select-none relative pb-24 overflow-x-hidden"
+      style={{ background: '#FFF8F0' }}
+    >
       {/* ── 0. Toast Notification Pill ── */}
       {toastMessage && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#811B2B] text-white px-4 py-2 rounded-full font-bold text-xs sm:text-sm shadow-lg flex items-center gap-2 animate-bounce">
-          <Sparkles className="w-3.5 h-3.5 text-[#FFF5CC]" />
+        <div
+          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 text-white px-5 py-2 rounded-full font-bold text-xs shadow-lg flex items-center gap-2"
+          style={{ background: '#811B2B', animation: 'fadeInDown 0.3s ease' }}
+        >
+          <span>🌸</span>
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* ── 1. Top Retro Header & Store Sign ── */}
-      <div className="w-full bg-[#811B2B] text-white py-2.5 px-4 border-b border-[#641623] relative z-20">
+      {/* ── 1. Burgundy Top Bar ── */}
+      <div
+        className="w-full text-white py-2 px-4 relative z-30"
+        style={{ background: '#811B2B', borderBottom: '2px solid #641623' }}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-bold">
           <button
             type="button"
@@ -204,11 +213,9 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Knots &amp; Co</span>
           </button>
-
-          <span className="hidden md:inline-block font-script text-base text-[#FFF5CC]">
-            &ldquo;A little something, made by you.&rdquo; ♡
+          <span className="hidden md:block font-['Satisfy'] text-base text-[#FFF5CC]">
+            "A little something, made by you." ♡
           </span>
-
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
@@ -220,55 +227,120 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
         </div>
       </div>
 
-      {/* ── 2. The Boutique Wallpaper & Wooden Sign Wall ── */}
-      <div className="w-full bg-gradient-to-b from-[#FFF5CC]/60 via-[#FFFDF9] to-[#FAF4ED] pt-6 pb-4 border-b border-[#641623]/10 relative">
-        {/* Subtle Checkered Wall Pattern Background */}
+      {/* ══════════════════════════════════════════════════════════
+          2. CHECKERBOARD SHOP WALL + HANGING SIGN
+         ══════════════════════════════════════════════════════════ */}
+      <div
+        className="w-full relative overflow-hidden"
+        style={{ minHeight: '90px' }}
+      >
+        {/* Checkerboard background — alternating butter & off-white squares */}
         <div
-          className="absolute inset-0 opacity-15 pointer-events-none"
+          className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(#811B2B 1.2px, transparent 1.2px)`,
-            backgroundSize: '24px 24px',
+            backgroundImage: `
+              repeating-conic-gradient(
+                #FFF5CC 0% 25%,
+                #FFFEF8 0% 50%
+              )
+            `,
+            backgroundSize: '56px 56px',
           }}
         />
+        {/* Vignette darkening at edges for depth */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, transparent 60%, rgba(100,22,35,0.08) 100%)',
+          }}
+        />
+        {/* Soft warm overlay so it doesn't look too stark */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'rgba(255,245,204,0.18)' }}
+        />
 
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 text-center relative z-10">
-          {/* Hanging Wooden Boutique Shop Sign */}
-          <div className="inline-block relative mb-2 max-w-[95vw]">
-            <div className="bg-[#FFFDF9] border-[2.5px] border-[#641623] px-4 sm:px-10 py-2 sm:py-2.5 rounded-2xl shadow-[0_6px_18px_rgba(100,22,35,0.12)]">
-              <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-widest text-[#811B2B] block">
-                Knots &amp; Co. Flower Boutique
+        {/* Central hanging shop sign */}
+        <div className="relative z-10 flex flex-col items-center justify-center py-5 px-4">
+          {/* Hanging strings */}
+          <div className="flex gap-32 sm:gap-48 mb-[-2px] pointer-events-none">
+            <div className="w-px h-5 bg-[#C8A882] opacity-60" />
+            <div className="w-px h-5 bg-[#C8A882] opacity-60" />
+          </div>
+          {/* Sign board */}
+          <div
+            className="rounded-2xl px-6 sm:px-12 py-3 shadow-[0_8px_24px_rgba(100,22,35,0.15)] border-2 relative"
+            style={{ background: '#FFF8E8', borderColor: '#C8A882' }}
+          >
+            {/* Pin dots at top corners */}
+            <div className="absolute top-2 left-3 w-2 h-2 rounded-full bg-[#C8A882] opacity-70" />
+            <div className="absolute top-2 right-3 w-2 h-2 rounded-full bg-[#C8A882] opacity-70" />
+            <div className="text-center">
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#811B2B] block">
+                Knots &amp; Co. · Flower Boutique
               </span>
-              <h1 className="font-['Fredoka'] font-black text-xl sm:text-3xl md:text-4xl text-[#641623] tracking-tight leading-none mt-0.5">
+              <h1
+                className="font-['Fredoka'] font-black text-lg sm:text-2xl md:text-3xl text-[#641623] leading-tight mt-0.5"
+              >
                 MAKE YOUR OWN BOUQUET
               </h1>
             </div>
           </div>
-
-          <p className="font-['Fredoka'] text-xs sm:text-sm text-[#641623]/80 max-w-lg mx-auto leading-relaxed font-medium px-2">
-            Pick your favourite blooms from our shelves, wrap them up, add a ribbon and tuck in a sweet note.
-          </p>
         </div>
       </div>
 
-      {/* ── 3. The Flower Shelf (Step One: Choose Your Blooms) ── */}
-      <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 pt-5 pb-6">
-        <FlowerCrateShelf
-          selectedFlowers={bouquet.flowers}
-          onAddFlower={handleAddFlower}
-          onRemoveFlower={handleRemoveFlower}
-        />
+      {/* ══════════════════════════════════════════════════════════
+          3. PINK FLOWER SHELF — flowers displayed in ceramic pots
+         ══════════════════════════════════════════════════════════ */}
+      <div
+        className="w-full relative"
+        style={{ background: 'linear-gradient(to bottom, #FAEBD7 0%, #FDF0E0 100%)' }}
+      >
+        {/* Shelf area: category tabs + scrollable pots */}
+        <div className="max-w-7xl mx-auto pt-4 pb-0">
+          <FlowerCrateShelf
+            selectedFlowers={bouquet.flowers}
+            onAddFlower={handleAddFlower}
+            onRemoveFlower={handleRemoveFlower}
+          />
+        </div>
+
+        {/* Dark tile strip below the shelf (like the reference dark tiled back wall) */}
+        <div
+          className="w-full h-7 relative overflow-hidden"
+          style={{ background: '#3D2B1F' }}
+        >
+          {/* Tile grout lines */}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage: `
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 60px),
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 28px)
+              `,
+            }}
+          />
+        </div>
       </div>
 
-      {/* ── 4. The Flower Shop Counter (Center Stage) ── */}
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 pt-2 pb-12">
-        {/* Countertop Surface Board */}
-        <div className="w-full bg-[#FAF3EA] rounded-[36px] sm:rounded-[44px] border-[2.5px] border-[#641623] p-4 sm:p-8 shadow-[0_18px_45px_rgba(100,22,35,0.12)] relative">
-          {/* Counter Trim Bar */}
-          <div className="absolute inset-x-8 top-3 h-1 bg-white/60 rounded-full pointer-events-none" />
+      {/* ══════════════════════════════════════════════════════════
+          4. PINK FLORIST COUNTER — 3-column layout
+         ══════════════════════════════════════════════════════════ */}
+      <div
+        className="w-full relative"
+        style={{ background: 'linear-gradient(to bottom, #E87EA0 0%, #D86490 40%, #C85880 100%)', minHeight: '500px' }}
+      >
+        {/* Counter top highlight edge */}
+        <div
+          className="w-full h-2.5 relative"
+          style={{ background: 'linear-gradient(to right, #F090B0 0%, #FAAAC0 50%, #F090B0 100%)' }}
+        />
 
-          {/* 3-Column Desktop Grid Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Left Column: Vintage Cash Register */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
+          {/* 3-column grid: Register | Bouquet | Finishing Touch */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            {/* ── LEFT: Vintage Cash Register ── */}
             <div className="lg:col-span-3 flex justify-center order-2 lg:order-1">
               <VintageCashRegister
                 totalPrice={totalPrice}
@@ -277,7 +349,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
               />
             </div>
 
-            {/* Center Column: Live Bouquet Builder Stage */}
+            {/* ── CENTER: Live Bouquet Preview ── */}
             <div className="lg:col-span-6 flex justify-center order-1 lg:order-2">
               <LiveBouquetCounter
                 selectedFlowers={bouquet.flowers}
@@ -290,7 +362,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
               />
             </div>
 
-            {/* Right Column: Finishing Touch & Note Station */}
+            {/* ── RIGHT: Finishing Touch & Note ── */}
             <div className="lg:col-span-3 flex justify-center order-3">
               <FinishingTouchBar
                 selectedRibbon={bouquet.ribbon}
@@ -302,10 +374,19 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Counter front face (bottom trim) */}
+        <div
+          className="w-full h-6 relative"
+          style={{ background: '#B84E70' }}
+        />
       </div>
 
       {/* ── 5. Mobile Sticky Bottom Action Bar ── */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 bg-[#FFFDF9]/95 backdrop-blur-md border-t border-[#641623]/20 p-3 z-30 shadow-lg flex items-center justify-between">
+      <div
+        className="lg:hidden fixed bottom-0 inset-x-0 backdrop-blur-md border-t p-3 z-30 shadow-lg flex items-center justify-between"
+        style={{ background: 'rgba(255,248,240,0.96)', borderColor: 'rgba(100,22,35,0.15)' }}
+      >
         <div>
           <span className="text-[11px] font-bold text-[#641623]/70 uppercase block leading-tight">
             {totalStems} {totalStems === 1 ? 'stem' : 'stems'} chosen

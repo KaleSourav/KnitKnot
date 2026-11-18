@@ -4,7 +4,7 @@ import {
   STEM_CATEGORIES,
   FLOWER_STEMS,
 } from '../../data/bouquetFlowers';
-import { ChevronLeft, ChevronRight, Plus, Minus, Check, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react';
 
 interface FlowerCrateShelfProps {
   selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
@@ -12,12 +12,14 @@ interface FlowerCrateShelfProps {
   onRemoveFlower: (variantId: string) => void;
 }
 
-const CRATE_STYLES = [
-  { bg: 'bg-[#FCE2EB]', border: 'border-[#E8A5B8]', accent: '#811B2B' }, // Pink
-  { bg: 'bg-[#FEF0C7]', border: 'border-[#F9DB7B]', accent: '#811B2B' }, // Butter Yellow
-  { bg: 'bg-[#F4EBFF]', border: 'border-[#D8B4FE]', accent: '#6B21A8' }, // Lilac
-  { bg: 'bg-[#E0F2FE]', border: 'border-[#93C5FD]', accent: '#0369A1' }, // Sky Blue
-  { bg: 'bg-[#DCFCE7]', border: 'border-[#86EFAC]', accent: '#15803D' }, // Mint
+// Boutique pot/basket colors — 6 rotating pastels
+const POT_COLORS = [
+  { pot: '#F9A8B8', rim: '#E8809A', label: '#FFF0F3' }, // Dusty rose
+  { pot: '#FBBF4A', rim: '#E8A020', label: '#FFFBEE' }, // Warm amber
+  { pot: '#A8D8B9', rim: '#6DBF8E', label: '#F0FFF6' }, // Sage green
+  { pot: '#A8C8F8', rim: '#6BAEE8', label: '#EFF6FF' }, // Cornflower blue
+  { pot: '#D4B4F8', rim: '#B87EE8', label: '#F8F0FF' }, // Soft purple
+  { pot: '#F8C4A8', rim: '#E89470', label: '#FFF5EE' }, // Peach
 ];
 
 export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
@@ -35,41 +37,39 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const distance = direction === 'left' ? -340 : 340;
+      const distance = direction === 'left' ? -320 : 320;
       scrollRef.current.scrollBy({ left: distance, behavior: 'smooth' });
     }
   };
 
   return (
     <div className="w-full relative select-none">
-      {/* 1. Category Filter Tabs */}
-      <div className="flex items-center justify-between mb-3 px-2 sm:px-4">
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1">
-          {STEM_CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full font-['Fredoka'] font-bold text-xs sm:text-[13px] whitespace-nowrap transition-all duration-200 cursor-pointer shadow-xs ${
-                  isActive
-                    ? 'bg-[#811B2B] text-white shadow-sm scale-102 border border-[#811B2B]'
-                    : 'bg-white/85 text-[#641623] hover:bg-[#FFF5CC] border border-[#641623]/15'
-                }`}
-              >
-                <span>{cat}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* ── Category Filter Row ── */}
+      <div className="flex items-center gap-2 px-3 sm:px-6 pb-3 overflow-x-auto no-scrollbar">
+        {STEM_CATEGORIES.map((cat) => {
+          const isActive = activeCategory === cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1 rounded-full font-['Fredoka'] font-semibold text-xs whitespace-nowrap transition-all duration-150 cursor-pointer border ${
+                isActive
+                  ? 'bg-[#811B2B] text-white border-[#811B2B] shadow-sm'
+                  : 'bg-white/70 text-[#641623] border-[#641623]/20 hover:bg-[#FFF5CC] hover:border-[#811B2B]/30'
+              }`}
+            >
+              {cat}
+            </button>
+          );
+        })}
 
         {/* Scroll Arrows */}
-        <div className="hidden sm:flex items-center gap-1.5 ml-2 flex-shrink-0">
+        <div className="hidden sm:flex items-center gap-1 ml-auto flex-shrink-0">
           <button
             type="button"
             onClick={() => handleScroll('left')}
-            className="w-7 h-7 rounded-full bg-white border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
+            className="w-7 h-7 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -77,7 +77,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
           <button
             type="button"
             onClick={() => handleScroll('right')}
-            className="w-7 h-7 rounded-full bg-white border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
+            className="w-7 h-7 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-4 h-4" />
@@ -85,127 +85,164 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
         </div>
       </div>
 
-      {/* 2. Horizontal Shelf with Crates */}
+      {/* ── The Pink Display Shelf ── */}
       <div className="relative w-full">
-        {/* Wooden Shelf Bar Top Edge */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-[#E3D1BE] border-b border-[#C8B29C] rounded-t-lg z-0 pointer-events-none" />
-
-        {/* Crates Container */}
+        {/* ── Shelf items container (flowers sit ON the shelf) ── */}
         <div
           ref={scrollRef}
-          className="flex items-end gap-3 sm:gap-4 overflow-x-auto no-scrollbar pt-4 pb-2 px-3 sm:px-4 scroll-smooth"
+          className="flex items-end gap-3 sm:gap-5 overflow-x-auto no-scrollbar px-4 sm:px-8 pb-0 scroll-smooth"
+          style={{ paddingBottom: 0 }}
         >
           {filteredStems.map((stem, index) => {
             const count = selectedFlowers[stem.variantId]?.quantity || 0;
-            const crateTheme = CRATE_STYLES[index % CRATE_STYLES.length];
             const isSelected = count > 0;
+            const pot = POT_COLORS[index % POT_COLORS.length];
 
             return (
               <div
                 key={stem.variantId}
-                className="flex-shrink-0 flex flex-col items-center w-[130px] sm:w-[155px] group"
+                className="flex-shrink-0 flex flex-col items-center"
+                style={{ width: '110px' }}
               >
-                {/* ── Flower Crate Container ── */}
-                <div
-                  onClick={() => onAddFlower(stem)}
-                  className={`relative w-full h-[140px] sm:h-[165px] rounded-2xl border-2 transition-all duration-200 cursor-pointer flex flex-col justify-between p-2 shadow-xs hover:shadow-md hover:-translate-y-1 ${
-                    crateTheme.bg
-                  } ${crateTheme.border} ${
-                    isSelected ? 'ring-2 ring-[#811B2B] ring-offset-2' : ''
-                  }`}
-                  title={`Click to add ${stem.name} to bouquet`}
-                >
-                  {/* Crate Ribbed Slats Effect */}
-                  <div className="absolute inset-x-2 top-2 h-1 bg-white/40 rounded-full pointer-events-none" />
-                  <div className="absolute inset-x-2 bottom-3 h-1 bg-black/5 rounded-full pointer-events-none" />
-
-                  {/* Quantity Badge on Top Right of Crate */}
+                {/* ── Quantity Badge floating above pot ── */}
+                <div className="relative w-full flex justify-center mb-0.5" style={{ height: '20px' }}>
                   {isSelected && (
-                    <div className="absolute -top-2.5 -right-2.5 z-20 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#811B2B] text-white border-2 border-white font-['Fredoka'] font-black text-xs sm:text-[13px] flex items-center justify-center shadow-md animate-bounce">
+                    <div
+                      className="absolute top-0 right-3 z-30 w-5 h-5 rounded-full bg-[#811B2B] text-white border-2 border-white font-black text-[10px] flex items-center justify-center shadow-md"
+                      style={{ lineHeight: 1 }}
+                    >
                       {count}
                     </div>
                   )}
-
-                  {/* Actual Crochet Flower Product Photograph */}
-                  <div className="relative w-full h-[100px] sm:h-[120px] flex items-center justify-center overflow-hidden rounded-xl bg-white/70 shadow-inner group-hover:scale-102 transition-transform duration-200">
-                    <img
-                      src={stem.image}
-                      alt={stem.name}
-                      loading="lazy"
-                      className="w-full h-full object-contain p-1 filter drop-shadow-sm select-none"
-                    />
-                  </div>
-
-                  {/* Crate Label Footnote */}
-                  <div className="w-full text-center py-0.5">
-                    <span className="text-[10px] sm:text-[11px] font-bold text-[#641623]/80 uppercase tracking-wider block truncate">
-                      {stem.color !== 'Multi' ? stem.color : stem.category}
-                    </span>
-                  </div>
                 </div>
 
-                {/* ── Price Tag Hanging Below Crate ── */}
-                <div className="relative -mt-1 w-[92%] bg-white/95 border border-[#641623]/20 rounded-xl p-2 shadow-xs text-center z-10">
-                  <h4
-                    className="font-['Fredoka'] font-bold text-xs sm:text-[13px] text-[#641623] truncate leading-tight"
+                {/* ── Flower photograph (above pot, appears to grow from it) ── */}
+                <div
+                  onClick={() => onAddFlower(stem)}
+                  className={`relative cursor-pointer w-[90px] h-[110px] sm:h-[120px] flex items-end justify-center transition-all duration-200 hover:-translate-y-1 ${
+                    isSelected ? 'drop-shadow-[0_0_8px_rgba(129,27,43,0.5)]' : 'hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]'
+                  }`}
+                  title={`Click to add ${stem.name}`}
+                >
+                  <img
+                    src={stem.cutoutImage || stem.image}
+                    alt={stem.name}
+                    loading="lazy"
+                    className="w-full h-full object-contain select-none"
+                    style={{
+                      filter: isSelected
+                        ? 'brightness(1.05) drop-shadow(0 4px 10px rgba(129,27,43,0.35))'
+                        : 'drop-shadow(0 4px 8px rgba(0,0,0,0.12))',
+                    }}
+                  />
+
+                  {/* Selected glow ring overlay */}
+                  {isSelected && (
+                    <div className="absolute inset-0 rounded-xl ring-2 ring-[#811B2B]/40 pointer-events-none" />
+                  )}
+                </div>
+
+                {/* ── Ceramic Pot / Basket (SVG) ── */}
+                <div className="w-[90px] relative -mt-1 z-10">
+                  <svg viewBox="0 0 90 55" className="w-full h-auto" fill="none">
+                    {/* Pot rim */}
+                    <ellipse cx="45" cy="12" rx="40" ry="8" fill={pot.rim} />
+                    {/* Pot body */}
+                    <path
+                      d="M 10 14 Q 5 54 25 54 L 65 54 Q 85 54 80 14 Z"
+                      fill={pot.pot}
+                    />
+                    {/* Inner rim shadow */}
+                    <ellipse cx="45" cy="12" rx="34" ry="6" fill={pot.pot} opacity="0.6" />
+                    {/* Top rim highlight */}
+                    <ellipse cx="45" cy="10" rx="38" ry="6" fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" />
+                    {/* Soil top */}
+                    <ellipse cx="45" cy="12" rx="32" ry="5" fill="#8B6B4A" opacity="0.35" />
+                    {/* Small decorative dot pattern on pot */}
+                    <circle cx="30" cy="34" r="2.5" fill="white" opacity="0.25" />
+                    <circle cx="45" cy="38" r="2.5" fill="white" opacity="0.25" />
+                    <circle cx="60" cy="34" r="2.5" fill="white" opacity="0.25" />
+                  </svg>
+
+                  {/* Selected state ring on pot */}
+                  {isSelected && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="absolute bottom-1 left-1 right-1 h-[48px] rounded-b-full ring-2 ring-[#811B2B] rounded-[50%] opacity-50" />
+                    </div>
+                  )}
+                </div>
+
+                {/* ── Price label card (below the shelf) ── */}
+                <div
+                  className="w-full text-center pt-1.5 pb-1"
+                  style={{ background: 'transparent' }}
+                >
+                  <p
+                    className="font-['Fredoka'] font-bold text-[11px] leading-tight text-[#641623] truncate px-1"
                     title={stem.name}
                   >
                     {stem.name}
-                  </h4>
-                  <div className="flex items-center justify-between mt-1 pt-1 border-t border-[#641623]/10">
-                    <span className="font-['Fredoka'] font-black text-xs sm:text-[13px] text-[#811B2B]">
-                      ₹{stem.price}
-                    </span>
+                  </p>
+                  <p className="font-['Fredoka'] font-black text-[12px] text-[#811B2B]">
+                    ₹{stem.price}
+                  </p>
 
-                    {/* Stepper / Add button */}
-                    {isSelected ? (
-                      <div
-                        className="inline-flex items-center gap-1 bg-[#FFF5CC] rounded-full p-0.5 border border-[#811B2B]/25"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => onRemoveFlower(stem.variantId)}
-                          className="w-5 h-5 rounded-full bg-white text-[#811B2B] hover:bg-[#811B2B] hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs font-bold"
-                          title="Remove one stem"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B] px-1">
-                          {count}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => onAddFlower(stem)}
-                          className="w-5 h-5 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] flex items-center justify-center transition-colors cursor-pointer text-xs font-bold"
-                          title="Add one stem"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ) : (
+                  {/* Add / Stepper control */}
+                  {isSelected ? (
+                    <div
+                      className="inline-flex items-center gap-1 bg-[#811B2B]/10 rounded-full px-1.5 py-0.5 mt-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onAddFlower(stem);
-                        }}
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#FFF5CC] text-[#811B2B] hover:bg-[#811B2B] hover:text-white border border-[#811B2B]/20 text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
-                        title="Add to bouquet"
+                        onClick={() => onRemoveFlower(stem.variantId)}
+                        className="w-5 h-5 rounded-full bg-white text-[#811B2B] hover:bg-[#811B2B] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-[#811B2B]/30 shadow-xs"
                       >
-                        <Plus className="w-3 h-3" />
-                        <span>Add</span>
+                        <Minus className="w-2.5 h-2.5" />
                       </button>
-                    )}
-                  </div>
+                      <span className="font-['Fredoka'] font-black text-xs text-[#811B2B] min-w-[14px] text-center">
+                        {count}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => onAddFlower(stem)}
+                        className="w-5 h-5 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+                      >
+                        <Plus className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onAddFlower(stem)}
+                      className="mt-1 inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-[#FFF5CC] text-[#811B2B] hover:bg-[#811B2B] hover:text-white border border-[#811B2B]/25 text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
+                    >
+                      <Plus className="w-2.5 h-2.5" />
+                      Add
+                    </button>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Shelf Base Board */}
-        <div className="w-full h-3 bg-[#D4BFAB] border-t border-[#BCA58F] shadow-sm rounded-b-lg" />
+        {/* ── The Pink Shelf Plank ── */}
+        <div
+          className="w-full relative z-10 mt-1"
+          style={{ height: '20px' }}
+        >
+          {/* Top ledge highlight */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[6px] rounded-t"
+            style={{ background: '#E87EA0' }}
+          />
+          {/* Main shelf board */}
+          <div
+            className="absolute top-[6px] left-0 right-0 bottom-0 shadow-[0_6px_18px_rgba(129,27,43,0.18)]"
+            style={{ background: '#D86490' }}
+          />
+        </div>
       </div>
     </div>
   );

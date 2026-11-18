@@ -2,9 +2,8 @@ import React from 'react';
 import {
   RibbonOption,
   RIBBON_OPTIONS,
-  CARD_STYLES,
 } from '../../data/bouquetFlowers';
-import { Sparkles, Check, Edit3, Heart } from 'lucide-react';
+import { Edit3, Heart, Check } from 'lucide-react';
 
 interface FinishingTouchBarProps {
   selectedRibbon: RibbonOption;
@@ -14,6 +13,72 @@ interface FinishingTouchBarProps {
   onOpenNoteModal: () => void;
 }
 
+// Detailed bow SVG for each ribbon option
+const BowSVG: React.FC<{ colorHex: string; size?: number }> = ({ colorHex, size = 56 }) => (
+  <svg
+    viewBox="0 0 70 56"
+    fill="none"
+    style={{ width: size, height: size * 0.8 }}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Left loop */}
+    <path
+      d="M 35 28 C 20 10 2 14 8 30 C 14 44 30 36 35 28 Z"
+      fill={colorHex}
+      stroke="rgba(0,0,0,0.25)"
+      strokeWidth="1"
+    />
+    {/* Left loop inner sheen */}
+    <path
+      d="M 35 28 C 24 16 10 18 13 28"
+      fill="none"
+      stroke="white"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      opacity="0.4"
+    />
+    {/* Right loop */}
+    <path
+      d="M 35 28 C 50 10 68 14 62 30 C 56 44 40 36 35 28 Z"
+      fill={colorHex}
+      stroke="rgba(0,0,0,0.25)"
+      strokeWidth="1"
+    />
+    {/* Right loop inner sheen */}
+    <path
+      d="M 35 28 C 46 16 60 18 57 28"
+      fill="none"
+      stroke="white"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      opacity="0.4"
+    />
+    {/* Center knot */}
+    <ellipse cx="35" cy="28" rx="6" ry="5" fill={colorHex} stroke="rgba(0,0,0,0.3)" strokeWidth="1.2" />
+    <ellipse cx="33" cy="26" rx="2.5" ry="2" fill="white" opacity="0.3" />
+    {/* Left tail */}
+    <path
+      d="M 32 32 Q 25 46 20 54"
+      stroke={colorHex}
+      strokeWidth="5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M 32 32 Q 25 46 20 54"
+      stroke="rgba(0,0,0,0.12)"
+      strokeWidth="5"
+      strokeLinecap="round"
+    />
+    {/* Right tail */}
+    <path
+      d="M 38 32 Q 45 46 50 54"
+      stroke={colorHex}
+      strokeWidth="5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
   selectedRibbon,
   onSelectRibbon,
@@ -22,140 +87,118 @@ export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
   onOpenNoteModal,
 }) => {
   return (
-    <div className="relative w-full max-w-[240px] sm:max-w-[270px] mx-auto flex flex-col gap-5 select-none text-left">
-      {/* ── 1. The Finishing Touch: Ribbons & Bows Station ── */}
-      <div className="bg-white/90 backdrop-blur-xs border-2 border-[#641623]/15 rounded-3xl p-4 shadow-xs">
-        {/* Banner Label Header */}
-        <div className="flex items-center gap-1.5 mb-2.5">
-          <Sparkles className="w-4 h-4 text-[#811B2B]" />
-          <h3 className="font-['Fredoka'] font-black text-sm text-[#641623] uppercase tracking-wide">
-            The finishing touch
-          </h3>
-        </div>
-        <p className="font-['Fredoka'] text-[11px] text-[#641623]/75 leading-tight mb-3">
-          Choose a bow to tie around your bouquet:
-        </p>
+    <div className="relative w-full max-w-[260px] mx-auto flex flex-col gap-5 select-none text-left">
 
-        {/* Ribbons Row */}
-        <div className="grid grid-cols-5 gap-1.5">
+      {/* ── 1. "The finishing touch." – Ribbon station ── */}
+      <div>
+        {/* Handwritten-style section label */}
+        <div className="mb-3">
+          <span
+            className="font-['Satisfy'] text-xl text-[#811B2B]"
+            style={{ textShadow: '0 1px 2px rgba(129,27,43,0.1)' }}
+          >
+            The finishing touch.
+          </span>
+          <p className="font-['Fredoka'] text-xs text-[#641623]/70 mt-0.5">
+            Choose a ribbon bow to tie around your bouquet:
+          </p>
+        </div>
+
+        {/* Bows displayed like physical items on the counter */}
+        <div className="flex items-end gap-2 flex-wrap">
           {RIBBON_OPTIONS.map((ribbon) => {
             const isSelected = ribbon.id === selectedRibbon.id;
-
             return (
               <button
                 key={ribbon.id}
                 type="button"
                 onClick={() => onSelectRibbon(ribbon)}
-                className={`relative flex flex-col items-center p-1 rounded-xl transition-all duration-200 cursor-pointer ${
+                className={`relative flex flex-col items-center transition-all duration-200 cursor-pointer rounded-2xl pt-2 pb-1.5 px-2 ${
                   isSelected
-                    ? 'bg-[#FFF5CC] ring-2 ring-[#811B2B] scale-105 shadow-xs'
-                    : 'hover:bg-[#FFF5CC]/50'
+                    ? 'bg-[#FFF5CC] ring-2 ring-[#811B2B] shadow-md scale-105'
+                    : 'bg-white/50 hover:bg-white/80 hover:shadow-sm hover:scale-102'
                 }`}
                 title={ribbon.name}
               >
-                {/* SVG Mini Bow Preview */}
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center">
-                  <svg viewBox="0 0 40 30" fill="none" className="w-full h-full">
-                    {/* Left Loop */}
-                    <path
-                      d="M 20 15 C 12 5, 2 8, 6 18 C 10 24, 18 18, 20 15 Z"
-                      fill={ribbon.colorHex}
-                      stroke="#641623"
-                      strokeWidth="1.2"
-                    />
-                    {/* Right Loop */}
-                    <path
-                      d="M 20 15 C 28 5, 38 8, 34 18 C 30 24, 22 18, 20 15 Z"
-                      fill={ribbon.colorHex}
-                      stroke="#641623"
-                      strokeWidth="1.2"
-                    />
-                    {/* Knot */}
-                    <circle
-                      cx="20"
-                      cy="15"
-                      r="3.5"
-                      fill={ribbon.colorHex}
-                      stroke="#641623"
-                      strokeWidth="1.2"
-                    />
-                    {/* Tails */}
-                    <path
-                      d="M 19 18 Q 15 25 12 28"
-                      stroke={ribbon.colorHex}
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M 21 18 Q 25 25 28 28"
-                      stroke={ribbon.colorHex}
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
-
+                <BowSVG colorHex={ribbon.colorHex} size={52} />
                 {isSelected && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#811B2B] mt-0.5" />
+                  <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#811B2B]" />
                 )}
               </button>
             );
           })}
         </div>
 
-        <div className="mt-2 text-center">
-          <span className="text-[11px] font-bold text-[#811B2B]">
+        <div className="mt-2">
+          <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B]">
             {selectedRibbon.name}
           </span>
         </div>
       </div>
 
-      {/* ── 2. Make it Personal: Greeting Card Station ── */}
-      <div
-        onClick={onOpenNoteModal}
-        className="bg-gradient-to-br from-[#FFF9DA] via-[#FEFBE2] to-[#FFF5CC] border-2 border-[#641623]/20 rounded-3xl p-4 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group"
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="font-['Fredoka'] font-black text-xs sm:text-sm text-[#641623] uppercase tracking-wide flex items-center gap-1.5">
-            <span>Make it personal</span>
-            <Heart className="w-3.5 h-3.5 text-[#811B2B] fill-[#811B2B]" />
-          </span>
-
-          <span className="w-6 h-6 rounded-full bg-white/80 border border-[#811B2B]/25 flex items-center justify-center text-[#811B2B] group-hover:scale-110 transition-transform">
-            <Edit3 className="w-3 h-3" />
+      {/* ── 2. "Make it personal." – Gift note station ── */}
+      <div>
+        <div className="mb-2">
+          <span
+            className="font-['Satisfy'] text-xl text-[#811B2B]"
+          >
+            Make it personal.
           </span>
         </div>
 
-        <p className="font-['Fredoka'] text-[11.5px] text-[#641623]/80 leading-relaxed font-medium mb-3">
-          Tuck a handwritten greeting card right into the bouquet.
-        </p>
+        <div
+          onClick={onOpenNoteModal}
+          className="relative cursor-pointer group transition-all duration-200 hover:-translate-y-0.5"
+        >
+          {/* Physical greeting card appearance */}
+          <div
+            className="rounded-2xl p-3 shadow-sm border-2 transition-all duration-200 group-hover:shadow-md"
+            style={{
+              background: 'linear-gradient(135deg, #FFF9EE 0%, #FFF5CC 100%)',
+              borderColor: '#E6D7A3',
+            }}
+          >
+            {/* Scalloped top edge */}
+            <div className="absolute -top-[5px] left-3 right-3 flex justify-around pointer-events-none">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ background: '#FFF9EE', border: '1.5px solid #E6D7A3', marginTop: '-1px' }}
+                />
+              ))}
+            </div>
 
-        {/* Mini Card Preview Illustration */}
-        <div className="bg-white/95 rounded-xl border-2 border-dashed border-[#811B2B]/30 p-2.5 shadow-2xs group-hover:border-[#811B2B] transition-colors">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#811B2B]">
-              Handwritten Card
-            </span>
-            {hasNote && (
-              <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-green-700 bg-green-100 px-1.5 py-0.2 rounded-full">
-                <Check className="w-2.5 h-2.5" />
-                Tucked In
+            <div className="flex items-start justify-between mb-2">
+              <span className="font-['Fredoka'] font-black text-xs text-[#641623] uppercase tracking-wide">
+                Handwritten Note
               </span>
+              <span className="w-6 h-6 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
+                style={{ background: 'rgba(129,27,43,0.08)' }}>
+                <Edit3 className="w-3 h-3 text-[#811B2B]" />
+              </span>
+            </div>
+
+            <div className="font-['Satisfy'] text-xs text-[#641623] leading-relaxed min-h-[32px]">
+              {hasNote
+                ? noteRecipient
+                  ? `To ${noteRecipient} ♡`
+                  : '"Your message is ready ♡"'
+                : '"Write your sweet message here..."'}
+            </div>
+
+            {hasNote && (
+              <div className="mt-2 flex items-center gap-1">
+                <Check className="w-3 h-3 text-green-600" />
+                <span className="text-[10px] font-bold text-green-700">Note tucked in!</span>
+              </div>
             )}
-          </div>
 
-          <div className="font-script text-xs text-[#641623] truncate leading-tight">
-            {hasNote
-              ? noteRecipient
-                ? `To ${noteRecipient} ♡`
-                : 'Message added ♡'
-              : '“Write your sweet note here...”'}
-          </div>
-
-          <div className="mt-2 text-right">
-            <span className="text-[10px] font-bold text-[#811B2B] group-hover:underline">
-              {hasNote ? 'Edit note →' : 'Add a note →'}
-            </span>
+            <div className="mt-2 text-right">
+              <span className="text-[11px] font-bold text-[#811B2B] group-hover:underline">
+                {hasNote ? 'Edit note →' : 'Add a note →'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
