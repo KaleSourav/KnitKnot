@@ -36,6 +36,13 @@ interface CartContextValue {
   openCart: () => void;
   closeCart: () => void;
   addToShopifyCart: (variantId: string, quantity: number) => Promise<number>;
+  addBouquetToShopifyCart: (
+    lines: Array<{
+      variantId: string;
+      quantity: number;
+      attributes?: Array<{ key: string; value: string }>;
+    }>
+  ) => Promise<number>;
   updateLineQuantity: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
   buyNow: (variantId: string, quantity: number) => Promise<void>;
@@ -330,6 +337,60 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [cartId, applyCart]
   );
 
+  /** Add an entire custom bouquet bundle with multiple flower lines and custom attributes */
+  const addBouquetToShopifyCart = useCallback(
+    async (
+      lines: Array<{
+        variantId: string;
+        quantity: number;
+        attributes?: Array<{ key: string; value: string }>;
+      }>
+    ): Promise<number> => {
+      setIsLoading(true);
+      try {
+        const formattedLines = lines.map((l) => ({
+          merchandiseId: l.variantId,
+          quantity: l.quantity,
+          attributes: l.attributes || [],
+        }));
+
+        let activeCart: RawShopifyCart | null = null;
+
+        if (cartId) {
+          try {
+            const res = await shopifyFetch<{
+              cartLinesAdd: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+            }>(CART_LINES_ADD_MUTATION, { cartId, lines: formattedLines });
+
+            if (res.cartLinesAdd?.cart) {
+              activeCart = res.cartLinesAdd.cart;
+            }
+          } catch {
+            // Cart might have expired on Shopify, fallback to fresh cart creation
+          }
+        }
+
+        if (!activeCart) {
+          const res = await shopifyFetch<{
+            cartCreate: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
+          }>(CART_CREATE_MUTATION, { lines: formattedLines });
+
+          activeCart = res.cartCreate?.cart || null;
+        }
+
+        if (!activeCart) {
+          throw new Error('Failed to add custom bouquet to Shopify cart');
+        }
+
+        applyCart(activeCart);
+        return activeCart.totalQuantity;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cartId, applyCart]
+  );
+
   /** Update quantity of an existing line item */
   const updateLineQuantity = useCallback(
     async (lineId: string, quantity: number) => {
@@ -433,6 +494,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         openCart,
         closeCart,
         addToShopifyCart,
+        addBouquetToShopifyCart,
         updateLineQuantity,
         removeLine,
         buyNow,

@@ -4,9 +4,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop' | 'product' | 'artisans';
+  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -241,7 +241,22 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Shop all</span>
           </button>
 
-          {/* 2. Behind The Stitches (Dedicated Artisan Story Page) */}
+          {/* 2. Make Your Own Bouquet (Interactive Flower Bar) */}
+          <button
+            type="button"
+            onClick={() => onNavigate?.('bouquet-builder')}
+            className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer select-none whitespace-nowrap ${
+              currentPage === 'bouquet-builder'
+                ? 'bg-[#811B2B] text-white shadow-xs scale-102'
+                : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
+            }`}
+            title="Make Your Own Bouquet - Interactive Flower Bar"
+          >
+            <span className="text-xs sm:text-sm">🌸</span>
+            <span>Make a Bouquet</span>
+          </button>
+
+          {/* 3. Behind The Stitches (Dedicated Artisan Story Page) */}
           <button
             type="button"
             onClick={() => onNavigate?.('artisans')}
@@ -443,6 +458,27 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>shop all products</span>
                 </span>
                 <span className="text-xs opacity-70">→</span>
+              </button>
+
+              {/* Make Your Own Bouquet (Interactive Flower Bar) */}
+              <button
+                onClick={() => {
+                  onNavigate?.('bouquet-builder');
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between cursor-pointer group ${
+                  currentPage === 'bouquet-builder'
+                    ? 'bg-[#811B2B] text-white shadow-xs'
+                    : 'text-[#641623] hover:bg-[#FFF5CC]'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <span className="text-lg">🌸</span>
+                  <span>make your own bouquet</span>
+                </span>
+                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">
+                  interactive ✨
+                </span>
               </button>
 
               {/* Behind The Stitches (Dedicated Artisan Story Page) */}

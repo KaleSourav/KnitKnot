@@ -13,6 +13,8 @@ import { BehindTheStitchesPage } from './components/BehindTheStitchesPage';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
 import { CorporateGiftingSection } from './components/CorporateGiftingSection';
+import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderPage';
+import { MakeYourOwnBouquetBanner } from './components/MakeYourOwnBouquetBanner';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { Footer } from './components/Footer';
@@ -37,13 +39,15 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
       if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
       if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
+      if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || path.includes('build-your-bouquet') || path.includes('bouquet-builder')) return 'bouquet-builder';
       return 'home';
     }
     return 'home';
@@ -108,6 +112,9 @@ function AppInner() {
       } else if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) {
         setCurrentPage('artisans');
         setSelectedProductId(null);
+      } else if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || hash.startsWith('#/bouquet-builder')) {
+        setCurrentPage('bouquet-builder');
+        setSelectedProductId(null);
       } else {
         setCurrentPage('home');
         setSelectedProductId(null);
@@ -119,7 +126,7 @@ function AppInner() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -142,6 +149,9 @@ function AppInner() {
     } else if (page === 'artisans') {
       setSelectedProductId(null);
       window.location.hash = '/behind-the-stitches';
+    } else if (page === 'bouquet-builder') {
+      setSelectedProductId(null);
+      window.location.hash = '/build-your-bouquet';
     }
 
     // Scroll smoothly to top on page change
@@ -215,6 +225,11 @@ function AppInner() {
               />
             </ScrollReveal>
 
+            {/* Interactive "Make Your Own Bouquet" Experience Banner */}
+            <ScrollReveal id="section-make-your-bouquet" yOffset={24} duration={0.45}>
+              <MakeYourOwnBouquetBanner onStartBuilding={() => navigateTo('bouquet-builder')} />
+            </ScrollReveal>
+
             {/* Storytelling Section: Original Knots & Co Brand Story ("A Little Dream, A Lot of Love ♡") */}
             <ScrollReveal id="section-story" yOffset={24} duration={0.45}>
               <OurStorySection onStoryClick={() => navigateTo('artisans')} />
@@ -267,6 +282,14 @@ function AppInner() {
           <BehindTheStitchesPage
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+          />
+        ) : currentPage === 'bouquet-builder' ? (
+          /* =========================================================================
+             DEDICATED BOUQUET BUILDER EXPERIENCE VIEW
+             "Make Your Own Bouquet" Retro Flower Boutique Experience
+             ========================================================================= */
+          <BouquetBuilderPage
+            onNavigateHome={() => navigateTo('home')}
           />
         ) : (
           /* =========================================================================
