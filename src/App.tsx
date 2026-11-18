@@ -168,18 +168,20 @@ function AppInner() {
 
   return (
     <div className="min-h-screen w-full bg-[#FAF4ED] text-[#2D2424] antialiased flex flex-col font-['Fredoka']">
-      {/* 1. Top Announcement Bar */}
-      <AnnouncementBar />
+      {/* 1. Top Announcement Bar (hidden in full-screen bouquet builder) */}
+      {currentPage !== 'bouquet-builder' && <AnnouncementBar />}
 
-      {/* 2. Striped Header with Brand Logo, Actions, and Category Pill Nav */}
-      <Header
-        currentPage={currentPage}
-        activeCategory={selectedCategory}
-        onNavigate={navigateTo}
-        onSearchClick={handleSearchClick}
-        onCartClick={handleCartClick}
-        cartCount={cartCount}
-      />
+      {/* 2. Striped Header with Brand Logo, Actions, and Category Pill Nav (hidden in full-screen bouquet builder) */}
+      {currentPage !== 'bouquet-builder' && (
+        <Header
+          currentPage={currentPage}
+          activeCategory={selectedCategory}
+          onNavigate={navigateTo}
+          onSearchClick={handleSearchClick}
+          onCartClick={handleCartClick}
+          cartCount={cartCount}
+        />
+      )}
 
       {/* Global Whimsical Ambient Petals, Stars & Hearts Animation Across EVERY Page */}
       <DynamicScrollBackground />
@@ -333,10 +335,12 @@ function AppInner() {
         )}
       </main>
 
-      {/* 4. Footer Section ("stay in the loop" newsletter + scalloped wave + brand links & legal) */}
-      <ScrollReveal yOffset={32}>
-        <Footer onNavigate={navigateTo} />
-      </ScrollReveal>
+      {/* 4. Footer Section (hidden in full-screen bouquet builder) */}
+      {currentPage !== 'bouquet-builder' && (
+        <ScrollReveal yOffset={32}>
+          <Footer onNavigate={navigateTo} />
+        </ScrollReveal>
+      )}
 
       {/* 5. Slide-Over Shopify Cart Drawer */}
       <CartDrawer onNavigateShop={(cat) => navigateTo('shop', cat || 'all')} />

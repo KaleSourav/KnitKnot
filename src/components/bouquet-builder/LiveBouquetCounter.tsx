@@ -5,7 +5,7 @@ import {
   RibbonOption,
   WRAPPING_OPTIONS,
 } from '../../data/bouquetFlowers';
-import { Trash2, RotateCcw } from 'lucide-react';
+import { Trash2, RotateCcw, Sparkles } from 'lucide-react';
 
 interface LiveBouquetCounterProps {
   selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
@@ -45,10 +45,10 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
   });
 
   const totalCount = flowerInstances.length;
-  // If user has chosen ribbon AND has at least 1 flower, bouquet is wrapped into cone!
+  // If user has chosen ribbon AND has at least 1 flower, bouquet wraps into a cone!
   const isWrapped = hasRibbonChosen && totalCount > 0;
 
-  // Compute natural fan arrangement for flower blossoms
+  // Natural fan arrangement for flower blossoms
   const getStemStyle = (index: number, total: number): React.CSSProperties => {
     if (total === 0) return {};
     if (total === 1) {
@@ -59,18 +59,18 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
       };
     }
 
-    const spread = Math.min(total - 1, 11);
+    const spread = Math.min(total - 1, 12);
     const progress = spread === 0 ? 0.5 : index / spread;
-    // Angle fan between -28deg and +28deg
-    const angleRange = Math.min(56, 18 + spread * 3.8);
+    // Fan angle between -26deg and +26deg
+    const angleRange = Math.min(52, 16 + spread * 3.4);
     const angle = -angleRange / 2 + progress * angleRange;
 
     // Horizontal spread from -80px to +80px
-    const xRange = Math.min(150, 30 + spread * 12);
+    const xRange = Math.min(150, 24 + spread * 11);
     const xOffset = -xRange / 2 + progress * xRange;
 
-    // Arch height: center flowers sit higher, edges slightly lower
-    const archOffset = (1 - Math.pow((progress - 0.5) * 2, 2)) * 22;
+    // Arch height: center blooms sit higher
+    const archOffset = (1 - Math.pow((progress - 0.5) * 2, 2)) * 26;
 
     return {
       transform: `translateX(${xOffset}px) translateY(${-archOffset}px) rotate(${angle}deg)`,
@@ -81,118 +81,97 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
 
   return (
     <div className="relative w-full max-w-[460px] lg:max-w-[500px] mx-auto flex flex-col items-center select-none">
-      {/* ── Bouquet Stage on Counter ── */}
+      {/* ── Central Bouquet Stage on Counter ── */}
       <div
         className="relative w-full flex items-end justify-center"
         style={{ height: '370px' }}
       >
-        {/* Soft colored glow behind bouquet */}
-        <div
-          className="absolute inset-x-12 bottom-0 h-52 rounded-full blur-3xl opacity-35 pointer-events-none transition-colors duration-500"
-          style={{ backgroundColor: wrapping.colorHex }}
-        />
-
         {totalCount === 0 ? (
           /* ══════════════════════════════════════════════════════════════
-              EMPTY STATE: Flat open diamond origami napkin + pointing hand
+              EMPTY STAGE: Photorealistic flat open diamond wrapping paper
+              with resting white-gloved hand (Matching Annie's Petal Post)
              ══════════════════════════════════════════════════════════════ */
-          <div className="relative flex flex-col items-center justify-center pb-6">
+          <div className="relative flex flex-col items-center justify-center pb-4 animate-fadeIn">
             {/* Flat diamond open wrapping sheet */}
-            <div
-              className="relative w-[210px] h-[210px] drop-shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
-              style={{ transform: 'rotate(45deg)' }}
-            >
-              <div
-                className="w-full h-full rounded-2xl border-2 transition-colors duration-500 relative overflow-hidden"
-                style={{
-                  backgroundColor: wrapping.colorHex,
-                  borderColor: wrapping.borderColor,
-                }}
-              >
-                {/* Diagonal fold crease lines */}
-                <div className="absolute inset-0 border-t border-l border-white/40" />
-                <div
-                  className="absolute inset-4 rounded-xl border border-dashed opacity-40"
-                  style={{ borderColor: wrapping.borderColor }}
-                />
-              </div>
+            <div className="relative w-[270px] h-[270px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.22)] transition-transform duration-300 hover:scale-[1.02]">
+              <img
+                src="/boutique/wrapping-paper-open.png"
+                alt="Open wrapping paper sheet"
+                className="w-full h-full object-contain pointer-events-none select-none"
+              />
             </div>
 
-            {/* Gloved Hand pointing icon & instruction overlay */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10 pointer-events-none">
-              {/* Animated White Gloved Hand */}
-              <div className="w-14 h-14 mb-2 animate-bounce-subtle drop-shadow-md">
-                <svg viewBox="0 0 64 64" fill="none" className="w-full h-full">
-                  {/* Glove cuff */}
-                  <rect x="24" y="46" width="16" height="10" rx="3" fill="#F3F4F6" stroke="#9CA3AF" strokeWidth="1.5" />
-                  {/* Glove palm */}
-                  <path d="M 22 26 C 22 20 26 18 32 18 C 38 18 42 20 42 26 L 42 46 L 22 46 Z" fill="#FFFFFF" stroke="#9CA3AF" strokeWidth="1.5" />
-                  {/* Pointing index finger */}
-                  <rect x="29" y="8" width="6" height="20" rx="3" fill="#FFFFFF" stroke="#9CA3AF" strokeWidth="1.5" />
-                  {/* Thumb */}
-                  <path d="M 22 30 Q 14 30 16 38 Q 18 44 24 44 Z" fill="#FFFFFF" stroke="#9CA3AF" strokeWidth="1.5" />
-                  {/* Glove shading */}
-                  <path d="M 32 20 L 32 46" stroke="#E5E7EB" strokeWidth="1.5" strokeDasharray="3 2" />
-                </svg>
-              </div>
+            {/* Photorealistic White Gloved Hand resting on paper */}
+            <div
+              className="absolute pointer-events-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.28)]"
+              style={{
+                width: '120px',
+                height: '140px',
+                top: '42%',
+                left: '42%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <img
+                src="/boutique/gloved-hand-resting.png"
+                alt="Florist white gloved hand"
+                className="w-full h-full object-contain pointer-events-none select-none animate-bounce-subtle"
+              />
+            </div>
 
-              <p className="font-['Fredoka'] font-bold text-xs text-[#641623] max-w-[170px] leading-snug drop-shadow-xs">
-                Pick flowers from the shelf above to fill your bouquet ♡
-              </p>
+            {/* Instruction Bubble */}
+            <div className="absolute -bottom-1 inset-x-0 flex justify-center pointer-events-none">
+              <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B] bg-white/95 px-4 py-1.5 rounded-full shadow-md border border-[#811B2B]/20">
+                Pick flowers from the shelf above to build your bouquet ♡
+              </span>
             </div>
           </div>
         ) : !isWrapped ? (
           /* ══════════════════════════════════════════════════════════════
-              UNWRAPPED STATE: Flowers laid out on open flat diamond sheet
+              UNWRAPPED STAGE: Flowers laid out on open diamond sheet
+              with green stems converging and gloved hand holding stems
              ══════════════════════════════════════════════════════════════ */
           <>
-            {/* Open flat wrapping sheet underneath */}
+            {/* Open diamond wrapping paper sheet underneath */}
             <div
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
-              style={{ width: '260px', height: '220px' }}
+              className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
+              style={{ width: '290px', height: '290px' }}
             >
-              <svg viewBox="0 0 260 220" fill="none" className="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.14)]">
-                {/* Flat open diamond paper corners */}
-                <polygon
-                  points="130,10 245,110 130,210 15,110"
-                  fill={wrapping.colorHex}
-                  stroke={wrapping.borderColor}
-                  strokeWidth="2.5"
-                  className="transition-colors duration-500"
-                />
-                <polygon
-                  points="130,30 225,110 130,190 35,110"
-                  fill={wrapping.foldColor}
-                  fillOpacity="0.4"
-                  className="transition-colors duration-500"
-                />
-                <line x1="130" y1="10" x2="130" y2="210" stroke="white" strokeWidth="1.5" opacity="0.35" />
-                <line x1="15" y1="110" x2="245" y2="110" stroke="white" strokeWidth="1.5" opacity="0.35" />
-              </svg>
+              <img
+                src="/boutique/wrapping-paper-open.png"
+                alt="Open wrapping paper"
+                className="w-full h-full object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.22)] pointer-events-none"
+              />
             </div>
 
             {/* Converging Stems */}
             <div
               className="absolute pointer-events-none z-15"
-              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)', width: '220px', height: '110px' }}
+              style={{
+                bottom: '72px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '240px',
+                height: '115px',
+              }}
             >
-              <svg viewBox="0 0 220 110" fill="none" className="w-full h-full">
-                {flowerInstances.slice(0, 14).map((_, idx) => {
-                  const spread = Math.min(flowerInstances.length - 1, 11);
+              <svg viewBox="0 0 240 115" fill="none" className="w-full h-full">
+                {flowerInstances.slice(0, 16).map((_, idx) => {
+                  const spread = Math.min(flowerInstances.length - 1, 12);
                   const progress = spread === 0 ? 0.5 : idx / spread;
-                  const xRange = Math.min(140, 20 + spread * 11);
-                  const startX = 110 + (progress - 0.5) * xRange;
+                  const xRange = Math.min(150, 20 + spread * 11);
+                  const startX = 120 + (progress - 0.5) * xRange;
                   return (
                     <line
                       key={idx}
                       x1={startX}
                       y1="0"
-                      x2="110"
-                      y2="105"
-                      stroke="#4E7C30"
-                      strokeWidth="2.2"
+                      x2="120"
+                      y2="110"
+                      stroke="#427328"
+                      strokeWidth="2.5"
                       strokeLinecap="round"
-                      opacity="0.85"
+                      opacity="0.9"
                     />
                   );
                 })}
@@ -209,306 +188,218 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
                 return (
                   <div
                     key={`${flower.variantId}-${idx}`}
-                    className="absolute transition-all duration-400 ease-out"
+                    className="absolute transition-all duration-300 ease-out"
                     style={{
                       ...style,
-                      width: '105px',
-                      height: '140px',
-                      left: '-52px',
+                      width: '120px',
+                      height: '155px',
+                      left: '-60px',
                       bottom: '0',
                     }}
                   >
                     <img
                       src={flower.cutoutImage || flower.image}
                       alt={flower.name}
-                      className="w-full h-full object-contain select-none pointer-events-none"
-                      style={{
-                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.22))',
-                      }}
+                      className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.24)]"
                     />
                   </div>
                 );
               })}
             </div>
 
+            {/* White Gloved Hand holding stems at convergence point */}
+            <div
+              className="absolute pointer-events-none z-25 drop-shadow-[0_10px_18px_rgba(0,0,0,0.3)]"
+              style={{
+                width: '100px',
+                height: '120px',
+                bottom: '50px',
+                left: 'calc(50% - 15px)',
+              }}
+            >
+              <img
+                src="/boutique/gloved-hand-resting.png"
+                alt="Gloved florist hand"
+                className="w-full h-full object-contain pointer-events-none select-none -rotate-12"
+              />
+            </div>
+
             {/* Subtitle guidance text */}
-            <div className="absolute bottom-1 inset-x-0 flex justify-center z-30">
-              <span className="font-['Fredoka'] text-[11px] font-bold text-[#811B2B] bg-white/80 px-3 py-1 rounded-full shadow-xs border border-[#811B2B]/20">
+            <div className="absolute bottom-0 inset-x-0 flex justify-center z-30">
+              <span className="font-['Fredoka'] text-[11px] font-bold text-[#811B2B] bg-white/95 px-3.5 py-1 rounded-full shadow-sm border border-[#811B2B]/20">
                 Choose a ribbon on the right to wrap your bouquet 🎀
               </span>
             </div>
           </>
         ) : (
           /* ══════════════════════════════════════════════════════════════
-              WRAPPED CONE STATE: Complete bouquet with cone, ribbon & card
+              WRAPPED CONE STAGE: Photorealistic crepe paper cone, tied ribbon & card
              ══════════════════════════════════════════════════════════════ */
           <>
-            {/* 1. Back Wrapping Paper Wings (z-10) */}
+            {/* Stems Converging at base peeking out */}
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
-              style={{ width: '250px', height: '220px' }}
+              className="absolute pointer-events-none z-10"
+              style={{
+                bottom: '12px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '80px',
+                height: '40px',
+              }}
             >
-              <svg viewBox="0 0 250 220" fill="none" className="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]">
-                <path
-                  d="M 15 25 L 125 210 L 65 80 Z"
-                  fill={wrapping.foldColor}
-                  stroke={wrapping.borderColor}
-                  strokeWidth="1.8"
-                  className="transition-colors duration-500"
-                />
-                <path
-                  d="M 235 25 L 125 210 L 185 80 Z"
-                  fill={wrapping.foldColor}
-                  stroke={wrapping.borderColor}
-                  strokeWidth="1.8"
-                  className="transition-colors duration-500"
-                />
-                <path
-                  d="M 25 35 Q 125 15 225 35 L 195 100 Q 125 80 55 100 Z"
-                  fill={wrapping.colorHex}
-                  fillOpacity="0.85"
-                  className="transition-colors duration-500"
-                />
+              <svg viewBox="0 0 80 40" fill="none" className="w-full h-full">
+                <line x1="32" y1="0" x2="38" y2="35" stroke="#427328" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="40" y1="0" x2="40" y2="38" stroke="#427328" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="48" y1="0" x2="42" y2="35" stroke="#427328" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </div>
 
-            {/* 2. Stems (z-15) */}
+            {/* Flower Blossoms blooming naturally out of the top cone opening (z-15) */}
             <div
-              className="absolute pointer-events-none z-15"
-              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '110px' }}
-            >
-              <svg viewBox="0 0 200 110" fill="none" className="w-full h-full">
-                {flowerInstances.slice(0, 14).map((_, idx) => {
-                  const spread = Math.min(flowerInstances.length - 1, 11);
-                  const progress = spread === 0 ? 0.5 : idx / spread;
-                  const xRange = Math.min(130, 20 + spread * 11);
-                  const startX = 100 + (progress - 0.5) * xRange;
-                  return (
-                    <line
-                      key={idx}
-                      x1={startX}
-                      y1="0"
-                      x2="100"
-                      y2="105"
-                      stroke="#4E7C30"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      opacity="0.85"
-                    />
-                  );
-                })}
-              </svg>
-            </div>
-
-            {/* 3. Tucked Handwritten Greeting Card (z-18, peeking out top-right!) */}
-            {note.isTucked && note.message && (
-              <div
-                onClick={onOpenNoteModal}
-                className="absolute z-18 cursor-pointer transform rotate-6 hover:rotate-3 transition-transform duration-200"
-                style={{ bottom: '155px', left: 'calc(50% + 25px)' }}
-                title="Click to view/edit your handwritten note"
-              >
-                {/* Realistic Scalloped Edge Note Card */}
-                <div
-                  className="bg-[#FFFDF9] rounded-md px-3 py-2 shadow-lg border-2 relative select-none w-[110px] sm:w-[125px]"
-                  style={{
-                    borderColor: '#F43F5E',
-                    backgroundImage: 'radial-gradient(#F43F5E 1px, transparent 1px)',
-                    backgroundSize: '12px 12px',
-                    backgroundColor: '#FFFDF9',
-                  }}
-                >
-                  <div className="font-['Satisfy'] text-xs text-[#811B2B] leading-tight line-clamp-2 italic">
-                    "{note.message}"
-                  </div>
-                  <div className="font-['Fredoka'] text-[8.5px] font-bold text-gray-500 mt-1 text-right">
-                    {note.sender ? `— ${note.sender}` : '♡'}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 4. Flower Blooms (z-20) */}
-            <div
-              className="absolute bottom-[115px] left-1/2 pointer-events-none z-20"
+              className="absolute bottom-[180px] left-1/2 pointer-events-none z-15"
               style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
             >
               {flowerInstances.slice(0, 16).map((flower, idx) => {
-                const style = getStemStyle(idx, Math.min(flowerInstances.length, 16));
+                const spread = Math.min(flowerInstances.length - 1, 10);
+                const progress = spread === 0 ? 0.5 : idx / spread;
+                const angle = -18 + progress * 36;
+                const xOffset = -55 + progress * 110;
+                const arch = (1 - Math.pow((progress - 0.5) * 2, 2)) * 18;
+
                 return (
                   <div
                     key={`${flower.variantId}-${idx}`}
-                    className="absolute transition-all duration-400 ease-out"
+                    className="absolute transition-all duration-300 ease-out"
                     style={{
-                      ...style,
+                      transform: `translateX(${xOffset}px) translateY(${-arch}px) rotate(${angle}deg)`,
+                      transformOrigin: 'bottom center',
                       width: '105px',
-                      height: '140px',
+                      height: '135px',
                       left: '-52px',
                       bottom: '0',
+                      zIndex: Math.round(10 + (1 - Math.abs(progress - 0.5)) * 10),
                     }}
                   >
                     <img
                       src={flower.cutoutImage || flower.image}
                       alt={flower.name}
-                      className="w-full h-full object-contain select-none pointer-events-none"
-                      style={{
-                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.22))',
-                      }}
+                      className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_8px_14px_rgba(0,0,0,0.22)]"
                     />
                   </div>
                 );
               })}
             </div>
 
-            {/* 5. Front Wrapping Cone (z-25) */}
+            {/* Tucked Handwritten Greeting Card (peeking out top-right) */}
+            {note.isTucked && note.message && (
+              <div
+                onClick={onOpenNoteModal}
+                className="absolute z-22 cursor-pointer transform rotate-6 hover:rotate-3 transition-transform duration-200 drop-shadow-md"
+                style={{ bottom: '195px', left: 'calc(50% + 28px)' }}
+                title="Click to view/edit your handwritten note"
+              >
+                <div
+                  className="w-16 h-20 rounded-md bg-[#FFFDF9] border-2 shadow-lg p-1.5 flex flex-col justify-between"
+                  style={{ borderColor: '#811B2B' }}
+                >
+                  <span className="text-[8px] font-['Satisfy'] text-[#811B2B] leading-tight line-clamp-3">
+                    "{note.message}"
+                  </span>
+                  <div className="flex items-center justify-between text-[7px] text-[#811B2B]/70 font-mono">
+                    <span>💌</span>
+                    <span>{note.recipient || 'Dear'}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Photorealistic Folded Crepe Paper Cone (z-20) */}
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-25 pointer-events-none"
-              style={{ width: '250px', height: '185px' }}
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+              style={{ width: '220px', height: '270px' }}
             >
-              <svg viewBox="0 0 250 185" fill="none" className="w-full h-full drop-shadow-[0_8px_18px_rgba(0,0,0,0.14)]">
-                <path
-                  d="M 22 28 C 75 58 125 42 228 28 L 136 180 C 130 186 120 186 114 180 Z"
-                  fill={wrapping.colorHex}
-                  stroke={wrapping.borderColor}
-                  strokeWidth="2.2"
-                  className="transition-colors duration-500"
-                />
-                <path
-                  d="M 28 34 Q 125 70 222 34"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  opacity="0.4"
-                />
-                <path
-                  d="M 34 40 Q 125 74 216 40"
-                  stroke={wrapping.borderColor}
-                  strokeWidth="1.5"
-                  strokeDasharray="5 3"
-                  strokeLinecap="round"
-                  opacity="0.55"
-                />
-                <path
-                  d="M 45 48 Q 125 88 205 48 L 132 178 L 118 178 Z"
-                  fill={wrapping.foldColor}
-                  fillOpacity="0.32"
-                  className="transition-colors duration-500"
-                />
-              </svg>
+              <img
+                src="/boutique/wrapping-paper-cone.png"
+                alt="Wrapped bouquet crepe cone"
+                className="w-full h-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] pointer-events-none"
+              />
             </div>
 
-            {/* 6. Tied Ribbon Bow (z-30) */}
+            {/* Tied Photorealistic 3D Satin Ribbon Bow (z-25, positioned at the cone's waist) */}
             <div
-              className="absolute z-30 pointer-events-none"
-              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)' }}
+              className="absolute z-25 pointer-events-none drop-shadow-[0_12px_22px_rgba(0,0,0,0.35)]"
+              style={{
+                bottom: '65px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '130px',
+                height: '130px',
+              }}
             >
-              <svg viewBox="0 0 110 70" fill="none" className="w-24 h-16 drop-shadow-[0_4px_10px_rgba(0,0,0,0.22)]">
-                <path
-                  d="M 55 32 C 36 12 6 16 16 36 C 24 50 48 42 55 32 Z"
-                  fill={ribbon.colorHex}
-                  stroke="#5A1218"
-                  strokeWidth="1.5"
-                  className="transition-colors duration-300"
-                />
-                <path
-                  d="M 55 32 C 74 12 104 16 94 36 C 86 50 62 42 55 32 Z"
-                  fill={ribbon.colorHex}
-                  stroke="#5A1218"
-                  strokeWidth="1.5"
-                  className="transition-colors duration-300"
-                />
-                <ellipse cx="55" cy="32" rx="7" ry="6" fill={ribbon.colorHex} stroke="#5A1218" strokeWidth="2" />
-                <ellipse cx="52" cy="30" rx="3" ry="2.5" fill="white" opacity="0.3" />
-                <path
-                  d="M 50 36 C 42 46 34 54 28 66 L 38 64 C 44 56 50 48 52 38 Z"
-                  fill={ribbon.colorHex}
-                  stroke="#5A1218"
-                  strokeWidth="1.2"
-                  opacity="0.9"
-                />
-                <path
-                  d="M 60 36 C 68 46 76 54 82 66 L 72 64 C 66 56 60 48 58 38 Z"
-                  fill={ribbon.colorHex}
-                  stroke="#5A1218"
-                  strokeWidth="1.2"
-                  opacity="0.9"
-                />
-              </svg>
+              <img
+                src={ribbon.image || '/boutique/satin-ribbon-orange.png'}
+                alt={ribbon.name}
+                className="w-full h-full object-contain select-none pointer-events-none animate-scaleIn"
+              />
+            </div>
+
+            {/* Action Bar Overlay */}
+            <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-2 z-30">
+              {onUndoRibbon && (
+                <button
+                  type="button"
+                  onClick={onUndoRibbon}
+                  className="text-[10px] font-bold text-[#811B2B] bg-white/95 px-3 py-1 rounded-full shadow-sm border border-[#811B2B]/20 hover:bg-white transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Unwrap &amp; Add More</span>
+                </button>
+              )}
             </div>
           </>
         )}
       </div>
 
-      {/* ── Status pill + Actions below bouquet ── */}
-      {totalCount > 0 && (
-        <div className="flex items-center gap-2 mt-3 mb-1">
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/80 border border-[#811B2B]/20 font-['Fredoka'] font-bold text-xs text-[#811B2B] shadow-xs">
-            <span>♥</span> {totalCount} {totalCount === 1 ? 'stem' : 'stems'}
+      {/* ── Bouquet Footer Controls (Wrapping Swatches & Counter Stats) ── */}
+      <div className="w-full mt-2 flex items-center justify-between px-2">
+        {/* Wrapping Paper Swatches */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-bold text-[#811B2B]/80 font-['Fredoka'] mr-1">
+            Paper:
           </span>
-
-          {isWrapped && onUndoRibbon && (
+          {WRAPPING_OPTIONS.slice(0, 5).map((w) => (
             <button
+              key={w.id}
               type="button"
-              onClick={onUndoRibbon}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/60 hover:bg-white text-gray-700 hover:text-[#811B2B] border border-gray-300 text-[11px] font-semibold transition-all cursor-pointer"
-              title="Unwrap bouquet"
-            >
-              <RotateCcw className="w-3 h-3" />
-              Undo
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={onClearBouquet}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/50 hover:bg-white/90 text-[#811B2B]/70 hover:text-[#811B2B] border border-transparent hover:border-[#811B2B]/20 text-[11px] font-medium transition-all cursor-pointer"
-            title="Clear all stems from bouquet"
-          >
-            <Trash2 className="w-3 h-3" />
-            Clear
-          </button>
-        </div>
-      )}
-
-      {/* ── Wrapping Paper Swatches Selector ── */}
-      <div className="w-full mt-3 flex flex-col items-center">
-        <div className="flex items-center justify-between w-full max-w-[340px] px-1 mb-1">
-          <span className="font-['Fredoka'] font-black text-[10.5px] uppercase tracking-wider text-[#641623]/80">
-            Wrapping Paper:
-          </span>
-          <span className="font-['Fredoka'] text-xs font-bold text-[#811B2B]">
-            {wrapping.name}
-          </span>
+              onClick={() => onSelectWrapping(w)}
+              title={w.name}
+              className={`w-5 h-5 rounded-full border-2 transition-transform cursor-pointer ${
+                wrapping.id === w.id
+                  ? 'scale-125 border-[#811B2B] shadow-sm'
+                  : 'border-white/80 hover:scale-110'
+              }`}
+              style={{ backgroundColor: w.colorHex }}
+            />
+          ))}
         </div>
 
-        <div className="flex items-center justify-center gap-2 p-1.5 rounded-2xl bg-white/50 border border-[#811B2B]/15 backdrop-blur-xs">
-          {WRAPPING_OPTIONS.map((w) => {
-            const isSelected = w.id === wrapping.id;
-            return (
+        {/* Stem Count Pill & Clear Bouquet */}
+        <div className="flex items-center gap-2">
+          {totalCount > 0 && (
+            <>
+              <span className="text-[11px] font-bold text-white bg-[#811B2B] px-2.5 py-0.5 rounded-full shadow-xs">
+                {totalCount} {totalCount === 1 ? 'stem' : 'stems'}
+              </span>
               <button
-                key={w.id}
                 type="button"
-                onClick={() => onSelectWrapping(w)}
-                className={`relative w-7 h-7 rounded-full transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? 'ring-2 ring-[#811B2B] ring-offset-2 scale-110 shadow-sm'
-                    : 'hover:scale-105 opacity-85 hover:opacity-100'
-                }`}
-                style={{
-                  backgroundColor: w.colorHex,
-                  border: `2px solid ${w.borderColor}`,
-                }}
-                title={w.name}
-                aria-label={`Select ${w.name} wrapping paper`}
+                onClick={onClearBouquet}
+                title="Clear all flowers"
+                className="w-6 h-6 rounded-full bg-white/80 text-[#811B2B] hover:bg-white flex items-center justify-center shadow-xs cursor-pointer transition-transform active:scale-90"
               >
-                {isSelected && (
-                  <span className="absolute inset-0 flex items-center justify-center text-[10px] text-[#811B2B]">
-                    ✓
-                  </span>
-                )}
+                <Trash2 className="w-3 h-3" />
               </button>
-            );
-          })}
+            </>
+          )}
         </div>
       </div>
     </div>

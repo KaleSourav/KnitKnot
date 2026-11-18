@@ -1,6 +1,6 @@
 import React from 'react';
 import { RibbonOption, RIBBON_OPTIONS } from '../../data/bouquetFlowers';
-import { Sparkles, Edit3, Check } from 'lucide-react';
+import { Sparkles, Edit3 } from 'lucide-react';
 
 interface FinishingTouchBarProps {
   selectedRibbon: RibbonOption;
@@ -13,57 +13,6 @@ interface FinishingTouchBarProps {
   onChangeRibbonClick: () => void;
 }
 
-// Detailed Satin Bow SVG Component
-const BowSVG: React.FC<{ colorHex: string; isSelected: boolean }> = ({
-  colorHex,
-  isSelected,
-}) => (
-  <svg
-    viewBox="0 0 110 80"
-    className={`w-18 h-14 sm:w-20 sm:h-16 transition-all duration-300 drop-shadow-[0_8px_16px_rgba(0,0,0,0.18)] ${
-      isSelected ? 'scale-110 drop-shadow-[0_10px_22px_rgba(129,27,43,0.35)]' : 'hover:scale-105'
-    }`}
-    fill="none"
-  >
-    {/* Left Ribbon Tail */}
-    <path
-      d="M 50 42 C 40 54 28 66 18 78 L 32 75 C 40 64 48 52 52 44 Z"
-      fill={colorHex}
-      stroke="#5A1218"
-      strokeWidth="1.2"
-      opacity="0.9"
-    />
-    {/* Right Ribbon Tail */}
-    <path
-      d="M 60 42 C 70 54 82 66 92 78 L 78 75 C 70 64 62 52 58 44 Z"
-      fill={colorHex}
-      stroke="#5A1218"
-      strokeWidth="1.2"
-      opacity="0.9"
-    />
-    {/* Left Bow Loop */}
-    <path
-      d="M 55 36 C 32 10 -2 16 12 40 C 22 56 46 48 55 36 Z"
-      fill={colorHex}
-      stroke="#5A1218"
-      strokeWidth="1.6"
-    />
-    {/* Right Bow Loop */}
-    <path
-      d="M 55 36 C 78 10 112 16 98 40 C 88 56 64 48 55 36 Z"
-      fill={colorHex}
-      stroke="#5A1218"
-      strokeWidth="1.6"
-    />
-    {/* Center Knot */}
-    <ellipse cx="55" cy="36" rx="8" ry="7" fill={colorHex} stroke="#5A1218" strokeWidth="2" />
-    {/* Glossy Sheen Highlight */}
-    <ellipse cx="52" cy="33" rx="3.5" ry="3" fill="white" opacity="0.35" />
-    <path d="M 28 26 Q 42 22 50 32" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
-    <path d="M 82 26 Q 68 22 60 32" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
-  </svg>
-);
-
 export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
   selectedRibbon,
   onSelectRibbon,
@@ -75,23 +24,26 @@ export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
   onChangeRibbonClick,
 }) => {
   return (
-    <div className="w-full max-w-[320px] mx-auto flex flex-col items-center select-none text-center">
+    <div className="w-full max-w-[340px] mx-auto flex flex-col items-center select-none text-center">
       {!hasRibbonChosen ? (
         /* ══════════════════════════════════════════════════════════════
             PHASE 1: "The finishing touch." (Ribbon Selection)
            ══════════════════════════════════════════════════════════════ */
         <div className="w-full flex flex-col items-center animate-fadeIn">
-          {/* Handwritten Cursive Script Title */}
-          <h3 className="font-['Satisfy'] text-2xl sm:text-[28px] text-[#811B2B] leading-tight drop-shadow-xs">
+          {/* Handwritten Cursive Script Title matching reference */}
+          <h3
+            className="font-['Satisfy'] text-3xl sm:text-4xl text-[#811B2B] leading-tight drop-shadow-sm"
+            style={{ textShadow: '1px 1px 0 rgba(255,255,255,0.7)' }}
+          >
             The finishing touch.
           </h3>
-          <p className="font-['Fredoka'] text-[11.5px] text-[#641623]/80 mt-1 max-w-[240px] leading-relaxed">
+          <p className="font-['Fredoka'] text-xs font-semibold text-[#811B2B]/90 mt-1 max-w-[260px] leading-relaxed drop-shadow-xs">
             Choose a ribbon bow to tie around your bouquet:
           </p>
 
-          {/* 3 Ribbon Bows Laid Out on the Pink Counter */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 pt-1">
-            {RIBBON_OPTIONS.map((r) => {
+          {/* Photorealistic 3D Satin Ribbon Bows Resting on the Counter */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3.5 mt-3 pt-1 flex-wrap">
+            {RIBBON_OPTIONS.slice(0, 3).map((r) => {
               const isSelected = selectedRibbon.id === r.id;
               return (
                 <button
@@ -100,17 +52,21 @@ export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
                   onClick={() => onSelectRibbon(r)}
                   className={`group relative flex flex-col items-center p-2 rounded-2xl transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-white/40 ring-2 ring-[#811B2B] shadow-sm'
-                      : 'hover:bg-white/20'
+                      ? 'bg-white/60 ring-3 ring-[#811B2B] shadow-md scale-105'
+                      : 'hover:bg-white/30 hover:scale-105'
                   }`}
                   title={`Choose ${r.name}`}
                 >
-                  <BowSVG colorHex={r.colorHex} isSelected={isSelected} />
-                  <span className="font-['Fredoka'] text-[10.5px] font-bold text-[#641623] mt-1 block">
-                    {r.name}
+                  <img
+                    src={r.image || '/boutique/satin-ribbon-orange.png'}
+                    alt={r.name}
+                    className="w-20 h-20 sm:w-22 sm:h-22 object-contain drop-shadow-[0_12px_18px_rgba(0,0,0,0.28)] select-none pointer-events-none group-hover:scale-110 transition-transform duration-200"
+                  />
+                  <span className="font-['Fredoka'] text-[11px] font-bold text-[#811B2B] mt-1 block">
+                    {r.name.replace(' Satin', '').replace(' Velvet', '')}
                   </span>
                   {isSelected && (
-                    <span className="text-[9px] font-extrabold text-[#811B2B] uppercase tracking-wide">
+                    <span className="text-[9px] font-black text-[#811B2B] uppercase tracking-wider bg-white/90 px-2 py-0.5 rounded-full mt-0.5 shadow-xs">
                       Selected
                     </span>
                   )}
@@ -119,8 +75,29 @@ export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
             })}
           </div>
 
-          <p className="font-['Fredoka'] text-[10px] text-[#641623]/60 italic mt-3">
-            Click a ribbon to cinch &amp; tie your bouquet
+          {/* Additional Colors Pill */}
+          <div className="flex items-center gap-2 mt-2.5">
+            {RIBBON_OPTIONS.slice(3).map((r) => {
+              const isSelected = selectedRibbon.id === r.id;
+              return (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => onSelectRibbon(r)}
+                  className={`text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer transition-transform ${
+                    isSelected
+                      ? 'bg-[#811B2B] text-white shadow-sm scale-105'
+                      : 'bg-white/70 text-[#811B2B] hover:bg-white'
+                  }`}
+                >
+                  {r.name}
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="font-['Fredoka'] text-[11px] text-[#811B2B]/80 font-semibold mt-2.5 italic drop-shadow-xs">
+            Click a ribbon to cinch &amp; tie your bouquet ♡
           </p>
         </div>
       ) : (
@@ -129,106 +106,112 @@ export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
            ══════════════════════════════════════════════════════════════ */
         <div className="w-full flex flex-col items-center animate-fadeIn">
           {/* Handwritten Cursive Script Title */}
-          <h3 className="font-['Satisfy'] text-2xl sm:text-[28px] text-[#811B2B] leading-tight drop-shadow-xs">
+          <h3
+            className="font-['Satisfy'] text-3xl sm:text-4xl text-[#811B2B] leading-tight drop-shadow-sm"
+            style={{ textShadow: '1px 1px 0 rgba(255,255,255,0.7)' }}
+          >
             Make it personal.
           </h3>
-          <p className="font-['Fredoka'] text-[11.5px] text-[#641623]/80 mt-1 max-w-[250px] leading-relaxed">
+          <p className="font-['Fredoka'] text-xs font-semibold text-[#811B2B]/90 mt-1 max-w-[260px] leading-relaxed drop-shadow-xs">
             Pick a card to tuck a handwritten note into the flowers:
           </p>
 
           {/* 3 Cute Stationery Note Cards Laid Out on the Counter */}
-          <div className="flex items-center justify-center gap-2.5 sm:gap-3 mt-4">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mt-3">
             {/* Card 1: Red Scalloped Border Card */}
             <div
               onClick={onOpenNoteModal}
-              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1.5 active:scale-95"
             >
               <div
-                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FFFDF9] border-2 shadow-md relative p-1.5 flex flex-col justify-between select-none"
+                className="w-18 h-24 sm:w-20 sm:h-26 rounded-md bg-[#FFFDF9] border-2 shadow-lg relative p-2 flex flex-col justify-between select-none"
                 style={{ borderColor: '#F43F5E' }}
               >
-                {/* Scalloped interior dots */}
                 <div
-                  className="w-full h-full border border-dashed rounded-[3px] p-1 flex flex-col justify-between"
+                  className="w-full h-full border border-dashed rounded-[3px] p-1.5 flex flex-col justify-between"
                   style={{ borderColor: '#F43F5E' }}
                 >
-                  <span className="text-[8px] font-['Satisfy'] text-[#811B2B] leading-tight">
+                  <span className="text-[9px] font-['Satisfy'] text-[#811B2B] leading-tight">
                     {hasNote ? 'Tucked ♡' : 'With love'}
                   </span>
-                  <div className="w-3 h-3 rounded-full bg-[#F43F5E]/20 self-end flex items-center justify-center">
-                    <span className="text-[7px] text-[#F43F5E]">💌</span>
+                  <div className="w-3.5 h-3.5 rounded-full bg-[#F43F5E]/20 self-end flex items-center justify-center">
+                    <span className="text-[8px] text-[#F43F5E]">💌</span>
                   </div>
                 </div>
               </div>
-              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#811B2B] mt-1.5">
                 Scallop
               </span>
             </div>
 
-            {/* Card 2: Golden Warm Cream Card */}
+            {/* Card 2: Butter Cream Gold Border Card */}
             <div
               onClick={onOpenNoteModal}
-              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1.5 active:scale-95"
             >
               <div
-                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FFF9E6] border-2 border-[#D97706] shadow-md relative p-1.5 flex flex-col justify-between select-none"
+                className="w-18 h-24 sm:w-20 sm:h-26 rounded-md bg-[#FFFDF0] border-2 shadow-lg relative p-2 flex flex-col justify-between select-none"
+                style={{ borderColor: '#F59E0B' }}
               >
-                <div className="w-full h-full border border-[#D97706]/40 rounded-[3px] p-1 flex flex-col justify-between">
-                  <span className="text-[8px] font-['Satisfy'] text-[#92400E] leading-tight">
-                    Sweet note
+                <div
+                  className="w-full h-full border border-solid rounded-[3px] p-1.5 flex flex-col justify-between"
+                  style={{ borderColor: '#F59E0B' }}
+                >
+                  <span className="text-[9px] font-['Satisfy'] text-[#92400E] leading-tight">
+                    {hasNote ? 'Handwritten' : 'Sweet note'}
                   </span>
-                  <div className="w-3 h-3 rounded-full bg-[#D97706]/20 self-end flex items-center justify-center">
-                    <span className="text-[7px]">✨</span>
-                  </div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]/30 self-end" />
                 </div>
               </div>
-              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#811B2B] mt-1.5">
                 Gold Trim
               </span>
             </div>
 
-            {/* Card 3: Pastel Blossom Card */}
+            {/* Card 3: Pink Blossom Border Card */}
             <div
               onClick={onOpenNoteModal}
-              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1.5 active:scale-95"
             >
               <div
-                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FDF2F8] border-2 border-[#EC4899] shadow-md relative p-1.5 flex flex-col justify-between select-none"
+                className="w-18 h-24 sm:w-20 sm:h-26 rounded-md bg-[#FFF7F7] border-2 shadow-lg relative p-2 flex flex-col justify-between select-none"
+                style={{ borderColor: '#EC4899' }}
               >
-                <div className="w-full h-full border border-pink-300 rounded-[3px] p-1 flex flex-col justify-between">
-                  <span className="text-[8px] font-['Satisfy'] text-[#9D174D] leading-tight">
-                    For you
+                <div
+                  className="w-full h-full border border-dotted rounded-[3px] p-1.5 flex flex-col justify-between"
+                  style={{ borderColor: '#EC4899' }}
+                >
+                  <span className="text-[9px] font-['Satisfy'] text-[#9D174D] leading-tight">
+                    {hasNote ? 'Personal note' : 'For you'}
                   </span>
-                  <div className="w-3 h-3 rounded-full bg-pink-200 self-end flex items-center justify-center">
-                    <span className="text-[7px]">🌸</span>
-                  </div>
+                  <span className="text-[8px] self-end">🌸</span>
                 </div>
               </div>
-              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#811B2B] mt-1.5">
                 Floral
               </span>
             </div>
           </div>
 
-          {/* Note Status / Trigger */}
-          <div className="mt-3 flex flex-col items-center gap-1.5">
-            <button
-              type="button"
-              onClick={onOpenNoteModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
-            >
-              <Edit3 className="w-3 h-3" />
-              <span>{hasNote ? 'Edit Handwritten Note' : 'Write Note on Card →'}</span>
-            </button>
+          {/* Action Trigger Button */}
+          <button
+            type="button"
+            onClick={onOpenNoteModal}
+            className="mt-3.5 px-5 py-2 rounded-full font-['Fredoka'] font-bold text-xs uppercase tracking-wider text-white shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95 cursor-pointer"
+            style={{ background: '#811B2B' }}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{hasNote ? 'Edit Handwritten Note →' : 'Write Note on Card →'}</span>
+          </button>
 
-            <button
-              type="button"
-              onClick={onChangeRibbonClick}
-              className="text-[10.5px] font-semibold text-[#811B2B]/75 hover:text-[#811B2B] underline cursor-pointer mt-1"
-            >
-              Change ribbon ({selectedRibbon.name})
-            </button>
-          </div>
+          {/* Change Ribbon Back Link */}
+          <button
+            type="button"
+            onClick={onChangeRibbonClick}
+            className="mt-2 text-[11px] font-bold text-[#811B2B]/80 hover:text-[#811B2B] hover:underline cursor-pointer transition-colors"
+          >
+            Change ribbon ({selectedRibbon.name})
+          </button>
         </div>
       )}
     </div>

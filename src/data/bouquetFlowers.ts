@@ -32,6 +32,7 @@ export interface RibbonOption {
   name: string;
   colorHex: string;
   textColor: string;
+  image?: string;
 }
 
 export interface CardStyleOption {
@@ -143,34 +144,39 @@ export const WRAPPING_OPTIONS: WrappingOption[] = [
 // ─── 3. RIBBON & BOW OPTIONS ─────────────────────────────────────────────────
 export const RIBBON_OPTIONS: RibbonOption[] = [
   {
+    id: 'orange-satin',
+    name: 'Vivid Orange Satin',
+    colorHex: '#EA580C',
+    textColor: '#FFFFFF',
+    image: '/boutique/satin-ribbon-orange.png',
+  },
+  {
+    id: 'sunbeam-yellow',
+    name: 'Sunbeam Satin',
+    colorHex: '#FBBF24',
+    textColor: '#641623',
+    image: '/boutique/satin-ribbon-yellow.png',
+  },
+  {
+    id: 'fuchsia-pink',
+    name: 'Fuchsia Satin',
+    colorHex: '#EC4899',
+    textColor: '#FFFFFF',
+    image: '/boutique/satin-ribbon-pink.png',
+  },
+  {
     id: 'burgundy-velvet',
     name: 'Burgundy Velvet',
     colorHex: '#811B2B',
     textColor: '#FFFFFF',
-  },
-  {
-    id: 'butter-yellow',
-    name: 'Sunbeam Satin',
-    colorHex: '#F5D76E',
-    textColor: '#641623',
-  },
-  {
-    id: 'soft-pink',
-    name: 'Petal Grosgrain',
-    colorHex: '#F8B6BA',
-    textColor: '#641623',
+    image: '/boutique/satin-ribbon-burgundy.png',
   },
   {
     id: 'cloud-blue',
     name: 'Cloud Blue Silk',
-    colorHex: '#9CD1E5',
-    textColor: '#1A4958',
-  },
-  {
-    id: 'silk-cream',
-    name: 'Silk Off-White',
-    colorHex: '#FFF8E6',
-    textColor: '#641623',
+    colorHex: '#38BDF8',
+    textColor: '#FFFFFF',
+    image: '/boutique/satin-ribbon-blue.png',
   },
 ];
 

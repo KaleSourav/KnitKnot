@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface VintageCashRegisterProps {
   totalPrice: number;
@@ -15,135 +15,90 @@ export const VintageCashRegister: React.FC<VintageCashRegisterProps> = ({
   const isReady = stemCount > 0;
 
   return (
-    <div className="relative select-none" style={{ width: '220px' }}>
-      {/* ── Receipt Paper Roll on Top ── */}
-      <div className="flex flex-col items-center -mb-1 relative z-10">
-        {/* Paper roll tube */}
-        <div
-          className="w-16 h-5 rounded-full border border-[#C5B39A] shadow-inner"
-          style={{ background: 'linear-gradient(to bottom, #F5EDE0, #E8D9C6)' }}
-        />
-        {/* Paper strip hanging down */}
-        <div
-          className="w-12 border-x border-[#E0D4C0] pb-1 pt-0.5 px-1 shadow-xs -mt-1"
-          style={{ background: '#FAFAF5' }}
-        >
-          <span className="block text-center font-['Fredoka'] font-black text-[7px] uppercase tracking-tighter text-[#811B2B] leading-tight">
-            Knots &amp; Co.
-          </span>
-          <span className="block text-center text-[6px] font-bold text-[#641623]/50 leading-tight">
-            Boutique #101
-          </span>
-          <div className="border-b border-dashed border-[#811B2B]/15 my-0.5" />
-        </div>
-      </div>
-
-      {/* ── Main Register Body ── */}
-      <div
-        className="rounded-3xl pt-3 px-3 pb-3 relative overflow-hidden border-[2px] shadow-[0_12px_30px_rgba(100,22,35,0.16)]"
-        style={{
-          background: 'linear-gradient(160deg, #F9F3EA 0%, #EDE0CC 100%)',
-          borderColor: '#C8A882',
-        }}
-      >
-        {/* Body top highlight band */}
-        <div
-          className="absolute top-0 left-3 right-3 h-[3px] rounded-b-full opacity-50"
-          style={{ background: 'white' }}
+    <div className="relative select-none flex flex-col items-center" style={{ width: '270px' }}>
+      {/* ── 3D Photorealistic Cash Register ── */}
+      <div className="relative w-full drop-shadow-[0_18px_32px_rgba(0,0,0,0.32)] transition-transform duration-200 hover:scale-[1.02]">
+        <img
+          src="/boutique/vintage-cash-register.png"
+          alt="Vintage Cash Register"
+          className="w-full h-auto object-contain pointer-events-none select-none"
         />
 
-        {/* ── TOTAL LABEL ── */}
+        {/* ── Live Digital LED Screen Overlay (Pixel-perfect aligned with physical register screen) ── */}
         <div
-          className="text-center px-2 py-0.5 rounded-lg mb-2 mx-auto inline-block w-full"
-          style={{ background: 'rgba(129,27,43,0.08)', border: '1px solid rgba(129,27,43,0.12)' }}
+          className="absolute font-mono font-black text-center flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          style={{
+            top: '29.2%',
+            left: '40.5%',
+            width: '29.0%',
+            height: '11.5%',
+            background: '#0D130E',
+            borderRadius: '2px',
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.95)',
+            border: '1px solid #1E3A24',
+          }}
         >
-          <span className="font-['Fredoka'] font-black text-[9px] uppercase tracking-widest text-[#811B2B]">
-            Your Bouquet Total
-          </span>
-        </div>
-
-        {/* ── LED Display Screen ── */}
-        <div
-          className="rounded-xl px-3 py-2 mb-3 text-center shadow-inner relative overflow-hidden"
-          style={{ background: '#1A1612', border: '2px solid #8B6B42' }}
-        >
-          {/* Screen scanline texture */}
+          {/* Scanline CRT overlay */}
           <div
-            className="absolute inset-0 opacity-10 pointer-events-none"
+            className="absolute inset-0 opacity-25 pointer-events-none"
             style={{
-              backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(255,255,255,0.4) 2px, rgba(255,255,255,0.4) 3px)',
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0,255,0,0.35) 2px, rgba(0,255,0,0.35) 3px)',
             }}
           />
-          <div className="font-mono text-[9px] uppercase tracking-widest text-[#E5A93C] opacity-80 mb-0.5 relative">
-            INR TOTAL
-          </div>
-          <div className="font-mono font-black flex items-center justify-center gap-0.5 relative">
-            <span className="text-sm text-[#E5A93C]">₹</span>
-            <span
-              className="text-2xl text-[#FFF5CC] tabular-nums transition-all duration-500"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              {totalPrice.toLocaleString('en-IN')}
-            </span>
-            <span className="text-xs text-[#E5A93C] self-end mb-0.5">.00</span>
-          </div>
+          <span
+            className="relative text-xs sm:text-[13px] font-black tracking-tight text-[#4ADE80] tabular-nums"
+            style={{
+              textShadow: '0 0 8px rgba(74, 222, 128, 0.85), 0 0 2px #4ADE80',
+              fontFamily: "'Courier New', Courier, monospace",
+            }}
+          >
+            ₹{totalPrice.toLocaleString('en-IN')}.00
+          </span>
         </div>
 
-        {/* ── Keypad Buttons ── */}
-        <div
-          className="rounded-xl p-2 mb-3 grid grid-cols-4 gap-1.5"
-          style={{ background: '#DDD0BC' }}
-        >
-          {['1','2','3','+','4','5','6','♡'].map((key, i) => (
-            <div
-              key={i}
-              className="h-5 rounded-md flex items-center justify-center text-[9px] font-black text-white shadow-sm"
-              style={{
-                background: ['1','2','3','4','5','6'].includes(key) ? '#E8721A' : '#D4A820',
-                boxShadow: '0 2px 0 rgba(0,0,0,0.25)',
-              }}
-            >
-              {key}
-            </div>
-          ))}
-        </div>
-
-        {/* Status line */}
-        <div className="text-center text-[10px] font-bold text-[#641623]/70 mb-2.5 font-['Fredoka']">
-          {stemCount === 0 ? (
-            <span className="italic">Pick some blooms to start ♡</span>
-          ) : (
-            <span>{stemCount} {stemCount === 1 ? 'stem' : 'stems'} ready to send</span>
-          )}
-        </div>
-
-        {/* ── SEND FLOWERS Button (Yellow Drawer Plate from Reference) ── */}
-        <button
-          type="button"
-          disabled={!isReady}
-          onClick={onCheckoutClick}
-          className={`w-full py-3 rounded-xl font-['Fredoka'] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 border-2 ${
-            isReady
-              ? 'bg-[#FBBF24] hover:bg-[#F59E0B] text-black border-[#D97706] shadow-[0_5px_0_#B45309,0_8px_16px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 cursor-pointer'
-              : 'bg-[#E5E7EB] text-gray-400 border-gray-300 cursor-not-allowed opacity-60'
-          }`}
-        >
-          <span>SEND FLOWERS</span>
-          <ArrowRight className="w-4 h-4 text-black" />
-        </button>
-
-        {/* Register feet */}
-        <div className="flex justify-between px-4 mt-2">
-          <div
-            className="w-4 h-2 rounded-b-md"
-            style={{ background: '#B0906A' }}
+        {/* Interactive Click Hotspot over Register's Physical Yellow "SEND FLOWERS" Key */}
+        {isReady && (
+          <button
+            type="button"
+            onClick={onCheckoutClick}
+            title="Click yellow key to send flowers"
+            className="absolute cursor-pointer rounded-full transition-transform active:scale-90"
+            style={{
+              top: '61.5%',
+              left: '53.0%',
+              width: '10.5%',
+              height: '7.0%',
+            }}
           />
-          <div
-            className="w-4 h-2 rounded-b-md"
-            style={{ background: '#B0906A' }}
-          />
-        </div>
+        )}
       </div>
+
+      {/* ── Subtitle Status ── */}
+      <div className="mt-2 text-center text-xs font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] font-['Fredoka']">
+        {stemCount === 0 ? (
+          <span className="italic text-white/95">Pick blooms from shelf to start ♡</span>
+        ) : (
+          <span className="bg-[#811B2B] text-[#FFF5CC] px-3.5 py-1 rounded-full shadow-sm border border-[#FFF5CC]/30">
+            {stemCount} {stemCount === 1 ? 'stem' : 'stems'} ready to wrap
+          </span>
+        )}
+      </div>
+
+      {/* ── Big Yellow 3D SEND FLOWERS Button (Matching Petal Post Reference) ── */}
+      <button
+        type="button"
+        disabled={!isReady}
+        onClick={onCheckoutClick}
+        className={`w-full mt-3 py-3 rounded-2xl font-['Fredoka'] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 border-2 ${
+          isReady
+            ? 'bg-[#FBBF24] hover:bg-[#F59E0B] text-black border-[#D97706] shadow-[0_6px_0_#B45309,0_12px_20px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 cursor-pointer'
+            : 'bg-white/40 text-gray-700 border-white/60 cursor-not-allowed opacity-60'
+        }`}
+      >
+        <span>SEND FLOWERS</span>
+        <ArrowRight className="w-4 h-4 text-black" />
+      </button>
     </div>
   );
 };

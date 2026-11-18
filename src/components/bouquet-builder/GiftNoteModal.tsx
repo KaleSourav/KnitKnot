@@ -123,48 +123,21 @@ export const GiftNoteModal: React.FC<GiftNoteModalProps> = ({
             </span>
           </div>
 
-          {/* Animated White Gloved Hand holding a red fountain pen writing on card */}
+          {/* Photorealistic White Gloved Hand holding fountain pen writing on card */}
           <div
-            className="absolute z-20 pointer-events-none drop-shadow-lg transition-transform duration-300"
+            className="absolute z-20 pointer-events-none drop-shadow-xl transition-transform duration-300"
             style={{
-              bottom: '15px',
-              right: '25px',
-              width: '85px',
-              height: '85px',
+              bottom: '-10px',
+              right: '-10px',
+              width: '130px',
+              height: '130px',
             }}
           >
-            <svg viewBox="0 0 100 100" fill="none" className="w-full h-full">
-              {/* White Gloved Arm & Hand */}
-              <path
-                d="M 60 90 L 80 70 L 65 55 L 45 75 Z"
-                fill="#FFFFFF"
-                stroke="#9CA3AF"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M 52 62 C 48 58 42 58 38 64 C 34 70 40 76 46 72 Z"
-                fill="#FFFFFF"
-                stroke="#9CA3AF"
-                strokeWidth="1.5"
-              />
-              {/* Glove Cuff Ribbing */}
-              <line x1="68" y1="84" x2="84" y2="68" stroke="#D1D5DB" strokeWidth="2" />
-              {/* Orange/Red Pen Body */}
-              <rect
-                x="22"
-                y="38"
-                width="40"
-                height="6"
-                rx="3"
-                transform="rotate(-40 22 38)"
-                fill="#EA580C"
-                stroke="#9A3412"
-                strokeWidth="1.2"
-              />
-              {/* Gold Pen Nib & Tip */}
-              <polygon points="16,33 22,35 20,41" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
-              <line x1="16" y1="33" x2="19" y2="37" stroke="#111827" strokeWidth="1" />
-            </svg>
+            <img
+              src="/boutique/gloved-hand-pen.png"
+              alt="Gloved hand with fountain pen"
+              className="w-full h-full object-contain pointer-events-none select-none"
+            />
           </div>
         </div>
 

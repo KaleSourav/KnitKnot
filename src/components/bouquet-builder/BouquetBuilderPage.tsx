@@ -18,10 +18,7 @@ import {
   Sparkles,
   HelpCircle,
   ShoppingBag,
-  Heart,
-  Check,
   ChevronRight,
-  Info,
 } from 'lucide-react';
 
 interface BouquetBuilderPageProps {
@@ -101,6 +98,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
       flowers: {},
       note: { ...prev.note, isTucked: false },
     }));
+    setHasRibbonChosen(false);
     showToast('Cleared your bouquet. Start fresh! 🌸');
   };
 
@@ -137,6 +135,16 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
     0
   );
 
+  // Helper status text on green subway tiles (matching Petal Post stages)
+  let statusBannerText = 'Pick your flowers. We’ll wrap them when you choose a ribbon.';
+  if (totalStems > 0 && !hasRibbonChosen) {
+    statusBannerText = 'A few more stems, then choose your ribbon.';
+  } else if (hasRibbonChosen && !(bouquet.note.isTucked && bouquet.note.message.length > 0)) {
+    statusBannerText = 'A note makes it personal. Your bouquet is ready to send.';
+  } else if (bouquet.note.isTucked && bouquet.note.message.length > 0) {
+    statusBannerText = 'Your handwritten note is tucked into the flowers. Ready to send!';
+  }
+
   // ── Add Complete Bouquet to Shopify Cart ────────────────────────────────────
   const handleConfirmAddToCart = async (deliveryDetails: {
     address: string;
@@ -146,7 +154,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
     if (totalStems === 0) return;
 
     // Build line item payload for Shopify Cart API
-    const lines = flowerItems.map(({ flower, quantity }, index) => {
+    const lines = flowerItems.map(({ flower, quantity }) => {
       const attributes = [
         { key: '_bundle', value: 'Make Your Own Bouquet' },
         { key: 'Bouquet Wrapping', value: bouquet.wrapping.name },
@@ -184,7 +192,6 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
       showToast('Your custom bouquet was added to your cart! 🎉');
     } catch (err) {
       console.error('Error adding bouquet to cart:', err);
-      // Fallback: Still open cart drawer
       setIsReviewDrawerOpen(false);
       openCart();
     }
@@ -192,13 +199,13 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
 
   return (
     <div
-      className="w-full min-h-screen font-['Fredoka'] select-none relative pb-24 overflow-x-hidden"
+      className="w-full min-h-screen lg:h-screen lg:max-h-[960px] flex flex-col justify-between font-['Fredoka'] select-none relative overflow-x-hidden"
       style={{ background: '#FFF8F0' }}
     >
       {/* ── 0. Toast Notification Pill ── */}
       {toastMessage && (
         <div
-          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 text-white px-5 py-2 rounded-full font-bold text-xs shadow-lg flex items-center gap-2"
+          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 text-white px-5 py-2 rounded-full font-bold text-xs shadow-lg flex items-center gap-2"
           style={{ background: '#811B2B', animation: 'fadeInDown 0.3s ease' }}
         >
           <span>🌸</span>
@@ -206,9 +213,9 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
         </div>
       )}
 
-      {/* ── 1. Burgundy Top Bar ── */}
+      {/* ── 1. Slim Burgundy Top Bar ── */}
       <div
-        className="w-full text-white py-2 px-4 relative z-30"
+        className="w-full text-white py-1.5 px-4 relative z-30 flex-shrink-0"
         style={{ background: '#811B2B', borderBottom: '2px solid #641623' }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-bold">
@@ -220,7 +227,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Knots &amp; Co</span>
           </button>
-          <span className="hidden md:block font-['Satisfy'] text-base text-[#FFF5CC]">
+          <span className="hidden md:block font-['Satisfy'] text-sm sm:text-base text-[#FFF5CC]">
             "A little something, made by you." ♡
           </span>
           <button
@@ -236,67 +243,32 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
 
       {/* ══════════════════════════════════════════════════════════
           2. RETRO CHECKERBOARD SHOP WALL + 3D SHOP SIGN
+          1970s mod wavy checkered boutique wall with 3D plaque
          ══════════════════════════════════════════════════════════ */}
       <div
-        className="w-full relative overflow-hidden"
-        style={{ minHeight: '120px' }}
+        className="w-full relative overflow-hidden bg-cover bg-center flex-shrink-0"
+        style={{
+          backgroundImage: "url('/boutique/shop-wall-sign.jpg')",
+          height: '160px',
+        }}
       >
-        {/* Retro 70s Checkerboard Wallpaper (Orange & Butter Cream) */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              repeating-conic-gradient(
-                #EA580C 0% 25%,
-                #FFF7ED 0% 50%
-              )
-            `,
-            backgroundSize: '68px 68px',
-          }}
-        />
-        {/* Soft warm lighting vignette for depth */}
+        {/* Subtle warm lighting vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.18) 100%)',
+            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.1) 100%)',
           }}
         />
-
-        {/* Central 3D Shop Sign (Matching Petal Post 3D Wall Sign) */}
-        <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4">
-          <div
-            className="rounded-2xl px-8 sm:px-16 py-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.25)] border-[3px] border-[#D97706] relative bg-[#FFFDF9]"
-          >
-            {/* Subtle hanging cord brackets */}
-            <div className="absolute -top-3 left-6 w-3 h-3 rounded-full bg-[#B45309] border border-white" />
-            <div className="absolute -top-3 right-6 w-3 h-3 rounded-full bg-[#B45309] border border-white" />
-            
-            <div className="text-center">
-              <h1
-                className="font-['Fredoka'] font-black text-3xl sm:text-4xl md:text-5xl tracking-tight leading-none text-[#F59E0B]"
-                style={{
-                  textShadow: '3px 3px 0px #EA580C, 5px 5px 0px #9A3412',
-                }}
-              >
-                KNOTSNCO
-              </h1>
-              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.28em] text-[#9A3412] block mt-1">
-                FLOWER BOUTIQUE · MAKE YOUR OWN BOUQUET
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          3. PINK FLOWER SHELF — flowers in colorful milk crates
+          3. PINK FLOWER SHELF — Photorealistic milk crates & buckets
          ══════════════════════════════════════════════════════════ */}
       <div
-        className="w-full relative"
-        style={{ background: 'linear-gradient(to bottom, #FFF3E6 0%, #FFE8D6 100%)' }}
+        className="w-full relative flex-shrink-0"
+        style={{ background: 'linear-gradient(to bottom, #FFF5EB 0%, #FFE9D9 100%)' }}
       >
-        {/* Shelf area: category tabs + scrollable crates */}
-        <div className="max-w-7xl mx-auto pt-4 pb-0">
+        <div className="max-w-7xl mx-auto pt-2 pb-0">
           <FlowerCrateShelf
             selectedFlowers={bouquet.flowers}
             onAddFlower={handleAddFlower}
@@ -306,44 +278,51 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
           />
         </div>
 
-        {/* Glossy dark ceramic tile backsplash below the shelf */}
+        {/* Glossy dark emerald green subway tile backsplash with status pill */}
         <div
-          className="w-full h-11 relative overflow-hidden"
-          style={{ background: 'linear-gradient(to bottom, #1E293B 0%, #0F172A 100%)' }}
+          className="w-full h-11 relative overflow-hidden bg-cover bg-center flex items-center justify-center"
+          style={{
+            backgroundImage: "url('/boutique/green-subway-tiles.jpg')",
+            backgroundRepeat: 'repeat-x',
+          }}
         >
-          {/* Reflective ceramic tile grid lines */}
-          <div
-            className="absolute inset-0 opacity-40"
-            style={{
-              backgroundImage: `
-                repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 52px),
-                repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 24px)
-              `,
-            }}
-          />
-          {/* Glossy top reflection highlight */}
-          <div className="absolute top-0 inset-x-0 h-1 bg-white/20" />
+          {/* Subtle glossy glass reflection line */}
+          <div className="absolute top-0 inset-x-0 h-1 bg-white/30" />
+
+          {/* Floating white status guidance pill matching Petal Post */}
+          <div className="z-10 bg-white/95 text-[#641623] px-4 py-1 rounded-full font-['Fredoka'] font-bold text-[11px] sm:text-xs shadow-md border border-[#641623]/20 flex items-center gap-1.5 animate-fadeIn">
+            <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+            <span>{statusBannerText}</span>
+          </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          4. PINK FLORIST COUNTER — 3-column layout
+          4. GLOSSY PINK FLORIST COUNTER — Register | Bouquet | Ribbons
          ══════════════════════════════════════════════════════════ */}
       <div
-        className="w-full relative"
-        style={{ background: 'linear-gradient(to bottom, #F472B6 0%, #EC4899 45%, #DB2777 100%)', minHeight: '520px' }}
+        className="w-full relative overflow-hidden flex-1 flex flex-col justify-between"
+        style={{
+          background: 'linear-gradient(to bottom, #F472B6 0%, #EC4899 45%, #DB2777 100%)',
+          minHeight: '390px',
+        }}
       >
+        {/* Subtle photographic counter surface texture overlay */}
+        <div
+          className="absolute inset-0 opacity-25 pointer-events-none bg-cover bg-center"
+          style={{ backgroundImage: "url('/boutique/pink-counter-surface.jpg')" }}
+        />
+
         {/* Counter top highlight edge */}
         <div
-          className="w-full h-2.5 relative"
+          className="w-full h-2 relative z-10"
           style={{ background: 'linear-gradient(to right, #FBCFE8 0%, #FDF2F8 50%, #FBCFE8 100%)' }}
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
-          {/* 3-column grid: Register | Bouquet | Finishing Touch */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-
-            {/* ── LEFT: Vintage Cash Register ── */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-4 relative z-10 w-full flex-1 flex items-center">
+          {/* 3-column layout: Register | Bouquet | Finishing Touch */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center w-full">
+            {/* ── LEFT: 3D Vintage Cash Register ── */}
             <div className="lg:col-span-3 flex justify-center order-2 lg:order-1">
               <VintageCashRegister
                 totalPrice={totalPrice}
@@ -383,9 +362,9 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
           </div>
         </div>
 
-        {/* Counter front face (bottom trim) */}
+        {/* Counter front edge */}
         <div
-          className="w-full h-6 relative"
+          className="w-full h-4 relative z-10 flex-shrink-0"
           style={{ background: '#BE185D' }}
         />
       </div>
@@ -399,7 +378,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
           <span className="text-[11px] font-bold text-[#641623]/70 uppercase block leading-tight">
             {totalStems} {totalStems === 1 ? 'stem' : 'stems'} chosen
           </span>
-          <span className="font-['Fredoka'] font-black text-lg text-[#811B2B]">
+          <span className="text-lg font-black text-[#811B2B] leading-none">
             ₹{totalPrice.toLocaleString('en-IN')}
           </span>
         </div>
@@ -408,18 +387,18 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
           type="button"
           disabled={totalStems === 0}
           onClick={() => setIsReviewDrawerOpen(true)}
-          className={`py-2.5 px-5 rounded-full font-bold text-xs uppercase tracking-wide flex items-center gap-1.5 transition-all shadow-md active:scale-95 ${
+          className={`px-5 py-2.5 rounded-full font-['Fredoka'] font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md ${
             totalStems > 0
-              ? 'bg-[#811B2B] text-white hover:bg-[#641623] cursor-pointer'
-              : 'bg-[#C8B8A6] text-white/70 cursor-not-allowed'
+              ? 'bg-[#FBBF24] text-black hover:bg-[#F59E0B] shadow-[#D97706]/40 cursor-pointer active:scale-95'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >
-          <span>Review Bouquet</span>
-          <ChevronRight className="w-4 h-4" />
+          <span>Send Flowers</span>
+          <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* ── 6. Modals & Drawers ── */}
+      {/* ── 6. Modals ── */}
       <GiftNoteModal
         isOpen={isNoteModalOpen}
         onClose={() => setIsNoteModalOpen(false)}
@@ -433,70 +412,68 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
       <BouquetReviewDrawer
         isOpen={isReviewDrawerOpen}
         onClose={() => setIsReviewDrawerOpen(false)}
-        selectedFlowers={bouquet.flowers}
-        wrapping={bouquet.wrapping}
-        ribbon={bouquet.ribbon}
-        note={bouquet.note}
-        onAddFlower={handleAddFlower}
-        onRemoveFlower={handleRemoveFlower}
-        onOpenNoteModal={() => {
-          setIsReviewDrawerOpen(false);
-          setIsNoteModalOpen(true);
-        }}
-        onAddToCart={handleConfirmAddToCart}
+        bouquet={bouquet}
+        onConfirm={handleConfirmAddToCart}
       />
 
       {/* ── 7. How It Works Modal ── */}
       {showHowItWorks && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs select-none">
           <div
-            className="fixed inset-0 bg-black/45 backdrop-blur-xs"
-            onClick={() => setShowHowItWorks(false)}
-          />
-          <div className="relative w-full max-w-md bg-[#FAF4ED] rounded-3xl border-2 border-[#641623] p-6 text-left shadow-2xl z-10">
-            <h3 className="font-bold text-xl text-[#641623] mb-3">
-              How the Bouquet Bar Works 🌸
+            className="w-full max-w-md rounded-3xl p-6 shadow-2xl relative border-2 border-[#811B2B]/20"
+            style={{ background: '#FFFDF9' }}
+          >
+            <button
+              type="button"
+              onClick={() => setShowHowItWorks(false)}
+              className="absolute top-4 right-4 w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 flex items-center justify-center font-bold text-xs cursor-pointer"
+            >
+              ✕
+            </button>
+            <h3 className="font-['Fredoka'] font-black text-xl text-[#811B2B] mb-3">
+              How Make Your Own Bouquet Works
             </h3>
-            <ol className="space-y-2.5 text-xs sm:text-sm text-[#641623]/85 font-medium leading-relaxed">
-              <li className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
+            <ol className="space-y-3 text-xs sm:text-sm text-[#641623]/80 font-medium">
+              <li className="flex gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
                   1
                 </span>
                 <span>
-                  <strong>Pick Your Stems:</strong> Browse the top crates and tap individual crochet flowers to add them to your wrapping paper.
+                  <strong>Pick Your Flowers:</strong> Browse the shelves and click flower crates to add stems to your wrapping paper.
                 </span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
+              <li className="flex gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
                   2
                 </span>
                 <span>
-                  <strong>Choose Wrapping &amp; Bow:</strong> Select your favorite paper color and matching ribbon bow.
+                  <strong>Choose a Ribbon:</strong> Pick a satin ribbon bow on the right to cinch and wrap your bouquet into a crepe paper cone!
                 </span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
+              <li className="flex gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
                   3
                 </span>
                 <span>
-                  <strong>Write a Gift Card:</strong> Type your heartfelt message and tuck it into the blooms.
+                  <strong>Write a Little Note:</strong> Pick a stationery card and tuck a handwritten greeting into the blooms.
                 </span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
+              <li className="flex gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-[#811B2B] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">
                   4
                 </span>
                 <span>
-                  <strong>Checkout:</strong> Click the vintage register to send your creation to our 200+ daadis to hand-crochet and dispatch!
+                  <strong>Send Flowers:</strong> Hit the yellow button on the register to send your handmade bouquet directly to your cart or loved ones!
                 </span>
               </li>
             </ol>
             <button
               type="button"
               onClick={() => setShowHowItWorks(false)}
-              className="mt-5 w-full py-2.5 bg-[#811B2B] text-white font-bold text-xs uppercase rounded-xl hover:bg-[#641623] cursor-pointer"
+              className="w-full mt-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider text-white cursor-pointer shadow-sm"
+              style={{ background: '#811B2B' }}
             >
-              Got it, let&apos;s build! →
+              Got it, let's bloom! 🌸
             </button>
           </div>
         </div>

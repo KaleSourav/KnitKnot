@@ -3,26 +3,15 @@ import {
   FlowerStem,
   WrappingOption,
   RibbonOption,
+  CustomBouquetState,
 } from '../../data/bouquetFlowers';
 import { X, Loader2, Sparkles, Heart } from 'lucide-react';
 
 interface BouquetReviewDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
-  wrapping: WrappingOption;
-  ribbon: RibbonOption;
-  note: {
-    recipient: string;
-    message: string;
-    sender: string;
-    cardStyle: string;
-    isTucked: boolean;
-  };
-  onAddFlower: (flower: FlowerStem) => void;
-  onRemoveFlower: (variantId: string) => void;
-  onOpenNoteModal: () => void;
-  onAddToCart: (deliveryDetails: {
+  bouquet: CustomBouquetState;
+  onConfirm: (deliveryDetails: {
     address: string;
     date: string;
     notes: string;
@@ -32,15 +21,15 @@ interface BouquetReviewDrawerProps {
 export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
   isOpen,
   onClose,
-  selectedFlowers,
-  wrapping,
-  ribbon,
-  note,
-  onOpenNoteModal,
-  onAddToCart,
+  bouquet,
+  onConfirm,
 }) => {
-  const [recipient, setRecipient] = useState(note.recipient || '');
-  const [address, setAddress] = useState('');
+  const selectedFlowers = bouquet?.flowers || {};
+  const wrapping = bouquet?.wrapping;
+  const ribbon = bouquet?.ribbon;
+  const note = bouquet?.note;
+  const [recipient, setRecipient] = useState(note?.recipient || '');
+  const [address, setAddress] = useState(bouquet?.delivery?.address || '');
   const [deliverySlot, setDeliverySlot] = useState('Standard Delivery (2-4 Days)');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -62,7 +51,7 @@ export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
   const handleConfirmAddToCart = async () => {
     setIsSubmitting(true);
     try {
-      await onAddToCart({
+      await onConfirm({
         address: address || 'Standard Delivery',
         date: deliverySlot,
         notes: recipient ? `For: ${recipient}` : '',
@@ -171,42 +160,40 @@ export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
               })}
             </div>
 
-            {/* Front Wrap Cone */}
+            {/* 3D Photorealistic Crepe Paper Cone */}
             <div
               className="absolute bottom-6 left-1/2 -translate-x-1/2 z-25 pointer-events-none"
-              style={{ width: '180px', height: '135px' }}
+              style={{ width: '190px', height: '240px' }}
             >
-              <svg viewBox="0 0 250 185" fill="none" className="w-full h-full drop-shadow-md">
-                <path d="M 22 28 C 75 58 125 42 228 28 L 136 180 C 130 186 120 186 114 180 Z" fill={wrapping.colorHex} stroke={wrapping.borderColor} strokeWidth="2.2" />
-                <path d="M 45 48 Q 125 88 205 48 L 132 178 L 118 178 Z" fill={wrapping.foldColor} fillOpacity="0.32" />
-              </svg>
+              <img
+                src="/boutique/wrapping-paper-cone.png"
+                alt="Bouquet wrap"
+                className="w-full h-full object-contain drop-shadow-md select-none pointer-events-none"
+              />
             </div>
 
-            {/* Ribbon Bow */}
+            {/* 3D Satin Ribbon Bow */}
             <div
               className="absolute z-30 pointer-events-none"
-              style={{ bottom: '55px', left: '50%', transform: 'translateX(-50%)' }}
+              style={{ bottom: '50px', left: '50%', transform: 'translateX(-50%)' }}
             >
-              <svg viewBox="0 0 110 70" fill="none" className="w-18 h-12 drop-shadow-md">
-                <path d="M 55 32 C 36 12 6 16 16 36 C 24 50 48 42 55 32 Z" fill={ribbon.colorHex} stroke="#5A1218" strokeWidth="1.5" />
-                <path d="M 55 32 C 74 12 104 16 94 36 C 86 50 62 42 55 32 Z" fill={ribbon.colorHex} stroke="#5A1218" strokeWidth="1.5" />
-                <ellipse cx="55" cy="32" rx="7" ry="6" fill={ribbon.colorHex} stroke="#5A1218" strokeWidth="2" />
-              </svg>
+              <img
+                src={ribbon.image || '/boutique/satin-ribbon-orange.png'}
+                alt={ribbon.name}
+                className="w-20 h-20 object-contain drop-shadow-md select-none pointer-events-none"
+              />
             </div>
 
-            {/* Animated Gloved Hands holding the bouquet */}
+            {/* Photorealistic Gloved Hands holding the bouquet */}
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-35 pointer-events-none drop-shadow-md"
-              style={{ width: '80px', height: '40px' }}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-35 pointer-events-none drop-shadow-lg"
+              style={{ width: '130px', height: '90px' }}
             >
-              <svg viewBox="0 0 80 40" fill="none" className="w-full h-full">
-                {/* Left gloved hand */}
-                <ellipse cx="30" cy="20" rx="14" ry="10" fill="#FFFFFF" stroke="#9CA3AF" strokeWidth="1.2" />
-                <ellipse cx="26" cy="18" rx="8" ry="4" fill="#E5E7EB" opacity="0.6" />
-                {/* Right gloved hand */}
-                <ellipse cx="50" cy="20" rx="14" ry="10" fill="#FFFFFF" stroke="#9CA3AF" strokeWidth="1.2" />
-                <ellipse cx="54" cy="18" rx="8" ry="4" fill="#E5E7EB" opacity="0.6" />
-              </svg>
+              <img
+                src="/boutique/gloved-hands-holding.png"
+                alt="Gloved hands holding bouquet"
+                className="w-full h-full object-contain select-none pointer-events-none"
+              />
             </div>
           </div>
 
