@@ -117,25 +117,19 @@ export const VintageCashRegister: React.FC<VintageCashRegisterProps> = ({
           )}
         </div>
 
-        {/* ── SEND FLOWERS Button ── */}
+        {/* ── SEND FLOWERS Button (Yellow Drawer Plate from Reference) ── */}
         <button
           type="button"
           disabled={!isReady}
           onClick={onCheckoutClick}
-          className={`w-full py-3 rounded-xl font-['Fredoka'] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 ${
+          className={`w-full py-3 rounded-xl font-['Fredoka'] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 border-2 ${
             isReady
-              ? 'text-white cursor-pointer hover:-translate-y-0.5'
-              : 'cursor-not-allowed opacity-50'
+              ? 'bg-[#FBBF24] hover:bg-[#F59E0B] text-black border-[#D97706] shadow-[0_5px_0_#B45309,0_8px_16px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 cursor-pointer'
+              : 'bg-[#E5E7EB] text-gray-400 border-gray-300 cursor-not-allowed opacity-60'
           }`}
-          style={{
-            background: isReady
-              ? 'linear-gradient(135deg, #811B2B 0%, #641623 100%)'
-              : '#B0A090',
-            boxShadow: isReady ? '0 6px 18px rgba(129,27,43,0.38), 0 2px 0 #4A0F18' : 'none',
-          }}
         >
-          <span>Send Flowers</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>SEND FLOWERS</span>
+          <ArrowRight className="w-4 h-4 text-black" />
         </button>
 
         {/* Register feet */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CARD_STYLES, CardStyleOption } from '../../data/bouquetFlowers';
-import { X, Check, Heart, Sparkles, PenLine } from 'lucide-react';
+import { CARD_STYLES } from '../../data/bouquetFlowers';
+import { X } from 'lucide-react';
 
 interface GiftNoteModalProps {
   isOpen: boolean;
@@ -30,226 +30,193 @@ export const GiftNoteModal: React.FC<GiftNoteModalProps> = ({
   const [recipient, setRecipient] = useState(initialRecipient);
   const [message, setMessage] = useState(initialMessage);
   const [sender, setSender] = useState(initialSender);
-  const [selectedStyleId, setSelectedStyleId] = useState(initialStyleId);
 
   useEffect(() => {
     if (isOpen) {
       setRecipient(initialRecipient);
-      setMessage(initialMessage);
+      setMessage(initialMessage || 'Love, Annie');
       setSender(initialSender);
-      setSelectedStyleId(initialStyleId || CARD_STYLES[0].id);
     }
-  }, [isOpen, initialRecipient, initialMessage, initialSender, initialStyleId]);
+  }, [isOpen, initialRecipient, initialMessage, initialSender]);
 
   if (!isOpen) return null;
-
-  const currentStyle =
-    CARD_STYLES.find((s) => s.id === selectedStyleId) || CARD_STYLES[0];
 
   const handleTuckIn = () => {
     onSaveNote({
       recipient: recipient.trim(),
       message: message.trim(),
       sender: sender.trim(),
-      cardStyle: currentStyle.id,
+      cardStyle: 'scallop',
       isTucked: message.trim().length > 0,
     });
     onClose();
   };
 
-  const handleRemoveNote = () => {
-    setRecipient('');
+  const handleClear = () => {
     setMessage('');
+    setRecipient('');
     setSender('');
-    onSaveNote({
-      recipient: '',
-      message: '',
-      sender: '',
-      cardStyle: CARD_STYLES[0].id,
-      isTucked: false,
-    });
-    onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none">
-      {/* Backdrop */}
+      {/* Dim backdrop */}
       <div
-        className="fixed inset-0 bg-[#2D2424]/50 backdrop-blur-xs transition-opacity duration-300"
+        className="fixed inset-0 bg-black/45 backdrop-blur-xs transition-opacity duration-300"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Modal Dialog Card */}
+      {/* Pink Modal Dialog (Petal Post Reference Style) */}
       <div
-        className="relative w-full max-w-lg bg-[#FAF4ED] rounded-[32px] border-[2.5px] border-[#641623] p-6 sm:p-8 shadow-[0_20px_50px_rgba(100,22,35,0.22)] font-['Fredoka'] z-10 max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-md sm:max-w-lg rounded-[36px] p-6 sm:p-8 shadow-[0_24px_60px_rgba(0,0,0,0.25)] font-['Fredoka'] z-10 animate-scaleIn border border-white/60"
+        style={{
+          background: 'linear-gradient(to bottom, #FCE7F3 0%, #FBCFE8 100%)',
+        }}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="gift-note-title"
       >
-        {/* Close Button */}
+        {/* Circular Close Button (top-right) */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 w-8 h-8 rounded-full border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#641623]/10 active:scale-95 transition-all cursor-pointer"
-          aria-label="Close note dialog"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-black/80 hover:bg-black text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+          aria-label="Close dialog"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Modal Header */}
-        <div className="text-center mb-5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[11px] font-bold text-[#811B2B] uppercase mb-1.5">
-            <Sparkles className="w-3 h-3 text-[#E5A93C]" />
-            <span>Handwritten Gift Card</span>
-          </div>
-          <h3
-            id="gift-note-title"
-            className="font-bold text-2xl sm:text-3xl text-[#641623] tracking-tight"
-          >
+        <div className="text-left mb-4 pr-10">
+          <h3 className="font-['Fredoka'] font-black text-xl sm:text-2xl text-[#811B2B] tracking-tight">
             A little note. A lot of love.
           </h3>
-          <p className="text-xs sm:text-sm text-[#641623]/70 mt-0.5">
-            write a sweet handwritten message to tuck inside your bouquet ♡
+          <p className="font-['Fredoka'] text-xs sm:text-[13px] text-[#811B2B]/75 mt-0.5">
+            Write on the card with your pen, or type below.
           </p>
         </div>
 
-        {/* ── Scallop Greeting Card Live Preview ── */}
-        <div
-          style={{
-            backgroundColor: currentStyle.bgHex,
-            borderColor: currentStyle.borderHex,
-          }}
-          className="w-full rounded-2xl border-[2.5px] border-dashed p-5 sm:p-6 mb-5 shadow-xs relative overflow-hidden transition-colors duration-300 min-h-[150px] flex flex-col justify-between"
-        >
-          {/* Card Top: Recipient */}
-          <div className="text-left font-script text-base sm:text-lg text-[#811B2B]">
-            {recipient ? `Dearest ${recipient},` : 'Dearest,'}
+        {/* ── Central Scalloped Greeting Card with Animated Pen/Hand ── */}
+        <div className="relative w-full bg-[#FFFDF9] rounded-2xl p-6 sm:p-8 shadow-md border-2 border-[#F43F5E] mb-4 min-h-[190px] sm:min-h-[220px] flex flex-col justify-between overflow-hidden">
+          {/* Scalloped decorative border SVG around card perimeter */}
+          <div className="absolute inset-2 border-2 border-dashed border-[#F43F5E]/40 rounded-xl pointer-events-none" />
+
+          {/* Top recipient greeting */}
+          <div className="relative z-10 flex justify-between items-center text-xs">
+            <span className="font-['Fredoka'] font-bold text-[#811B2B]">
+              {recipient ? `For: ${recipient}` : 'For someone special ♡'}
+            </span>
+            <span className="text-xs text-[#F43F5E]">💌</span>
           </div>
 
-          {/* Card Center: Handwriting Message */}
-          <div className="my-3 text-center font-script text-lg sm:text-2xl text-[#641623] leading-relaxed break-words px-2">
-            {message ? (
-              <span>&ldquo;{message}&rdquo;</span>
-            ) : (
-              <span className="opacity-35 italic font-sans text-xs">
-                (Your message will appear here in sweet handwritten script...)
-              </span>
-            )}
+          {/* Customer's handwritten message */}
+          <div className="relative z-10 my-auto py-2">
+            <p className="font-['Satisfy'] text-2xl sm:text-3xl text-[#811B2B] leading-relaxed drop-shadow-xs italic">
+              {message || 'Love Annie'}
+            </p>
           </div>
 
-          {/* Card Bottom: Sender */}
-          <div className="text-right font-script text-base sm:text-lg text-[#811B2B]">
-            {sender ? `With love, ${sender}` : 'With all our love ♡'}
+          {/* Sender sign-off */}
+          <div className="relative z-10 text-right">
+            <span className="font-['Satisfy'] text-base text-[#811B2B]/80 italic">
+              {sender ? `— ${sender}` : 'xoxo'}
+            </span>
           </div>
 
-          {/* Small Decorative Flower Accent on Card */}
-          <div className="absolute top-2 right-2 opacity-25 pointer-events-none">
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#811B2B] fill-current">
-              <circle cx="12" cy="12" r="3" />
-              <circle cx="12" cy="6" r="2.5" />
-              <circle cx="12" cy="18" r="2.5" />
-              <circle cx="6" cy="12" r="2.5" />
-              <circle cx="18" cy="12" r="2.5" />
+          {/* Animated White Gloved Hand holding a red fountain pen writing on card */}
+          <div
+            className="absolute z-20 pointer-events-none drop-shadow-lg transition-transform duration-300"
+            style={{
+              bottom: '15px',
+              right: '25px',
+              width: '85px',
+              height: '85px',
+            }}
+          >
+            <svg viewBox="0 0 100 100" fill="none" className="w-full h-full">
+              {/* White Gloved Arm & Hand */}
+              <path
+                d="M 60 90 L 80 70 L 65 55 L 45 75 Z"
+                fill="#FFFFFF"
+                stroke="#9CA3AF"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M 52 62 C 48 58 42 58 38 64 C 34 70 40 76 46 72 Z"
+                fill="#FFFFFF"
+                stroke="#9CA3AF"
+                strokeWidth="1.5"
+              />
+              {/* Glove Cuff Ribbing */}
+              <line x1="68" y1="84" x2="84" y2="68" stroke="#D1D5DB" strokeWidth="2" />
+              {/* Orange/Red Pen Body */}
+              <rect
+                x="22"
+                y="38"
+                width="40"
+                height="6"
+                rx="3"
+                transform="rotate(-40 22 38)"
+                fill="#EA580C"
+                stroke="#9A3412"
+                strokeWidth="1.2"
+              />
+              {/* Gold Pen Nib & Tip */}
+              <polygon points="16,33 22,35 20,41" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
+              <line x1="16" y1="33" x2="19" y2="37" stroke="#111827" strokeWidth="1" />
             </svg>
           </div>
         </div>
 
-        {/* Card Style Theme Buttons */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <span className="text-[11px] font-bold text-[#641623]/70 uppercase">
-            Card theme:
-          </span>
-          {CARD_STYLES.map((style) => (
-            <button
-              key={style.id}
-              type="button"
-              onClick={() => setSelectedStyleId(style.id)}
-              style={{ backgroundColor: style.bgHex, borderColor: style.borderHex }}
-              className={`px-2.5 py-1 rounded-full text-xs font-bold border-2 transition-all cursor-pointer ${
-                selectedStyleId === style.id
-                  ? 'ring-2 ring-[#811B2B] scale-105 shadow-xs font-black'
-                  : 'opacity-70 hover:opacity-100'
-              }`}
-            >
-              {style.name}
-            </button>
-          ))}
-        </div>
-
-        {/* Form Inputs */}
-        <div className="space-y-3.5 text-left mb-6">
-          {/* Recipient */}
-          <div>
-            <label className="block text-xs font-bold text-[#641623] uppercase mb-1">
-              To (Recipient Name)
-            </label>
+        {/* ── Input Box: "Your message" + "Tuck it in →" Button ── */}
+        <div className="flex flex-col gap-2">
+          <label className="text-[11px] font-bold text-[#811B2B] uppercase tracking-wider block text-left">
+            Your message:
+          </label>
+          <div className="flex items-center gap-2">
             <input
               type="text"
-              placeholder="e.g. Mum, Priya, Bestie..."
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none text-sm text-[#641623] shadow-xs"
-              maxLength={40}
-            />
-          </div>
-
-          {/* Message Textarea */}
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-bold text-[#641623] uppercase">
-                Your Personal Note *
-              </label>
-              <span className="text-[11px] font-bold text-[#641623]/60">
-                {message.length} / 200
-              </span>
-            </div>
-            <textarea
-              rows={3}
-              placeholder="Wishing you flowers that never fade, just like your smile! Happy Birthday!"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              maxLength={200}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none text-sm text-[#641623] shadow-xs resize-none"
+              placeholder="For you, just because x"
+              maxLength={70}
+              className="flex-1 bg-white/95 border border-[#811B2B]/25 rounded-2xl px-4 py-2.5 text-xs sm:text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#811B2B] shadow-inner"
             />
-          </div>
-
-          {/* Sender */}
-          <div>
-            <label className="block text-xs font-bold text-[#641623] uppercase mb-1">
-              From (Sender Name)
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Annie, Rahul, With Love..."
-              value={sender}
-              onChange={(e) => setSender(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border-2 border-[#641623]/20 focus:border-[#811B2B] focus:outline-none text-sm text-[#641623] shadow-xs"
-              maxLength={40}
-            />
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-3">
-          {message.trim() && (
             <button
               type="button"
-              onClick={handleRemoveNote}
-              className="px-4 py-3 rounded-xl border border-red-300 text-red-600 hover:bg-red-50 text-xs font-bold transition-all cursor-pointer"
+              onClick={handleTuckIn}
+              className="px-5 py-2.5 rounded-full bg-[#3D2529] hover:bg-[#231518] text-white font-['Fredoka'] font-bold text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer whitespace-nowrap"
             >
-              Remove
+              Tuck it in →
             </button>
-          )}
+          </div>
 
-          <button
-            type="button"
-            onClick={handleTuckIn}
-            className="flex-1 py-3.5 px-4 rounded-2xl bg-[#811B2B] text-white font-['Fredoka'] font-black text-sm uppercase tracking-wider hover:bg-[#641623] transition-all cursor-pointer shadow-md active:scale-98 flex items-center justify-center gap-2"
-          >
-            <Heart className="w-4 h-4 fill-white" />
-            <span>Tuck it in ♡</span>
-          </button>
+          {/* Secondary inputs & clear link */}
+          <div className="flex items-center justify-between pt-1 text-xs">
+            <button
+              type="button"
+              onClick={handleClear}
+              className="text-[11px] text-[#811B2B]/70 hover:text-[#811B2B] underline cursor-pointer"
+            >
+              Clear handwriting
+            </button>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={recipient}
+                onChange={(e) => setRecipient(e.target.value)}
+                placeholder="To (optional)"
+                className="w-24 bg-white/80 border border-gray-300 rounded-lg px-2 py-1 text-[11px] text-gray-700"
+              />
+              <input
+                type="text"
+                value={sender}
+                onChange={(e) => setSender(e.target.value)}
+                placeholder="From (optional)"
+                className="w-24 bg-white/80 border border-gray-300 rounded-lg px-2 py-1 text-[11px] text-gray-700"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

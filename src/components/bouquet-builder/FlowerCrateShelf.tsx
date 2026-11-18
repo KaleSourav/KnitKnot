@@ -10,22 +10,89 @@ interface FlowerCrateShelfProps {
   selectedFlowers: Record<string, { flower: FlowerStem; quantity: number }>;
   onAddFlower: (flower: FlowerStem) => void;
   onRemoveFlower: (variantId: string) => void;
+  hasRibbon: boolean;
+  hasNote: boolean;
 }
 
-// Boutique pot/basket colors — 6 rotating pastels
-const POT_COLORS = [
-  { pot: '#F9A8B8', rim: '#E8809A', label: '#FFF0F3' }, // Dusty rose
-  { pot: '#FBBF4A', rim: '#E8A020', label: '#FFFBEE' }, // Warm amber
-  { pot: '#A8D8B9', rim: '#6DBF8E', label: '#F0FFF6' }, // Sage green
-  { pot: '#A8C8F8', rim: '#6BAEE8', label: '#EFF6FF' }, // Cornflower blue
-  { pot: '#D4B4F8', rim: '#B87EE8', label: '#F8F0FF' }, // Soft purple
-  { pot: '#F8C4A8', rim: '#E89470', label: '#FFF5EE' }, // Peach
+// 6 Retro plastic milk crate colors from Annie's Petal Post reference
+const CRATE_STYLES = [
+  { crate: '#F43F5E', rim: '#BE123C', name: 'pink' },    // Hot Pink
+  { crate: '#FB923C', rim: '#C2410C', name: 'orange' },  // Retro Orange
+  { crate: '#F5F2EB', rim: '#D4CDC3', name: 'white' },   // Milk White
+  { crate: '#EC4899', rim: '#9D174D', name: 'magenta' }, // Magenta
+  { crate: '#38BDF8', rim: '#0284C7', name: 'blue' },    // Sky Blue
+  { crate: '#FBBF24', rim: '#B45309', name: 'yellow' },  // Amber Yellow
 ];
+
+// SVG Plastic Milk Crate with realistic grid cutouts & zinc bucket
+const PlasticMilkCrate: React.FC<{
+  color: string;
+  rimColor: string;
+  isSelected: boolean;
+}> = ({ color, rimColor, isSelected }) => (
+  <svg
+    viewBox="0 0 100 66"
+    className={`w-full h-auto drop-shadow-[0_6px_10px_rgba(0,0,0,0.18)] transition-transform duration-200 ${
+      isSelected ? 'scale-[1.03]' : ''
+    }`}
+    fill="none"
+  >
+    {/* Zinc / Galvanized bucket inside crate holding flower stems */}
+    <path
+      d="M 24 16 L 30 54 L 70 54 L 76 16 Z"
+      fill="#D1D5DB"
+      stroke="#9CA3AF"
+      strokeWidth="1.2"
+    />
+    <ellipse cx="50" cy="16" rx="26" ry="6" fill="#9CA3AF" />
+    <ellipse cx="50" cy="16" rx="24" ry="5" fill="#374151" />
+
+    {/* Front Crate Body */}
+    <rect
+      x="8"
+      y="18"
+      width="84"
+      height="44"
+      rx="4"
+      fill={color}
+      stroke={rimColor}
+      strokeWidth="2.5"
+    />
+
+    {/* Top Crate Rim */}
+    <rect x="6" y="14" width="88" height="7" rx="2" fill={rimColor} />
+
+    {/* Handle Cutout */}
+    <rect x="36" y="24" width="28" height="7" rx="3.5" fill="#111827" opacity="0.38" />
+
+    {/* Grid of rectangular holes on crate face (Authentic milk crate mesh) */}
+    <g fill="#111827" opacity="0.3">
+      {/* Row 1 */}
+      <rect x="14" y="36" width="10" height="9" rx="1.5" />
+      <rect x="28" y="36" width="10" height="9" rx="1.5" />
+      <rect x="42" y="36" width="10" height="9" rx="1.5" />
+      <rect x="56" y="36" width="10" height="9" rx="1.5" />
+      <rect x="70" y="36" width="10" height="9" rx="1.5" />
+      {/* Row 2 */}
+      <rect x="14" y="49" width="10" height="8" rx="1.5" />
+      <rect x="28" y="49" width="10" height="8" rx="1.5" />
+      <rect x="42" y="49" width="10" height="8" rx="1.5" />
+      <rect x="56" y="49" width="10" height="8" rx="1.5" />
+      <rect x="70" y="49" width="10" height="8" rx="1.5" />
+    </g>
+
+    {/* Corner structural ribbing */}
+    <rect x="8" y="18" width="4" height="44" fill={rimColor} opacity="0.8" />
+    <rect x="88" y="18" width="4" height="44" fill={rimColor} opacity="0.8" />
+  </svg>
+);
 
 export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
   selectedFlowers,
   onAddFlower,
   onRemoveFlower,
+  hasRibbon,
+  hasNote,
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>('All Blooms');
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -35,17 +102,32 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
       ? FLOWER_STEMS
       : FLOWER_STEMS.filter((s) => s.category === activeCategory);
 
+  const totalStemsCount = Object.values(selectedFlowers).reduce(
+    (acc, it) => acc + it.quantity,
+    0
+  );
+
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const distance = direction === 'left' ? -320 : 320;
+      const distance = direction === 'left' ? -340 : 340;
       scrollRef.current.scrollBy({ left: distance, behavior: 'smooth' });
     }
   };
 
+  // Helper banner instruction text matching reference stages
+  let bannerText = 'Pick your flowers. We’ll wrap them when you choose a ribbon.';
+  if (totalStemsCount > 0 && !hasRibbon) {
+    bannerText = 'A few more stems, then choose your ribbon.';
+  } else if (hasRibbon && !hasNote) {
+    bannerText = 'A note makes it personal. Your bouquet is ready to send.';
+  } else if (hasNote) {
+    bannerText = 'Your handwritten note is tucked into the flowers.';
+  }
+
   return (
     <div className="w-full relative select-none">
-      {/* ── Category Filter Row ── */}
-      <div className="flex items-center gap-2 px-3 sm:px-6 pb-3 overflow-x-auto no-scrollbar">
+      {/* ── Category Filter Pills ── */}
+      <div className="flex items-center gap-2 px-4 sm:px-8 pb-3 overflow-x-auto no-scrollbar">
         {STEM_CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (
@@ -53,10 +135,10 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
               key={cat}
               type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`px-3 py-1 rounded-full font-['Fredoka'] font-semibold text-xs whitespace-nowrap transition-all duration-150 cursor-pointer border ${
+              className={`px-3.5 py-1 rounded-full font-['Fredoka'] font-semibold text-xs whitespace-nowrap transition-all duration-150 cursor-pointer border ${
                 isActive
-                  ? 'bg-[#811B2B] text-white border-[#811B2B] shadow-sm'
-                  : 'bg-white/70 text-[#641623] border-[#641623]/20 hover:bg-[#FFF5CC] hover:border-[#811B2B]/30'
+                  ? 'bg-[#811B2B] text-white border-[#811B2B] shadow-sm scale-105'
+                  : 'bg-white/80 text-[#641623] border-[#641623]/20 hover:bg-[#FFF5CC] hover:border-[#811B2B]/30'
               }`}
             >
               {cat}
@@ -65,11 +147,11 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
         })}
 
         {/* Scroll Arrows */}
-        <div className="hidden sm:flex items-center gap-1 ml-auto flex-shrink-0">
+        <div className="hidden sm:flex items-center gap-1.5 ml-auto flex-shrink-0">
           <button
             type="button"
             onClick={() => handleScroll('left')}
-            className="w-7 h-7 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
+            className="w-7 h-7 rounded-full bg-white/90 border border-[#641623]/25 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -77,7 +159,7 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
           <button
             type="button"
             onClick={() => handleScroll('right')}
-            className="w-7 h-7 rounded-full bg-white/80 border border-[#641623]/20 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
+            className="w-7 h-7 rounded-full bg-white/90 border border-[#641623]/25 flex items-center justify-center text-[#641623] hover:bg-[#FFF5CC] active:scale-90 transition-all cursor-pointer shadow-xs"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-4 h-4" />
@@ -85,128 +167,93 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
         </div>
       </div>
 
-      {/* ── The Pink Display Shelf ── */}
+      {/* ── The Flower Shelf (Items sit directly ON the shelf board) ── */}
       <div className="relative w-full">
-        {/* ── Shelf items container (flowers sit ON the shelf) ── */}
         <div
           ref={scrollRef}
-          className="flex items-end gap-3 sm:gap-5 overflow-x-auto no-scrollbar px-4 sm:px-8 pb-0 scroll-smooth"
-          style={{ paddingBottom: 0 }}
+          className="flex items-end gap-3 sm:gap-6 overflow-x-auto no-scrollbar px-4 sm:px-8 pb-0 scroll-smooth"
         >
           {filteredStems.map((stem, index) => {
             const count = selectedFlowers[stem.variantId]?.quantity || 0;
             const isSelected = count > 0;
-            const pot = POT_COLORS[index % POT_COLORS.length];
+            const crate = CRATE_STYLES[index % CRATE_STYLES.length];
 
             return (
               <div
                 key={stem.variantId}
-                className="flex-shrink-0 flex flex-col items-center"
-                style={{ width: '110px' }}
+                className="group flex-shrink-0 flex flex-col items-center relative w-[105px] sm:w-[115px]"
               >
-                {/* ── Quantity Badge floating above pot ── */}
-                <div className="relative w-full flex justify-center mb-0.5" style={{ height: '20px' }}>
-                  {isSelected && (
-                    <div
-                      className="absolute top-0 right-3 z-30 w-5 h-5 rounded-full bg-[#811B2B] text-white border-2 border-white font-black text-[10px] flex items-center justify-center shadow-md"
-                      style={{ lineHeight: 1 }}
-                    >
-                      {count}
-                    </div>
-                  )}
-                </div>
+                {/* ── Black Circular Quantity Badge (above crate, like Petal Post) ── */}
+                {count > 0 && (
+                  <div className="absolute -top-1 -right-1 z-30 w-6 h-6 rounded-full bg-[#111827] text-white font-black text-xs flex items-center justify-center shadow-md border-2 border-white animate-bounce-short">
+                    {count}
+                  </div>
+                )}
 
-                {/* ── Flower photograph (above pot, appears to grow from it) ── */}
+                {/* ── Flower Bloom (emerges from zinc bucket inside crate) ── */}
                 <div
                   onClick={() => onAddFlower(stem)}
-                  className={`relative cursor-pointer w-[90px] h-[110px] sm:h-[120px] flex items-end justify-center transition-all duration-200 hover:-translate-y-1 ${
-                    isSelected ? 'drop-shadow-[0_0_8px_rgba(129,27,43,0.5)]' : 'hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]'
-                  }`}
-                  title={`Click to add ${stem.name}`}
+                  className="relative cursor-pointer w-[95px] h-[120px] sm:h-[130px] flex items-end justify-center transition-transform duration-200 hover:-translate-y-1.5 active:scale-95"
+                  title={`Click to pick ${stem.name}`}
                 >
                   <img
                     src={stem.cutoutImage || stem.image}
                     alt={stem.name}
                     loading="lazy"
-                    className="w-full h-full object-contain select-none"
-                    style={{
-                      filter: isSelected
-                        ? 'brightness(1.05) drop-shadow(0 4px 10px rgba(129,27,43,0.35))'
-                        : 'drop-shadow(0 4px 8px rgba(0,0,0,0.12))',
-                    }}
+                    className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.14)]"
                   />
-
-                  {/* Selected glow ring overlay */}
-                  {isSelected && (
-                    <div className="absolute inset-0 rounded-xl ring-2 ring-[#811B2B]/40 pointer-events-none" />
-                  )}
                 </div>
 
-                {/* ── Ceramic Pot / Basket (SVG) ── */}
-                <div className="w-[90px] relative -mt-1 z-10">
-                  <svg viewBox="0 0 90 55" className="w-full h-auto" fill="none">
-                    {/* Pot rim */}
-                    <ellipse cx="45" cy="12" rx="40" ry="8" fill={pot.rim} />
-                    {/* Pot body */}
-                    <path
-                      d="M 10 14 Q 5 54 25 54 L 65 54 Q 85 54 80 14 Z"
-                      fill={pot.pot}
-                    />
-                    {/* Inner rim shadow */}
-                    <ellipse cx="45" cy="12" rx="34" ry="6" fill={pot.pot} opacity="0.6" />
-                    {/* Top rim highlight */}
-                    <ellipse cx="45" cy="10" rx="38" ry="6" fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" />
-                    {/* Soil top */}
-                    <ellipse cx="45" cy="12" rx="32" ry="5" fill="#8B6B4A" opacity="0.35" />
-                    {/* Small decorative dot pattern on pot */}
-                    <circle cx="30" cy="34" r="2.5" fill="white" opacity="0.25" />
-                    <circle cx="45" cy="38" r="2.5" fill="white" opacity="0.25" />
-                    <circle cx="60" cy="34" r="2.5" fill="white" opacity="0.25" />
-                  </svg>
-
-                  {/* Selected state ring on pot */}
-                  {isSelected && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="absolute bottom-1 left-1 right-1 h-[48px] rounded-b-full ring-2 ring-[#811B2B] rounded-[50%] opacity-50" />
-                    </div>
-                  )}
-                </div>
-
-                {/* ── Price label card (below the shelf) ── */}
+                {/* ── Plastic Milk Crate (SVG) ── */}
                 <div
-                  className="w-full text-center pt-1.5 pb-1"
-                  style={{ background: 'transparent' }}
+                  onClick={() => onAddFlower(stem)}
+                  className="w-[100px] relative -mt-3 z-10 cursor-pointer"
+                  title={`Pick ${stem.name}`}
                 >
-                  <p
-                    className="font-['Fredoka'] font-bold text-[11px] leading-tight text-[#641623] truncate px-1"
-                    title={stem.name}
-                  >
-                    {stem.name}
-                  </p>
-                  <p className="font-['Fredoka'] font-black text-[12px] text-[#811B2B]">
-                    ₹{stem.price}
-                  </p>
+                  <PlasticMilkCrate
+                    color={crate.crate}
+                    rimColor={crate.rim}
+                    isSelected={isSelected}
+                  />
+                </div>
 
-                  {/* Add / Stepper control */}
+                {/* ── White Price Tag Sticker (stuck to shelf face) ── */}
+                <div
+                  className="bg-[#FFFDF9] border border-gray-300 shadow-xs px-1.5 py-1 rounded-[2px] text-center w-[98px] mt-1 relative z-20 transition-all group-hover:shadow-sm"
+                  style={{ transform: 'rotate(-0.5deg)' }}
+                >
+                  <div className="font-['Fredoka'] text-[10px] sm:text-[10.5px] font-bold text-gray-800 leading-tight truncate">
+                    {stem.name}
+                  </div>
+                  <div className="font-['Fredoka'] text-[10.5px] sm:text-[11px] font-black text-[#811B2B] mt-0.5">
+                    ₹{stem.price}
+                  </div>
+
+                  {/* Quantity Stepper (on hover or when selected) */}
                   {isSelected ? (
-                    <div
-                      className="inline-flex items-center gap-1 bg-[#811B2B]/10 rounded-full px-1.5 py-0.5 mt-1"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                    <div className="flex items-center justify-center gap-1.5 mt-1 pt-1 border-t border-gray-200">
                       <button
                         type="button"
-                        onClick={() => onRemoveFlower(stem.variantId)}
-                        className="w-5 h-5 rounded-full bg-white text-[#811B2B] hover:bg-[#811B2B] hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-[#811B2B]/30 shadow-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRemoveFlower(stem.variantId);
+                        }}
+                        className="w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 flex items-center justify-center transition-colors cursor-pointer"
+                        title="Remove one"
                       >
                         <Minus className="w-2.5 h-2.5" />
                       </button>
-                      <span className="font-['Fredoka'] font-black text-xs text-[#811B2B] min-w-[14px] text-center">
+                      <span className="font-['Fredoka'] font-black text-[11px] text-[#811B2B] min-w-[12px] text-center">
                         {count}
                       </span>
                       <button
                         type="button"
-                        onClick={() => onAddFlower(stem)}
-                        className="w-5 h-5 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] flex items-center justify-center transition-colors cursor-pointer shadow-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddFlower(stem);
+                        }}
+                        className="w-4 h-4 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] flex items-center justify-center transition-colors cursor-pointer"
+                        title="Add one more"
                       >
                         <Plus className="w-2.5 h-2.5" />
                       </button>
@@ -214,11 +261,13 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
                   ) : (
                     <button
                       type="button"
-                      onClick={() => onAddFlower(stem)}
-                      className="mt-1 inline-flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-[#FFF5CC] text-[#811B2B] hover:bg-[#811B2B] hover:text-white border border-[#811B2B]/25 text-[11px] font-bold transition-all cursor-pointer shadow-xs active:scale-95"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAddFlower(stem);
+                      }}
+                      className="mt-1 text-[10px] font-bold text-[#811B2B] hover:underline cursor-pointer block w-full text-center"
                     >
-                      <Plus className="w-2.5 h-2.5" />
-                      Add
+                      + Add
                     </button>
                   )}
                 </div>
@@ -227,21 +276,28 @@ export const FlowerCrateShelf: React.FC<FlowerCrateShelfProps> = ({
           })}
         </div>
 
-        {/* ── The Pink Shelf Plank ── */}
-        <div
-          className="w-full relative z-10 mt-1"
-          style={{ height: '20px' }}
-        >
-          {/* Top ledge highlight */}
+        {/* ── Pink Shelf Board Plank ── */}
+        <div className="w-full mt-2">
+          {/* Top highlight line of the shelf board */}
+          <div className="w-full h-1 bg-[#FFAEC4]" />
+          {/* Main bold pink shelf board */}
           <div
-            className="absolute top-0 left-0 right-0 h-[6px] rounded-t"
-            style={{ background: '#E87EA0' }}
+            className="w-full h-4 relative shadow-md"
+            style={{
+              background: 'linear-gradient(to bottom, #F43F5E 0%, #E11D48 100%)',
+            }}
           />
-          {/* Main shelf board */}
-          <div
-            className="absolute top-[6px] left-0 right-0 bottom-0 shadow-[0_6px_18px_rgba(129,27,43,0.18)]"
-            style={{ background: '#D86490' }}
-          />
+          {/* Underside shadow of shelf */}
+          <div className="w-full h-1.5 bg-[#881337] opacity-80" />
+        </div>
+      </div>
+
+      {/* ── Status Instruction Banner (Centered on glossy backsplash below shelf) ── */}
+      <div className="w-full flex justify-center py-2 relative z-20">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFFDF9]/90 border border-black/15 shadow-sm text-center backdrop-blur-xs">
+          <span className="font-['Fredoka'] text-[11.5px] sm:text-xs font-semibold text-[#641623]">
+            {bannerText}
+          </span>
         </div>
       </div>
     </div>

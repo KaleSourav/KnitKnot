@@ -1,207 +1,236 @@
 import React from 'react';
-import {
-  RibbonOption,
-  RIBBON_OPTIONS,
-} from '../../data/bouquetFlowers';
-import { Edit3, Heart, Check } from 'lucide-react';
+import { RibbonOption, RIBBON_OPTIONS } from '../../data/bouquetFlowers';
+import { Sparkles, Edit3, Check } from 'lucide-react';
 
 interface FinishingTouchBarProps {
   selectedRibbon: RibbonOption;
   onSelectRibbon: (ribbon: RibbonOption) => void;
+  hasRibbonChosen: boolean;
   hasNote: boolean;
   noteRecipient: string;
+  noteMessage: string;
   onOpenNoteModal: () => void;
+  onChangeRibbonClick: () => void;
 }
 
-// Detailed bow SVG for each ribbon option
-const BowSVG: React.FC<{ colorHex: string; size?: number }> = ({ colorHex, size = 56 }) => (
+// Detailed Satin Bow SVG Component
+const BowSVG: React.FC<{ colorHex: string; isSelected: boolean }> = ({
+  colorHex,
+  isSelected,
+}) => (
   <svg
-    viewBox="0 0 70 56"
+    viewBox="0 0 110 80"
+    className={`w-18 h-14 sm:w-20 sm:h-16 transition-all duration-300 drop-shadow-[0_8px_16px_rgba(0,0,0,0.18)] ${
+      isSelected ? 'scale-110 drop-shadow-[0_10px_22px_rgba(129,27,43,0.35)]' : 'hover:scale-105'
+    }`}
     fill="none"
-    style={{ width: size, height: size * 0.8 }}
-    xmlns="http://www.w3.org/2000/svg"
   >
-    {/* Left loop */}
+    {/* Left Ribbon Tail */}
     <path
-      d="M 35 28 C 20 10 2 14 8 30 C 14 44 30 36 35 28 Z"
+      d="M 50 42 C 40 54 28 66 18 78 L 32 75 C 40 64 48 52 52 44 Z"
       fill={colorHex}
-      stroke="rgba(0,0,0,0.25)"
-      strokeWidth="1"
-    />
-    {/* Left loop inner sheen */}
-    <path
-      d="M 35 28 C 24 16 10 18 13 28"
-      fill="none"
-      stroke="white"
+      stroke="#5A1218"
       strokeWidth="1.2"
-      strokeLinecap="round"
-      opacity="0.4"
+      opacity="0.9"
     />
-    {/* Right loop */}
+    {/* Right Ribbon Tail */}
     <path
-      d="M 35 28 C 50 10 68 14 62 30 C 56 44 40 36 35 28 Z"
+      d="M 60 42 C 70 54 82 66 92 78 L 78 75 C 70 64 62 52 58 44 Z"
       fill={colorHex}
-      stroke="rgba(0,0,0,0.25)"
-      strokeWidth="1"
-    />
-    {/* Right loop inner sheen */}
-    <path
-      d="M 35 28 C 46 16 60 18 57 28"
-      fill="none"
-      stroke="white"
+      stroke="#5A1218"
       strokeWidth="1.2"
-      strokeLinecap="round"
-      opacity="0.4"
+      opacity="0.9"
     />
-    {/* Center knot */}
-    <ellipse cx="35" cy="28" rx="6" ry="5" fill={colorHex} stroke="rgba(0,0,0,0.3)" strokeWidth="1.2" />
-    <ellipse cx="33" cy="26" rx="2.5" ry="2" fill="white" opacity="0.3" />
-    {/* Left tail */}
+    {/* Left Bow Loop */}
     <path
-      d="M 32 32 Q 25 46 20 54"
-      stroke={colorHex}
-      strokeWidth="5"
-      strokeLinecap="round"
+      d="M 55 36 C 32 10 -2 16 12 40 C 22 56 46 48 55 36 Z"
+      fill={colorHex}
+      stroke="#5A1218"
+      strokeWidth="1.6"
     />
+    {/* Right Bow Loop */}
     <path
-      d="M 32 32 Q 25 46 20 54"
-      stroke="rgba(0,0,0,0.12)"
-      strokeWidth="5"
-      strokeLinecap="round"
+      d="M 55 36 C 78 10 112 16 98 40 C 88 56 64 48 55 36 Z"
+      fill={colorHex}
+      stroke="#5A1218"
+      strokeWidth="1.6"
     />
-    {/* Right tail */}
-    <path
-      d="M 38 32 Q 45 46 50 54"
-      stroke={colorHex}
-      strokeWidth="5"
-      strokeLinecap="round"
-    />
+    {/* Center Knot */}
+    <ellipse cx="55" cy="36" rx="8" ry="7" fill={colorHex} stroke="#5A1218" strokeWidth="2" />
+    {/* Glossy Sheen Highlight */}
+    <ellipse cx="52" cy="33" rx="3.5" ry="3" fill="white" opacity="0.35" />
+    <path d="M 28 26 Q 42 22 50 32" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
+    <path d="M 82 26 Q 68 22 60 32" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
   </svg>
 );
 
 export const FinishingTouchBar: React.FC<FinishingTouchBarProps> = ({
   selectedRibbon,
   onSelectRibbon,
+  hasRibbonChosen,
   hasNote,
   noteRecipient,
+  noteMessage,
   onOpenNoteModal,
+  onChangeRibbonClick,
 }) => {
   return (
-    <div className="relative w-full max-w-[260px] mx-auto flex flex-col gap-5 select-none text-left">
-
-      {/* ── 1. "The finishing touch." – Ribbon station ── */}
-      <div>
-        {/* Handwritten-style section label */}
-        <div className="mb-3">
-          <span
-            className="font-['Satisfy'] text-xl text-[#811B2B]"
-            style={{ textShadow: '0 1px 2px rgba(129,27,43,0.1)' }}
-          >
+    <div className="w-full max-w-[320px] mx-auto flex flex-col items-center select-none text-center">
+      {!hasRibbonChosen ? (
+        /* ══════════════════════════════════════════════════════════════
+            PHASE 1: "The finishing touch." (Ribbon Selection)
+           ══════════════════════════════════════════════════════════════ */
+        <div className="w-full flex flex-col items-center animate-fadeIn">
+          {/* Handwritten Cursive Script Title */}
+          <h3 className="font-['Satisfy'] text-2xl sm:text-[28px] text-[#811B2B] leading-tight drop-shadow-xs">
             The finishing touch.
-          </span>
-          <p className="font-['Fredoka'] text-xs text-[#641623]/70 mt-0.5">
+          </h3>
+          <p className="font-['Fredoka'] text-[11.5px] text-[#641623]/80 mt-1 max-w-[240px] leading-relaxed">
             Choose a ribbon bow to tie around your bouquet:
           </p>
-        </div>
 
-        {/* Bows displayed like physical items on the counter */}
-        <div className="flex items-end gap-2 flex-wrap">
-          {RIBBON_OPTIONS.map((ribbon) => {
-            const isSelected = ribbon.id === selectedRibbon.id;
-            return (
-              <button
-                key={ribbon.id}
-                type="button"
-                onClick={() => onSelectRibbon(ribbon)}
-                className={`relative flex flex-col items-center transition-all duration-200 cursor-pointer rounded-2xl pt-2 pb-1.5 px-2 ${
-                  isSelected
-                    ? 'bg-[#FFF5CC] ring-2 ring-[#811B2B] shadow-md scale-105'
-                    : 'bg-white/50 hover:bg-white/80 hover:shadow-sm hover:scale-102'
-                }`}
-                title={ribbon.name}
-              >
-                <BowSVG colorHex={ribbon.colorHex} size={52} />
-                {isSelected && (
-                  <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#811B2B]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+          {/* 3 Ribbon Bows Laid Out on the Pink Counter */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 pt-1">
+            {RIBBON_OPTIONS.map((r) => {
+              const isSelected = selectedRibbon.id === r.id;
+              return (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => onSelectRibbon(r)}
+                  className={`group relative flex flex-col items-center p-2 rounded-2xl transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? 'bg-white/40 ring-2 ring-[#811B2B] shadow-sm'
+                      : 'hover:bg-white/20'
+                  }`}
+                  title={`Choose ${r.name}`}
+                >
+                  <BowSVG colorHex={r.colorHex} isSelected={isSelected} />
+                  <span className="font-['Fredoka'] text-[10.5px] font-bold text-[#641623] mt-1 block">
+                    {r.name}
+                  </span>
+                  {isSelected && (
+                    <span className="text-[9px] font-extrabold text-[#811B2B] uppercase tracking-wide">
+                      Selected
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
 
-        <div className="mt-2">
-          <span className="font-['Fredoka'] font-bold text-xs text-[#811B2B]">
-            {selectedRibbon.name}
-          </span>
+          <p className="font-['Fredoka'] text-[10px] text-[#641623]/60 italic mt-3">
+            Click a ribbon to cinch &amp; tie your bouquet
+          </p>
         </div>
-      </div>
-
-      {/* ── 2. "Make it personal." – Gift note station ── */}
-      <div>
-        <div className="mb-2">
-          <span
-            className="font-['Satisfy'] text-xl text-[#811B2B]"
-          >
+      ) : (
+        /* ══════════════════════════════════════════════════════════════
+            PHASE 2: "Make it personal." (Stationery Note Cards)
+           ══════════════════════════════════════════════════════════════ */
+        <div className="w-full flex flex-col items-center animate-fadeIn">
+          {/* Handwritten Cursive Script Title */}
+          <h3 className="font-['Satisfy'] text-2xl sm:text-[28px] text-[#811B2B] leading-tight drop-shadow-xs">
             Make it personal.
-          </span>
-        </div>
+          </h3>
+          <p className="font-['Fredoka'] text-[11.5px] text-[#641623]/80 mt-1 max-w-[250px] leading-relaxed">
+            Pick a card to tuck a handwritten note into the flowers:
+          </p>
 
-        <div
-          onClick={onOpenNoteModal}
-          className="relative cursor-pointer group transition-all duration-200 hover:-translate-y-0.5"
-        >
-          {/* Physical greeting card appearance */}
-          <div
-            className="rounded-2xl p-3 shadow-sm border-2 transition-all duration-200 group-hover:shadow-md"
-            style={{
-              background: 'linear-gradient(135deg, #FFF9EE 0%, #FFF5CC 100%)',
-              borderColor: '#E6D7A3',
-            }}
-          >
-            {/* Scalloped top edge */}
-            <div className="absolute -top-[5px] left-3 right-3 flex justify-around pointer-events-none">
-              {Array.from({ length: 8 }).map((_, i) => (
+          {/* 3 Cute Stationery Note Cards Laid Out on the Counter */}
+          <div className="flex items-center justify-center gap-2.5 sm:gap-3 mt-4">
+            {/* Card 1: Red Scalloped Border Card */}
+            <div
+              onClick={onOpenNoteModal}
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+            >
+              <div
+                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FFFDF9] border-2 shadow-md relative p-1.5 flex flex-col justify-between select-none"
+                style={{ borderColor: '#F43F5E' }}
+              >
+                {/* Scalloped interior dots */}
                 <div
-                  key={i}
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ background: '#FFF9EE', border: '1.5px solid #E6D7A3', marginTop: '-1px' }}
-                />
-              ))}
-            </div>
-
-            <div className="flex items-start justify-between mb-2">
-              <span className="font-['Fredoka'] font-black text-xs text-[#641623] uppercase tracking-wide">
-                Handwritten Note
-              </span>
-              <span className="w-6 h-6 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
-                style={{ background: 'rgba(129,27,43,0.08)' }}>
-                <Edit3 className="w-3 h-3 text-[#811B2B]" />
-              </span>
-            </div>
-
-            <div className="font-['Satisfy'] text-xs text-[#641623] leading-relaxed min-h-[32px]">
-              {hasNote
-                ? noteRecipient
-                  ? `To ${noteRecipient} ♡`
-                  : '"Your message is ready ♡"'
-                : '"Write your sweet message here..."'}
-            </div>
-
-            {hasNote && (
-              <div className="mt-2 flex items-center gap-1">
-                <Check className="w-3 h-3 text-green-600" />
-                <span className="text-[10px] font-bold text-green-700">Note tucked in!</span>
+                  className="w-full h-full border border-dashed rounded-[3px] p-1 flex flex-col justify-between"
+                  style={{ borderColor: '#F43F5E' }}
+                >
+                  <span className="text-[8px] font-['Satisfy'] text-[#811B2B] leading-tight">
+                    {hasNote ? 'Tucked ♡' : 'With love'}
+                  </span>
+                  <div className="w-3 h-3 rounded-full bg-[#F43F5E]/20 self-end flex items-center justify-center">
+                    <span className="text-[7px] text-[#F43F5E]">💌</span>
+                  </div>
+                </div>
               </div>
-            )}
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+                Scallop
+              </span>
+            </div>
 
-            <div className="mt-2 text-right">
-              <span className="text-[11px] font-bold text-[#811B2B] group-hover:underline">
-                {hasNote ? 'Edit note →' : 'Add a note →'}
+            {/* Card 2: Golden Warm Cream Card */}
+            <div
+              onClick={onOpenNoteModal}
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+            >
+              <div
+                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FFF9E6] border-2 border-[#D97706] shadow-md relative p-1.5 flex flex-col justify-between select-none"
+              >
+                <div className="w-full h-full border border-[#D97706]/40 rounded-[3px] p-1 flex flex-col justify-between">
+                  <span className="text-[8px] font-['Satisfy'] text-[#92400E] leading-tight">
+                    Sweet note
+                  </span>
+                  <div className="w-3 h-3 rounded-full bg-[#D97706]/20 self-end flex items-center justify-center">
+                    <span className="text-[7px]">✨</span>
+                  </div>
+                </div>
+              </div>
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+                Gold Trim
+              </span>
+            </div>
+
+            {/* Card 3: Pastel Blossom Card */}
+            <div
+              onClick={onOpenNoteModal}
+              className="group cursor-pointer flex flex-col items-center transition-transform hover:-translate-y-1 active:scale-95"
+            >
+              <div
+                className="w-16 h-20 sm:w-18 sm:h-22 rounded-md bg-[#FDF2F8] border-2 border-[#EC4899] shadow-md relative p-1.5 flex flex-col justify-between select-none"
+              >
+                <div className="w-full h-full border border-pink-300 rounded-[3px] p-1 flex flex-col justify-between">
+                  <span className="text-[8px] font-['Satisfy'] text-[#9D174D] leading-tight">
+                    For you
+                  </span>
+                  <div className="w-3 h-3 rounded-full bg-pink-200 self-end flex items-center justify-center">
+                    <span className="text-[7px]">🌸</span>
+                  </div>
+                </div>
+              </div>
+              <span className="font-['Fredoka'] text-[10px] font-bold text-[#641623] mt-1">
+                Floral
               </span>
             </div>
           </div>
+
+          {/* Note Status / Trigger */}
+          <div className="mt-3 flex flex-col items-center gap-1.5">
+            <button
+              type="button"
+              onClick={onOpenNoteModal}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#811B2B] text-white hover:bg-[#641623] text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+            >
+              <Edit3 className="w-3 h-3" />
+              <span>{hasNote ? 'Edit Handwritten Note' : 'Write Note on Card →'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onChangeRibbonClick}
+              className="text-[10.5px] font-semibold text-[#811B2B]/75 hover:text-[#811B2B] underline cursor-pointer mt-1"
+            >
+              Change ribbon ({selectedRibbon.name})
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

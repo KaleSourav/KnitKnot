@@ -46,6 +46,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
   const [isReviewDrawerOpen, setIsReviewDrawerOpen] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [hasRibbonChosen, setHasRibbonChosen] = useState(false);
 
   // Sync bouquet state to localStorage
   useEffect(() => {
@@ -111,7 +112,13 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
 
   const handleSelectRibbon = (ribbon: RibbonOption) => {
     setBouquet((prev) => ({ ...prev, ribbon }));
+    setHasRibbonChosen(true);
     showToast(`Tied ${ribbon.name} around your bouquet! 🎀`);
+  };
+
+  const handleUndoRibbon = () => {
+    setHasRibbonChosen(false);
+    showToast('Unwrapped bouquet. Choose another ribbon!');
   };
 
   // ── Gift Note ───────────────────────────────────────────────────────────────
@@ -228,98 +235,94 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          2. CHECKERBOARD SHOP WALL + HANGING SIGN
+          2. RETRO CHECKERBOARD SHOP WALL + 3D SHOP SIGN
          ══════════════════════════════════════════════════════════ */}
       <div
         className="w-full relative overflow-hidden"
-        style={{ minHeight: '90px' }}
+        style={{ minHeight: '120px' }}
       >
-        {/* Checkerboard background — alternating butter & off-white squares */}
+        {/* Retro 70s Checkerboard Wallpaper (Orange & Butter Cream) */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
               repeating-conic-gradient(
-                #FFF5CC 0% 25%,
-                #FFFEF8 0% 50%
+                #EA580C 0% 25%,
+                #FFF7ED 0% 50%
               )
             `,
-            backgroundSize: '56px 56px',
+            backgroundSize: '68px 68px',
           }}
         />
-        {/* Vignette darkening at edges for depth */}
+        {/* Soft warm lighting vignette for depth */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 60%, rgba(100,22,35,0.08) 100%)',
+            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.18) 100%)',
           }}
         />
-        {/* Soft warm overlay so it doesn't look too stark */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'rgba(255,245,204,0.18)' }}
-        />
 
-        {/* Central hanging shop sign */}
-        <div className="relative z-10 flex flex-col items-center justify-center py-5 px-4">
-          {/* Hanging strings */}
-          <div className="flex gap-32 sm:gap-48 mb-[-2px] pointer-events-none">
-            <div className="w-px h-5 bg-[#C8A882] opacity-60" />
-            <div className="w-px h-5 bg-[#C8A882] opacity-60" />
-          </div>
-          {/* Sign board */}
+        {/* Central 3D Shop Sign (Matching Petal Post 3D Wall Sign) */}
+        <div className="relative z-10 flex flex-col items-center justify-center py-6 px-4">
           <div
-            className="rounded-2xl px-6 sm:px-12 py-3 shadow-[0_8px_24px_rgba(100,22,35,0.15)] border-2 relative"
-            style={{ background: '#FFF8E8', borderColor: '#C8A882' }}
+            className="rounded-2xl px-8 sm:px-16 py-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.25)] border-[3px] border-[#D97706] relative bg-[#FFFDF9]"
           >
-            {/* Pin dots at top corners */}
-            <div className="absolute top-2 left-3 w-2 h-2 rounded-full bg-[#C8A882] opacity-70" />
-            <div className="absolute top-2 right-3 w-2 h-2 rounded-full bg-[#C8A882] opacity-70" />
+            {/* Subtle hanging cord brackets */}
+            <div className="absolute -top-3 left-6 w-3 h-3 rounded-full bg-[#B45309] border border-white" />
+            <div className="absolute -top-3 right-6 w-3 h-3 rounded-full bg-[#B45309] border border-white" />
+            
             <div className="text-center">
-              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#811B2B] block">
-                Knots &amp; Co. · Flower Boutique
-              </span>
               <h1
-                className="font-['Fredoka'] font-black text-lg sm:text-2xl md:text-3xl text-[#641623] leading-tight mt-0.5"
+                className="font-['Fredoka'] font-black text-3xl sm:text-4xl md:text-5xl tracking-tight leading-none text-[#F59E0B]"
+                style={{
+                  textShadow: '3px 3px 0px #EA580C, 5px 5px 0px #9A3412',
+                }}
               >
-                MAKE YOUR OWN BOUQUET
+                KNOTSNCO
               </h1>
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.28em] text-[#9A3412] block mt-1">
+                FLOWER BOUTIQUE · MAKE YOUR OWN BOUQUET
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          3. PINK FLOWER SHELF — flowers displayed in ceramic pots
+          3. PINK FLOWER SHELF — flowers in colorful milk crates
          ══════════════════════════════════════════════════════════ */}
       <div
         className="w-full relative"
-        style={{ background: 'linear-gradient(to bottom, #FAEBD7 0%, #FDF0E0 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, #FFF3E6 0%, #FFE8D6 100%)' }}
       >
-        {/* Shelf area: category tabs + scrollable pots */}
+        {/* Shelf area: category tabs + scrollable crates */}
         <div className="max-w-7xl mx-auto pt-4 pb-0">
           <FlowerCrateShelf
             selectedFlowers={bouquet.flowers}
             onAddFlower={handleAddFlower}
             onRemoveFlower={handleRemoveFlower}
+            hasRibbon={hasRibbonChosen}
+            hasNote={bouquet.note.isTucked && bouquet.note.message.length > 0}
           />
         </div>
 
-        {/* Dark tile strip below the shelf (like the reference dark tiled back wall) */}
+        {/* Glossy dark ceramic tile backsplash below the shelf */}
         <div
-          className="w-full h-7 relative overflow-hidden"
-          style={{ background: '#3D2B1F' }}
+          className="w-full h-11 relative overflow-hidden"
+          style={{ background: 'linear-gradient(to bottom, #1E293B 0%, #0F172A 100%)' }}
         >
-          {/* Tile grout lines */}
+          {/* Reflective ceramic tile grid lines */}
           <div
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-40"
             style={{
               backgroundImage: `
-                repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 60px),
-                repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 28px)
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 52px),
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 24px)
               `,
             }}
           />
+          {/* Glossy top reflection highlight */}
+          <div className="absolute top-0 inset-x-0 h-1 bg-white/20" />
         </div>
       </div>
 
@@ -328,12 +331,12 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
          ══════════════════════════════════════════════════════════ */}
       <div
         className="w-full relative"
-        style={{ background: 'linear-gradient(to bottom, #E87EA0 0%, #D86490 40%, #C85880 100%)', minHeight: '500px' }}
+        style={{ background: 'linear-gradient(to bottom, #F472B6 0%, #EC4899 45%, #DB2777 100%)', minHeight: '520px' }}
       >
         {/* Counter top highlight edge */}
         <div
           className="w-full h-2.5 relative"
-          style={{ background: 'linear-gradient(to right, #F090B0 0%, #FAAAC0 50%, #F090B0 100%)' }}
+          style={{ background: 'linear-gradient(to right, #FBCFE8 0%, #FDF2F8 50%, #FBCFE8 100%)' }}
         />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
@@ -356,9 +359,11 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
                 wrapping={bouquet.wrapping}
                 ribbon={bouquet.ribbon}
                 note={bouquet.note}
+                hasRibbonChosen={hasRibbonChosen}
                 onSelectWrapping={handleSelectWrapping}
                 onOpenNoteModal={() => setIsNoteModalOpen(true)}
                 onClearBouquet={handleClearBouquet}
+                onUndoRibbon={handleUndoRibbon}
               />
             </div>
 
@@ -367,9 +372,12 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
               <FinishingTouchBar
                 selectedRibbon={bouquet.ribbon}
                 onSelectRibbon={handleSelectRibbon}
+                hasRibbonChosen={hasRibbonChosen}
                 hasNote={bouquet.note.isTucked && bouquet.note.message.length > 0}
                 noteRecipient={bouquet.note.recipient}
+                noteMessage={bouquet.note.message}
                 onOpenNoteModal={() => setIsNoteModalOpen(true)}
+                onChangeRibbonClick={() => setHasRibbonChosen(false)}
               />
             </div>
           </div>
@@ -378,7 +386,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
         {/* Counter front face (bottom trim) */}
         <div
           className="w-full h-6 relative"
-          style={{ background: '#B84E70' }}
+          style={{ background: '#BE185D' }}
         />
       </div>
 
