@@ -88,6 +88,16 @@ export const GiftNoteModal: React.FC<GiftNoteModalProps> = ({
 
         {/* Modal Header */}
         <div className="text-left mb-4 pr-10">
+          <div className="flex items-center gap-2 mb-1.5">
+            <img
+              src="/logo-knotsnco.png"
+              alt="knotsnco."
+              className="h-5 w-auto object-contain select-none"
+            />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#811B2B]/80 font-['Fredoka']">
+              • Stationery &amp; Notes
+            </span>
+          </div>
           <h3 className="font-['Fredoka'] font-black text-xl sm:text-2xl text-[#811B2B] tracking-tight">
             A little note. A lot of love.
           </h3>

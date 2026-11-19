@@ -215,17 +215,22 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
 
       {/* ── 1. Slim Burgundy Top Bar ── */}
       <div
-        className="w-full text-white py-1.5 px-4 relative z-30 flex-shrink-0"
+        className="w-full text-white py-1.5 sm:py-2 px-4 sm:px-6 relative z-30 flex-shrink-0 shadow-xs"
         style={{ background: '#811B2B', borderBottom: '2px solid #641623' }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-bold">
           <button
             type="button"
             onClick={onNavigateHome}
-            className="flex items-center gap-1.5 text-white/90 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-white/90 hover:text-white transition-colors cursor-pointer group"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Knots &amp; Co</span>
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+            <img
+              src="/logo-knotsnco-white.png"
+              alt="knotsnco."
+              className="h-5 sm:h-5.5 w-auto object-contain brightness-0 invert drop-shadow-xs"
+            />
+            <span className="hidden sm:inline text-white/70 font-normal">| Back to Shop</span>
           </button>
           <span className="hidden md:block font-['Satisfy'] text-sm sm:text-base text-[#FFF5CC]">
             "A little something, made by you." ♡
@@ -233,7 +238,7 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
-            className="flex items-center gap-1 text-[#FFF5CC] hover:underline cursor-pointer"
+            className="flex items-center gap-1.5 text-[#FFF5CC] hover:underline cursor-pointer"
           >
             <HelpCircle className="w-3.5 h-3.5" />
             <span>How it works</span>
@@ -430,6 +435,16 @@ export const BouquetBuilderPage: React.FC<BouquetBuilderPageProps> = ({
             >
               ✕
             </button>
+            <div className="flex items-center gap-2 mb-2">
+              <img
+                src="/logo-knotsnco.png"
+                alt="knotsnco."
+                className="h-5.5 w-auto object-contain select-none"
+              />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#811B2B]/80 font-['Fredoka']">
+                • Flower Boutique
+              </span>
+            </div>
             <h3 className="font-['Fredoka'] font-black text-xl text-[#811B2B] mb-3">
               How Make Your Own Bouquet Works
             </h3>

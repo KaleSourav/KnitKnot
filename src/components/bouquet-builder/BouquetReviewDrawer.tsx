@@ -210,6 +210,16 @@ export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
         {/* ── RIGHT: Form Fields ("Where's the love going?") ── */}
         <div className="w-full md:w-[55%] p-6 sm:p-8 flex flex-col justify-between">
           <div>
+            <div className="flex items-center gap-2 mb-2">
+              <img
+                src="/logo-knotsnco.png"
+                alt="knotsnco."
+                className="h-5 sm:h-5.5 w-auto object-contain select-none"
+              />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#811B2B]/80 font-['Fredoka']">
+                • Flower Boutique
+              </span>
+            </div>
             <h3 className="font-['Fredoka'] font-black text-2xl sm:text-[26px] text-[#641623] tracking-tight leading-tight">
               Where’s the love going?
             </h3>

@@ -44,12 +44,25 @@ export const MakeYourOwnBouquetBanner: React.FC<MakeYourOwnBouquetBannerProps> =
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Text & CTA */}
             <div className="lg:col-span-7 text-center lg:text-left">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 border border-[#641623]/20 shadow-xs mb-3.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#811B2B]" />
-                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#641623]">
-                  Interactive Flower Boutique
-                </span>
+              {/* Brand Logo & Flower Boutique Badges */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 sm:gap-3 mb-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#641623]/20 shadow-xs">
+                  <img
+                    src="/logo-knotsnco.png"
+                    alt="knotsnco."
+                    className="h-5 sm:h-6 w-auto object-contain select-none"
+                  />
+                  <span className="text-[#641623]/35 font-bold">|</span>
+                  <span className="text-[#641623] font-['Fredoka'] font-semibold text-xs tracking-wide lowercase select-none">
+                    everything crochet
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#811B2B] text-white shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FFF5CC]" />
+                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#FFF5CC]">
+                    Interactive Flower Boutique
+                  </span>
+                </div>
               </div>
 
               {/* Main Headline */}
@@ -111,6 +124,23 @@ export const MakeYourOwnBouquetBanner: React.FC<MakeYourOwnBouquetBannerProps> =
                 {/* Cute Corner Ribbon */}
                 <div className="absolute -top-3 -right-3 z-20 bg-[#811B2B] text-white text-[10px] font-black uppercase px-3 py-1 rounded-full border-2 border-white shadow-sm transform rotate-6">
                   Interactive Bar
+                </div>
+
+                {/* Boutique Header Tag with Brand Logo */}
+                <div className="flex items-center justify-between mb-3 px-1">
+                  <div className="flex items-center gap-1.5">
+                    <img
+                      src="/logo-knotsnco.png"
+                      alt="knotsnco."
+                      className="h-4 sm:h-5 w-auto object-contain select-none"
+                    />
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-[#811B2B]/80 font-['Fredoka']">
+                      • Flower Boutique
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[#641623]/70 font-semibold font-['Fredoka']">
+                    100% Handmade ♡
+                  </span>
                 </div>
 
                 {/* Sample Bouquet Visual Composition */}
