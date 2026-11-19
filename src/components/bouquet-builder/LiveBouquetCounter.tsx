@@ -313,83 +313,9 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               Flower heads emerge naturally right from the cone's top opening
              ══════════════════════════════════════════════════════════════ */
           <>
-            {/* Stems Converging at base peeking out bottom of cone */}
+            {/* 1. Photorealistic Folded Crepe Paper Cone (Back Layer, z-10) with centered radiant backlight */}
             <div
-              className="absolute pointer-events-none z-10"
-              style={{
-                bottom: '8px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '80px',
-                height: '40px',
-              }}
-            >
-              <svg viewBox="0 0 80 40" fill="none" className="w-full h-full">
-                <line x1="32" y1="0" x2="38" y2="35" stroke="#3B6B22" strokeWidth="2.8" strokeLinecap="round" />
-                <line x1="40" y1="0" x2="40" y2="38" stroke="#3B6B22" strokeWidth="2.8" strokeLinecap="round" />
-                <line x1="48" y1="0" x2="42" y2="35" stroke="#3B6B22" strokeWidth="2.8" strokeLinecap="round" />
-              </svg>
-            </div>
-
-            {/* Flower Blossoms blooming naturally out of the top cone opening (z-15) */}
-            <div
-              className="absolute bottom-[80px] left-1/2 pointer-events-none z-15"
-              style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
-            >
-              {flowerInstances.slice(0, 16).map((flower, idx) => {
-                const style = getWrappedStemStyle(idx, Math.min(flowerInstances.length, 16));
-                return (
-                  <div
-                    key={`${flower.variantId}-${idx}`}
-                    className="absolute transition-all duration-300 ease-out"
-                    style={{
-                      ...style,
-                      width: '135px',
-                      height: '175px',
-                      left: '-67px',
-                      bottom: '0',
-                    }}
-                  >
-                    <img
-                      src={flower.cutoutImage || flower.image}
-                      alt={flower.name}
-                      className="w-full h-full object-contain select-none pointer-events-none"
-                      style={{
-                        filter:
-                          'brightness(1.08) contrast(1.06) saturate(1.15) drop-shadow(0 0 10px rgba(255, 245, 180, 0.7)) drop-shadow(0 0 20px rgba(254, 224, 71, 0.4)) drop-shadow(0 10px 18px rgba(0,0,0,0.28))',
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Tucked Handwritten Greeting Card (peeking out top-right of cone) */}
-            {note.isTucked && note.message && (
-              <div
-                onClick={onOpenNoteModal}
-                className="absolute z-22 cursor-pointer transform rotate-6 hover:rotate-3 transition-transform duration-200 drop-shadow-md"
-                style={{ bottom: '160px', left: 'calc(50% + 28px)' }}
-                title="Click to view/edit your handwritten note"
-              >
-                <div
-                  className="w-16 h-20 rounded-md bg-[#FFFDF9] border-2 shadow-lg p-1.5 flex flex-col justify-between"
-                  style={{ borderColor: '#811B2B' }}
-                >
-                  <span className="text-[8px] font-['Satisfy'] text-[#811B2B] leading-tight line-clamp-3">
-                    "{note.message}"
-                  </span>
-                  <div className="flex items-center justify-between text-[7px] text-[#811B2B]/70 font-mono">
-                    <span>💌</span>
-                    <span>{note.recipient || 'Dear'}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Photorealistic Folded Crepe Paper Cone (z-20) with centered radiant backlight */}
-            <div
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]"
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 pointer-events-none flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]"
               style={{ width: '235px', height: '280px' }}
             >
               {/* Luminous yellow radial halo (100% locked to cone center) */}
@@ -414,11 +340,79 @@ export const LiveBouquetCounter: React.FC<LiveBouquetCounterProps> = ({
               />
             </div>
 
-            {/* Tied Photorealistic 3D Satin Ribbon Bow (z-25, positioned at the cone's waist) */}
+            {/* 2. Customer's Actual Flower Blossoms blooming naturally out of the top cone opening (z-18) */}
             <div
-              className="absolute z-25 pointer-events-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.35)]"
+              className="absolute bottom-[140px] left-1/2 pointer-events-none z-18"
+              style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
+            >
+              {flowerInstances.slice(0, 16).map((flower, idx) => {
+                const style = getWrappedStemStyle(idx, Math.min(flowerInstances.length, 16));
+                return (
+                  <div
+                    key={`${flower.variantId}-${idx}`}
+                    className="absolute transition-all duration-300 ease-out"
+                    style={{
+                      ...style,
+                      width: '140px',
+                      height: '180px',
+                      left: '-70px',
+                      bottom: '0',
+                    }}
+                  >
+                    <img
+                      src={flower.cutoutImage || flower.image}
+                      alt={flower.name}
+                      className="w-full h-full object-contain select-none pointer-events-none"
+                      style={{
+                        filter:
+                          'brightness(1.08) contrast(1.06) saturate(1.15) drop-shadow(0 0 10px rgba(255, 245, 180, 0.7)) drop-shadow(0 0 20px rgba(254, 224, 71, 0.4)) drop-shadow(0 10px 18px rgba(0,0,0,0.28))',
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 3. Tucked Handwritten Greeting Card (peeking out top-right of cone, z-22) */}
+            {note.isTucked && note.message && (
+              <div
+                onClick={onOpenNoteModal}
+                className="absolute z-22 cursor-pointer transform rotate-6 hover:rotate-3 transition-transform duration-200 drop-shadow-md"
+                style={{ bottom: '210px', left: 'calc(50% + 35px)' }}
+                title="Click to view/edit your handwritten note"
+              >
+                <div
+                  className="w-16 h-20 rounded-md bg-[#FFFDF9] border-2 shadow-lg p-1.5 flex flex-col justify-between"
+                  style={{ borderColor: '#811B2B' }}
+                >
+                  <span className="text-[8px] font-['Satisfy'] text-[#811B2B] leading-tight line-clamp-3">
+                    "{note.message}"
+                  </span>
+                  <div className="flex items-center justify-between text-[7px] text-[#811B2B]/70 font-mono">
+                    <span>💌</span>
+                    <span>{note.recipient || 'Dear'}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 4. Front Crepe Cone Flap (z-24) - Covers lower stems inside the cone */}
+            <div
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 z-24 pointer-events-none"
+              style={{ width: '235px', height: '280px' }}
+            >
+              <img
+                src="/boutique/wrapping-paper-cone-front.png"
+                alt="Front fold"
+                className="w-full h-full object-contain select-none pointer-events-none"
+              />
+            </div>
+
+            {/* 5. Tied Photorealistic 3D Satin Ribbon Bow (z-26, positioned at the cone's waist) */}
+            <div
+              className="absolute z-26 pointer-events-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.35)]"
               style={{
-                bottom: '70px',
+                bottom: '75px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 width: '140px',

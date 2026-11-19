@@ -88,106 +88,120 @@ export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
 
         {/* ── LEFT: Complete Bouquet Preview held by Gloved Hands ── */}
         <div className="w-full md:w-[45%] bg-[#FDF0E6] p-6 flex flex-col items-center justify-center relative border-b md:border-b-0 md:border-r border-[#641623]/10">
-          <div className="relative w-full flex items-center justify-center h-[260px] sm:h-[300px]">
-            {/* Back Paper */}
+          <div className="relative w-full flex items-center justify-center h-[280px] sm:h-[320px]">
+            {/* Luminous yellow radial halo */}
+            <div
+              className="absolute bottom-12 left-1/2 -translate-x-1/2 pointer-events-none rounded-full"
+              style={{
+                width: '240px',
+                height: '240px',
+                background:
+                  'radial-gradient(ellipse at center, rgba(254, 240, 138, 0.75) 0%, rgba(250, 204, 21, 0.45) 50%, transparent 80%)',
+                filter: 'blur(20px)',
+              }}
+            />
+
+            {/* 1. Back Crepe Paper Cone (z-10) */}
             <div
               className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
-              style={{ width: '180px', height: '160px' }}
+              style={{ width: '200px', height: '250px' }}
             >
-              <svg viewBox="0 0 250 220" fill="none" className="w-full h-full drop-shadow-md">
-                <path d="M 15 25 L 125 210 L 65 80 Z" fill={wrapping.foldColor} stroke={wrapping.borderColor} strokeWidth="1.8" />
-                <path d="M 235 25 L 125 210 L 185 80 Z" fill={wrapping.foldColor} stroke={wrapping.borderColor} strokeWidth="1.8" />
-                <path d="M 25 35 Q 125 15 225 35 L 195 100 Q 125 80 55 100 Z" fill={wrapping.colorHex} fillOpacity="0.85" />
-              </svg>
+              <img
+                src="/boutique/wrapping-paper-cone.png"
+                alt="Bouquet wrap"
+                className="w-full h-full object-contain select-none pointer-events-none"
+                style={{
+                  filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.22))',
+                }}
+              />
             </div>
 
-            {/* Stems */}
+            {/* 2. Customer's Actual Flower Blooms (z-18) - Blooming naturally from cone opening */}
             <div
-              className="absolute pointer-events-none z-15"
-              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)', width: '140px', height: '80px' }}
-            >
-              <svg viewBox="0 0 200 110" fill="none" className="w-full h-full">
-                {flowerInstances.slice(0, 10).map((_, idx) => (
-                  <line key={idx} x1={50 + idx * 11} y1="0" x2="100" y2="105" stroke="#4E7C30" strokeWidth="2.2" strokeLinecap="round" />
-                ))}
-              </svg>
-            </div>
-
-            {/* Tucked Note Card */}
-            {note.isTucked && note.message && (
-              <div
-                className="absolute z-18 transform rotate-6 drop-shadow-md"
-                style={{ bottom: '130px', left: 'calc(50% + 15px)' }}
-              >
-                <div className="bg-[#FFFDF9] border border-[#F43F5E] rounded-md px-2 py-1 w-[80px]">
-                  <p className="font-['Satisfy'] text-[9px] text-[#811B2B] leading-tight truncate">
-                    "{note.message}"
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Flower Blooms */}
-            <div
-              className="absolute bottom-[95px] left-1/2 pointer-events-none z-20"
+              className="absolute bottom-[135px] left-1/2 pointer-events-none z-18"
               style={{ transform: 'translateX(-50%)', width: '1px', height: '1px' }}
             >
-              {flowerInstances.slice(0, 10).map((flower, idx) => {
-                const spread = Math.min(flowerInstances.length - 1, 9);
+              {flowerInstances.slice(0, 16).map((flower, idx) => {
+                const total = Math.min(flowerInstances.length, 16);
+                const spread = Math.min(total - 1, 10);
                 const progress = spread === 0 ? 0.5 : idx / spread;
-                const angle = -24 + progress * 48;
-                const xOffset = -55 + progress * 110;
+                const angle = -14 + progress * 28;
+                const xOffset = -36 + progress * 72;
+                const arch = (1 - Math.pow((progress - 0.5) * 2, 2)) * 14;
                 return (
                   <div
-                    key={idx}
+                    key={`${flower.variantId}-${idx}`}
                     className="absolute"
                     style={{
-                      transform: `translateX(${xOffset}px) rotate(${angle}deg)`,
+                      transform: `translateX(${xOffset}px) translateY(${-arch}px) rotate(${angle}deg)`,
                       transformOrigin: 'bottom center',
-                      width: '75px',
-                      height: '100px',
-                      left: '-37px',
+                      width: '120px',
+                      height: '155px',
+                      left: '-60px',
                       bottom: '0',
+                      zIndex: Math.round(10 + (1 - Math.abs(progress - 0.5)) * 10),
                     }}
                   >
                     <img
                       src={flower.cutoutImage || flower.image}
                       alt={flower.name}
-                      className="w-full h-full object-contain drop-shadow-sm"
+                      className="w-full h-full object-contain select-none pointer-events-none"
+                      style={{
+                        filter:
+                          'brightness(1.08) contrast(1.06) saturate(1.15) drop-shadow(0 0 8px rgba(255, 245, 180, 0.6)) drop-shadow(0 6px 14px rgba(0,0,0,0.25))',
+                      }}
                     />
                   </div>
                 );
               })}
             </div>
 
-            {/* 3D Photorealistic Crepe Paper Cone */}
+            {/* 3. Tucked Note Card (z-22) */}
+            {note.isTucked && note.message && (
+              <div
+                className="absolute z-22 transform rotate-6 drop-shadow-lg"
+                style={{ bottom: '185px', left: 'calc(50% + 28px)' }}
+              >
+                <div className="bg-[#FFFDF9] border-2 border-[#811B2B] rounded-lg px-2.5 py-1.5 w-[90px] shadow-md">
+                  <p className="font-['Satisfy'] text-[10px] text-[#811B2B] leading-tight truncate">
+                    "{note.message}"
+                  </p>
+                  <div className="flex items-center justify-between text-[7px] text-[#811B2B]/70 font-mono mt-0.5">
+                    <span>💌</span>
+                    <span>{note.recipient || 'Dear'}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 4. Front Crepe Cone Flap (z-25) - Covers lower stems inside the cone */}
             <div
               className="absolute bottom-6 left-1/2 -translate-x-1/2 z-25 pointer-events-none"
-              style={{ width: '190px', height: '240px' }}
+              style={{ width: '200px', height: '250px' }}
             >
               <img
-                src="/boutique/wrapping-paper-cone.png"
-                alt="Bouquet wrap"
-                className="w-full h-full object-contain drop-shadow-md select-none pointer-events-none"
+                src="/boutique/wrapping-paper-cone-front.png"
+                alt="Front fold"
+                className="w-full h-full object-contain select-none pointer-events-none"
               />
             </div>
 
-            {/* 3D Satin Ribbon Bow */}
+            {/* 5. 3D Satin Ribbon Bow (z-30) */}
             <div
-              className="absolute z-30 pointer-events-none"
-              style={{ bottom: '50px', left: '50%', transform: 'translateX(-50%)' }}
+              className="absolute z-30 pointer-events-none drop-shadow-md"
+              style={{ bottom: '70px', left: '50%', transform: 'translateX(-50%)' }}
             >
               <img
                 src={ribbon.image || '/boutique/satin-ribbon-orange.png'}
                 alt={ribbon.name}
-                className="w-20 h-20 object-contain drop-shadow-md select-none pointer-events-none"
+                className="w-24 h-24 object-contain select-none pointer-events-none"
               />
             </div>
 
-            {/* Photorealistic Gloved Hands holding the bouquet */}
+            {/* 6. Photorealistic Gloved Hands holding the bouquet (z-35) */}
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 z-35 pointer-events-none drop-shadow-lg"
-              style={{ width: '130px', height: '90px' }}
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-35 pointer-events-none drop-shadow-lg"
+              style={{ width: '130px', height: '95px' }}
             >
               <img
                 src="/boutique/gloved-hands-holding.png"
