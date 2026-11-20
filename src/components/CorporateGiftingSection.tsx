@@ -239,7 +239,7 @@ export const CorporateGiftingSection: React.FC = () => {
   return (
     <section
       id="section-b2b"
-      className="w-full bg-[#FFFDF9] pt-8 pb-16 sm:pt-12 sm:pb-24 font-['Fredoka'] select-none relative overflow-hidden"
+      className="w-full bg-[#FBF8CF] pt-8 pb-16 sm:pt-12 sm:pb-24 font-['Fredoka'] select-none relative overflow-hidden"
     >
       <div className="w-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* 1. Whimsical Curvy Dashed Stitch Divider */}

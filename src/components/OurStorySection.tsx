@@ -6,7 +6,7 @@ interface OurStorySectionProps {
 
 export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }) => {
   return (
-    <section id="section-story" className="w-full bg-[#FAF4ED] pt-4 sm:pt-6 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
+    <section id="section-story" className="w-full bg-[#FBF8CF] pt-4 sm:pt-6 pb-16 sm:pb-24 lg:pb-28 text-[#2D2424] overflow-hidden font-['Fredoka']">
       {/* 1. Golden Wavy Sine Divider at Top Transition from Bestsellers */}
       <div className="w-full overflow-hidden flex justify-center -mt-2 sm:-mt-4 mb-10 sm:mb-14 lg:mb-18" aria-hidden="true">
         <svg
@@ -68,7 +68,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
             <div>
               <button
                 onClick={onStoryClick}
-                className="inline-flex items-center justify-center min-w-[170px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-7 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-lg tracking-wide hover:bg-[#641623] hover:text-[#FAF4ED] transition-all duration-200 cursor-pointer text-center"
+                className="inline-flex items-center justify-center min-w-[170px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-7 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-lg tracking-wide hover:bg-[#641623] hover:text-[#FBF8CF] transition-all duration-200 cursor-pointer text-center"
               >
                 our story
               </button>

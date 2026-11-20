@@ -749,7 +749,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   }, [product, images]);
 
   return (
-    <article className="relative w-full bg-[#FAF4ED]/85 text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
+    <article className="relative w-full bg-[#FBF8CF]/90 text-[#2D2424] font-['Fredoka'] pt-4 pb-4 sm:pb-8">
       {/* Toast Notification for Add to Cart */}
       {addedToast && (
         <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 max-w-sm mx-auto sm:mx-0 z-50 bg-[#641623] text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-xl flex items-center justify-between gap-3 animate-bounce">
@@ -775,7 +775,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               openCart();
             }}
             type="button"
-            className="px-3 py-1 rounded-full bg-[#FAF4ED] text-[#641623] font-bold text-xs uppercase tracking-wider hover:bg-[#FFE485] active:scale-95 transition-all flex-shrink-0 cursor-pointer"
+            className="px-3 py-1 rounded-full bg-[#FBF8CF] text-[#641623] font-bold text-xs uppercase tracking-wider hover:bg-[#FFE485] active:scale-95 transition-all flex-shrink-0 cursor-pointer"
           >
             View Bag →
           </button>
@@ -836,7 +836,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
              ===================================================================== */}
           <div className="w-full flex flex-col items-center">
             {/* Main Image Box */}
-            <div className="relative aspect-square w-full rounded-[28px] sm:rounded-[32px] overflow-hidden bg-[#FAF2E8]/60 border border-[#641623]/10 shadow-[0_8px_28px_rgba(100,22,35,0.06)] group">
+            <div className="relative aspect-square w-full rounded-[28px] sm:rounded-[32px] overflow-hidden bg-white/70 border border-[#641623]/10 shadow-[0_8px_28px_rgba(100,22,35,0.06)] group">
               {/* Overlaid Handmade Badge (Top Left) */}
               <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 z-20 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm border border-[#641623]/15 text-[#641623] shadow-xs flex items-center gap-1.5 font-bold text-[11px] sm:text-xs">
                 <SparkleIcon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -932,7 +932,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                   className="w-full h-full object-cover select-none transition-all duration-300"
                 />
               ) : (
-                <div className="w-full h-full bg-[#FAF4ED] flex items-center justify-center select-none" />
+                <div className="w-full h-full bg-[#FBF8CF] flex items-center justify-center select-none" />
               )}
             </div>
 
@@ -976,7 +976,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           <div className="w-full text-left flex flex-col">
             {/* Top Category Pill & Stock Status */}
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="px-3 py-1 rounded-full bg-[#FAF2E8] border border-[#641623]/15 text-[#641623] font-['Fredoka'] font-bold text-xs uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[#641623] font-['Fredoka'] font-bold text-xs uppercase tracking-wider">
                 {product.category}
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shadow-2xs">
@@ -1066,7 +1066,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             </div>
 
             {/* Clean Heartfelt Description Callout Box */}
-            <div className="mt-3.5 p-3.5 sm:p-4 rounded-[20px] bg-[#FAF2E8]/80 border border-[#641623]/12 shadow-2xs">
+            <div className="mt-3.5 p-3.5 sm:p-4 rounded-[20px] bg-[#FFF5CC]/80 border border-[#641623]/12 shadow-2xs">
               <p className="text-sm sm:text-[15px] text-[#2D2424]/90 font-medium leading-relaxed italic">
                 "{conciseSummary}"
               </p>
@@ -1074,22 +1074,22 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
             {/* 4 Feature Badges (Brand Trust Chips) */}
             <div className="flex items-center gap-2 flex-wrap mt-3.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
                 <DaisyIcon className="w-3.5 h-3.5 flex-shrink-0" /> 100% Handcrafted
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
                 <SparkleIcon className="w-3.5 h-3.5 flex-shrink-0" /> Everlasting Blooms
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
                 <YarnBallIcon className="w-3.5 h-3.5 flex-shrink-0" /> Soft Milk-Cotton Yarn
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF4ED] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5CC] border border-[#641623]/15 text-[#641623] text-xs font-bold shadow-2xs">
                 <LoveLetterIcon className="w-3.5 h-3.5 flex-shrink-0" /> Free Custom Gift Note
               </span>
             </div>
 
             {/* Handmade Specs Card (Compact 4-Item Grid) */}
-            <div className="mt-4 p-3.5 sm:p-4 rounded-[22px] bg-[#FAF2E8] border border-[#641623]/15 shadow-2xs">
+            <div className="mt-4 p-3.5 sm:p-4 rounded-[22px] bg-[#FFF5CC] border border-[#641623]/15 shadow-2xs">
               <p className="font-['Fredoka'] font-bold text-xs uppercase tracking-wider text-[#641623] mb-2.5">
                 HANDMADE SPECIFICATIONS
               </p>
@@ -2037,7 +2037,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 <div key={card.id} className="flex flex-col items-center text-center group w-full">
                   {/* Square Format Image with Curved Edges & No Borders */}
                   <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 aspect-square">
-                    <div className="w-full h-full rounded-[22px] sm:rounded-[28px] overflow-hidden shadow-[0_6px_20px_rgba(100,22,35,0.08)] bg-[#FAF4ED]">
+                    <div className="w-full h-full rounded-[22px] sm:rounded-[28px] overflow-hidden shadow-[0_6px_20px_rgba(100,22,35,0.08)] bg-[#FBF8CF]">
                       {card.imageUrl ? (
                         <img
                           src={card.imageUrl}
@@ -2047,7 +2047,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[#FAF4ED]">
+                        <div className="w-full h-full flex items-center justify-center bg-[#FBF8CF]">
                           <div className="w-14 h-14 rounded-full bg-[#EBD8E7]/60" />
                         </div>
                       )}
@@ -2110,7 +2110,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             type="button"
             onClick={handleCarouselPrev}
             aria-label="Previous products"
-            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FBF8CF] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -2194,7 +2194,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           )}
                         </>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[#641623]/40 bg-[#FAF4ED]">
+                        <div className="w-full h-full flex items-center justify-center text-[#641623]/40 bg-[#FBF8CF]">
                           <span className="text-xs">No image</span>
                         </div>
                       )}
@@ -2318,7 +2318,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
             type="button"
             onClick={handleCarouselNext}
             aria-label="Next products"
-            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FBF8CF] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
           >
             <svg
               className="w-5 h-5"

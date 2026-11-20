@@ -206,7 +206,7 @@ export const ReelsSection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-[#FAF4ED] py-12 md:py-16 overflow-hidden">
+    <section ref={sectionRef} className="relative w-full bg-[#FBF8CF] py-12 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header matching Reference 1 (media_1793693473509_aa9fe40d.jpg) */}
         <div className="flex items-center justify-between mb-5 sm:mb-8">

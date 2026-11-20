@@ -153,7 +153,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
   };
 
   return (
-    <section className="w-full bg-[#FAF4ED] pt-3 pb-12 sm:pt-5 sm:pb-16 px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#FBF8CF] pt-3 pb-12 sm:pt-5 sm:pb-16 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-[1340px] mx-auto flex flex-col items-center">
         {/* 1. Curvy Dashed Stitch Divider with Centered Yarn Ball Icon */}
         <div className="w-full mb-5 sm:mb-7 px-2">
@@ -175,7 +175,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
 
             {/* Authentic Yarn Ball Icon in Center */}
             <g transform="translate(600, 32)">
-              <circle cx="0" cy="0" r="18" fill="#FAF4ED" stroke="#641623" strokeWidth="2.8" />
+              <circle cx="0" cy="0" r="18" fill="#FBF8CF" stroke="#641623" strokeWidth="2.8" />
               <path d="M -13 -7 C -7 -14, 2 -14, 12 -8" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M -16 1 C -8 -6, 2 -5, 14 -1" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
               <path d="M -14 9 C -7 3, 4 4, 15 5" stroke="#641623" strokeWidth="2.4" strokeLinecap="round" />
@@ -245,7 +245,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
           {/* Left Arrow Button (Desktop only, mobile uses smooth touch swipe) */}
           <button
             onClick={() => scroll('left')}
-            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FBF8CF] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Previous products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -429,7 +429,7 @@ export const BestsellersSection: React.FC<BestsellersSectionProps> = ({
           {/* Right Arrow Button (Desktop only, mobile uses smooth touch swipe) */}
           <button
             onClick={() => scroll('right')}
-            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FAF4ED] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[38%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#2D2424] bg-[#FBF8CF] text-[#2D2424] items-center justify-center hover:bg-[#2D2424] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Next products"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">

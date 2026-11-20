@@ -117,7 +117,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-screen bg-[#FAF4ED] text-[#2D2424] font-['Fredoka'] select-none overflow-x-hidden"
+      className="relative w-full min-h-screen bg-[#FBF8CF] text-[#2D2424] font-['Fredoka'] select-none overflow-x-hidden"
     >
       {/* =========================================================================
           TOP BREADCRUMBS & RETURN BUTTON
@@ -360,7 +360,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="relative overflow-hidden rounded-[32px] sm:rounded-[44px] bg-[#FFF5CC] border-[2.5px] border-[#811B2B]/20 p-7 sm:p-12 lg:p-16 shadow-[0_16px_48px_rgba(100,22,35,0.08)]"
         >
-          <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 rounded-full bg-[#FAF4ED]/50 pointer-events-none" />
+          <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 rounded-full bg-[#FBF8CF]/50 pointer-events-none" />
           <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 rounded-full bg-[#D9EEF5]/40 pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -444,7 +444,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
 
             <button
               onClick={onNavigateHome}
-              className="inline-flex items-center justify-center gap-2 min-w-[170px] py-3.5 px-6 rounded-full border-[2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] hover:text-[#FAF4ED] transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 min-w-[170px] py-3.5 px-6 rounded-full border-[2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] hover:text-[#FBF8CF] transition-all cursor-pointer"
             >
               <span>Back to Home</span>
             </button>

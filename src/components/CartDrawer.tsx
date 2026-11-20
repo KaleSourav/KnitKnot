@@ -68,11 +68,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
 
       {/* 2. Slide-Over Panel */}
       <aside
-        className="relative w-full max-w-md bg-[#FAF4ED] text-[#2D2424] h-full shadow-[0_0_50px_rgba(100,22,35,0.2)] flex flex-col font-['Fredoka'] z-10 transition-transform duration-300 ease-out transform translate-x-0"
+        className="relative w-full max-w-md bg-[#FBF8CF] text-[#2D2424] h-full shadow-[0_0_50px_rgba(100,22,35,0.2)] flex flex-col font-['Fredoka'] z-10 transition-transform duration-300 ease-out transform translate-x-0"
         aria-label="Shopping Cart Drawer"
       >
         {/* Top Header */}
-        <div className="p-4 sm:p-5 border-b border-[#641623]/15 flex items-center justify-between bg-[#FFFDF9]">
+        <div className="p-4 sm:p-5 border-b border-[#641623]/15 flex items-center justify-between bg-white">
           <div className="flex items-center gap-2">
             <h2 className="font-bold text-lg sm:text-xl text-[#641623] flex items-center gap-2">
               <span>Your Crochet Bag</span>
@@ -104,7 +104,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
         </div>
 
         {/* Free Shipping Milestone Bar */}
-        <div className="bg-[#FAF2E8] px-4 py-3 border-b border-[#641623]/10">
+        <div className="bg-[#FFF5CC] px-4 py-3 border-b border-[#641623]/10">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#641623] mb-1.5">
             <DeliveryTruckIcon className="w-4 h-4 flex-shrink-0" />
             {amountNeeded > 0 ? (
@@ -130,7 +130,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5">
           {items.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center p-6 text-[#641623]">
-              <div className="w-20 h-20 rounded-full bg-[#FAF2E8] border border-[#641623]/15 flex items-center justify-center mb-4">
+              <div className="w-20 h-20 rounded-full bg-[#FFF5CC] border border-[#641623]/15 flex items-center justify-center mb-4">
                 <YarnBallIcon className="w-10 h-10 text-[#641623]/70" />
               </div>
               <h3 className="font-bold text-lg mb-1">Your bag is empty</h3>
@@ -155,7 +155,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
                 className="relative p-3 rounded-2xl bg-white border border-[#641623]/12 shadow-xs flex gap-3.5 items-center"
               >
                 {/* Product Image */}
-                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-[#FAF2E8] border border-[#641623]/10 flex-shrink-0">
+                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-white border border-[#641623]/10 flex-shrink-0">
                   {item.image ? (
                     <img
                       src={optimizeShopifyUrl(item.image, 160)}
@@ -205,7 +205,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
 
                   <div className="flex items-center justify-between mt-2.5">
                     {/* Stepper */}
-                    <div className="inline-flex items-center h-7 px-2 rounded-full border border-[#641623]/25 bg-[#FAF4ED] text-xs font-bold text-[#641623]">
+                    <div className="inline-flex items-center h-7 px-2 rounded-full border border-[#641623]/25 bg-[#FBF8CF] text-xs font-bold text-[#641623]">
                       <button
                         onClick={() => updateLineQuantity(item.lineId, item.quantity - 1)}
                         type="button"
@@ -240,7 +240,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
 
         {/* Bottom Checkout Footer */}
         {items.length > 0 && (
-          <div className="p-4 sm:p-5 border-t border-[#641623]/15 bg-[#FFFDF9] space-y-3">
+          <div className="p-4 sm:p-5 border-t border-[#641623]/15 bg-white space-y-3">
             {/* Subtotal */}
             <div className="flex items-center justify-between text-sm">
               <span className="text-[#2D2424]/75 font-medium">Subtotal</span>

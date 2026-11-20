@@ -127,7 +127,7 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
   };
 
   return (
-    <section className="w-full bg-[#FAF4ED] pt-3 pb-10 sm:pt-5 sm:pb-14 overflow-hidden font-['Fredoka']">
+    <section className="w-full bg-[#FBF8CF] pt-3 pb-10 sm:pt-5 sm:pb-14 overflow-hidden font-['Fredoka']">
       <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* 1. Top Whimsical Wavy Stitched Line with Smiling 5-Petal Flower Divider */}
         <div className="w-full flex justify-center mb-4 sm:mb-6" aria-hidden="true">
@@ -215,7 +215,7 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
           {/* Left Arrow Button (Desktop only) */}
           <button
             onClick={() => scroll('left')}
-            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -left-2 sm:-left-3 lg:-left-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FBF8CF] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Previous occasions"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
@@ -305,7 +305,7 @@ export const ShopTheOccasionSection: React.FC<ShopTheOccasionSectionProps> = ({
           {/* Right Arrow Button (Desktop only) */}
           <button
             onClick={() => scroll('right')}
-            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FAF4ED] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
+            className="hidden sm:flex absolute -right-2 sm:-right-3 lg:-right-5 top-[40%] -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full border-[1.8px] sm:border-2 border-[#641623] bg-[#FBF8CF] text-[#641623] items-center justify-center hover:bg-[#641623] hover:text-white transition-all shadow-md focus:outline-none cursor-pointer"
             aria-label="Next occasions"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">

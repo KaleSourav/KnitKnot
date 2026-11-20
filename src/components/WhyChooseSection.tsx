@@ -99,7 +99,7 @@ export const WhyChooseSection: React.FC = () => {
   };
 
   return (
-    <section className="w-full bg-[#FAF4ED] pt-8 pb-20 sm:pt-14 sm:pb-28 overflow-hidden font-['Fredoka'] select-none">
+    <section className="w-full bg-[#FBF8CF] pt-8 pb-20 sm:pt-14 sm:pb-28 overflow-hidden font-['Fredoka'] select-none">
       <div className="w-full max-w-[1780px] 2xl:max-w-[1900px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Whimsical Curvy Dashed Stitch Divider */}
         <div className="w-full flex justify-center mb-5 sm:mb-7" aria-hidden="true">
@@ -119,7 +119,7 @@ export const WhyChooseSection: React.FC = () => {
             />
             {/* Center Mascot Badge */}
             <g transform="translate(600, 24)">
-              <circle cx="0" cy="0" r="16" fill="#FFFDF9" stroke="#641623" strokeWidth="2.4" />
+              <circle cx="0" cy="0" r="16" fill="#FBF8CF" stroke="#641623" strokeWidth="2.4" />
               <path
                 d="M 0 5 C -7 -3, -11 -7, -11 -11 C -11 -15, -7 -18, -2 -18 C 1 -18, 0 -16, 0 -16 C 0 -16, -1 -18, 2 -18 C 7 -18, 11 -15, 11 -11 C 11 -7, 7 -3, 0 5 Z"
                 transform="translate(0, 6) scale(0.65)"

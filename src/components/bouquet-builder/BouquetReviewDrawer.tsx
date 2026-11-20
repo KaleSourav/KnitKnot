@@ -72,7 +72,7 @@ export const BouquetReviewDrawer: React.FC<BouquetReviewDrawerProps> = ({
 
       {/* ── Dialog Card matching Annie's "Where's the love going?" (media_1794989621305_04e4230d.jpg) ── */}
       <div
-        className="relative w-full max-w-3xl rounded-[36px] bg-[#FAF4ED] border border-[#641623]/20 shadow-[0_25px_60px_rgba(0,0,0,0.3)] font-['Fredoka'] z-10 animate-scaleIn overflow-hidden max-h-[92vh] flex flex-col md:flex-row"
+        className="relative w-full max-w-3xl rounded-[36px] bg-[#FBF8CF] border border-[#641623]/20 shadow-[0_25px_60px_rgba(0,0,0,0.3)] font-['Fredoka'] z-10 animate-scaleIn overflow-hidden max-h-[92vh] flex flex-col md:flex-row"
         role="dialog"
         aria-modal="true"
       >

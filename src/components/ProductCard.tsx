@@ -160,7 +160,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               )}
             </>
           ) : (
-            <div className="w-full h-full bg-[#FAF4ED]" />
+            <div className="w-full h-full bg-[#FBF8CF]" />
           )}
         </div>
 

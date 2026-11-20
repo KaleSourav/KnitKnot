@@ -115,7 +115,7 @@ export const TheHandsBehindEveryStitchSection: React.FC<TheHandsBehindEveryStitc
     <section
       id="section-story"
       ref={sectionRef}
-      className="relative w-full bg-[#FAF4ED] pt-6 sm:pt-12 pb-20 sm:pb-32 overflow-hidden text-[#2D2424] font-['Fredoka'] select-none"
+      className="relative w-full bg-[#FBF8CF] pt-6 sm:pt-12 pb-20 sm:pb-32 overflow-hidden text-[#2D2424] font-['Fredoka'] select-none"
       aria-label="The Hands Behind Every Stitch - Our Story and Artisans"
     >
       {/* Target anchor for navbar clicks */}
@@ -361,7 +361,7 @@ export const TheHandsBehindEveryStitchSection: React.FC<TheHandsBehindEveryStitc
           className="relative overflow-hidden rounded-[32px] sm:rounded-[44px] bg-[#FFF5CC] border-[2.5px] border-[#811B2B]/20 p-7 sm:p-12 lg:p-16 shadow-[0_16px_48px_rgba(100,22,35,0.08)]"
         >
           {/* Subtle Decorative Background Stitches */}
-          <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 rounded-full bg-[#FAF4ED]/50 pointer-events-none" />
+          <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 rounded-full bg-[#FBF8CF]/50 pointer-events-none" />
           <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 rounded-full bg-[#D9EEF5]/40 pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -447,7 +447,7 @@ export const TheHandsBehindEveryStitchSection: React.FC<TheHandsBehindEveryStitc
               <button
                 type="button"
                 onClick={onStoryClick}
-                className="inline-flex items-center justify-center min-w-[180px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-8 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] hover:text-[#FAF4ED] transition-all duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center min-w-[180px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-8 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] hover:text-[#FBF8CF] transition-all duration-200 cursor-pointer"
               >
                 <span>explore </span>
                 <span className="font-script font-normal text-[1.18em] lowercase ml-1">our collection</span>

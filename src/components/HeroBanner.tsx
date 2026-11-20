@@ -214,7 +214,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
   };
 
   return (
-    <section className="relative w-full bg-[#FAF4ED] overflow-hidden">
+    <section className="relative w-full bg-[#FBF8CF] overflow-hidden">
       {/* Keyframe animation for subtle 5s progress fill */}
       <style>{`
         @keyframes bannerProgressFill {
@@ -225,7 +225,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onShopClick }) => {
 
       {/* Mobile View: 11-Slide Automatic Carousel with Silky Crossfade Transition */}
       <div
-        className="block sm:hidden relative w-full aspect-[1086/1448] overflow-hidden bg-[#FAF4ED] select-none"
+        className="block sm:hidden relative w-full aspect-[1086/1448] overflow-hidden bg-[#FBF8CF] select-none"
         onTouchStart={handleMobileTouchStart}
         onTouchEnd={handleMobileTouchEnd}
       >

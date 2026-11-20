@@ -9,7 +9,7 @@ export const MakeYourOwnBouquetBanner: React.FC<MakeYourOwnBouquetBannerProps> =
   onStartBuilding,
 }) => {
   return (
-    <section className="w-full bg-[#FFFDF9] py-8 sm:py-12 font-['Fredoka'] select-none relative overflow-hidden">
+    <section className="w-full bg-[#FBF8CF] py-8 sm:py-12 font-['Fredoka'] select-none relative overflow-hidden">
       <div className="w-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Curvy Dashed Stitch Divider */}
         <div className="w-full flex justify-center mb-6 sm:mb-8" aria-hidden="true">

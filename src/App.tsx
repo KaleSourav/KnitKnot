@@ -167,7 +167,7 @@ function AppInner() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#FAF4ED] text-[#2D2424] antialiased flex flex-col font-['Fredoka']">
+    <div className="min-h-screen w-full bg-[#FBF8CF] text-[#2D2424] antialiased flex flex-col font-['Fredoka']">
       {/* 1. Top Announcement Bar (hidden in full-screen bouquet builder) */}
       {currentPage !== 'bouquet-builder' && <AnnouncementBar />}
 

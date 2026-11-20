@@ -291,7 +291,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
     selectedOccasions.length > 0;
 
   return (
-    <section id="all-products-shop" className="relative w-full bg-[#FAF4ED]/85 text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
+    <section id="all-products-shop" className="relative w-full bg-[#FBF8CF]/90 text-[#2D2424] font-['Fredoka'] pt-6 pb-12 sm:pb-16">
       {/* =========================================================================
           1. BREADCRUMB NAVIGATION ("home / shop all products")
          ========================================================================= */}
@@ -814,7 +814,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
           />
 
           {/* Bottom Sheet Drawer */}
-          <div className="relative w-full sm:max-w-md bg-[#FAF4ED] rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] overflow-y-auto z-10 shadow-2xl text-left border border-[#641623]/20">
+          <div className="relative w-full sm:max-w-md bg-[#FBF8CF] rounded-t-3xl sm:rounded-3xl p-5 max-h-[85vh] overflow-y-auto z-10 shadow-2xl text-left border border-[#641623]/20">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[#641623]/15">
               <span className="text-xl font-bold text-[#641623] lowercase">filters</span>
