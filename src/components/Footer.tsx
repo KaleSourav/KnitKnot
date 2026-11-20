@@ -24,7 +24,7 @@ const FOOTER_SCALLOP_WAVE =
   'L 1440,60 Z';
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans', category?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'b2b', category?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
@@ -351,6 +351,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
                     >
                       behind the stitches (200+)
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate?.('b2b')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      b2b corporate gifting
                     </button>
                   </li>
                   <li>

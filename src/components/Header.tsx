@@ -4,9 +4,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder';
+  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -59,27 +59,10 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  // Smooth scroll handler for "Request a Quote" / B2B Corporate Gifting
+  // Navigation handler for B2B Corporate Gifting page
   const handleQuoteClick = () => {
     setMobileMenuOpen(false);
-    if (currentPage !== 'home') {
-      onNavigate?.('home');
-      setTimeout(() => {
-        const el = document.getElementById('section-b2b');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          const input = document.getElementById('b2b-name');
-          if (input) setTimeout(() => input.focus(), 600);
-        }
-      }, 200);
-    } else {
-      const el = document.getElementById('section-b2b');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const input = document.getElementById('b2b-name');
-        if (input) setTimeout(() => input.focus(), 600);
-      }
-    }
+    onNavigate?.('b2b');
   };
 
   return (
@@ -279,15 +262,21 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Behind The Stitches</span>
           </button>
 
-          {/* 3. Request a Quote (Corporate Gifting) */}
+          {/* 3. B2B Corporate Gifting */}
           <button
             type="button"
             onClick={handleQuoteClick}
-            className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer select-none whitespace-nowrap"
-            title="Request a Quote - Corporate & Bulk Gifting"
+            className={`group relative inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1 rounded-full font-['Fredoka'] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer select-none whitespace-nowrap ${
+              currentPage === 'b2b'
+                ? 'bg-[#811B2B] text-white shadow-xs scale-102'
+                : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
+            }`}
+            title="B2B & Corporate Gifting - Request a Bulk Quote"
           >
             <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:rotate-12"
+              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:rotate-12 ${
+                currentPage === 'b2b' ? 'text-white' : 'text-[#811B2B]'
+              }`}
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -301,7 +290,7 @@ export const Header: React.FC<HeaderProps> = ({
               <path d="M3 5h4" />
               <path d="M17 19h4" />
             </svg>
-            <span>Request a Quote</span>
+            <span>B2B Gifting</span>
           </button>
 
           {/* 4. Story (Scrolls to Brand Story on Homepage) */}
@@ -508,14 +497,20 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
               </button>
 
-              {/* Request a Quote (Corporate & Bulk Gifting) */}
+              {/* B2B & Corporate Gifting */}
               <button
                 onClick={handleQuoteClick}
-                className="w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between text-[#641623] hover:bg-[#FFF5CC] cursor-pointer group"
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between cursor-pointer group ${
+                  currentPage === 'b2b'
+                    ? 'bg-[#811B2B] text-white shadow-xs'
+                    : 'text-[#641623] hover:bg-[#FFF5CC]'
+                }`}
               >
                 <span className="flex items-center gap-2.5">
                   <svg
-                    className="w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-115 group-hover:rotate-12 text-[#811B2B]"
+                    className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-115 group-hover:rotate-12 ${
+                      currentPage === 'b2b' ? 'text-white' : 'text-[#811B2B]'
+                    }`}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -529,9 +524,13 @@ export const Header: React.FC<HeaderProps> = ({
                     <path d="M3 5h4" />
                     <path d="M17 19h4" />
                   </svg>
-                  <span>request a quote (b2b)</span>
+                  <span>b2b &amp; corporate gifting</span>
                 </span>
-                <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                  currentPage === 'b2b'
+                    ? 'bg-white/20 text-white border-white/30'
+                    : 'text-[#811B2B] bg-[#FFF5CC] border-[#811B2B]/20'
+                }`}>
                   bulk quote →
                 </span>
               </button>

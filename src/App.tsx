@@ -12,7 +12,7 @@ import { OurStorySection } from './components/OurStorySection';
 import { BehindTheStitchesPage } from './components/BehindTheStitchesPage';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
-import { CorporateGiftingSection } from './components/CorporateGiftingSection';
+import { CorporateGiftingPage } from './components/CorporateGiftingPage';
 import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderPage';
 import { MakeYourOwnBouquetBanner } from './components/MakeYourOwnBouquetBanner';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
@@ -39,14 +39,15 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
       if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
       if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
+      if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) return 'b2b';
       if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || path.includes('build-your-bouquet') || path.includes('bouquet-builder')) return 'bouquet-builder';
       return 'home';
     }
@@ -112,6 +113,9 @@ function AppInner() {
       } else if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) {
         setCurrentPage('artisans');
         setSelectedProductId(null);
+      } else if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) {
+        setCurrentPage('b2b');
+        setSelectedProductId(null);
       } else if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || hash.startsWith('#/bouquet-builder')) {
         setCurrentPage('bouquet-builder');
         setSelectedProductId(null);
@@ -126,7 +130,7 @@ function AppInner() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -149,6 +153,9 @@ function AppInner() {
     } else if (page === 'artisans') {
       setSelectedProductId(null);
       window.location.hash = '/behind-the-stitches';
+    } else if (page === 'b2b') {
+      setSelectedProductId(null);
+      window.location.hash = '/b2b';
     } else if (page === 'bouquet-builder') {
       setSelectedProductId(null);
       window.location.hash = '/build-your-bouquet';
@@ -253,12 +260,16 @@ function AppInner() {
             <ScrollReveal id="section-why-choose" yOffset={24} duration={0.45}>
               <WhyChooseSection />
             </ScrollReveal>
-
-            {/* B2B & Corporate Gifting Section ("REQUEST A QUOTE") */}
-            <ScrollReveal id="section-b2b" yOffset={24} duration={0.45}>
-              <CorporateGiftingSection />
-            </ScrollReveal>
           </div>
+        ) : currentPage === 'b2b' ? (
+          /* =========================================================================
+             DEDICATED B2B & CORPORATE GIFTING PAGE VIEW
+             Interactive Occasions, Bulk Tiers & Quote Request Form
+             ========================================================================= */
+          <CorporateGiftingPage
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+          />
         ) : currentPage === 'shop' ? (
           /* =========================================================================
              DEDICATED SHOP PAGE VIEW (All Products Shop)
