@@ -281,6 +281,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigateShop }) => {
               </svg>
               <span>Secure Checkout powered by Shopify • UPI & Cards accepted</span>
             </div>
+
+            {/* Handmade Craft & 24h Return Reassurance */}
+            <div className="pt-1.5 border-t border-[#641623]/10 text-center">
+              <span className="text-[10px] text-[#641623]/75 font-medium leading-tight block">
+                ✦ 7–10 days handmade production • 24-hr return on transit defects with unboxing video
+              </span>
+            </div>
           </div>
         )}
       </aside>

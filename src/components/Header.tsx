@@ -4,9 +4,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b';
+  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -570,6 +570,36 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>contact us</span>
                 </span>
                 <span className="text-xs opacity-70">→</span>
+              </button>
+
+              {/* Customer Care: Return & Shipping Policies */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigate?.('policy', 'returns');
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between cursor-pointer group ${
+                  currentPage === 'policy'
+                    ? 'bg-[#811B2B] text-white shadow-xs'
+                    : 'text-[#641623] hover:bg-[#FFF5CC]'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                    <path d="M16 21h5v-5" />
+                  </svg>
+                  <span>shipping &amp; return policy</span>
+                </span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                  currentPage === 'policy'
+                    ? 'bg-white/20 text-white border-white/30'
+                    : 'text-[#811B2B] bg-[#FFF5CC] border-[#811B2B]/20'
+                }`}>
+                  policies ♡
+                </span>
               </button>
 
               {/* Divider & Categories Section */}

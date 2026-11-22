@@ -35,6 +35,7 @@ interface ProductDetailsPageProps {
   onNavigateHome?: () => void;
   onNavigateShop?: (category?: string) => void;
   onNavigateProduct?: (productId: string) => void;
+  onNavigatePolicy?: (tab: 'returns' | 'shipping') => void;
   onAddToCart?: (product: ShopProduct, quantity: number) => void | Promise<void>;
   onBuyNow?: (product: ShopProduct, quantity: number) => void | Promise<void>;
 }
@@ -171,6 +172,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onNavigateHome,
   onNavigateShop,
   onNavigateProduct,
+  onNavigatePolicy,
   onAddToCart,
   onBuyNow,
 }) => {
@@ -415,13 +417,15 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     details: boolean;
     care: boolean;
     shipping: boolean;
+    returns: boolean;
   }>({
     details: false,
     care: false,
     shipping: false,
+    returns: false,
   });
 
-  const toggleAccordion = (section: 'details' | 'care' | 'shipping') => {
+  const toggleAccordion = (section: 'details' | 'care' | 'shipping' | 'returns') => {
     setOpenAccordions((prev) => ({
       ...prev,
       [section]: !prev[section],
@@ -458,23 +462,23 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     setPincodeStatus('checking');
     setTimeout(() => {
       const now = new Date();
-      let daysToAdd = 3;
-      let zoneName = 'India Express Delivery';
+      let daysToAdd = 12;
+      let zoneName = 'Pan-India Delivery';
       if (cleanPin.startsWith('395') || cleanPin.startsWith('394')) {
-        zoneName = 'Surat Artisan Hub';
-        daysToAdd = 1;
+        zoneName = 'Surat Studio Local';
+        daysToAdd = 9;
       } else if (cleanPin.startsWith('400') || cleanPin.startsWith('411')) {
         zoneName = 'Mumbai / Pune Region';
-        daysToAdd = 2;
+        daysToAdd = 11;
       } else if (cleanPin.startsWith('110') || cleanPin.startsWith('122') || cleanPin.startsWith('201')) {
         zoneName = 'Delhi NCR';
-        daysToAdd = 2;
+        daysToAdd = 11;
       } else if (cleanPin.startsWith('560')) {
         zoneName = 'Bengaluru';
-        daysToAdd = 2;
+        daysToAdd = 12;
       } else if (cleanPin.startsWith('500')) {
         zoneName = 'Hyderabad';
-        daysToAdd = 2;
+        daysToAdd = 12;
       }
 
       const deliveryDateObj = new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
@@ -1242,18 +1246,29 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
               </button>
             </div>
 
-            {/* Free Delivery & Trust Bar */}
+            {/* Handmade Delivery & Trust Bar */}
             <div className="mt-3.5 p-3 rounded-2xl bg-[#FFFDF9] border border-[#641623]/12 flex flex-col gap-1.5 text-xs text-[#641623]/85 shadow-2xs">
               <div className="flex items-center gap-2">
                 <DeliveryTruckIcon className="w-4 h-4 flex-shrink-0" />
                 <span>
-                  <strong>Free Express Shipping</strong> on all orders above ₹1,999
+                  <strong>10–15 Days Expected Delivery</strong> • 7–10 days handcrafted production
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 flex-shrink-0 text-[#811B2B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                  <path d="M16 21h5v-5" />
+                </svg>
+                <span>
+                  <strong>24-Hour Return Window</strong> on damaged items (Unboxing video required)
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <GiftBoxIcon className="w-4 h-4 flex-shrink-0" />
                 <span>
-                  Every order includes a <strong>complimentary custom gift card</strong>
+                  <strong>Free Express Shipping</strong> above ₹1,999 • Free custom gift card
                 </span>
               </div>
             </div>
@@ -1853,7 +1868,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                 )}
               </div>
 
-              {/* 3. Shipping & Returns Accordion with Live Pincode Estimator */}
+              {/* 3. Shipping & Delivery Accordion with Live Pincode Estimator */}
               <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
                 <button
                   onClick={() => toggleAccordion('shipping')}
@@ -1865,7 +1880,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                     <span className="w-6 h-6 rounded-full bg-[#D6E8EF] flex items-center justify-center">
                       <DeliveryTruckIcon className="w-3.5 h-3.5" />
                     </span>
-                    <span>Shipping & Delivery</span>
+                    <span>Shipping & Delivery Policy</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#D6E8EF] text-[#2B6CB0] font-medium">
@@ -1914,10 +1929,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                         <div className="mt-2.5 p-2 rounded-lg bg-[#E3F5E1] border border-[#236E38]/30 text-xs text-[#236E38]">
                           <p className="font-bold flex items-center gap-1.5">
                             <CheckCircleIcon className="w-4 h-4 flex-shrink-0" />
-                            <span>Express Courier Available to {pincodeDetails.zone}!</span>
+                            <span>Available for {pincodeDetails.zone}!</span>
                           </p>
                           <p className="text-[11px] text-[#2D2424] mt-0.5">
-                            Estimated delivery by <strong>{pincodeDetails.deliveryDate}</strong> with live tracking. Free shipping on orders above ₹1,999!
+                            Expected delivery by <strong>{pincodeDetails.deliveryDate}</strong> (includes 7–10 days handmade crafting + tracked courier dispatch).
                           </p>
                         </div>
                       )}
@@ -1931,15 +1946,107 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
 
                     <div className="space-y-1.5 text-xs text-[#2D2424]">
                       <p>
-                        • <strong>Dispatch Window:</strong> Dispatches within 24 to 48 hours directly from our Surat studio.
+                        • <strong>Handmade Production:</strong> 7–10 business days for our artisan daadis &amp; aunties to handcraft your order with love.
                       </p>
                       <p>
-                        • <strong>Live Tracking:</strong> Real-time SMS & WhatsApp updates with courier tracking link.
+                        • <strong>Expected Delivery:</strong> Approximately 10–15 days from date of order (up to 18 days for custom orders or peak festival seasons).
                       </p>
                       <p>
-                        • <strong>100% Safe Transit Guarantee:</strong> In the rare event of transit damage, we send an immediate free replacement!
+                        • <strong>Order Tracking:</strong> Tracking details sent via email and WhatsApp upon courier dispatch.
+                      </p>
+                      <p>
+                        • <strong>Free Shipping:</strong> Automatically applied to all orders above ₹1,999.
                       </p>
                     </div>
+
+                    {onNavigatePolicy && (
+                      <div className="pt-1">
+                        <button
+                          type="button"
+                          onClick={() => onNavigatePolicy('shipping')}
+                          className="text-xs font-bold text-[#811B2B] hover:underline cursor-pointer"
+                        >
+                          Read full Shipping &amp; Delivery Policy →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 4. 24-Hour Return & Exchange Policy Accordion */}
+              <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
+                <button
+                  onClick={() => toggleAccordion('returns')}
+                  type="button"
+                  aria-expanded={openAccordions.returns}
+                  className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-[#FCE2EB] flex items-center justify-center text-[#811B2B]">
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                        <path d="M16 21h5v-5" />
+                      </svg>
+                    </span>
+                    <span>24-Hour Return &amp; Exchange Policy</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#FCE2EB] text-[#811B2B] font-medium">
+                      24h Notice
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
+                        openAccordions.returns ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </button>
+                {openAccordions.returns && (
+                  <div className="px-4 sm:px-5 pb-4 pt-2 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-2.5 border-t border-[#641623]/10">
+                    <div className="p-2.5 rounded-xl bg-[#FFF9DA] border border-[#F7BE44]/40 text-[#641623] font-semibold text-xs flex items-start gap-2">
+                      <span className="text-[#811B2B] font-bold text-sm leading-none">📹</span>
+                      <span>
+                        <strong>Mandatory Unboxing Video:</strong> Continuous video showing parcel seal being opened is strictly required for any damaged/defective claims.
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5 text-xs text-[#2D2424]">
+                      <p>
+                        • <strong>24-Hour Window:</strong> Notify us at <strong className="text-[#811B2B]">knotsnco101@gmail.com</strong> within 24 hours of package delivery.
+                      </p>
+                      <p>
+                        • <strong>Damaged/Defective Only:</strong> Returns/exchanges accepted only for damaged, defective, or incorrect products received. No returns for change of mind.
+                      </p>
+                      <p>
+                        • <strong>Handmade Nature:</strong> Minor variations in shape, size, color, or stitching are unique artisan hallmarks, not defects.
+                      </p>
+                      <p>
+                        • <strong>Return Shipping &amp; Refunds:</strong> Approved returns are self-shipped to our Surat studio; Knotsnco reimburses shipping charges. Refunds processed to original payment method within 10 business days.
+                      </p>
+                    </div>
+
+                    {onNavigatePolicy && (
+                      <div className="pt-1">
+                        <button
+                          type="button"
+                          onClick={() => onNavigatePolicy('returns')}
+                          className="text-xs font-bold text-[#811B2B] hover:underline cursor-pointer"
+                        >
+                          Read full Return &amp; Exchange Policy →
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

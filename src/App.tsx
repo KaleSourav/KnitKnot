@@ -13,6 +13,7 @@ import { BehindTheStitchesPage } from './components/BehindTheStitchesPage';
 import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
 import { CorporateGiftingPage } from './components/CorporateGiftingPage';
+import { PolicyPage } from './components/PolicyPage';
 import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderPage';
 import { MakeYourOwnBouquetBanner } from './components/MakeYourOwnBouquetBanner';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
@@ -39,8 +40,8 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
@@ -48,10 +49,19 @@ function AppInner() {
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
       if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
       if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) return 'b2b';
+      if (hash.startsWith('#shipping') || hash.startsWith('#/shipping') || hash.startsWith('#return') || hash.startsWith('#/return') || hash.startsWith('#policy') || hash.startsWith('#/policy')) return 'policy';
       if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || path.includes('build-your-bouquet') || path.includes('bouquet-builder')) return 'bouquet-builder';
       return 'home';
     }
     return 'home';
+  });
+
+  const [policyTab, setPolicyTab] = useState<'returns' | 'shipping'>(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.startsWith('#shipping') || hash.startsWith('#/shipping')) return 'shipping';
+    }
+    return 'returns';
   });
 
   const [selectedProductId, setSelectedProductId] = useState<string | null>(() => {
@@ -116,6 +126,14 @@ function AppInner() {
       } else if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) {
         setCurrentPage('b2b');
         setSelectedProductId(null);
+      } else if (hash.startsWith('#shipping') || hash.startsWith('#/shipping') || hash.startsWith('#shipping-policy')) {
+        setCurrentPage('policy');
+        setPolicyTab('shipping');
+        setSelectedProductId(null);
+      } else if (hash.startsWith('#return') || hash.startsWith('#/return') || hash.startsWith('#returns') || hash.startsWith('#refund') || hash.startsWith('#policy') || hash.startsWith('#/policy')) {
+        setCurrentPage('policy');
+        setPolicyTab('returns');
+        setSelectedProductId(null);
       } else if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || hash.startsWith('#/bouquet-builder')) {
         setCurrentPage('bouquet-builder');
         setSelectedProductId(null);
@@ -130,7 +148,7 @@ function AppInner() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -156,6 +174,11 @@ function AppInner() {
     } else if (page === 'b2b') {
       setSelectedProductId(null);
       window.location.hash = '/b2b';
+    } else if (page === 'policy') {
+      setSelectedProductId(null);
+      const tab = param === 'shipping' ? 'shipping' : 'returns';
+      setPolicyTab(tab);
+      window.location.hash = tab === 'shipping' ? '/shipping-policy' : '/return-policy';
     } else if (page === 'bouquet-builder') {
       setSelectedProductId(null);
       window.location.hash = '/build-your-bouquet';
@@ -270,6 +293,15 @@ function AppInner() {
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
           />
+        ) : currentPage === 'policy' ? (
+          /* =========================================================================
+             DEDICATED POLICY PAGE VIEW (Shipping & Delivery, Return & Exchange)
+             ========================================================================= */
+          <PolicyPage
+            initialTab={policyTab}
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+          />
         ) : currentPage === 'shop' ? (
           /* =========================================================================
              DEDICATED SHOP PAGE VIEW (All Products Shop)
@@ -316,6 +348,7 @@ function AppInner() {
               onNavigateHome={() => navigateTo('home')}
               onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
               onNavigateProduct={(id) => navigateTo('product', id)}
+              onNavigatePolicy={(tab) => navigateTo('policy', tab)}
               onAddToCart={async (product, qty) => {
                 if (product.variantId) {
                   await addToShopifyCart(product.variantId, qty);

@@ -24,7 +24,7 @@ const FOOTER_SCALLOP_WAVE =
   'L 1440,60 Z';
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'b2b', category?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'b2b' | 'policy', categoryOrTab?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
@@ -395,14 +395,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-2 text-sm sm:text-base text-white/80 lowercase">
                   <li>
-                    <a href="#shipping" className="hover:text-white transition-colors duration-150">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('policy', 'shipping')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
                       shipping policy
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#returns" className="hover:text-white transition-colors duration-150">
-                      returns & refunds
-                    </a>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('policy', 'returns')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
+                      return &amp; exchange policy
+                    </button>
                   </li>
                   <li>
                     <a href="#faq" className="hover:text-white transition-colors duration-150">
