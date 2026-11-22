@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ShopProduct } from '../data/allProductsData';
 import { useProducts } from '../context/ProductContext';
+import { normalizeCategory } from '../data/categories';
 import { ProductCard } from './ProductCard';
 
 interface AllProductsShopSectionProps {
@@ -38,20 +39,6 @@ const COLOR_SWATCHES = [
   { name: 'Sky Blue', hex: '#BAE6FD' },
   { name: 'White', hex: '#FFFFFF', hasBorder: true },
 ];
-
-// Helper to normalize category strings for foolproof matching
-const normalizeCategory = (cat?: string): string => {
-  if (!cat) return '';
-  const cleaned = cat.toLowerCase().replace(/[-_]/g, ' ').trim();
-  if (cleaned === 'bouquet') return 'bouquets';
-  if (cleaned === 'flower') return 'flowers';
-  if (cleaned === 'keychain') return 'keychains';
-  if (cleaned === 'bag') return 'bags';
-  if (cleaned === 'plushie') return 'plushies';
-  if (cleaned === 'flower pot' || cleaned === 'flower-pots') return 'flower pots';
-  if (cleaned === 'home decor' || cleaned === 'homedecor') return 'home decor';
-  return cleaned;
-};
 
 export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   initialCategory = 'all',

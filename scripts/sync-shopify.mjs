@@ -38,14 +38,25 @@ function mapToMainCategory(rawCategory = '', title = '') {
   const c = (rawCategory || '').toLowerCase();
   const t = (title || '').toLowerCase();
 
+  // 1. Primary check: Respect Shopify productType/rawCategory if explicitly specified
   if (c.includes('flower pot') || c.includes('pot') || c.includes('vase')) return 'Flower Pots';
-  if (c.includes('bouquet') || t.includes('bouquet')) return 'Bouquets';
-  if (c.includes('flower') || c.includes('filler') || t.includes('tulip') || t.includes('rose') || t.includes('sunflower') || t.includes('lily') || t.includes('daisy')) return 'Flowers';
-  if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm') || t.includes('keychain') || t.includes('charm')) return 'Keychains';
-  if (c.includes('bag') && !c.includes('charm') || t.includes('tote') || t.includes('bag')) return 'Bags';
-  if (c.includes('plushie') || c.includes('character') || t.includes('plushie')) return 'Plushies';
+  if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm')) return 'Keychains';
+  if (c.includes('bag') || c.includes('tote')) return 'Bags';
+  if (c.includes('plushie') || c.includes('character')) return 'Plushies';
   if (c.includes('standee') || c.includes('magnet') || c.includes('decor')) return 'Home Decor';
-  if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory') || t.includes('clip') || t.includes('scrunchie')) return 'Accessories';
+  if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory')) return 'Accessories';
+  if (c.includes('bouquet')) return 'Bouquets';
+  if (c.includes('flower') || c.includes('filler')) return 'Flowers';
+
+  // 2. Secondary fallback: Title heuristics if rawCategory was ambiguous or empty
+  if (t.includes('bouquet')) return 'Bouquets';
+  if (t.includes('keychain') || t.includes('charm')) return 'Keychains';
+  if (t.includes('tote') || t.includes('bag') || t.includes('potli')) return 'Bags';
+  if (t.includes('plushie') || t.includes('duck') || t.includes('teddy')) return 'Plushies';
+  if (t.includes('magnet') || t.includes('frame') || t.includes('standee')) return 'Home Decor';
+  if (t.includes('clip') || t.includes('bandana') || t.includes('earring') || t.includes('stud') || t.includes('gajra') || t.includes('scrunchie')) return 'Accessories';
+  if (t.includes('pot') || t.includes('planter')) return 'Flower Pots';
+  if (t.includes('tulip') || t.includes('rose') || t.includes('sunflower') || t.includes('lily') || t.includes('daisy') || t.includes('flower')) return 'Flowers';
 
   return 'Flowers';
 }

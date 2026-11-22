@@ -6,7 +6,7 @@
     "handle": "keychains-and-bag-charms-maroon-puffy-flower-charm",
     "name": "Maroon Puffy Flower Charm",
     "category": "Keychains",
-    "rawCategory": "Bag Charms",
+    "rawCategory": "Keychains",
     "group": "Keychains",
     "price": 350,
     "originalPrice": null,
@@ -27,11 +27,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -41,7 +41,7 @@
     "handle": "keychains-and-bag-charms-pink-puffy-flower-charm",
     "name": "Pink Puffy Flower Charm",
     "category": "Keychains",
-    "rawCategory": "Bag Charms",
+    "rawCategory": "Keychains",
     "group": "Keychains",
     "price": 350,
     "originalPrice": null,
@@ -62,11 +62,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -76,7 +76,7 @@
     "handle": "keychains-and-bag-charms-yellow-puffy-flower-charm",
     "name": "Yellow Puffy Flower Charm",
     "category": "Keychains",
-    "rawCategory": "Bag Charms",
+    "rawCategory": "Keychains",
     "group": "Keychains",
     "price": 350,
     "originalPrice": null,
@@ -97,11 +97,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -111,7 +111,7 @@
     "handle": "keychains-and-bag-charms-bell-bottom-flower-charm",
     "name": "Bell Bottom Flower Charm",
     "category": "Keychains",
-    "rawCategory": "Bag Charms",
+    "rawCategory": "Keychains",
     "group": "Keychains",
     "price": 150,
     "originalPrice": null,
@@ -132,11 +132,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -146,7 +146,7 @@
     "handle": "keychains-and-bag-charms-evil-eye-charm",
     "name": "Evil Eye Charm",
     "category": "Keychains",
-    "rawCategory": "Bag Charms",
+    "rawCategory": "Keychains",
     "group": "Keychains",
     "price": 410,
     "originalPrice": 829,
@@ -172,11 +172,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -185,9 +185,9 @@
     "variantId": "gid://shopify/ProductVariant/44296303280191",
     "handle": "keychains-and-bag-charms-rose-bag-charm",
     "name": "Rose Bag Charm",
-    "category": "Flowers",
-    "rawCategory": "Bag Charms",
-    "group": "Flowers",
+    "category": "Keychains",
+    "rawCategory": "Keychains",
+    "group": "Keychains",
     "price": 320,
     "originalPrice": 649,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/79kF9g-j_RNIEMJN3U0_2026-09-29_1_8d62837e-4cef-4de1-8d8e-02124630b470.jpg?v=1793949866",
@@ -212,11 +212,11 @@
     "inStock": true,
     "featuredInHero": true,
     "tags": [
-      "bag-charms",
       "crochet",
       "gift",
       "handmade",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains",
+      "subtype-bag-charms"
     ]
   },
   {
@@ -250,8 +250,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -285,8 +284,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -320,8 +318,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -355,8 +352,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -390,8 +386,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -400,9 +395,9 @@
     "variantId": "gid://shopify/ProductVariant/44296304001087",
     "handle": "keychains-and-bag-charms-red-rose-bouquet-charm",
     "name": "Red Rose Bouquet Charm",
-    "category": "Bouquets",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Bouquets",
+    "group": "Keychains",
     "price": 350,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.09.04PM.png?v=1793950751",
@@ -425,8 +420,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -460,8 +454,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -470,9 +463,9 @@
     "variantId": "gid://shopify/ProductVariant/44296304197695",
     "handle": "keychains-and-bag-charms-sunflower-bouquet-charm",
     "name": "Sunflower Bouquet Charm",
-    "category": "Bouquets",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Bouquets",
+    "group": "Keychains",
     "price": 350,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.10.13PM.png?v=1793950820",
@@ -495,8 +488,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -530,8 +522,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -565,8 +556,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -603,8 +593,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -638,8 +627,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -648,9 +636,9 @@
     "variantId": "gid://shopify/ProductVariant/44296304754751",
     "handle": "keychains-and-bag-charms-tulip-keychain",
     "name": "Tulip Keychain",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 200,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.12.52PM.png?v=1793950977",
@@ -673,8 +661,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -708,8 +695,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -745,8 +731,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -782,8 +767,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -792,9 +776,9 @@
     "variantId": "gid://shopify/ProductVariant/44296305213503",
     "handle": "keychains-and-bag-charms-strawberry-daisy",
     "name": "Strawberry Daisy Keychain",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 500,
     "originalPrice": 1009,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_RcnLZb3m_1791261134213_bc329rzsu5phx7c.jpg?v=1793949858",
@@ -819,8 +803,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -854,8 +837,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -890,8 +872,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -925,8 +906,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -940,10 +920,10 @@
     "group": "Keychains",
     "price": 400,
     "originalPrice": 809,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_XXM29OZYRO_2026-09-29_1_4c1ba97a-654d-47b1-b6a3-369ccaf739de.jpg?v=1793949855",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_MDM751VDIC_2026-09-29_2_537ef5b5-ee03-4cde-9883-642c87f86c4f.jpg?v=1793949855",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_XXM29OZYRO_2026-09-29_1_4c1ba97a-654d-47b1-b6a3-369ccaf739de.jpg?v=1793949855",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_MDM751VDIC_2026-09-29_2_537ef5b5-ee03-4cde-9883-642c87f86c4f.jpg?v=1793949855",
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_XXM29OZYRO_2026-09-29_1_4c1ba97a-654d-47b1-b6a3-369ccaf739de.jpg?v=1793949855",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_XXM29OZYRO_2026-09-29_1.jpg?v=1793078158",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Fra7qOlN_MDM751VDIC_2026-09-29_2.jpg?v=1793078158"
     ],
@@ -963,8 +943,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -996,8 +975,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1033,8 +1011,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1068,8 +1045,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1078,9 +1054,9 @@
     "variantId": "gid://shopify/ProductVariant/44296306425919",
     "handle": "keychains-and-bag-charms-sunflower-charm",
     "name": "Sunflower Charm",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 190,
     "originalPrice": 909,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/iMAwN0wM_ZSRL10SPMT_2026-09-29_1_4a5a721e-baee-4ffe-8d1b-8ed77819f6eb.jpg?v=1793949852",
@@ -1106,8 +1082,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1142,8 +1117,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1178,8 +1152,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1188,9 +1161,9 @@
     "variantId": "gid://shopify/ProductVariant/44296306720831",
     "handle": "keychains-and-bag-charms-puffy-daisy",
     "name": "Puffy Daisy Keychain - Pack of 3",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 120,
     "originalPrice": 249,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/SIrpldXU_ZILHL8YTMT_2026-09-29_1.jpg?v=1793949850",
@@ -1214,8 +1187,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1249,8 +1221,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1289,8 +1260,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1325,8 +1295,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1360,8 +1329,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1375,10 +1343,10 @@
     "group": "Keychains",
     "price": 399,
     "originalPrice": 799,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_9R4QV5YBYX_2026-09-29_1.jpg?v=1793949848",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_JV4BL4NDMK_2026-09-29_2.jpg?v=1793949847",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_9R4QV5YBYX_2026-09-29_1.jpg?v=1793949848",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_JV4BL4NDMK_2026-09-29_2.jpg?v=1793949847"
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_JV4BL4NDMK_2026-09-29_2.jpg?v=1793949847",
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/EiuIirtl_9R4QV5YBYX_2026-09-29_1.jpg?v=1793949848"
     ],
     "rating": 4.8,
     "reviewsCount": 46,
@@ -1396,8 +1364,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1431,8 +1398,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1466,8 +1432,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1501,8 +1466,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1516,10 +1480,10 @@
     "group": "Keychains",
     "price": 400,
     "originalPrice": 809,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_PLZS8K7XKX_2026-09-29_1.jpg?v=1793949845",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_GZLU06JLK4_2026-09-29_2.jpg?v=1793949845",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_PLZS8K7XKX_2026-09-29_1.jpg?v=1793949845",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_GZLU06JLK4_2026-09-29_2.jpg?v=1793949845"
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_GZLU06JLK4_2026-09-29_2.jpg?v=1793949845",
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/7wFFoO53_PLZS8K7XKX_2026-09-29_1.jpg?v=1793949845"
     ],
     "rating": 4.8,
     "reviewsCount": 74,
@@ -1537,8 +1501,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1552,10 +1515,10 @@
     "group": "Keychains",
     "price": 329,
     "originalPrice": 659,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__46PRLC8NMW_2026-09-29_1_50b81923-1696-42fd-8feb-503b7752f730.jpg?v=1793949845",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__2MWVTDGNK7_2026-09-29_2_7bc691ad-abb7-4100-9dac-8252955ead3d.jpg?v=1793949845",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__46PRLC8NMW_2026-09-29_1_50b81923-1696-42fd-8feb-503b7752f730.jpg?v=1793949845",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__2MWVTDGNK7_2026-09-29_2_7bc691ad-abb7-4100-9dac-8252955ead3d.jpg?v=1793949845",
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__46PRLC8NMW_2026-09-29_1_50b81923-1696-42fd-8feb-503b7752f730.jpg?v=1793949845",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__46PRLC8NMW_2026-09-29_1.jpg?v=1793078173",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Dljrz98__2MWVTDGNK7_2026-09-29_2.jpg?v=1793078173"
     ],
@@ -1575,8 +1538,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains",
-      "keychains-and-bag-charms"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -1613,9 +1575,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1652,9 +1614,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1694,9 +1656,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1733,9 +1695,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1772,9 +1734,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1811,9 +1773,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1845,9 +1807,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1884,9 +1846,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1923,9 +1885,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1957,9 +1919,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -1991,9 +1953,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2005,15 +1967,13 @@
     "category": "Flower Pots",
     "rawCategory": "Flower Pots",
     "group": "Flower Pots",
-    "price": 1100,
+    "price": 750,
     "originalPrice": 2209,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_44u1VgBc_1791261132202_ogffglv0xxip1mt_4db0846c-98ac-49ad-ac11-e86a0236adcc.jpg?v=1793949839",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/VRqM6jO1_WK3XAEOYPN_2026-09-29_1_59901b54-dfa6-49f3-8fb2-d0c8cdf197e7.jpg?v=1793949839",
     "images": [
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/VRqM6jO1_WK3XAEOYPN_2026-09-29_1_59901b54-dfa6-49f3-8fb2-d0c8cdf197e7.jpg?v=1793949839",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_44u1VgBc_1791261132202_ogffglv0xxip1mt_4db0846c-98ac-49ad-ac11-e86a0236adcc.jpg?v=1793949839",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_44u1VgBc_1791261135089_lvxigbav0xgugsb_758bb653-b513-481e-a6e5-a1fe41c6f741.jpg?v=1793949839",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/VRqM6jO1_WK3XAEOYPN_2026-09-29_1_59901b54-dfa6-49f3-8fb2-d0c8cdf197e7.jpg?v=1793949839",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_44u1VgBc_1791261132202_ogffglv0xxip1mt.jpg?v=1793078185",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_44u1VgBc_1791261135089_lvxigbav0xgugsb.jpg?v=1793078185",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/VRqM6jO1_WK3XAEOYPN_2026-09-29_1.jpg?v=1793078184"
     ],
     "rating": 4.8,
@@ -2030,9 +1990,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2066,9 +2026,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2101,9 +2061,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2140,9 +2100,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2179,9 +2139,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2218,9 +2178,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2234,10 +2194,10 @@
     "group": "Flower Pots",
     "price": 499,
     "originalPrice": 999,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261160916_j9lq1leit0nkja5_d3bd3314-fdef-41bc-a85b-27b5b8a299ff.jpg?v=1793949835",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261161323_eptyz88e4mex16m_cf22bad5-4ca5-4094-bf7f-a929a373f3ac.jpg?v=1793949836",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261160916_j9lq1leit0nkja5_d3bd3314-fdef-41bc-a85b-27b5b8a299ff.jpg?v=1793949835",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261161323_eptyz88e4mex16m_cf22bad5-4ca5-4094-bf7f-a929a373f3ac.jpg?v=1793949836",
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261160916_j9lq1leit0nkja5_d3bd3314-fdef-41bc-a85b-27b5b8a299ff.jpg?v=1793949835",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Rie7oHix_ETXRSTNYP5_2026-09-29_1_199e5638-8cd9-4739-9679-b7e699b3dfb0.jpg?v=1793949835",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261160916_j9lq1leit0nkja5.jpg?v=1793078190",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_haVo2o3z_1791261161323_eptyz88e4mex16m.jpg?v=1793078190",
@@ -2257,9 +2217,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2291,9 +2251,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2330,9 +2290,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2369,9 +2329,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flower-pots",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flower-pots"
     ]
   },
   {
@@ -2381,7 +2341,7 @@
     "handle": "home-decor-snoopy-standee",
     "name": "Snoopy Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2405,8 +2365,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2416,7 +2376,7 @@
     "handle": "home-decor-cinderella-standee",
     "name": "Cinderella Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2440,8 +2400,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2451,7 +2411,7 @@
     "handle": "home-decor-spider-man-standee",
     "name": "Spider-Man Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2475,8 +2435,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2486,7 +2446,7 @@
     "handle": "home-decor-batman-standee",
     "name": "Batman Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2510,8 +2470,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2521,7 +2481,7 @@
     "handle": "home-decor-mickey-mouse-standee",
     "name": "Mickey Mouse Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2545,8 +2505,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2556,7 +2516,7 @@
     "handle": "home-decor-harry-potter-standee",
     "name": "Harry Potter Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2580,8 +2540,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2591,7 +2551,7 @@
     "handle": "home-decor-pikachu-standee",
     "name": "Pikachu Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2615,8 +2575,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2626,7 +2586,7 @@
     "handle": "home-decor-shinchan-standee",
     "name": "Shinchan Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2650,8 +2610,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2661,7 +2621,7 @@
     "handle": "home-decor-captain-america-standee",
     "name": "Captain America Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2685,8 +2645,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2696,7 +2656,7 @@
     "handle": "home-decor-iron-man-standee",
     "name": "Iron Man Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2720,8 +2680,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2731,7 +2691,7 @@
     "handle": "home-decor-stitch-standee",
     "name": "Stitch Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2755,8 +2715,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2766,7 +2726,7 @@
     "handle": "home-decor-spongebob-standee",
     "name": "SpongeBob Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2790,8 +2750,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2801,7 +2761,7 @@
     "handle": "home-decor-mario-standee",
     "name": "Mario Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2825,8 +2785,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2836,7 +2796,7 @@
     "handle": "home-decor-naruto-standee",
     "name": "Naruto Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2860,8 +2820,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2871,7 +2831,7 @@
     "handle": "home-decor-footballer-standee",
     "name": "Footballer Standee",
     "category": "Home Decor",
-    "rawCategory": "Standees",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 999,
     "originalPrice": null,
@@ -2895,8 +2855,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "standees"
+      "knotsnco-collection-home-decor",
+      "subtype-standees"
     ]
   },
   {
@@ -2905,9 +2865,9 @@
     "variantId": "gid://shopify/ProductVariant/44296312291391",
     "handle": "home-decor-daisy-pot-fridge-magnet",
     "name": "Daisy Pot Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 310,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.46.06PM.png?v=1793952975",
@@ -2928,10 +2888,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -2940,9 +2900,9 @@
     "variantId": "gid://shopify/ProductVariant/44296312389695",
     "handle": "home-decor-sunflower-pot-fridge-magnet",
     "name": "Sunflower Pot Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 310,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.45.14PM.png?v=1793952922",
@@ -2963,10 +2923,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -2976,7 +2936,7 @@
     "handle": "home-decor-baby-breath-pot-fridge-magnet",
     "name": "Baby Breath Pot Fridge Magnet",
     "category": "Home Decor",
-    "rawCategory": "Fridge Magnets",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 310,
     "originalPrice": null,
@@ -2998,10 +2958,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3011,7 +2971,7 @@
     "handle": "home-decor-smiley-pot-fridge-magnet",
     "name": "Smiley Pot Fridge Magnet",
     "category": "Home Decor",
-    "rawCategory": "Fridge Magnets",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 350,
     "originalPrice": null,
@@ -3033,10 +2993,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3045,9 +3005,9 @@
     "variantId": "gid://shopify/ProductVariant/44296312684607",
     "handle": "home-decor-strawberry-daisy-pot-fridge-magnet",
     "name": "Strawberry Daisy Pot Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 380,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.42.08PM.png?v=1793952734",
@@ -3068,10 +3028,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3081,7 +3041,7 @@
     "handle": "home-decor-strawberry-pot-fridge-magnet",
     "name": "Strawberry Pot Fridge Magnet",
     "category": "Home Decor",
-    "rawCategory": "Fridge Magnets",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 350,
     "originalPrice": null,
@@ -3103,10 +3063,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3116,7 +3076,7 @@
     "handle": "home-decor-vintage-bloom-cluster-fridge-magnet",
     "name": "Vintage Bloom Cluster Fridge Magnet",
     "category": "Home Decor",
-    "rawCategory": "Fridge Magnets",
+    "rawCategory": "Home Decor",
     "group": "Home Decor",
     "price": 399,
     "originalPrice": null,
@@ -3138,10 +3098,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3150,9 +3110,9 @@
     "variantId": "gid://shopify/ProductVariant/44296312979519",
     "handle": "home-decor-daisy-cluster-fridge-magnet",
     "name": "Daisy Cluster Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 399,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.40.38PM.png?v=1793952646",
@@ -3173,10 +3133,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3185,9 +3145,9 @@
     "variantId": "gid://shopify/ProductVariant/44296313077823",
     "handle": "home-decor-sunflower-fridge-magnet",
     "name": "Sunflower Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 180,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.40.14PM.png?v=1793952621",
@@ -3208,10 +3168,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3220,9 +3180,9 @@
     "variantId": "gid://shopify/ProductVariant/44296313208895",
     "handle": "home-decor-single-rose-fridge-magnet",
     "name": "Single Rose Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 180,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.39.52PM.png?v=1793952599",
@@ -3243,10 +3203,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3255,9 +3215,9 @@
     "variantId": "gid://shopify/ProductVariant/44296313339967",
     "handle": "home-decor-tulip-fridge-magnet",
     "name": "Tulip Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 180,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.39.30PM.png?v=1793952577",
@@ -3278,10 +3238,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3290,9 +3250,9 @@
     "variantId": "gid://shopify/ProductVariant/44296313372735",
     "handle": "home-decor-daisy-fridge-magnet",
     "name": "Daisy Fridge Magnet",
-    "category": "Flowers",
-    "rawCategory": "Fridge Magnets",
-    "group": "Flowers",
+    "category": "Home Decor",
+    "rawCategory": "Home Decor",
+    "group": "Home Decor",
     "price": 180,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at1.39.03PM.png?v=1793952552",
@@ -3313,10 +3273,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fridge-magnets",
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor",
+      "subtype-fridge-magnets"
     ]
   },
   {
@@ -3326,7 +3286,7 @@
     "handle": "home-decor-3-pink-daisy-vase",
     "name": "3 Pink Daisy Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1500,
     "originalPrice": null,
@@ -3350,8 +3310,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3361,7 +3321,7 @@
     "handle": "home-decor-rose-valley-vase",
     "name": "Rose Valley Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 2400,
     "originalPrice": null,
@@ -3385,8 +3345,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3396,7 +3356,7 @@
     "handle": "home-decor-pastel-daisy-garden",
     "name": "Pastel Daisy Garden",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 2180,
     "originalPrice": null,
@@ -3420,8 +3380,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3431,7 +3391,7 @@
     "handle": "home-decor-pink-daisy-garden",
     "name": "Pink Daisy Garden",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 2180,
     "originalPrice": null,
@@ -3455,8 +3415,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3466,7 +3426,7 @@
     "handle": "home-decor-mini-sunflower-garden",
     "name": "Mini Sunflower Garden",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 2000,
     "originalPrice": null,
@@ -3490,8 +3450,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3501,7 +3461,7 @@
     "handle": "home-decor-sunflower-valley-vase",
     "name": "Sunflower Valley Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1900,
     "originalPrice": null,
@@ -3525,8 +3485,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3536,7 +3496,7 @@
     "handle": "home-decor-duckie-fairyland-vase",
     "name": "Duckie Fairyland Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1550,
     "originalPrice": null,
@@ -3560,8 +3520,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3571,7 +3531,7 @@
     "handle": "home-decor-fairy-vase",
     "name": "Fairy Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1500,
     "originalPrice": null,
@@ -3595,8 +3555,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3606,7 +3566,7 @@
     "handle": "home-decor-forest-cactus-vase",
     "name": "Forest Cactus Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1349,
     "originalPrice": null,
@@ -3630,8 +3590,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3641,7 +3601,7 @@
     "handle": "home-decor-lily-s-fever-vase",
     "name": "Lily's Fever Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 2350,
     "originalPrice": null,
@@ -3665,8 +3625,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3676,7 +3636,7 @@
     "handle": "home-decor-evil-ghog-vase",
     "name": "Evil Ghog Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1999,
     "originalPrice": null,
@@ -3700,8 +3660,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3711,7 +3671,7 @@
     "handle": "home-decor-lemon-long-bottom-vase",
     "name": "Lemon Long Bottom Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1599,
     "originalPrice": null,
@@ -3735,8 +3695,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3746,7 +3706,7 @@
     "handle": "home-decor-blue-basil-twirly-vase",
     "name": "Blue Basil Twirly Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1600,
     "originalPrice": null,
@@ -3770,8 +3730,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3781,7 +3741,7 @@
     "handle": "home-decor-three-musketeers-vase",
     "name": "Three Musketeers Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1699,
     "originalPrice": null,
@@ -3805,8 +3765,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3816,7 +3776,7 @@
     "handle": "home-decor-blushing-beauty-vase",
     "name": "Blushing Beauty Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1500,
     "originalPrice": null,
@@ -3840,8 +3800,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3851,7 +3811,7 @@
     "handle": "home-decor-ocean-breeze-vase",
     "name": "Ocean Breeze Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1500,
     "originalPrice": null,
@@ -3875,8 +3835,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3886,7 +3846,7 @@
     "handle": "home-decor-heavenly-harmony-vase",
     "name": "Heavenly Harmony Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1600,
     "originalPrice": null,
@@ -3910,8 +3870,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3921,7 +3881,7 @@
     "handle": "home-decor-autumn-gold-vase",
     "name": "Autumn Gold Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1900,
     "originalPrice": null,
@@ -3945,8 +3905,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -3956,7 +3916,7 @@
     "handle": "home-decor-the-lavender-fields-vase",
     "name": "The Lavender Fields Vase",
     "category": "Flower Pots",
-    "rawCategory": "Vases",
+    "rawCategory": "Flower Pots",
     "group": "Flower Pots",
     "price": 1900,
     "originalPrice": null,
@@ -3980,8 +3940,8 @@
       "crochet",
       "gift",
       "handmade",
-      "home-decor",
-      "vases"
+      "knotsnco-collection-flower-pots",
+      "subtype-vases"
     ]
   },
   {
@@ -4013,9 +3973,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4047,9 +4007,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4081,9 +4041,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4115,9 +4075,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4149,9 +4109,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4186,9 +4146,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4225,9 +4185,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4259,9 +4219,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4293,9 +4253,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4330,9 +4290,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4364,9 +4324,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4398,9 +4358,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4432,9 +4392,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4466,9 +4426,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4500,9 +4460,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4534,9 +4494,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4566,9 +4526,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4598,9 +4558,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4630,9 +4590,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4662,9 +4622,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4694,9 +4654,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4726,9 +4686,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4758,9 +4718,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4790,9 +4750,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4822,9 +4782,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4856,9 +4816,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4890,9 +4850,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4924,9 +4884,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4958,9 +4918,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -4992,9 +4952,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5028,9 +4988,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5065,9 +5025,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5099,9 +5059,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5133,9 +5093,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5168,9 +5128,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5202,9 +5162,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5238,9 +5198,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5272,9 +5232,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5306,9 +5266,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5340,9 +5300,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5374,9 +5334,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5408,9 +5368,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5442,9 +5402,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5476,9 +5436,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5510,9 +5470,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5546,9 +5506,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5580,9 +5540,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5614,9 +5574,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5648,9 +5608,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5682,9 +5642,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5716,9 +5676,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5750,9 +5710,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5784,9 +5744,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5818,9 +5778,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5852,9 +5812,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5886,9 +5846,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5920,9 +5880,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5954,9 +5914,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -5988,9 +5948,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -6022,9 +5982,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -6056,9 +6016,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -6068,7 +6028,7 @@
     "handle": "flowers-regular-leaf",
     "name": "Regular Leaf",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 180,
     "originalPrice": null,
@@ -6090,10 +6050,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6103,7 +6063,7 @@
     "handle": "flowers-round-leaf",
     "name": "Round Leaf",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 180,
     "originalPrice": null,
@@ -6125,10 +6085,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6138,7 +6098,7 @@
     "handle": "flowers-sage-leaf",
     "name": "Sage Leaf",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 200,
     "originalPrice": 849,
@@ -6163,10 +6123,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6176,7 +6136,7 @@
     "handle": "flowers-monster-leaf",
     "name": "Monster Leaf",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6198,10 +6158,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6211,7 +6171,7 @@
     "handle": "flowers-baby-breath-off-white",
     "name": "Baby Breath (Off White)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6233,10 +6193,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6246,7 +6206,7 @@
     "handle": "flowers-baby-breath-pink",
     "name": "Baby Breath (Pink)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6268,10 +6228,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6281,7 +6241,7 @@
     "handle": "flowers-baby-breath-pearl-blue",
     "name": "Baby Breath Pearl (Blue)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6303,10 +6263,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6316,7 +6276,7 @@
     "handle": "flowers-baby-breath-pearl-purple",
     "name": "Baby Breath Pearl (Purple)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6338,10 +6298,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6351,7 +6311,7 @@
     "handle": "flowers-heart-stick-red",
     "name": "Heart Stick (Red)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 200,
     "originalPrice": 1109,
@@ -6374,10 +6334,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6387,7 +6347,7 @@
     "handle": "flowers-heart-stick-pink",
     "name": "Heart Stick (Pink)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 200,
     "originalPrice": null,
@@ -6407,10 +6367,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6420,7 +6380,7 @@
     "handle": "flowers-evil-eye-stick",
     "name": "Evil Eye Stick",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 150,
     "originalPrice": null,
@@ -6440,10 +6400,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6453,7 +6413,7 @@
     "handle": "flowers-dancing-lady-white",
     "name": "Dancing Lady (White)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6473,10 +6433,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6486,7 +6446,7 @@
     "handle": "flowers-dancing-lady-pink",
     "name": "Dancing Lady (Pink)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6506,10 +6466,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6519,7 +6479,7 @@
     "handle": "flowers-dancing-lady-butter-yellow",
     "name": "Dancing Lady (Butter Yellow)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6539,10 +6499,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6552,7 +6512,7 @@
     "handle": "flowers-twisted-line",
     "name": "Twisted Line",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 50,
     "originalPrice": null,
@@ -6572,10 +6532,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6585,7 +6545,7 @@
     "handle": "flowers-forget-me-not-purple",
     "name": "Forget Me Not (Purple)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6605,10 +6565,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6618,7 +6578,7 @@
     "handle": "flowers-forget-me-not-yellow",
     "name": "Forget Me Not (Yellow)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6638,10 +6598,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6651,7 +6611,7 @@
     "handle": "flowers-forget-me-not-pink",
     "name": "Forget Me Not (Pink)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 250,
     "originalPrice": null,
@@ -6671,10 +6631,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6684,7 +6644,7 @@
     "handle": "flowers-lavender-heart-stick-pink",
     "name": "Lavender Heart Stick (Pink)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 350,
     "originalPrice": null,
@@ -6704,10 +6664,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6717,7 +6677,7 @@
     "handle": "flowers-lavender-heart-stick-red",
     "name": "Lavender Heart Stick (Red)",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 350,
     "originalPrice": null,
@@ -6737,10 +6697,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6750,7 +6710,7 @@
     "handle": "flowers-mini-daisy",
     "name": "Mini Daisy",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 420,
     "originalPrice": 849,
@@ -6775,10 +6735,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6788,7 +6748,7 @@
     "handle": "flowers-pod",
     "name": "Pod",
     "category": "Flowers",
-    "rawCategory": "Fillers",
+    "rawCategory": "Flowers",
     "group": "Flowers",
     "price": 200,
     "originalPrice": null,
@@ -6808,10 +6768,10 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "fillers",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers",
+      "subtype-fillers"
     ]
   },
   {
@@ -6821,7 +6781,7 @@
     "handle": "flowers-character-chick-chenille",
     "name": "Character - Chick (Chenille)",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 400,
     "originalPrice": null,
@@ -6840,11 +6800,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -6854,7 +6814,7 @@
     "handle": "flowers-character-hello-kitty",
     "name": "Character - Hello Kitty",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 350,
     "originalPrice": null,
@@ -6873,11 +6833,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -6887,7 +6847,7 @@
     "handle": "flowers-character-blue-penguin",
     "name": "Character - Blue Penguin",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 350,
     "originalPrice": null,
@@ -6906,11 +6866,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -6920,7 +6880,7 @@
     "handle": "flowers-character-pink-penguin",
     "name": "Character - Pink Penguin",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 350,
     "originalPrice": null,
@@ -6939,11 +6899,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -6953,7 +6913,7 @@
     "handle": "flowers-character-birthday-cake",
     "name": "Character - Birthday Cake",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 400,
     "originalPrice": null,
@@ -6972,11 +6932,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -6986,7 +6946,7 @@
     "handle": "flowers-character-bunny",
     "name": "Character - Bunny",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 350,
     "originalPrice": null,
@@ -7005,11 +6965,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -7019,7 +6979,7 @@
     "handle": "flowers-character-honey-bee",
     "name": "Character - Honey Bee",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 300,
     "originalPrice": null,
@@ -7038,11 +6998,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -7052,7 +7012,7 @@
     "handle": "flowers-character-graduation",
     "name": "Character - Graduation",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 350,
     "originalPrice": null,
@@ -7071,11 +7031,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -7085,7 +7045,7 @@
     "handle": "flowers-character-birthday-hat-bear",
     "name": "Birthday Hat Bear",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 380,
     "originalPrice": 769,
@@ -7107,11 +7067,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -7121,7 +7081,7 @@
     "handle": "accessories-cherry-blossom-clip-white-4-inch",
     "name": "Cherry Blossom Clip (White 4 inch)",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 650,
     "originalPrice": 1309,
@@ -7147,11 +7107,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7161,7 +7121,7 @@
     "handle": "accessories-cherry-blossom-clip-white-3-inch",
     "name": "Cherry Blossom Clip 3 inch",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 250,
     "originalPrice": 509,
@@ -7182,11 +7142,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7196,7 +7156,7 @@
     "handle": "accessories-mogra-gajra",
     "name": "Mogra Gajra",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 500,
     "originalPrice": 1009,
@@ -7220,11 +7180,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7234,7 +7194,7 @@
     "handle": "accessories-cherry-blossom-hairclip-pink-4-inch",
     "name": "Cherry Blossom Hairclip (Pink 4 inch)",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 350,
     "originalPrice": 709,
@@ -7260,11 +7220,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7273,9 +7233,9 @@
     "variantId": "gid://shopify/ProductVariant/44296319369279",
     "handle": "accessories-daisy-clip-maroon",
     "name": "Daisy Clip (Maroon)",
-    "category": "Flowers",
-    "rawCategory": "Hair Accessories",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 489,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at5.46.29PM.png?v=1793967396",
@@ -7295,11 +7255,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7309,7 +7269,7 @@
     "handle": "accessories-lotus-gajra",
     "name": "Lotus Gajra",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 599,
     "originalPrice": null,
@@ -7330,11 +7290,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7343,9 +7303,9 @@
     "variantId": "gid://shopify/ProductVariant/44296319434815",
     "handle": "accessories-mini-sunflower-clip",
     "name": "Mini Sunflower Clip",
-    "category": "Flowers",
-    "rawCategory": "Hair Accessories",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 350,
     "originalPrice": 709,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_dGspw7yA_1791261168609_dyw85t2nurzbu8q_681c62d8-987a-4cbc-b3ad-74980f7000f5.jpg?v=1793949748",
@@ -7370,11 +7330,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7384,7 +7344,7 @@
     "handle": "accessories-bow-hairclip",
     "name": "Bow Hairclip",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 489,
     "originalPrice": 979,
@@ -7410,11 +7370,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7423,9 +7383,9 @@
     "variantId": "gid://shopify/ProductVariant/44296319500351",
     "handle": "accessories-daisy-hairclip-purple",
     "name": "Daisy Hairclip (Purple)",
-    "category": "Flowers",
-    "rawCategory": "Hair Accessories",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 499,
     "originalPrice": null,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/Screenshot2026-11-06at5.45.07PM.png?v=1793967314",
@@ -7445,11 +7405,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7459,7 +7419,7 @@
     "handle": "accessories-double-puffy-flower-clip-lavender",
     "name": "Double Puffy Flower Clip (Lavender)",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 350,
     "originalPrice": 909,
@@ -7485,11 +7445,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7499,7 +7459,7 @@
     "handle": "accessories-double-puffy-flower-clip-butter-yellow",
     "name": "Double Puffy Flower Clip (Butter Yellow)",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 450,
     "originalPrice": 909,
@@ -7525,11 +7485,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7539,7 +7499,7 @@
     "handle": "accessories-double-puffy-flower-clip-pink",
     "name": "Double Puffy Flower Clip (Pink)",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 450,
     "originalPrice": 909,
@@ -7565,11 +7525,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7578,9 +7538,9 @@
     "variantId": "gid://shopify/ProductVariant/44296319631423",
     "handle": "accessories-mini-puffy-flower-clip-butter-yellow",
     "name": "Mini Puffy Flower Butter Yellow",
-    "category": "Accessories",
-    "rawCategory": "Hair Accessories",
-    "group": "Accessories",
+    "category": "Flowers",
+    "rawCategory": "Accessories",
+    "group": "Flowers",
     "price": 270,
     "originalPrice": 549,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/DpD54kl2_X61NNVXFCD_2026-09-29_1.jpg?v=1793949741",
@@ -7600,11 +7560,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7613,9 +7573,9 @@
     "variantId": "gid://shopify/ProductVariant/44296319664191",
     "handle": "accessories-mini-puffy-flower-clip-lavender",
     "name": "Mini Puffy Flower Lavender",
-    "category": "Accessories",
-    "rawCategory": "Hair Accessories",
-    "group": "Accessories",
+    "category": "Flowers",
+    "rawCategory": "Accessories",
+    "group": "Flowers",
     "price": 300,
     "originalPrice": 609,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/A57G3w5e_DN4HH0SSCS_2026-09-29_1.jpg?v=1793949740",
@@ -7637,11 +7597,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7651,7 +7611,7 @@
     "handle": "accessories-mini-puffy-flower-clip-pink",
     "name": "Mini Puffy Flower Clip Pink",
     "category": "Accessories",
-    "rawCategory": "Hair Accessories",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 270,
     "originalPrice": 549,
@@ -7672,11 +7632,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
       "gift",
-      "hair-accessories",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-hair-accessories"
     ]
   },
   {
@@ -7686,7 +7646,7 @@
     "handle": "accessories-red-bandana",
     "name": "Red Bandana",
     "category": "Accessories",
-    "rawCategory": "Bandanas",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 1200,
     "originalPrice": 2409,
@@ -7714,11 +7674,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
-      "bandanas",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-bandanas"
     ]
   },
   {
@@ -7728,7 +7688,7 @@
     "handle": "accessories-floral-bandana",
     "name": "Floral Bandana",
     "category": "Accessories",
-    "rawCategory": "Bandanas",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 599,
     "originalPrice": 1199,
@@ -7754,11 +7714,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
-      "bandanas",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-bandanas"
     ]
   },
   {
@@ -7768,7 +7728,7 @@
     "handle": "accessories-beachy-bandana",
     "name": "Beachy Bandana",
     "category": "Accessories",
-    "rawCategory": "Bandanas",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 1200,
     "originalPrice": 2409,
@@ -7792,11 +7752,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
-      "bandanas",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-bandanas"
     ]
   },
   {
@@ -7806,7 +7766,7 @@
     "handle": "accessories-watermelon-studs",
     "name": "Watermelon Studs",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 400,
     "originalPrice": 809,
@@ -7830,12 +7790,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -7845,7 +7805,7 @@
     "handle": "accessories-pink-cherry-blossom-studs",
     "name": "Pink Cherry Blossom Studs",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 300,
     "originalPrice": 609,
@@ -7871,12 +7831,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -7886,7 +7846,7 @@
     "handle": "accessories-avo-love-drop-earrings",
     "name": "Avo-Love Drop Earrings",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 800,
     "originalPrice": 1609,
@@ -7908,12 +7868,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -7923,7 +7883,7 @@
     "handle": "accessories-strawberry-crochet-earring",
     "name": "Strawberry Crochet Earring",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 700,
     "originalPrice": 1409,
@@ -7947,12 +7907,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -7962,7 +7922,7 @@
     "handle": "accessories-blue-orchid-earring",
     "name": "Blue Orchid Earring",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 1000,
     "originalPrice": 2009,
@@ -7986,12 +7946,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -8001,7 +7961,7 @@
     "handle": "accessories-burger-crochet-earring",
     "name": "Burger Crochet Earring",
     "category": "Accessories",
-    "rawCategory": "Earrings",
+    "rawCategory": "Accessories",
     "group": "Accessories",
     "price": 900,
     "originalPrice": 1809,
@@ -8025,12 +7985,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -8039,9 +7999,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320024639",
     "handle": "accessories-sunflower-crochet-studs",
     "name": "Sunflower Crochet Studs",
-    "category": "Flowers",
-    "rawCategory": "Earrings",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 600,
     "originalPrice": 1209,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/ZcSq34ih_I5UGH5S65P_2026-09-29_1_2f7362ab-1d4e-444e-93ff-0b9ab21a63e5.jpg?v=1793949728",
@@ -8064,12 +8024,12 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
       "handmade",
-      "jewellery"
+      "knotsnco-collection-accessories",
+      "subtype-earrings",
+      "subtype-jewellery"
     ]
   },
   {
@@ -8078,9 +8038,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320548927",
     "handle": "accessories-tulip-earrings",
     "name": "Tulip Earrings",
-    "category": "Flowers",
-    "rawCategory": "Earrings",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 280,
     "originalPrice": null,
     "image": "",
@@ -8098,11 +8058,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-earrings"
     ]
   },
   {
@@ -8111,9 +8071,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320581695",
     "handle": "accessories-daisy-stud",
     "name": "Daisy Stud",
-    "category": "Flowers",
-    "rawCategory": "Earrings",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 150,
     "originalPrice": null,
     "image": "",
@@ -8131,11 +8091,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-earrings"
     ]
   },
   {
@@ -8144,9 +8104,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320614463",
     "handle": "accessories-blue-daisy-stud",
     "name": "Blue Daisy Stud",
-    "category": "Flowers",
-    "rawCategory": "Earrings",
-    "group": "Flowers",
+    "category": "Accessories",
+    "rawCategory": "Accessories",
+    "group": "Accessories",
     "price": 150,
     "originalPrice": null,
     "image": "",
@@ -8164,11 +8124,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "accessories",
       "crochet",
-      "earrings",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-accessories",
+      "subtype-earrings"
     ]
   },
   {
@@ -8177,9 +8137,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320647231",
     "handle": "bags-blue-daisy-tote",
     "name": "Blue Daisy Tote",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 1800,
     "originalPrice": 3869,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/y12idilA_TL8M5CXLZT_2026-09-29_1_be4efa1b-d9f3-4359-83f7-13a360956c82.jpg?v=1793949725",
@@ -8204,10 +8164,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8216,9 +8176,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320679999",
     "handle": "bags-boho-sunflower-crochet-tote",
     "name": "Boho Sunflower Crochet Tote",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 4500,
     "originalPrice": 9009,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/dzgJ9mNa_NBQEGQ2IUZ_2026-09-29_1_9c018278-b57d-445b-ac2e-521e1ab8daef.jpg?v=1793949724",
@@ -8243,10 +8203,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8275,10 +8235,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8307,10 +8267,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8344,10 +8304,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8356,9 +8316,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320811071",
     "handle": "bags-blue-sunflower-valley-crochet-bag",
     "name": "Blue Sunflower Valley Crochet Bag",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 1800,
     "originalPrice": 2300,
     "image": "",
@@ -8376,10 +8336,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8388,9 +8348,9 @@
     "variantId": "gid://shopify/ProductVariant/44296320843839",
     "handle": "bags-sunflower-potli-crochet",
     "name": "Sunflower Potli Crochet",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 2900,
     "originalPrice": 5809,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/e3wpWmZB_3TNMZBM166_2026-09-29_1_c05a608f-9693-4e83-958b-f353a48288d3.jpg?v=1793949720",
@@ -8413,10 +8373,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8450,10 +8410,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8482,10 +8442,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8523,10 +8483,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8560,10 +8520,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8572,9 +8532,9 @@
     "variantId": "gid://shopify/ProductVariant/44296321007679",
     "handle": "bags-pink-and-white-daisy-bag",
     "name": "Pink and White Daisy Bag",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 2000,
     "originalPrice": 4009,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_1hTp_npk_1791261173548_5xtx6is7uthoapc_612b556e-4a41-4058-9c98-7422e004c92a.jpg?v=1793949716",
@@ -8599,10 +8559,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8638,10 +8598,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8674,10 +8634,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8706,10 +8666,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8718,9 +8678,9 @@
     "variantId": "gid://shopify/ProductVariant/44296321138751",
     "handle": "bags-sunflower-tote",
     "name": "Sunflower Tote",
-    "category": "Flowers",
+    "category": "Bags",
     "rawCategory": "Bags",
-    "group": "Flowers",
+    "group": "Bags",
     "price": 4000,
     "originalPrice": null,
     "image": "",
@@ -8738,10 +8698,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8770,10 +8730,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8802,10 +8762,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8834,10 +8794,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -8869,10 +8829,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -8907,7 +8867,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -8941,7 +8901,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -8975,7 +8935,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -8989,10 +8949,8 @@
     "group": "Bouquets",
     "price": 1999,
     "originalPrice": 3999,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166417_3l7oukh265vjtjy.jpg?v=1793949872",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/zpc9P5wW_ZNM0MJ7TRS_2026-09-29_1.jpg?v=1793949872",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166417_3l7oukh265vjtjy.jpg?v=1793949872",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_XYjbB_DJ_1791261166945_uqm5apjf2huds4m.jpg?v=1793949872",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/zpc9P5wW_ZNM0MJ7TRS_2026-09-29_1.jpg?v=1793949872"
     ],
     "rating": 4.8,
@@ -9008,10 +8966,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9043,10 +9001,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9078,9 +9036,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -9111,10 +9069,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9148,7 +9106,7 @@
     "tags": [
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor"
     ]
   },
   {
@@ -9181,10 +9139,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9198,10 +9156,8 @@
     "group": "Bouquets",
     "price": 3000,
     "originalPrice": 6009,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171133_ppm15wu6ir03zlw.jpg?v=1793949877",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/kUyAsftQ_BDUZ7MERT0_2026-09-29_1.jpg?v=1793949876",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171133_ppm15wu6ir03zlw.jpg?v=1793949877",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171212_f0o9dx165knbcyv.jpg?v=1793949877",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/kUyAsftQ_BDUZ7MERT0_2026-09-29_1.jpg?v=1793949876"
     ],
     "rating": 4.8,
@@ -9217,10 +9173,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9253,10 +9209,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9287,10 +9243,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9299,9 +9255,9 @@
     "variantId": "gid://shopify/ProductVariant/44407705632831",
     "handle": "plushies-small-sunflower-valley-w-duck",
     "name": "Small Sunflower Valley W Duck",
-    "category": "Flowers",
+    "category": "Plushies",
     "rawCategory": "Plushies",
-    "group": "Flowers",
+    "group": "Plushies",
     "price": 1599,
     "originalPrice": 3199,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/mIKZR9WF_PKXCYUOE1I_2026-09-29_1.jpg?v=1793949879",
@@ -9325,7 +9281,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9356,10 +9312,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9368,16 +9324,16 @@
     "variantId": "gid://shopify/ProductVariant/44407705698367",
     "handle": "keychains-sunflower-teddy-valley",
     "name": "Sunflower Teddy Valley",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 5000,
     "originalPrice": 10009,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__o4XZquk_1791261175620_t67hwjylmjpozjp.jpg?v=1793949880",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/QOnqqEov_QNGCREQ7EG_2026-09-29_1.jpg?v=1793949880",
     "images": [
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/QOnqqEov_QNGCREQ7EG_2026-09-29_1.jpg?v=1793949880",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__o4XZquk_1791261175620_t67hwjylmjpozjp.jpg?v=1793949880",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__o4XZquk_1791261175282_h4mgb8ncycpgkc5.jpg?v=1793949880",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/QOnqqEov_QNGCREQ7EG_2026-09-29_1.jpg?v=1793949880"
+      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website__o4XZquk_1791261175282_h4mgb8ncycpgkc5.jpg?v=1793949880"
     ],
     "rating": 4.8,
     "reviewsCount": 35,
@@ -9395,7 +9351,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -9430,7 +9386,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -9462,10 +9418,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9501,7 +9457,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9537,7 +9493,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9546,9 +9502,9 @@
     "variantId": "gid://shopify/ProductVariant/44407710056511",
     "handle": "home-decor-puffy-sunflower-frame",
     "name": "Puffy Sunflower Frame",
-    "category": "Flowers",
+    "category": "Home Decor",
     "rawCategory": "Home Decor",
-    "group": "Flowers",
+    "group": "Home Decor",
     "price": 700,
     "originalPrice": 1409,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/GzWHNryG_Q71ZCDQ83J_2026-09-29_1.jpg?v=1793949884",
@@ -9572,7 +9528,7 @@
     "tags": [
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor"
     ]
   },
   {
@@ -9586,10 +9542,8 @@
     "group": "Bouquets",
     "price": 4500,
     "originalPrice": 9009,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_zzYghJah_1791261175627_loj6h9pfipcpbd1.jpg?v=1793949885",
+    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/ZsnshivU_N03UAPS253_2026-09-29_1.jpg?v=1793949885",
     "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_zzYghJah_1791261175627_loj6h9pfipcpbd1.jpg?v=1793949885",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_zzYghJah_1791261175934_z9i13geyix0vd8f.jpg?v=1793949885",
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/ZsnshivU_N03UAPS253_2026-09-29_1.jpg?v=1793949885"
     ],
     "rating": 4.8,
@@ -9605,10 +9559,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9641,10 +9595,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9680,7 +9634,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -9719,7 +9673,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9754,7 +9708,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9789,7 +9743,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -9798,9 +9752,9 @@
     "variantId": "gid://shopify/ProductVariant/44407714480191",
     "handle": "keychains-purple-rose-stick",
     "name": "Purple Rose Stick",
-    "category": "Flowers",
+    "category": "Keychains",
     "rawCategory": "Keychains",
-    "group": "Flowers",
+    "group": "Keychains",
     "price": 250,
     "originalPrice": 909,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/pSVQ2Gkh_4ZYQXC03CH_2026-09-29_2.jpg?v=1793949889",
@@ -9824,7 +9778,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -9857,10 +9811,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -9892,10 +9846,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -9931,7 +9885,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -9963,10 +9917,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10002,7 +9956,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -10038,7 +9992,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10074,7 +10028,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -10106,10 +10060,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10145,10 +10099,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10179,10 +10133,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10215,9 +10169,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -10249,10 +10203,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10262,7 +10216,7 @@
     "handle": "plushies-duck-stick",
     "name": "Duck Stick",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 420,
     "originalPrice": 849,
@@ -10284,10 +10238,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -10320,10 +10275,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10359,7 +10314,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10393,7 +10348,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -10424,10 +10379,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10463,7 +10418,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10494,10 +10449,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10529,10 +10484,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10568,7 +10523,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10601,7 +10556,7 @@
     "tags": [
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor"
     ]
   },
   {
@@ -10634,10 +10589,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10673,7 +10628,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10706,10 +10661,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10741,10 +10696,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10780,7 +10735,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10789,9 +10744,9 @@
     "variantId": "gid://shopify/ProductVariant/44407755604031",
     "handle": "plushies-mini-duck-with-sunflower",
     "name": "Mini Duck With Sunflower",
-    "category": "Flowers",
+    "category": "Plushies",
     "rawCategory": "Plushies",
-    "group": "Flowers",
+    "group": "Plushies",
     "price": 689,
     "originalPrice": 1379,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/mbMC2Cli_M4ULS8SB8N_2026-09-29_1.jpg?v=1793949935",
@@ -10815,7 +10770,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -10847,10 +10802,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10883,10 +10838,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10919,10 +10874,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10955,10 +10910,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -10990,10 +10945,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11025,10 +10980,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11061,10 +11016,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11097,10 +11052,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11136,7 +11091,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -11172,7 +11127,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -11203,10 +11158,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11238,10 +11193,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11272,10 +11227,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11308,10 +11263,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11344,10 +11299,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11380,10 +11335,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11392,9 +11347,9 @@
     "variantId": "gid://shopify/ProductVariant/44407766483007",
     "handle": "home-decor-daisy-photo-frame",
     "name": "Daisy Photo Frame",
-    "category": "Flowers",
+    "category": "Home Decor",
     "rawCategory": "Home Decor",
-    "group": "Flowers",
+    "group": "Home Decor",
     "price": 899,
     "originalPrice": 1799,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/KMUelaj3_KIE5KHM2QC_2026-09-29_1.jpg?v=1793949958",
@@ -11418,7 +11373,7 @@
     "tags": [
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor"
     ]
   },
   {
@@ -11450,10 +11405,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11486,10 +11441,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11522,10 +11477,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11558,10 +11513,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bags",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bags"
     ]
   },
   {
@@ -11593,10 +11548,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11628,10 +11583,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11664,7 +11619,7 @@
     "tags": [
       "gift",
       "handmade",
-      "home-decor"
+      "knotsnco-collection-home-decor"
     ]
   },
   {
@@ -11697,10 +11652,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11732,10 +11687,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11771,7 +11726,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -11803,10 +11758,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11839,9 +11794,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -11877,7 +11832,7 @@
       "crochet",
       "gift",
       "handmade",
-      "keychains"
+      "knotsnco-collection-keychains"
     ]
   },
   {
@@ -11909,10 +11864,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11945,10 +11900,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -11985,7 +11940,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -11995,7 +11950,7 @@
     "handle": "plushies-yellow-mini-dino",
     "name": "Yellow Mini Dino",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 899,
     "originalPrice": 1799,
@@ -12019,10 +11974,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -12055,10 +12011,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12091,10 +12047,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12125,10 +12081,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12160,9 +12116,9 @@
     "featuredInHero": false,
     "tags": [
       "crochet",
-      "flowers",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-flowers"
     ]
   },
   {
@@ -12195,10 +12151,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12234,7 +12190,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -12267,10 +12223,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12306,7 +12262,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   },
   {
@@ -12339,46 +12295,10 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "bouquets",
       "crochet",
       "gift",
-      "handmade"
-    ]
-  },
-  {
-    "id": "gid://shopify/Product/8502152331327",
-    "shopifyId": "gid://shopify/Product/8502152331327",
-    "variantId": "gid://shopify/ProductVariant/44407795449919",
-    "handle": "flowers-xl-sunflower",
-    "name": "Xl Sunflower",
-    "category": "Bouquets",
-    "rawCategory": "Bouquets",
-    "group": "Bouquets",
-    "price": 550,
-    "originalPrice": 1109,
-    "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/qdGuVFbW_XM5UHUGRC6_2026-09-29_1.jpg?v=1793949993",
-    "images": [
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/qdGuVFbW_XM5UHUGRC6_2026-09-29_1.jpg?v=1793949993",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_mkBFjFRS_1791261138710_wqfzofqaqzsg8j4.jpg?v=1793949994",
-      "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_mkBFjFRS_1791261140008_lfq64ounm8amp80.jpg?v=1793949994"
-    ],
-    "rating": 4.8,
-    "reviewsCount": 63,
-    "badge": "50% off",
-    "description": "Make a bold and beautiful statement with our Handcrafted XL Sunflower Crochet. Designed with vibrant petals, a detailed centre, and a sturdy green stem, this oversized sunflower adds a cheerful and eye-catching touch to any bouquet or space. Each piece is lovingly handmade, making every flower unique and special.Unlike fresh flowers, this everlasting sunflower stays beautiful for years, making it a meaningful keepsake and a perfect symbol of happiness, warmth, and positivity. 🌻✨Perfect for: Statement bouquets, birthdays, anniversaries, gift hampers, home decor, special occasions & everlasting gifts.",
-    "details": [
-      "100% Handcrafted crochet piece",
-      "Made with love by artisans in Surat",
-      "Soft combed milk cotton yarn",
-      "Durable, everlasting & easy care"
-    ],
-    "inStock": true,
-    "featuredInHero": false,
-    "tags": [
-      "bouquets",
-      "crochet",
-      "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-bouquets"
     ]
   },
   {
@@ -12388,7 +12308,7 @@
     "handle": "plushies-crochet-batman-stick-pack-of-2",
     "name": "Crochet Batman Stick - Pack of 2",
     "category": "Plushies",
-    "rawCategory": "Characters",
+    "rawCategory": "Plushies",
     "group": "Plushies",
     "price": 239,
     "originalPrice": 479,
@@ -12398,7 +12318,7 @@
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/tD1paCCA_CY01LTFL4D_2026-09-29_2.jpg?v=1793949995"
     ],
     "rating": 4.8,
-    "reviewsCount": 70,
+    "reviewsCount": 63,
     "badge": "50% off",
     "description": "A Crochet Batman Stick is a fun and handcrafted decorative piece featuring a cute Batman-inspired crochet figure attached to a sturdy stick. Made with soft yarn and detailed stitching, it adds a playful touch to kids’ rooms, gift hampers, themed bouquets, or party decor. Lightweight and durable, this handmade stick is perfect for superhero fans and makes a unique, creative alternative to traditional toys or decorations.",
     "details": [
@@ -12410,10 +12330,11 @@
     "inStock": true,
     "featuredInHero": false,
     "tags": [
-      "characters",
       "crochet",
       "gift",
-      "handmade"
+      "handmade",
+      "knotsnco-collection-plushies",
+      "subtype-characters"
     ]
   },
   {
@@ -12425,7 +12346,7 @@
     "category": "Plushies",
     "rawCategory": "Plushies",
     "group": "Plushies",
-    "price": 1500,
+    "price": 1,
     "originalPrice": 3009,
     "image": "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/B76f9YjZ_2DZQBEBME2_2026-09-29_1.jpg?v=1793949996",
     "images": [
@@ -12433,7 +12354,7 @@
       "https://cdn.shopify.com/s/files/1/0688/9829/1775/files/B76f9YjZ_PYKKTHCN7N_2026-09-29_2.jpg?v=1793949995"
     ],
     "rating": 4.8,
-    "reviewsCount": 77,
+    "reviewsCount": 70,
     "badge": "50% off",
     "description": "Bring a fun foodie twist to your collection with our Handcrafted Crochet Momos Plushie. Made with soft, cozy plushie yarn, this adorable 7-inch momo-inspired plushie is designed to look cute, squishy, and irresistibly huggable.A unique statement piece for food lovers and anyone who enjoys quirky, aesthetic decor. 🥟✨Size: 7 InchesPerfect for: Room decor, desk decor, gifting, birthdays, food lovers, cute surprises & plushie collections.",
     "details": [
@@ -12448,7 +12369,7 @@
       "crochet",
       "gift",
       "handmade",
-      "plushies"
+      "knotsnco-collection-plushies"
     ]
   }
 ]

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useProducts } from '../context/ProductContext';
+import { normalizeCategory } from '../data/categories';
 
 interface CategoryItem {
   id: string;
@@ -15,8 +17,8 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'flowers',
     buttonLabel: 'FLOWERS',
-    count: 87,
-    badgeLine1: '87',
+    count: 89,
+    badgeLine1: '89',
     badgeLine2: 'ITEMS',
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ocn7Itf__1791261168121_zatq139exytyux3_889a38be-1947-4be8-9d7c-1c62855d22cc.jpg?v=1793949761',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_ocn7Itf__1791261168756_ky8iidjl0m9o7ve_2fab5bc4-8918-4d50-8a6e-07fbbbc81c26.jpg?v=1793949762',
@@ -41,8 +43,8 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'bouquets',
     buttonLabel: 'BOUQUETS',
-    count: 56,
-    badgeLine1: '56',
+    count: 55,
+    badgeLine1: '55',
     badgeLine2: 'ITEMS',
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171133_ppm15wu6ir03zlw.jpg?v=1793949877',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_DkNdEIUO_1791261171212_f0o9dx165knbcyv.jpg?v=1793949877',
@@ -118,8 +120,8 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'keychains',
     buttonLabel: 'KEYCHAINS',
-    count: 57,
-    badgeLine1: '57',
+    count: 55,
+    badgeLine1: '55',
     badgeLine2: 'ITEMS',
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TpmXihBW_1791261167432_2ekupxrps6ykckj.jpg?v=1793949860',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_TpmXihBW_1791261167458_j3kgqq6g5bvdqnu.jpg?v=1793949859',
@@ -194,8 +196,8 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: 'accessories',
     buttonLabel: 'ACCESSORIES',
-    count: 28,
-    badgeLine1: '28',
+    count: 26,
+    badgeLine1: '26',
     badgeLine2: 'ITEMS',
     image: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/yIeeMt1B_UHTT3669DS_2026-09-29_1_6fbf59d8-b422-46c9-831f-50b9737956e7.jpg?v=1793949750',
     hoverImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/yIeeMt1B_8LZ4YJUZLG_2026-09-29_2_2474a603-a2a9-4d75-ae0e-974f8c2d4b33.jpg?v=1793949749',
@@ -321,6 +323,31 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
   onShopAllClick,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const { products } = useProducts();
+
+  // Dynamically compute real-time counts from live Shopify products
+  const dynamicCategories = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of products) {
+      const normCat = normalizeCategory(p.category);
+      counts[normCat] = (counts[normCat] || 0) + 1;
+      if (p.rawCategory) {
+        const normRaw = normalizeCategory(p.rawCategory);
+        if (normRaw !== normCat) {
+          counts[normRaw] = (counts[normRaw] || 0) + 1;
+        }
+      }
+    }
+
+    return CATEGORIES.map((cat) => {
+      const liveCount = counts[normalizeCategory(cat.id)] ?? cat.count;
+      return {
+        ...cat,
+        count: liveCount,
+        badgeLine1: String(liveCount),
+      };
+    });
+  }, [products]);
 
   const handleAllClick = () => {
     if (onShopAllClick) {
@@ -451,7 +478,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
               Desktop: 4x2 Grid (lg:grid-cols-4)
               ========================================================================= */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6 pb-3 pt-1 px-1">
-            {CATEGORIES.map((cat) => {
+            {dynamicCategories.map((cat) => {
               const isHovered = hoveredCategory === cat.id;
 
               return (

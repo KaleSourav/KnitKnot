@@ -19,11 +19,14 @@ import { mapToMainCategory } from '../data/categories';
 
 const LS_CATALOG_KEY = 'knotsnco_live_catalog';
 const LS_CATALOG_TS_KEY = 'knotsnco_catalog_timestamp';
+const LS_CATALOG_VERSION_KEY = 'knotsnco_catalog_version';
+const CURRENT_CATALOG_VERSION = 'v_2026_11_22_351';
 
 // ─── Context Interface ───────────────────────────────────────────────────────
 
 interface ProductContextValue {
   products: ShopProduct[];
+  totalCount: number;
   isSyncing: boolean;
   lastSynced: Date | null;
   refreshProducts: () => Promise<void>;
@@ -229,11 +232,15 @@ function transformShopifyNode(
 function getInitialProducts(): ShopProduct[] {
   if (typeof window === 'undefined') return ALL_PRODUCTS;
   try {
-    const cached = localStorage.getItem(LS_CATALOG_KEY);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+    const cachedVer = localStorage.getItem(LS_CATALOG_VERSION_KEY);
+    // Prefer fresh build catalog if version does not match
+    if (cachedVer === CURRENT_CATALOG_VERSION) {
+      const cached = localStorage.getItem(LS_CATALOG_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
     }
   } catch {}
@@ -312,6 +319,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         try {
           localStorage.setItem(LS_CATALOG_KEY, JSON.stringify(transformed));
           localStorage.setItem(LS_CATALOG_TS_KEY, String(now.getTime()));
+          localStorage.setItem(LS_CATALOG_VERSION_KEY, CURRENT_CATALOG_VERSION);
         } catch {}
 
         console.log(`[Shopify Auto-Sync] Successfully synchronized ${transformed.length} live products.`);
@@ -409,6 +417,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     <ProductContext.Provider
       value={{
         products,
+        totalCount: products.length,
         isSyncing,
         lastSynced,
         refreshProducts,

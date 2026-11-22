@@ -24,7 +24,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     id: 'flowers',
     slug: 'flowers',
     name: 'Flowers',
-    count: 83,
+    count: 89,
     tagline: 'Flowers That Never Ghost You 🌸',
     description: 'Handcrafted single roses, pastel tulips, sunny sunflowers, lilies & daisies stitched with love by our Dadis.',
     image: '/products/bouquet.jpg',
@@ -52,7 +52,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     id: 'keychains-and-bag-charms',
     slug: 'keychains-and-bag-charms',
     name: 'Keychains & Bag Charms',
-    count: 46,
+    count: 55,
     tagline: 'Little Friends On The Go 🔑',
     description: 'Amigurumi fruit turtles, cute duckies, puffy floral charms, and lucky evil eyes to carry everywhere.',
     image: '/products/bunny.jpg',
@@ -66,7 +66,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     id: 'accessories',
     slug: 'accessories',
     name: 'Accessories',
-    count: 28,
+    count: 26,
     tagline: 'Wearable Handmade Art 🎀',
     description: 'Hand-knitted bandanas, dainty floral earrings, hair scrunchies & clips designed for playful Gen-Z styling.',
     image: '/products/accessories.jpg',
@@ -80,7 +80,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     id: 'bags',
     slug: 'bags',
     name: 'Bags',
-    count: 19,
+    count: 21,
     tagline: 'Statement Granny Square Totes 👜',
     description: 'Handcrafted floral tote bags, boho shoulder carryalls, and phone pouches stitched with durable cotton yarn.',
     image: '/products/tote.jpg',
@@ -94,7 +94,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     id: 'home-decor',
     slug: 'home-decor',
     name: 'Home Decor',
-    count: 36,
+    count: 32,
     tagline: 'Handmade Cozy Corners 🛋️',
     description: 'Cute crochet standees, fridge magnets, amigurumi characters & table centerpieces to brighten your room.',
     image: '/products/utility.jpg',
@@ -107,36 +107,48 @@ export const MAIN_CATEGORIES: MainCategory[] = [
 ];
 
 /**
- * Maps any raw product category or title to one of the 6 core Knotsnco categories.
+ * Normalizes any category string for consistent matching across UI components.
+ */
+export function normalizeCategory(cat?: string): string {
+  if (!cat) return '';
+  const cleaned = cat.toLowerCase().replace(/[-_]/g, ' ').trim();
+  if (cleaned === 'bouquet' || cleaned === 'bouquets') return 'bouquets';
+  if (cleaned === 'flower' || cleaned === 'flowers') return 'flowers';
+  if (cleaned === 'keychain' || cleaned === 'keychains' || cleaned === 'keychains and bag charms' || cleaned === 'bag charms' || cleaned === 'charms') return 'keychains';
+  if (cleaned === 'bag' || cleaned === 'bags') return 'bags';
+  if (cleaned === 'plushie' || cleaned === 'plushies' || cleaned === 'characters') return 'plushies';
+  if (cleaned === 'flower pot' || cleaned === 'flower pots' || cleaned === 'flower-pots' || cleaned === 'pots' || cleaned === 'vases') return 'flower pots';
+  if (cleaned === 'home decor' || cleaned === 'homedecor' || cleaned === 'decor') return 'home decor';
+  if (cleaned === 'accessory' || cleaned === 'accessories') return 'accessories';
+  return cleaned;
+}
+
+/**
+ * Maps any raw product category or title to one of the 8 core Knotsnco categories.
  */
 export function mapToMainCategory(rawCategory: string = '', title: string = ''): string {
-  const c = rawCategory.toLowerCase();
-  const t = title.toLowerCase();
+  const c = (rawCategory || '').toLowerCase();
+  const t = (title || '').toLowerCase();
 
-  if (c.includes('flower pot') || c.includes('pot') || c.includes('vase')) {
-    return 'Flower Pots';
-  }
-  if (c.includes('bouquet')) {
-    return 'Bouquets';
-  }
-  if (c.includes('flower') || c.includes('filler')) {
-    return 'Flowers';
-  }
-  if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm')) {
-    return 'Keychains';
-  }
-  if (c.includes('bag') && !c.includes('charm')) {
-    return 'Bags';
-  }
-  if (c.includes('plushie') || c.includes('character')) {
-    return 'Plushies';
-  }
-  if (c.includes('standee') || c.includes('magnet') || c.includes('decor')) {
-    return 'Home Decor';
-  }
-  if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory')) {
-    return 'Accessories';
-  }
+  // 1. Primary check: Respect Shopify productType/rawCategory if explicitly specified
+  if (c.includes('flower pot') || c.includes('pot') || c.includes('vase')) return 'Flower Pots';
+  if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm')) return 'Keychains';
+  if (c.includes('bag') || c.includes('tote')) return 'Bags';
+  if (c.includes('plushie') || c.includes('character')) return 'Plushies';
+  if (c.includes('standee') || c.includes('magnet') || c.includes('decor')) return 'Home Decor';
+  if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory')) return 'Accessories';
+  if (c.includes('bouquet')) return 'Bouquets';
+  if (c.includes('flower') || c.includes('filler')) return 'Flowers';
+
+  // 2. Secondary fallback: Title heuristics if rawCategory was ambiguous or empty
+  if (t.includes('bouquet')) return 'Bouquets';
+  if (t.includes('keychain') || t.includes('charm')) return 'Keychains';
+  if (t.includes('tote') || t.includes('bag') || t.includes('potli')) return 'Bags';
+  if (t.includes('plushie') || t.includes('duck') || t.includes('teddy')) return 'Plushies';
+  if (t.includes('magnet') || t.includes('frame') || t.includes('standee')) return 'Home Decor';
+  if (t.includes('clip') || t.includes('bandana') || t.includes('earring') || t.includes('stud') || t.includes('gajra') || t.includes('scrunchie')) return 'Accessories';
+  if (t.includes('pot') || t.includes('planter')) return 'Flower Pots';
+  if (t.includes('tulip') || t.includes('rose') || t.includes('sunflower') || t.includes('lily') || t.includes('daisy') || t.includes('flower')) return 'Flowers';
 
   return 'Flowers';
 }
