@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useProducts } from '../context/ProductContext';
-import { normalizeCategory } from '../data/categories';
+import { normalizeCategory, getShopifyCollection, SHOPIFY_COLLECTION_COUNTS } from '../data/categories';
 
 interface HeaderProps {
   onSearchClick?: () => void;
@@ -22,32 +22,28 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { products } = useProducts();
 
-  // Dynamic category counts calculated in real-time from Shopify products
+  // Dynamic category counts calculated in real-time matching Shopify Collections
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) {
-      const normCat = normalizeCategory(p.category);
-      counts[normCat] = (counts[normCat] || 0) + 1;
-      if (p.rawCategory) {
-        const normRaw = normalizeCategory(p.rawCategory);
-        if (normRaw !== normCat) {
-          counts[normRaw] = (counts[normRaw] || 0) + 1;
-        }
+      const col = getShopifyCollection(p);
+      if (col) {
+        counts[col] = (counts[col] || 0) + 1;
       }
     }
     return counts;
   }, [products]);
 
-  // 8 Main Product Categories for Menu Drawer with live dynamic counts
+  // 8 Main Product Categories for Menu Drawer with live dynamic counts matching Shopify
   const categories = useMemo(() => [
-    { id: 'flowers', label: 'flowers', count: categoryCounts['flowers'] ?? 89, category: 'Flowers' },
-    { id: 'bouquets', label: 'bouquets', count: categoryCounts['bouquets'] ?? 55, category: 'Bouquets' },
-    { id: 'plushies', label: 'plushies', count: categoryCounts['plushies'] ?? 33, category: 'Plushies' },
-    { id: 'bags', label: 'bags', count: categoryCounts['bags'] ?? 21, category: 'Bags' },
-    { id: 'keychains', label: 'keychains', count: categoryCounts['keychains'] ?? 55, category: 'Keychains' },
-    { id: 'flower-pots', label: 'flower pots', count: categoryCounts['flower pots'] ?? 40, category: 'Flower Pots' },
-    { id: 'home-decor', label: 'home decor', count: categoryCounts['home decor'] ?? 32, category: 'Home Decor' },
-    { id: 'accessories', label: 'accessories', count: categoryCounts['accessories'] ?? 26, category: 'Accessories' },
+    { id: 'flowers', label: 'flowers', count: categoryCounts['flowers'] ?? SHOPIFY_COLLECTION_COUNTS['flowers'] ?? 87, category: 'Flowers' },
+    { id: 'bouquets', label: 'bouquets', count: categoryCounts['bouquets'] ?? SHOPIFY_COLLECTION_COUNTS['bouquets'] ?? 42, category: 'Bouquets' },
+    { id: 'plushies', label: 'plushies', count: categoryCounts['plushies'] ?? SHOPIFY_COLLECTION_COUNTS['plushies'] ?? 33, category: 'Plushies' },
+    { id: 'bags', label: 'bags', count: categoryCounts['bags'] ?? SHOPIFY_COLLECTION_COUNTS['bags'] ?? 21, category: 'Bags' },
+    { id: 'keychains', label: 'keychains', count: categoryCounts['keychains'] ?? SHOPIFY_COLLECTION_COUNTS['keychains'] ?? 48, category: 'Keychains' },
+    { id: 'flower-pots', label: 'flower pots', count: categoryCounts['flower pots'] ?? SHOPIFY_COLLECTION_COUNTS['flower pots'] ?? 40, category: 'Flower Pots' },
+    { id: 'home-decor', label: 'home decor', count: categoryCounts['home decor'] ?? SHOPIFY_COLLECTION_COUNTS['home decor'] ?? 30, category: 'Home Decor' },
+    { id: 'accessories', label: 'accessories', count: categoryCounts['accessories'] ?? SHOPIFY_COLLECTION_COUNTS['accessories'] ?? 28, category: 'Accessories' },
   ], [categoryCounts]);
 
   // Smooth scroll handler for "Story" section on Homepage

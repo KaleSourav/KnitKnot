@@ -34,29 +34,104 @@ function getEnv() {
 const env = getEnv();
 const ENDPOINT = `https://${env.domain}/api/${env.version}/graphql.json`;
 
-function mapToMainCategory(rawCategory = '', title = '') {
-  const c = (rawCategory || '').toLowerCase();
-  const t = (title || '').toLowerCase();
+const EXCLUDED_BOUQUET_TITLES = new Set([
+  'Pink Daisy',
+  'Big Leaf',
+  'Rounded Leaf',
+  'Sunflower With Honeybee Pot',
+  'Shaded Rose Peach - Pack of 2',
+  'Regular Sunflower',
+  'Tiger Lily White',
+  'Mod Leaf',
+  'White Tulip',
+  'Shaded Lily',
+  'Jasmine Filler',
+  'Rose Blue',
+  'Tiger Lily Red',
+]);
 
-  // 1. Primary check: Respect Shopify productType/rawCategory if explicitly specified
-  if (c.includes('flower pot') || c.includes('pot') || c.includes('vase')) return 'Flower Pots';
-  if (c.includes('keychain') || c.includes('bag charm') || c.includes('charm')) return 'Keychains';
-  if (c.includes('bag') || c.includes('tote')) return 'Bags';
-  if (c.includes('plushie') || c.includes('character')) return 'Plushies';
-  if (c.includes('standee') || c.includes('magnet') || c.includes('decor')) return 'Home Decor';
-  if (c.includes('hair') || c.includes('bandana') || c.includes('earring') || c.includes('accessory')) return 'Accessories';
-  if (c.includes('bouquet')) return 'Bouquets';
-  if (c.includes('flower') || c.includes('filler')) return 'Flowers';
+const EXCLUDED_KEYCHAIN_TITLES = new Set([
+  'Maroon Puffy Flower Charm',
+  'Pink Puffy Flower Charm',
+  'Yellow Puffy Flower Charm',
+  'Bell Bottom Flower Charm',
+  'Evil Eye Charm',
+  'Rose Bag Charm',
+  'Spiderman Car Charm',
+]);
 
-  // 2. Secondary fallback: Title heuristics if rawCategory was ambiguous or empty
-  if (t.includes('bouquet')) return 'Bouquets';
-  if (t.includes('keychain') || t.includes('charm')) return 'Keychains';
-  if (t.includes('tote') || t.includes('bag') || t.includes('potli')) return 'Bags';
-  if (t.includes('plushie') || t.includes('duck') || t.includes('teddy')) return 'Plushies';
-  if (t.includes('magnet') || t.includes('frame') || t.includes('standee')) return 'Home Decor';
-  if (t.includes('clip') || t.includes('bandana') || t.includes('earring') || t.includes('stud') || t.includes('gajra') || t.includes('scrunchie')) return 'Accessories';
-  if (t.includes('pot') || t.includes('planter')) return 'Flower Pots';
-  if (t.includes('tulip') || t.includes('rose') || t.includes('sunflower') || t.includes('lily') || t.includes('daisy') || t.includes('flower')) return 'Flowers';
+const EXCLUDED_HOME_DECOR_TITLES = new Set([
+  'Puffy Sunflower Frame',
+  'Daisy Photo Frame',
+]);
+
+function getShopifyCollection(node) {
+  const title = (node.title || node.name || '').trim();
+  const tags = (node.tags || []).map((t) => t.toLowerCase().trim());
+
+  for (const t of tags) {
+    if (t === 'knotsnco-collection-flowers' || t === 'flowers') return 'flowers';
+    if (t === 'knotsnco-collection-bouquets' || t === 'bouquets') {
+      if (EXCLUDED_BOUQUET_TITLES.has(title)) return null;
+      return 'bouquets';
+    }
+    if (t === 'knotsnco-collection-keychains' || t === 'keychains') {
+      if (EXCLUDED_KEYCHAIN_TITLES.has(title)) return null;
+      return 'keychains';
+    }
+    if (t === 'knotsnco-collection-flower-pots' || t === 'flower pots' || t === 'flower-pots') return 'flower pots';
+    if (t === 'knotsnco-collection-plushies' || t === 'plushies') return 'plushies';
+    if (t === 'knotsnco-collection-home-decor' || t === 'home decor' || t === 'home-decor') {
+      if (EXCLUDED_HOME_DECOR_TITLES.has(title)) return null;
+      return 'home decor';
+    }
+    if (t === 'knotsnco-collection-bags' || t === 'bags') return 'bags';
+    if (t === 'knotsnco-collection-accessories' || t === 'accessories') return 'accessories';
+  }
+
+  const type = (node.productType || node.rawCategory || '').toLowerCase().trim();
+  const lowerTitle = title.toLowerCase();
+
+  if (type.includes('flower pot') || type.includes('pot') || lowerTitle.includes('flower pot') || lowerTitle.includes('planter')) return 'flower pots';
+  if (type.includes('keychain') || lowerTitle.includes('keychain')) {
+    if (EXCLUDED_KEYCHAIN_TITLES.has(title)) return null;
+    return 'keychains';
+  }
+  if (type.includes('tote') || type.includes('bag') || lowerTitle.includes('tote') || lowerTitle.includes('bag') || lowerTitle.includes('potli')) return 'bags';
+  if (type.includes('plushie') || type.includes('character') || lowerTitle.includes('plushie') || lowerTitle.includes('duck') || lowerTitle.includes('teddy')) return 'plushies';
+  if (type.includes('standee') || type.includes('magnet') || type.includes('decor') || lowerTitle.includes('magnet') || lowerTitle.includes('standee')) {
+    if (EXCLUDED_HOME_DECOR_TITLES.has(title)) return null;
+    return 'home decor';
+  }
+  if (type.includes('hair') || type.includes('bandana') || type.includes('earring') || type.includes('clip') || type.includes('gajra') || lowerTitle.includes('clip') || lowerTitle.includes('bandana') || lowerTitle.includes('earring') || lowerTitle.includes('stud') || lowerTitle.includes('gajra') || lowerTitle.includes('scrunchie')) return 'accessories';
+  if (type.includes('bouquet') || lowerTitle.includes('bouquet')) {
+    if (EXCLUDED_BOUQUET_TITLES.has(title)) return null;
+    return 'bouquets';
+  }
+  if (type.includes('flower') || lowerTitle.includes('rose') || lowerTitle.includes('tulip') || lowerTitle.includes('sunflower') || lowerTitle.includes('lily') || lowerTitle.includes('daisy')) return 'flowers';
+
+  return null;
+}
+
+function mapToMainCategory(rawCategory = '', title = '', tags = []) {
+  const col = getShopifyCollection({ productType: rawCategory, rawCategory, title, name: title, tags });
+  if (col) {
+    switch (col) {
+      case 'flowers': return 'Flowers';
+      case 'bouquets': return 'Bouquets';
+      case 'keychains': return 'Keychains';
+      case 'flower pots': return 'Flower Pots';
+      case 'plushies': return 'Plushies';
+      case 'home decor': return 'Home Decor';
+      case 'bags': return 'Bags';
+      case 'accessories': return 'Accessories';
+    }
+  }
+
+  const t = title.trim();
+  if (EXCLUDED_BOUQUET_TITLES.has(t)) return 'Bouquet Stems';
+  if (EXCLUDED_KEYCHAIN_TITLES.has(t)) return 'Bag Charms';
+  if (EXCLUDED_HOME_DECOR_TITLES.has(t)) return 'Home Decor Frames';
 
   return 'Flowers';
 }
@@ -223,7 +298,7 @@ async function syncCatalog() {
       discount = `${pct}% OFF`;
     }
 
-    const category = mapToMainCategory(node.productType, node.title);
+    const category = mapToMainCategory(node.productType, node.title, node.tags || []);
     const colors = deriveColors(node.title, node.tags || []);
     const occasions = deriveOccasions(node.title, category);
 

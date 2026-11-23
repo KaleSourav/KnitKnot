@@ -20,7 +20,7 @@ import { mapToMainCategory } from '../data/categories';
 const LS_CATALOG_KEY = 'knotsnco_live_catalog';
 const LS_CATALOG_TS_KEY = 'knotsnco_catalog_timestamp';
 const LS_CATALOG_VERSION_KEY = 'knotsnco_catalog_version';
-const CURRENT_CATALOG_VERSION = 'v_2026_11_22_351';
+const CURRENT_CATALOG_VERSION = 'v_2026_11_23_351_collections';
 
 // ─── Context Interface ───────────────────────────────────────────────────────
 
@@ -197,7 +197,7 @@ function transformShopifyNode(
     discount = `${pct}% OFF`;
   }
 
-  const category = mapToMainCategory(node.productType, node.title);
+  const category = mapToMainCategory(node.productType, node.title, node.tags);
 
   const desc = (node.description || existing?.description || 'Handmade crochet, crafted with love by our artisans in Surat.')
     .replace(/\r?\n|\r/g, ' ')

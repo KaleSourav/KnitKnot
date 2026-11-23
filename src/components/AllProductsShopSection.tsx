@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ShopProduct } from '../data/allProductsData';
 import { useProducts } from '../context/ProductContext';
-import { normalizeCategory } from '../data/categories';
+import { normalizeCategory, getShopifyCollection, SHOPIFY_COLLECTION_COUNTS } from '../data/categories';
 import { ProductCard } from './ProductCard';
 
 interface AllProductsShopSectionProps {
@@ -60,17 +60,13 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   // Live products automatically synced from Shopify Storefront API
   const { products, isSyncing, refreshProducts } = useProducts();
 
-  // Dynamic counts derived from real Shopify products with normalized categories
+  // Dynamic counts derived from real Shopify products matching Shopify Collections
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) {
-      const normCat = normalizeCategory(p.category);
-      counts[normCat] = (counts[normCat] || 0) + 1;
-      if (p.rawCategory) {
-        const normRaw = normalizeCategory(p.rawCategory);
-        if (normRaw !== normCat) {
-          counts[normRaw] = (counts[normRaw] || 0) + 1;
-        }
+      const col = getShopifyCollection(p);
+      if (col) {
+        counts[col] = (counts[col] || 0) + 1;
       }
     }
     return counts;
@@ -199,13 +195,12 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Category filter with normalized comparison
+    // Category filter with exact Shopify Collection comparison
     if (selectedCategories.length > 0) {
       const normalizedTargets = selectedCategories.map(normalizeCategory);
       result = result.filter((p) => {
-        const prodCat = normalizeCategory(p.category);
-        const prodRaw = p.rawCategory ? normalizeCategory(p.rawCategory) : '';
-        return normalizedTargets.includes(prodCat) || (prodRaw && normalizedTargets.includes(prodRaw));
+        const col = getShopifyCollection(p);
+        return col ? normalizedTargets.includes(col) : false;
       });
     }
 
@@ -510,7 +505,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                       const isChecked = selectedCategories.some(
                         (sc) => normalizeCategory(sc) === normalizeCategory(cat.id)
                       );
-                      const count = categoryCounts[normalizeCategory(cat.id)] || 0;
+                      const count = categoryCounts[normalizeCategory(cat.id)] ?? SHOPIFY_COLLECTION_COUNTS[normalizeCategory(cat.id)] ?? 0;
 
                       return (
                         <label
@@ -825,7 +820,7 @@ export const AllProductsShopSection: React.FC<AllProductsShopSectionProps> = ({
                     const isChecked = selectedCategories.some(
                       (sc) => normalizeCategory(sc) === normalizeCategory(cat.id)
                     );
-                    const count = categoryCounts[normalizeCategory(cat.id)] || 0;
+                    const count = categoryCounts[normalizeCategory(cat.id)] ?? SHOPIFY_COLLECTION_COUNTS[normalizeCategory(cat.id)] ?? 0;
 
                     return (
                       <label
