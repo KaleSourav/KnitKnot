@@ -18,6 +18,7 @@ export interface ExtendedRequest extends Request {
 }
 
 export const app = express();
+export const apiRouter = express.Router();
 
 // Enable CORS headers for development and storefront
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -45,19 +46,20 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Health Endpoint ─────────────────────────────────────────────────────────
+// ─── 1. Health Endpoint ───────────────────────────────────────────────────────
 
-app.get('/api/health', (_req: Request, res: Response) => {
+apiRouter.get('/health', (_req: Request, res: Response) => {
   res.json({
     status: 'ok',
     store: 'Knotsnco Headless Storefront',
     timestamp: new Date().toISOString(),
+    runtime: process.env.VERCEL ? 'vercel-serverless' : 'node-server',
   });
 });
 
-// ─── PART 2: Create Pending Order Before Payment ─────────────────────────────
+// ─── 2. Create Pending Order Before Payment ───────────────────────────────────
 
-app.post('/api/checkout/create-order', async (req: Request, res: Response): Promise<void> => {
+apiRouter.post('/checkout/create-order', async (req: Request, res: Response): Promise<void> => {
   try {
     const { items, customer, shippingAddress, billingAddress, mode = 'standard' } = req.body;
 
@@ -100,9 +102,7 @@ app.post('/api/checkout/create-order', async (req: Request, res: Response): Prom
       };
     });
 
-    // Free shipping threshold: Free shipping if subtotal >= ₹1,999, else ₹99 (or 0 if promotion)
-    // Note: Knotsnco gives Free Shipping across India on qualifying orders
-    const shippingCharge = subtotal >= 1999 ? 0 : 0; // Currently free delivery across India for standard orders
+    const shippingCharge = subtotal >= 1999 ? 0 : 0; // Standard free delivery across India
     const discount = 0;
     const taxes = 0; // Prices are all-inclusive of taxes
     const finalAmount = Math.max(1, subtotal + shippingCharge - discount);
@@ -200,7 +200,7 @@ app.post('/api/checkout/create-order', async (req: Request, res: Response): Prom
     }
 
     // Persist pending order to durable DB
-    db.saveOrder(pendingOrder);
+    await db.saveOrder(pendingOrder);
 
     const { keyId } = getRazorpayConfig();
 
@@ -225,9 +225,9 @@ app.post('/api/checkout/create-order', async (req: Request, res: Response): Prom
   }
 });
 
-// ─── PART 3: Case A — Razorpay Standard Checkout Verification Endpoint ──────
+// ─── 3. Razorpay Standard Checkout Verification Endpoint ─────────────────────
 
-app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Promise<void> => {
+apiRouter.post('/checkout/verify-payment', async (req: Request, res: Response): Promise<void> => {
   try {
     const { orderReference, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -236,7 +236,7 @@ app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Pr
       return;
     }
 
-    const order = db.getOrderByReference(orderReference);
+    const order = await db.getOrderByReference(orderReference);
     if (!order) {
       res.status(404).json({ error: `Order with reference ${orderReference} not found.` });
       return;
@@ -285,7 +285,7 @@ app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Pr
       method: payment.method || 'online',
       paidAt: new Date().toISOString(),
     };
-    db.saveOrder(order);
+    await db.saveOrder(order);
 
     // Call Shopify Admin GraphQL API to create the order
     try {
@@ -296,7 +296,7 @@ app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Pr
         orderNumber: shopifyOrder.orderNumber,
         createdAt: shopifyOrder.createdAt,
       };
-      db.saveOrder(order);
+      await db.saveOrder(order);
 
       res.json({
         success: true,
@@ -309,9 +309,9 @@ app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Pr
       order.shopify = {
         error: shopifyError.message,
       };
-      db.saveOrder(order);
+      await db.saveOrder(order);
 
-      // Return success with pending sync so user still gets a friendly confirmation
+      // Return success with pending sync so customer still gets a friendly confirmation
       res.json({
         success: true,
         orderReference: order.orderReference,
@@ -325,9 +325,9 @@ app.post('/api/checkout/verify-payment', async (req: Request, res: Response): Pr
   }
 });
 
-// ─── PART 3: Case B — Razorpay Payment Link GET Callback ────────────────────
+// ─── 4. Razorpay Payment Link GET Callback ───────────────────────────────────
 
-app.get('/api/checkout/callback', async (req: Request, res: Response): Promise<void> => {
+apiRouter.get('/checkout/callback', async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       razorpay_payment_id,
@@ -344,9 +344,9 @@ app.get('/api/checkout/callback', async (req: Request, res: Response): Promise<v
     const signature = String(razorpay_signature || '');
 
     const order = referenceId
-      ? db.getOrderByReference(referenceId)
+      ? await db.getOrderByReference(referenceId)
       : linkId
-      ? db.getOrderByPaymentLinkId(linkId)
+      ? await db.getOrderByPaymentLinkId(linkId)
       : undefined;
 
     const frontendBaseUrl =
@@ -388,7 +388,7 @@ app.get('/api/checkout/callback', async (req: Request, res: Response): Promise<v
         signature,
         paidAt: new Date().toISOString(),
       };
-      db.saveOrder(order);
+      await db.saveOrder(order);
 
       try {
         const shopifyOrder = await createShopifyAdminOrder(order, paymentId);
@@ -398,11 +398,11 @@ app.get('/api/checkout/callback', async (req: Request, res: Response): Promise<v
           orderNumber: shopifyOrder.orderNumber,
           createdAt: shopifyOrder.createdAt,
         };
-        db.saveOrder(order);
+        await db.saveOrder(order);
       } catch (err: any) {
         console.error(`[Callback] Shopify order creation error: ${err.message}`);
         order.shopify = { error: err.message };
-        db.saveOrder(order);
+        await db.saveOrder(order);
       }
     }
 
@@ -413,9 +413,9 @@ app.get('/api/checkout/callback', async (req: Request, res: Response): Promise<v
   }
 });
 
-// ─── PART 4: Razorpay Webhook Endpoint ───────────────────────────────────────
+// ─── 5. Razorpay Webhook Endpoint ────────────────────────────────────────────
 
-app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): Promise<void> => {
+apiRouter.post('/webhooks/razorpay', async (req: ExtendedRequest, res: Response): Promise<void> => {
   try {
     const signature = req.headers['x-razorpay-signature'] as string;
     const eventId = req.headers['x-razorpay-event-id'] as string;
@@ -426,8 +426,14 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
       return;
     }
 
-    const rawBody = req.rawBody;
-    if (!rawBody) {
+    // Capture raw body buffer safely across express.json or serverless pre-parsing
+    const rawBody =
+      req.rawBody ||
+      (Buffer.isBuffer(req.body)
+        ? req.body
+        : Buffer.from(typeof req.body === 'string' ? req.body : JSON.stringify(req.body)));
+
+    if (!rawBody || rawBody.length === 0) {
       console.error('[Webhook] Raw request body not available for signature verification.');
       res.status(500).json({ error: 'Server misconfiguration: Raw body required.' });
       return;
@@ -442,13 +448,13 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
     }
 
     // Deduplication check: if eventId was already processed, ignore
-    if (eventId && db.hasWebhookEvent(eventId)) {
+    if (eventId && (await db.hasWebhookEvent(eventId))) {
       console.log(`[Webhook] Duplicate event ${eventId} received. Skipping.`);
       res.status(200).json({ status: 'duplicate_ignored', eventId });
       return;
     }
 
-    const event = req.body;
+    const event = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const eventType = event.event;
     console.log(`[Webhook] Processing Razorpay event: ${eventType} (ID: ${eventId || 'unknown'})`);
 
@@ -469,11 +475,11 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
       let targetOrder: InternalOrder | undefined;
 
       if (orderReference) {
-        targetOrder = db.getOrderByReference(orderReference);
+        targetOrder = await db.getOrderByReference(orderReference);
       } else if (order?.id) {
-        targetOrder = db.getOrderByRazorpayOrderId(order.id);
+        targetOrder = await db.getOrderByRazorpayOrderId(order.id);
       } else if (paymentId) {
-        targetOrder = db.getOrderByPaymentId(paymentId);
+        targetOrder = await db.getOrderByPaymentId(paymentId);
       }
 
       if (targetOrder) {
@@ -489,7 +495,7 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
             method: payment?.method || targetOrder.razorpay?.method,
             paidAt: new Date().toISOString(),
           };
-          db.saveOrder(targetOrder);
+          await db.saveOrder(targetOrder);
 
           try {
             const shopifyOrder = await createShopifyAdminOrder(targetOrder, paymentId || 'webhook_captured');
@@ -499,12 +505,12 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
               orderNumber: shopifyOrder.orderNumber,
               createdAt: shopifyOrder.createdAt,
             };
-            db.saveOrder(targetOrder);
+            await db.saveOrder(targetOrder);
             console.log(`[Webhook] Created Shopify order ${shopifyOrder.orderNumber} for ${targetOrder.orderReference}`);
           } catch (shopErr: any) {
             console.error(`[Webhook] Error creating Shopify order: ${shopErr.message}`);
             targetOrder.shopify = { error: shopErr.message };
-            db.saveOrder(targetOrder);
+            await db.saveOrder(targetOrder);
           }
         }
       }
@@ -516,8 +522,8 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
       orderReference = pLink?.reference_id || pLink?.notes?.orderReference;
 
       const targetOrder = orderReference
-        ? db.getOrderByReference(orderReference)
-        : db.getOrderByPaymentLinkId(pLink?.id);
+        ? await db.getOrderByReference(orderReference)
+        : await db.getOrderByPaymentLinkId(pLink?.id);
 
       if (targetOrder) {
         if (targetOrder.status !== 'PAID' || !targetOrder.shopify?.orderNumber) {
@@ -528,7 +534,7 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
             paymentId,
             paidAt: new Date().toISOString(),
           };
-          db.saveOrder(targetOrder);
+          await db.saveOrder(targetOrder);
 
           try {
             const shopifyOrder = await createShopifyAdminOrder(targetOrder, paymentId || 'plink_captured');
@@ -537,7 +543,7 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
               orderNumber: shopifyOrder.orderNumber,
               createdAt: shopifyOrder.createdAt,
             };
-            db.saveOrder(targetOrder);
+            await db.saveOrder(targetOrder);
           } catch (err: any) {
             console.error(`[Webhook] Payment link Shopify creation error: ${err.message}`);
           }
@@ -547,7 +553,7 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
 
     // Record webhook event for deduplication
     if (eventId) {
-      db.recordWebhookEvent({
+      await db.recordWebhookEvent({
         eventId,
         eventType,
         orderReference,
@@ -564,11 +570,11 @@ app.post('/api/webhooks/razorpay', async (req: ExtendedRequest, res: Response): 
   }
 });
 
-// ─── PART 6: Public Order Lookup & Polling Endpoint ─────────────────────────
+// ─── 6. Public Order Lookup & Polling Endpoint ───────────────────────────────
 
-app.get('/api/orders/:orderReference', (req: Request, res: Response): void => {
+apiRouter.get('/orders/:orderReference', async (req: Request, res: Response): Promise<void> => {
   const { orderReference } = req.params;
-  const order = db.getOrderByReference(orderReference);
+  const order = await db.getOrderByReference(orderReference);
 
   if (!order) {
     res.status(404).json({ error: 'Order not found' });
@@ -601,3 +607,13 @@ app.get('/api/orders/:orderReference', (req: Request, res: Response): void => {
     },
   });
 });
+
+// ─── Mount Router ────────────────────────────────────────────────────────────
+
+// Mounting on both '/api' and '/' guarantees complete compatibility:
+// - Direct Express / proxy calls (e.g. GET /api/health) match on '/api'
+// - Vercel Serverless Function rewrites (e.g. /api/(.*) -> /api) match on '/' or '/api'
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
+
+export default app;
