@@ -6,6 +6,57 @@ export interface ShopifyAdminConfig {
   apiVersion: string;
 }
 
+let cachedAdminToken: { token: string; expiresAt: number } | null = null;
+
+export async function getShopifyAdminAccessToken(): Promise<string> {
+  const directToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+  if (directToken && directToken !== 'mock_admin_token') {
+    return directToken;
+  }
+
+  const clientId = process.env.SHOPIFY_CLIENT_ID;
+  const clientSecret = process.env.SHOPIFY_CLIENT_SECRET;
+  const storeDomain =
+    process.env.SHOPIFY_STORE_DOMAIN ||
+    process.env.VITE_SHOPIFY_STORE_DOMAIN ||
+    '04wv6h-ut.myshopify.com';
+
+  if (clientId && clientSecret) {
+    const now = Date.now();
+    if (cachedAdminToken && cachedAdminToken.expiresAt > now + 60000) {
+      return cachedAdminToken.token;
+    }
+
+    try {
+      const res = await fetch(`https://${storeDomain}/admin/oauth/access_token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          grant_type: 'client_credentials',
+        }),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as any;
+        if (data.access_token) {
+          const expiresInMs = (data.expires_in || 86400) * 1000;
+          cachedAdminToken = {
+            token: data.access_token,
+            expiresAt: now + expiresInMs,
+          };
+          return data.access_token;
+        }
+      }
+    } catch (err) {
+      console.error('[ShopifyAdmin] Failed to exchange client credentials for access token:', err);
+    }
+  }
+
+  return directToken || '';
+}
+
 export function getShopifyAdminConfig(): ShopifyAdminConfig {
   const storeDomain =
     process.env.SHOPIFY_STORE_DOMAIN ||
@@ -148,7 +199,8 @@ export async function createShopifyAdminOrder(
   order: InternalOrder,
   razorpayPaymentId: string
 ): Promise<CreatedShopifyOrderResult> {
-  const { storeDomain, adminAccessToken, apiVersion } = getShopifyAdminConfig();
+  const { storeDomain, apiVersion } = getShopifyAdminConfig();
+  const adminAccessToken = await getShopifyAdminAccessToken();
 
   // If already created (Idempotency safeguard)
   if (order.shopify?.orderId && order.shopify?.orderNumber) {
