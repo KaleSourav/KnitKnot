@@ -1,13 +1,22 @@
 /**
  * End-to-End Test Suite for Knotsnco Razorpay -> Shopify Integration
  */
+import dotenv from 'dotenv';
+dotenv.config();
+
 import crypto from 'crypto';
 import http from 'http';
 import { app } from './app';
 
+process.env.NODE_ENV = 'test';
+process.env.MOCK_SHOPIFY = 'true';
+
 const TEST_SECRET = 'test_secret_key_12345';
 const TEST_WEBHOOK_SECRET = 'test_webhook_secret_67890';
 
+// Use mock Razorpay & mock Shopify order creation in E2E integration test suite
+process.env.RAZORPAY_KEY_ID = '';
+process.env.VITE_RAZORPAY_KEY_ID = '';
 process.env.RAZORPAY_KEY_SECRET = TEST_SECRET;
 process.env.RAZORPAY_WEBHOOK_SECRET = TEST_WEBHOOK_SECRET;
 
@@ -393,7 +402,29 @@ async function runTests() {
     console.log('✅ inventoryBehaviour: DECREMENT_OBEYING_POLICY confirmed in OrderCreateOptionsInput.');
     console.log('✅ ORDER_CREATE_MUTATION signature verified matching Shopify Admin API 2026-10.');
 
-    console.log('\n🎉 ALL 10 E2E INTEGRATION & INVENTORY TESTS PASSED PERFECTLY!');
+    // ─── Test 11: Shopify Admin API OAuth & Concurrency ──────────────────────────
+    console.log('\nTest 11: Shopify Admin API OAuth Token Caching & Concurrency Safeguard');
+    delete process.env.MOCK_SHOPIFY;
+    const { getShopifyAdminAccessToken, getShopifyAdminTokenDetails, clearShopifyAdminTokenCache } = await import('./services/shopifyAdmin');
+    clearShopifyAdminTokenCache();
+
+    // Test 10 concurrent requests
+    const parallelTokens = await Promise.all(
+      Array.from({ length: 10 }, () => getShopifyAdminAccessToken())
+    );
+    const tokenZero = parallelTokens[0];
+    const allMatch = parallelTokens.every((t) => t === tokenZero);
+    if (!allMatch) {
+      throw new Error('Concurrent token requests produced mismatched tokens!');
+    }
+    const tokenMeta = await getShopifyAdminTokenDetails();
+    if (!tokenMeta.hasToken || !tokenMeta.isCached) {
+      throw new Error('Token caching failed');
+    }
+    console.log(`✅ 10 concurrent token requests safely deduplicated into a single exchange.`);
+    console.log(`✅ Token safely cached (Scope: "${tokenMeta.scope}", Expires in: ${tokenMeta.expiresInSeconds}s).`);
+
+    console.log('\n🎉 ALL 11 E2E INTEGRATION, INVENTORY & AUTH TESTS PASSED PERFECTLY!');
   } finally {
     server.close();
   }

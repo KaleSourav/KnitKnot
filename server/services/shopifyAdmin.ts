@@ -2,18 +2,36 @@ import { InternalOrder } from '../types';
 
 export interface ShopifyAdminConfig {
   storeDomain: string;
-  adminAccessToken: string;
   apiVersion: string;
 }
 
-let cachedAdminToken: { token: string; expiresAt: number } | null = null;
+interface CachedAdminToken {
+  token: string;
+  expiresAt: number; // millisecond timestamp
+  scope?: string;
+}
 
-export async function getShopifyAdminAccessToken(): Promise<string> {
-  const directToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-  if (directToken && directToken !== 'mock_admin_token') {
-    return directToken;
-  }
+// In-memory token cache (never persisted, expires with the node process or TTL)
+let cachedAdminToken: CachedAdminToken | null = null;
 
+// Concurrency mutex: in-flight Promise so parallel requests share one token exchange
+let inFlightTokenPromise: Promise<string> | null = null;
+
+/**
+ * Resets the in-memory token cache (useful for testing or forced refresh)
+ */
+export function clearShopifyAdminTokenCache(): void {
+  cachedAdminToken = null;
+  inFlightTokenPromise = null;
+}
+
+/**
+ * Internal worker to request a new access token via Shopify's Client Credentials Grant:
+ * POST https://{store-domain}/admin/oauth/access_token
+ * Content-Type: application/x-www-form-urlencoded
+ * Body: grant_type=client_credentials&client_id=...&client_secret=...
+ */
+async function fetchNewAccessToken(): Promise<string> {
   const clientId = process.env.SHOPIFY_CLIENT_ID;
   const clientSecret = process.env.SHOPIFY_CLIENT_SECRET;
   const storeDomain =
@@ -21,40 +39,149 @@ export async function getShopifyAdminAccessToken(): Promise<string> {
     process.env.VITE_SHOPIFY_STORE_DOMAIN ||
     '04wv6h-ut.myshopify.com';
 
-  if (clientId && clientSecret) {
-    const now = Date.now();
-    if (cachedAdminToken && cachedAdminToken.expiresAt > now + 60000) {
-      return cachedAdminToken.token;
-    }
-
-    try {
-      const res = await fetch(`https://${storeDomain}/admin/oauth/access_token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'client_credentials',
-        }),
-      });
-
-      if (res.ok) {
-        const data = (await res.json()) as any;
-        if (data.access_token) {
-          const expiresInMs = (data.expires_in || 86400) * 1000;
-          cachedAdminToken = {
-            token: data.access_token,
-            expiresAt: now + expiresInMs,
-          };
-          return data.access_token;
-        }
-      }
-    } catch (err) {
-      console.error('[ShopifyAdmin] Failed to exchange client credentials for access token:', err);
-    }
+  if (process.env.MOCK_SHOPIFY === 'true') {
+    return 'mock_admin_token';
   }
 
-  return directToken || '';
+  if (!clientId || !clientSecret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        '[ShopifyAdmin] Missing credentials: SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET are required in production.'
+      );
+    }
+    return 'mock_admin_token';
+  }
+
+  const tokenEndpoint = `https://${storeDomain}/admin/oauth/access_token`;
+  const params = new URLSearchParams({
+    grant_type: 'client_credentials',
+    client_id: clientId,
+    client_secret: clientSecret,
+  });
+
+  let response: Response;
+  try {
+    response = await fetch(tokenEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
+      body: params.toString(),
+    });
+  } catch (netErr: any) {
+    throw new Error(`[ShopifyAdmin] Network error connecting to Shopify OAuth: ${netErr?.message || netErr}`);
+  }
+
+  if (!response.ok) {
+    const rawBody = await response.text();
+    let sanitizedError = '';
+
+    try {
+      const parsedJson = JSON.parse(rawBody);
+      sanitizedError = parsedJson.error_description || parsedJson.error || parsedJson.errors || '';
+    } catch {
+      const match =
+        rawBody.match(/Oauth error ([^<:\n]+)(?::\s*([^<\n]+))?/i) ||
+        rawBody.match(/<title>([^<]+)<\/title>/i);
+      if (match) {
+        sanitizedError = (match[2] ? `${match[1]}: ${match[2]}` : match[1]).trim();
+      } else {
+        sanitizedError = `HTTP ${response.status} ${response.statusText}`;
+      }
+    }
+
+    // Specific user-requested handling for shop_not_permitted and related OAuth errors
+    if (sanitizedError.includes('shop_not_permitted') || rawBody.includes('shop_not_permitted')) {
+      throw new Error(
+        `[ShopifyAdmin] Shopify OAuth Error: shop_not_permitted. Ensure the app "Knotsnco Backend Integration" is installed and approved on store "${storeDomain}".`
+      );
+    }
+    if (
+      sanitizedError.includes('application_cannot_be_found') ||
+      rawBody.includes('application_cannot_be_found')
+    ) {
+      throw new Error(
+        `[ShopifyAdmin] Shopify OAuth Error: application_cannot_be_found. The SHOPIFY_CLIENT_ID does not match an app registered for store "${storeDomain}".`
+      );
+    }
+    if (
+      sanitizedError.includes('invalid_client') ||
+      sanitizedError.includes('invalid_request')
+    ) {
+      throw new Error(
+        `[ShopifyAdmin] Shopify OAuth Error: invalid_client/invalid_request. Verify SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET.`
+      );
+    }
+
+    throw new Error(
+      `[ShopifyAdmin] Failed to obtain Shopify Admin access token (HTTP ${response.status}): ${sanitizedError}`
+    );
+  }
+
+  const data = (await response.json()) as {
+    access_token?: string;
+    scope?: string;
+    expires_in?: number;
+  };
+
+  if (!data.access_token) {
+    throw new Error('[ShopifyAdmin] Shopify OAuth response did not contain an access_token.');
+  }
+
+  const expiresInSec = typeof data.expires_in === 'number' ? data.expires_in : 86400;
+  const now = Date.now();
+
+  cachedAdminToken = {
+    token: data.access_token,
+    expiresAt: now + expiresInSec * 1000,
+    scope: data.scope,
+  };
+
+  return data.access_token;
+}
+
+/**
+ * Obtains an Admin API access token using Shopify's Client Credentials Grant.
+ * Caches the token in memory and automatically refreshes it 5 minutes before expiry.
+ * Concurrent requests safely share a single in-flight Promise.
+ */
+export async function getShopifyAdminAccessToken(): Promise<string> {
+  const now = Date.now();
+  // Refresh if less than 5 minutes (300,000 ms) remain before expiration
+  if (cachedAdminToken && cachedAdminToken.expiresAt - 300_000 > now) {
+    return cachedAdminToken.token;
+  }
+
+  if (inFlightTokenPromise) {
+    return inFlightTokenPromise;
+  }
+
+  inFlightTokenPromise = fetchNewAccessToken().finally(() => {
+    inFlightTokenPromise = null;
+  });
+
+  return inFlightTokenPromise;
+}
+
+/**
+ * Returns safe metadata about the current Shopify token without exposing secrets.
+ */
+export async function getShopifyAdminTokenDetails(): Promise<{
+  hasToken: boolean;
+  scope: string;
+  expiresInSeconds: number;
+  isCached: boolean;
+}> {
+  const token = await getShopifyAdminAccessToken();
+  const now = Date.now();
+  const remainingMs = cachedAdminToken ? Math.max(0, cachedAdminToken.expiresAt - now) : 0;
+  return {
+    hasToken: Boolean(token),
+    scope: cachedAdminToken?.scope || '',
+    expiresInSeconds: Math.floor(remainingMs / 1000),
+    isCached: Boolean(cachedAdminToken),
+  };
 }
 
 export function getShopifyAdminConfig(): ShopifyAdminConfig {
@@ -62,10 +189,9 @@ export function getShopifyAdminConfig(): ShopifyAdminConfig {
     process.env.SHOPIFY_STORE_DOMAIN ||
     process.env.VITE_SHOPIFY_STORE_DOMAIN ||
     '04wv6h-ut.myshopify.com';
-  const adminAccessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || '';
   const apiVersion = process.env.SHOPIFY_ADMIN_API_VERSION || '2026-10';
 
-  return { storeDomain, adminAccessToken, apiVersion };
+  return { storeDomain, apiVersion };
 }
 
 export interface CreatedShopifyOrderResult {
@@ -132,7 +258,12 @@ export function buildShopifyOrderCreatePayload(
         kind: 'SALE',
         status: 'SUCCESS',
         gateway: 'Razorpay',
-        amount: finalAmountStr,
+        amountSet: {
+          shopMoney: {
+            amount: finalAmountStr,
+            currencyCode: 'INR',
+          },
+        },
         authorizationCode: razorpayPaymentId,
       },
     ],
@@ -213,10 +344,10 @@ export async function createShopifyAdminOrder(
     };
   }
 
-  // Handle mock / test mode when Admin token is not configured
-  if (!adminAccessToken || adminAccessToken === 'mock_admin_token') {
+  // Handle mock / test mode when Admin token is mocked
+  if (adminAccessToken === 'mock_admin_token') {
     console.warn(
-      `[ShopifyAdmin] ⚠️ SHOPIFY_ADMIN_ACCESS_TOKEN is not set. Simulating verified order creation for ${order.orderReference}.`
+      `[ShopifyAdmin] ⚠️ Running in mock mode. Simulating verified order creation for ${order.orderReference}.`
     );
     const mockOrderNumber = `#KNOTS-${Math.floor(1000 + Math.random() * 9000)}`;
     const mockOrderId = `gid://shopify/Order/mock_${Date.now()}`;
