@@ -239,7 +239,8 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Shop all</span>
           </button>
 
-          {/* 2. Make Your Own Bouquet (Interactive Flower Bar) */}
+          {/* 2. Make Your Own Bouquet (Interactive Flower Bar) - Hidden for now per user request */}
+          {/*
           <button
             type="button"
             onClick={() => onNavigate?.('bouquet-builder')}
@@ -253,6 +254,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-xs sm:text-sm">🌸</span>
             <span>Make a Bouquet</span>
           </button>
+          */}
 
           {/* 3. Behind The Stitches (Dedicated Artisan Story Page) */}
           <button
@@ -464,7 +466,8 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-xs opacity-70">→</span>
               </button>
 
-              {/* Make Your Own Bouquet (Interactive Flower Bar) */}
+              {/* Make Your Own Bouquet (Interactive Flower Bar) - Hidden for now per user request */}
+              {/*
               <button
                 onClick={() => {
                   onNavigate?.('bouquet-builder');
@@ -484,6 +487,7 @@ export const Header: React.FC<HeaderProps> = ({
                   interactive ✨
                 </span>
               </button>
+              */}
 
               {/* Behind The Stitches (Dedicated Artisan Story Page) */}
               <button

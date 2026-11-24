@@ -257,10 +257,12 @@ function AppInner() {
               />
             </ScrollReveal>
 
-            {/* Interactive "Make Your Own Bouquet" Experience Banner */}
+            {/* Interactive "Make Your Own Bouquet" Experience Banner (Hidden for now per user request) */}
+            {/*
             <ScrollReveal id="section-make-your-bouquet" yOffset={24} duration={0.45}>
               <MakeYourOwnBouquetBanner onStartBuilding={() => navigateTo('bouquet-builder')} />
             </ScrollReveal>
+            */}
 
             {/* Storytelling Section: Original Knots & Co Brand Story ("A Little Dream, A Lot of Love ♡") */}
             <ScrollReveal id="section-story" yOffset={24} duration={0.45}>
