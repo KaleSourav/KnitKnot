@@ -1,5 +1,5 @@
 import http from 'http';
-import handler from '../api/index';
+import handler from '../api/index.js';
 
 async function testVercelHandler() {
   console.log('Testing api/index.ts Vercel Serverless Function entry point...');
