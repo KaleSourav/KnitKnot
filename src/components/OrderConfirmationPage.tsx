@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DaisyIcon, SparkleIcon, DeliveryTruckIcon, YarnBallIcon } from './ArtisanIcons';
+import { DaisyIcon, SparkleIcon, DeliveryTruckIcon } from './ArtisanIcons';
 
 interface OrderData {
   orderReference: string;

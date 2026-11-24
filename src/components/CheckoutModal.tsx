@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCart, CartItemDetails } from '../context/CartContext';
+import { useCart } from '../context/CartContext';
 import { SparkleIcon, DaisyIcon } from './ArtisanIcons';
 
 interface AddressFormState {

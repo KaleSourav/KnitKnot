@@ -10,7 +10,7 @@ import {
   getRazorpayConfig,
 } from './services/razorpay';
 import { createShopifyAdminOrder } from './services/shopifyAdmin';
-import { InternalOrder, OrderItem, AddressDetails, CustomerDetails } from './types';
+import { InternalOrder, OrderItem, AddressDetails } from './types';
 
 // Extended Express Request type to include rawBody captured for webhook verification
 export interface ExtendedRequest extends Request {

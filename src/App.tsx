@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ProductProvider, useProducts } from './context/ProductContext';
 import { CartProvider, useCart } from './context/CartContext';
 import { CartDrawer } from './components/CartDrawer';
@@ -15,7 +15,6 @@ import { WhyChooseSection } from './components/WhyChooseSection';
 import { CorporateGiftingPage } from './components/CorporateGiftingPage';
 import { PolicyPage } from './components/PolicyPage';
 import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderPage';
-import { MakeYourOwnBouquetBanner } from './components/MakeYourOwnBouquetBanner';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
 import { CheckoutModal } from './components/CheckoutModal';
@@ -280,7 +279,7 @@ function AppInner() {
             {/* Shop The Occasion Section (Top Stitch with Smiling Flower, 5 Occasion Cards with Hover Crossfade, Bottom Golden Wave) */}
             <ScrollReveal id="section-occasions" yOffset={24} duration={0.45}>
               <ShopTheOccasionSection
-                onOccasionClick={(id) => navigateTo('shop', 'all')}
+                onOccasionClick={() => navigateTo('shop', 'all')}
               />
             </ScrollReveal>
 

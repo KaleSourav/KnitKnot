@@ -25,8 +25,8 @@ export interface CreatedShopifyOrderResult {
 }
 
 const ORDER_CREATE_MUTATION = `
-  mutation OrderCreate($order: OrderCreateOrderInput!) {
-    orderCreate(order: $order) {
+  mutation OrderCreate($order: OrderCreateOrderInput!, $options: OrderCreateOptionsInput) {
+    orderCreate(order: $order, options: $options) {
       order {
         id
         name
@@ -175,6 +175,9 @@ export async function createShopifyAdminOrder(
       query: ORDER_CREATE_MUTATION,
       variables: {
         order: orderInput,
+        options: {
+          inventoryBehaviour: 'DECREMENT_OBEYING_POLICY',
+        },
       },
     }),
   });

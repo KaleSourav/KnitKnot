@@ -22,7 +22,6 @@ interface WebhookDBState {
 class Database {
   private orders: Map<string, InternalOrder> = new Map();
   private webhookEvents: Set<string> = new Set();
-  private isLoaded = false;
 
   constructor() {
     this.load();
@@ -52,7 +51,6 @@ class Database {
     } catch (err) {
       console.error('Failed to load database files:', err);
     }
-    this.isLoaded = true;
   }
 
   private persistOrders() {

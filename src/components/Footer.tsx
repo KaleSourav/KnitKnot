@@ -24,7 +24,7 @@ const FOOTER_SCALLOP_WAVE =
   'L 1440,60 Z';
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'b2b' | 'policy', categoryOrTab?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', categoryOrTab?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
