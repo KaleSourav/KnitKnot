@@ -24,7 +24,7 @@ export interface CreatedShopifyOrderResult {
   createdAt: string;
 }
 
-const ORDER_CREATE_MUTATION = `
+export const ORDER_CREATE_MUTATION = `
   mutation OrderCreate($order: OrderCreateOrderInput!, $options: OrderCreateOptionsInput) {
     orderCreate(order: $order, options: $options) {
       order {
@@ -48,62 +48,28 @@ const ORDER_CREATE_MUTATION = `
 `;
 
 /**
- * Creates a verified PAID order in Shopify using the Shopify Admin GraphQL API
+ * Builds the exact OrderCreateOrderInput and OrderCreateOptionsInput objects
  */
-export async function createShopifyAdminOrder(
+export function buildShopifyOrderCreatePayload(
   order: InternalOrder,
   razorpayPaymentId: string
-): Promise<CreatedShopifyOrderResult> {
-  const { storeDomain, adminAccessToken, apiVersion } = getShopifyAdminConfig();
-
-  // If already created (Idempotency safeguard)
-  if (order.shopify?.orderId && order.shopify?.orderNumber) {
-    console.log(`[ShopifyAdmin] Order ${order.orderReference} already has Shopify order ${order.shopify.orderNumber}. Skipping creation.`);
-    return {
-      orderId: order.shopify.orderId,
-      orderNumber: order.shopify.orderNumber,
-      financialStatus: 'PAID',
-      createdAt: order.shopify.createdAt || new Date().toISOString(),
-    };
-  }
-
-  // Handle mock / test mode when Admin token is not configured
-  if (!adminAccessToken || adminAccessToken === 'mock_admin_token') {
-    console.warn(
-      `[ShopifyAdmin] ⚠️ SHOPIFY_ADMIN_ACCESS_TOKEN is not set. Simulating verified order creation for ${order.orderReference}.`
-    );
-    const mockOrderNumber = `#KNOTS-${Math.floor(1000 + Math.random() * 9000)}`;
-    const mockOrderId = `gid://shopify/Order/mock_${Date.now()}`;
-    return {
-      orderId: mockOrderId,
-      orderNumber: mockOrderNumber,
-      financialStatus: 'PAID',
-      createdAt: new Date().toISOString(),
-    };
-  }
-
-  const endpoint = `https://${storeDomain}/admin/api/${apiVersion}/graphql.json`;
-
-  // Prepare names
+): { order: Record<string, any>; options: Record<string, any> } {
   const nameParts = (order.customer.name || '').trim().split(' ');
   const firstName = nameParts[0] || 'Customer';
   const lastName = nameParts.slice(1).join(' ') || '';
 
-  // Format line items
-  const lineItems = order.items.map((item) => {
-    return {
-      variantId: item.variantId.startsWith('gid://')
-        ? item.variantId
-        : `gid://shopify/ProductVariant/${item.variantId}`,
-      quantity: item.quantity,
-      priceSet: {
-        shopMoney: {
-          amount: Number(item.unitPrice).toFixed(2),
-          currencyCode: 'INR',
-        },
+  const lineItems = order.items.map((item) => ({
+    variantId: item.variantId.startsWith('gid://')
+      ? item.variantId
+      : `gid://shopify/ProductVariant/${item.variantId}`,
+    quantity: item.quantity,
+    priceSet: {
+      shopMoney: {
+        amount: Number(item.unitPrice).toFixed(2),
+        currencyCode: 'INR',
       },
-    };
-  });
+    },
+  }));
 
   const finalAmountStr = Number(order.pricing.finalAmount).toFixed(2);
 
@@ -162,8 +128,57 @@ export async function createShopifyAdminOrder(
       { key: 'knotsnco_order_ref', value: order.orderReference },
       { key: 'razorpay_payment_id', value: razorpayPaymentId },
     ],
+  };
+
+  const optionsInput = {
+    inventoryBehaviour: 'DECREMENT_OBEYING_POLICY',
     sendReceipt: true, // Triggers Shopify's automated order confirmation email to the customer
   };
+
+  return {
+    order: orderInput,
+    options: optionsInput,
+  };
+}
+
+/**
+ * Creates a verified PAID order in Shopify using the Shopify Admin GraphQL API
+ */
+export async function createShopifyAdminOrder(
+  order: InternalOrder,
+  razorpayPaymentId: string
+): Promise<CreatedShopifyOrderResult> {
+  const { storeDomain, adminAccessToken, apiVersion } = getShopifyAdminConfig();
+
+  // If already created (Idempotency safeguard)
+  if (order.shopify?.orderId && order.shopify?.orderNumber) {
+    console.log(`[ShopifyAdmin] Order ${order.orderReference} already has Shopify order ${order.shopify.orderNumber}. Skipping creation.`);
+    return {
+      orderId: order.shopify.orderId,
+      orderNumber: order.shopify.orderNumber,
+      financialStatus: 'PAID',
+      createdAt: order.shopify.createdAt || new Date().toISOString(),
+    };
+  }
+
+  // Handle mock / test mode when Admin token is not configured
+  if (!adminAccessToken || adminAccessToken === 'mock_admin_token') {
+    console.warn(
+      `[ShopifyAdmin] ⚠️ SHOPIFY_ADMIN_ACCESS_TOKEN is not set. Simulating verified order creation for ${order.orderReference}.`
+    );
+    const mockOrderNumber = `#KNOTS-${Math.floor(1000 + Math.random() * 9000)}`;
+    const mockOrderId = `gid://shopify/Order/mock_${Date.now()}`;
+    return {
+      orderId: mockOrderId,
+      orderNumber: mockOrderNumber,
+      financialStatus: 'PAID',
+      createdAt: new Date().toISOString(),
+    };
+  }
+
+  const endpoint = `https://${storeDomain}/admin/api/${apiVersion}/graphql.json`;
+
+  const { order: orderInput, options: optionsInput } = buildShopifyOrderCreatePayload(order, razorpayPaymentId);
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -175,9 +190,7 @@ export async function createShopifyAdminOrder(
       query: ORDER_CREATE_MUTATION,
       variables: {
         order: orderInput,
-        options: {
-          inventoryBehaviour: 'DECREMENT_OBEYING_POLICY',
-        },
+        options: optionsInput,
       },
     }),
   });

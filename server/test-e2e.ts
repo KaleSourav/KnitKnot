@@ -321,7 +321,79 @@ async function runTests() {
       throw new Error('Expected insufficient stock error to be thrown, but it succeeded.');
     }
 
-    console.log('\n🎉 ALL 9 E2E INTEGRATION & INVENTORY TESTS PASSED PERFECTLY!');
+    // ─── Test 10: Validate OrderCreateOptionsInput Schema & Payload Structure ──
+    console.log('\nTest 10: Validate OrderCreateOptionsInput & sendReceipt Placement');
+    const { buildShopifyOrderCreatePayload, ORDER_CREATE_MUTATION } = await import('./services/shopifyAdmin');
+    const dummyOrder = {
+      orderReference: 'KNOTS-TEST-1234',
+      status: 'PENDING_PAYMENT' as const,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      items: [
+        {
+          productId: 'prod_1',
+          variantId: 'gid://shopify/ProductVariant/44296302297151',
+          title: 'Sunflower Bouquet',
+          image: '',
+          unitPrice: 1299,
+          quantity: 1,
+          lineTotal: 1299,
+        },
+      ],
+      pricing: {
+        subtotal: 1299,
+        discount: 0,
+        shippingCharge: 0,
+        taxes: 0,
+        finalAmount: 1299,
+        amountInPaise: 129900,
+        currency: 'INR' as const,
+      },
+      customer: {
+        name: 'Simulated Test Customer',
+        email: 'test@example.com',
+        phone: '9876543210',
+      },
+      shippingAddress: {
+        address1: 'Test Address Line 1',
+        city: 'Surat',
+        zip: '395007',
+        country: 'India',
+        countryCode: 'IN',
+      },
+      billingAddress: {
+        address1: 'Test Address Line 1',
+        city: 'Surat',
+        zip: '395007',
+        country: 'India',
+        countryCode: 'IN',
+      },
+    };
+
+    const built = buildShopifyOrderCreatePayload(dummyOrder, 'pay_mock_12345');
+
+    // Verify sendReceipt is NOT in order input
+    if ('sendReceipt' in built.order) {
+      throw new Error('Schema Violation: sendReceipt must NOT be inside OrderCreateOrderInput!');
+    }
+    // Verify sendReceipt IS in options
+    if (built.options.sendReceipt !== true) {
+      throw new Error('Expected options.sendReceipt to be true');
+    }
+    // Verify inventoryBehaviour IS in options
+    if (built.options.inventoryBehaviour !== 'DECREMENT_OBEYING_POLICY') {
+      throw new Error('Expected options.inventoryBehaviour to be DECREMENT_OBEYING_POLICY');
+    }
+    // Verify ORDER_CREATE_MUTATION signature
+    if (!ORDER_CREATE_MUTATION.includes('$options: OrderCreateOptionsInput') || !ORDER_CREATE_MUTATION.includes('options: $options')) {
+      throw new Error('ORDER_CREATE_MUTATION does not declare or pass $options: OrderCreateOptionsInput');
+    }
+
+    console.log('✅ sendReceipt correctly placed inside OrderCreateOptionsInput (and removed from order input).');
+    console.log('✅ inventoryBehaviour: DECREMENT_OBEYING_POLICY confirmed in OrderCreateOptionsInput.');
+    console.log('✅ ORDER_CREATE_MUTATION signature verified matching Shopify Admin API 2026-10.');
+
+    console.log('\n🎉 ALL 10 E2E INTEGRATION & INVENTORY TESTS PASSED PERFECTLY!');
   } finally {
     server.close();
   }
