@@ -81,6 +81,6 @@ export interface WebhookEventRecord {
   orderReference?: string;
   razorpayPaymentId?: string;
   processedAt: string;
-  status: 'SUCCESS' | 'IGNORED' | 'ERROR';
+  status: 'SUCCESS' | 'PROCESSING' | 'IGNORED' | 'ERROR';
   error?: string;
 }

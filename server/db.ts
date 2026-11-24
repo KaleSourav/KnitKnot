@@ -1,11 +1,14 @@
+import { Redis } from '@upstash/redis';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { InternalOrder, WebhookEventRecord } from './types';
 
+dotenv.config();
+
 const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
-// On Vercel / serverless environments, the root filesystem is read-only.
-// We use /tmp for temporary file fallback, or a remote durable store (Vercel KV / Upstash).
+// Local file fallback paths for offline development
 const DATA_DIR = isServerless
   ? path.resolve('/tmp', 'knotsnco_data')
   : path.resolve(process.cwd(), 'server/data');
@@ -19,46 +22,46 @@ function ensureDataDir(): boolean {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
     return true;
-  } catch (err) {
-    // Graceful fallback on read-only environments
+  } catch {
     return false;
   }
 }
 
-interface KvConfig {
-  url: string;
-  token: string;
-}
+let cachedRedis: Redis | null = null;
 
-function getKvConfig(): KvConfig | null {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) {
-    return { url, token };
+/**
+ * Returns an active Upstash Redis client initialized via Redis.fromEnv()
+ * Supports UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN or KV_REST_API_URL + KV_REST_API_TOKEN.
+ */
+export function getRedisClient(): Redis | null {
+  const hasEnv = Boolean(
+    (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) ||
+    (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+  );
+
+  if (!hasEnv) {
+    cachedRedis = null;
+    return null;
   }
-  return null;
-}
 
-async function executeKv(command: any[]): Promise<any> {
-  const config = getKvConfig();
-  if (!config) return null;
-  try {
-    const res = await fetch(config.url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${config.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(command),
-    });
-    if (res.ok) {
-      const data = (await res.json()) as any;
-      return data.result;
+  if (!cachedRedis) {
+    try {
+      cachedRedis = Redis.fromEnv();
+      console.log('⚡ [Database] Connected to Upstash Redis via Redis.fromEnv()');
+    } catch (err: any) {
+      console.warn('[Database] Redis.fromEnv() initialization failed:', err?.message || err);
+      return null;
     }
-  } catch (err: any) {
-    console.warn('[Database:KV] Error executing command:', err?.message || err);
   }
-  return null;
+
+  return cachedRedis;
+}
+
+/**
+ * Resets cached Redis instance (used by test suites)
+ */
+export function resetRedisClient(): void {
+  cachedRedis = null;
 }
 
 interface DBState {
@@ -75,7 +78,7 @@ export class Database {
   private ordersByRazorpayId: Map<string, string> = new Map();
   private ordersByPaymentLinkId: Map<string, string> = new Map();
   private ordersByPaymentId: Map<string, string> = new Map();
-  private hasLoggedStorageNotice = false;
+  private verificationLocks: Set<string> = new Set();
 
   constructor() {
     this.initFileStore();
@@ -89,7 +92,7 @@ export class Database {
         const raw = fs.readFileSync(ORDERS_FILE, 'utf-8');
         const data: DBState = JSON.parse(raw);
         if (data.orders) {
-          for (const [k, v] of Object.entries(data.orders)) {
+          for (const v of Object.values(data.orders)) {
             this.indexInMemory(v);
           }
         }
@@ -104,21 +107,34 @@ export class Database {
           }
         }
       }
-    } catch (err) {
-      // Ignore load failures in read-only / clean environments
+    } catch {
+      // Ignore load failures in clean environments
     }
   }
 
-  private logStorageNoticeOnce() {
-    if (this.hasLoggedStorageNotice) return;
-    this.hasLoggedStorageNotice = true;
+  public isConfigured(): boolean {
+    return Boolean(
+      (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) ||
+      (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+    );
+  }
 
-    if (getKvConfig()) {
-      console.log('📦 [Database] Connected to durable storage (Vercel KV / Upstash Redis REST API).');
-    } else if (isServerless) {
-      console.warn(
-        '⚠️ [Database] Running on Vercel without a durable database configured (KV_REST_API_URL / KV_REST_API_TOKEN). Orders are held in memory and /tmp ephemeral storage. To persist orders durably across serverless executions before enabling real customer payments, connect Vercel KV or Upstash Redis.'
-      );
+  /**
+   * Health check verifying Redis connectivity via PING command
+   */
+  public async checkHealth(): Promise<{ ok: boolean; latencyMs?: number; error?: string }> {
+    const redis = getRedisClient();
+    if (!redis) {
+      return { ok: false, error: 'unconfigured' };
+    }
+
+    const start = Date.now();
+    try {
+      const ping = await redis.ping();
+      const latencyMs = Date.now() - start;
+      return { ok: ping === 'PONG', latencyMs };
+    } catch (err: any) {
+      return { ok: false, error: err?.message || 'ping_failed' };
     }
   }
 
@@ -164,197 +180,251 @@ export class Database {
     }
   }
 
-  // ─── Orders API ─────────────────────────────────────────────────────────────
+  // ─── Orders API (Durable Redis Persistence) ─────────────────────────────────
 
   public async saveOrder(order: InternalOrder): Promise<InternalOrder> {
-    this.logStorageNoticeOnce();
     order.updatedAt = new Date().toISOString();
     this.indexInMemory(order);
 
-    // 1. If remote KV is configured, persist durably
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const serialized = JSON.stringify(order);
-        await executeKv(['SET', `order:${order.orderReference}`, serialized]);
+        // Persist order permanently in Redis (no short TTL)
+        await redis.set(`order:${order.orderReference}`, JSON.stringify(order));
 
+        // Secondary lookup indexes for O(1) query performance
         if (order.razorpay?.orderId) {
-          await executeKv(['SET', `order_rzp:${order.razorpay.orderId}`, order.orderReference]);
+          await redis.set(`idx:rzp_order:${order.razorpay.orderId}`, order.orderReference);
         }
         if (order.razorpay?.paymentLinkId) {
-          await executeKv(['SET', `order_plink:${order.razorpay.paymentLinkId}`, order.orderReference]);
+          await redis.set(`idx:plink:${order.razorpay.paymentLinkId}`, order.orderReference);
         }
         if (order.razorpay?.paymentId) {
-          await executeKv(['SET', `order_pay:${order.razorpay.paymentId}`, order.orderReference]);
+          await redis.set(`idx:pay:${order.razorpay.paymentId}`, order.orderReference);
         }
+
+        // Set tracking all order references
+        await redis.sadd('orders:all', order.orderReference);
       } catch (err: any) {
-        console.warn('[Database] KV save error:', err?.message || err);
+        console.error('[Database:Redis] saveOrder error:', err?.message || err);
       }
     }
 
-    // 2. Persist to file store fallback
     this.persistOrdersToFile();
-
     return order;
   }
 
   public async getOrderByReference(orderReference: string): Promise<InternalOrder | undefined> {
-    this.logStorageNoticeOnce();
     if (!orderReference) return undefined;
 
-    // Check memory first
-    const cached = this.orders.get(orderReference);
-    if (cached) return cached;
-
-    // Check remote KV store
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const res = await executeKv(['GET', `order:${orderReference}`]);
-        if (res) {
-          const parsed: InternalOrder = typeof res === 'string' ? JSON.parse(res) : res;
+        const raw = await redis.get(`order:${orderReference}`);
+        if (raw) {
+          const parsed: InternalOrder = typeof raw === 'string' ? JSON.parse(raw) : (raw as InternalOrder);
           this.indexInMemory(parsed);
           return parsed;
         }
       } catch (err: any) {
-        console.warn('[Database] KV lookup error:', err?.message || err);
+        console.warn('[Database:Redis] getOrderByReference error:', err?.message || err);
       }
     }
 
-    return undefined;
+    return this.orders.get(orderReference);
   }
 
   public async getOrderByRazorpayOrderId(razorpayOrderId: string): Promise<InternalOrder | undefined> {
-    this.logStorageNoticeOnce();
     if (!razorpayOrderId) return undefined;
 
-    const ref = this.ordersByRazorpayId.get(razorpayOrderId);
-    if (ref) {
-      return this.getOrderByReference(ref);
-    }
-
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const foundRef = await executeKv(['GET', `order_rzp:${razorpayOrderId}`]);
-        if (foundRef) {
-          return this.getOrderByReference(String(foundRef));
+        const ref = await redis.get<string>(`idx:rzp_order:${razorpayOrderId}`);
+        if (ref) {
+          return this.getOrderByReference(ref);
         }
       } catch (err: any) {
-        console.warn('[Database] KV lookup error:', err?.message || err);
+        console.warn('[Database:Redis] getOrderByRazorpayOrderId error:', err?.message || err);
       }
     }
 
-    // In-memory scan fallback
+    const ref = this.ordersByRazorpayId.get(razorpayOrderId);
+    if (ref) return this.orders.get(ref);
+
     for (const order of this.orders.values()) {
-      if (order.razorpay?.orderId === razorpayOrderId) {
-        return order;
-      }
+      if (order.razorpay?.orderId === razorpayOrderId) return order;
     }
-
     return undefined;
   }
 
   public async getOrderByPaymentLinkId(paymentLinkId: string): Promise<InternalOrder | undefined> {
-    this.logStorageNoticeOnce();
     if (!paymentLinkId) return undefined;
 
-    const ref = this.ordersByPaymentLinkId.get(paymentLinkId);
-    if (ref) {
-      return this.getOrderByReference(ref);
-    }
-
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const foundRef = await executeKv(['GET', `order_plink:${paymentLinkId}`]);
-        if (foundRef) {
-          return this.getOrderByReference(String(foundRef));
+        const ref = await redis.get<string>(`idx:plink:${paymentLinkId}`);
+        if (ref) {
+          return this.getOrderByReference(ref);
         }
       } catch (err: any) {
-        console.warn('[Database] KV lookup error:', err?.message || err);
+        console.warn('[Database:Redis] getOrderByPaymentLinkId error:', err?.message || err);
       }
     }
 
-    // In-memory scan fallback
+    const ref = this.ordersByPaymentLinkId.get(paymentLinkId);
+    if (ref) return this.orders.get(ref);
+
     for (const order of this.orders.values()) {
-      if (order.razorpay?.paymentLinkId === paymentLinkId) {
-        return order;
-      }
+      if (order.razorpay?.paymentLinkId === paymentLinkId) return order;
     }
-
     return undefined;
   }
 
   public async getOrderByPaymentId(paymentId: string): Promise<InternalOrder | undefined> {
-    this.logStorageNoticeOnce();
     if (!paymentId) return undefined;
 
-    const ref = this.ordersByPaymentId.get(paymentId);
-    if (ref) {
-      return this.getOrderByReference(ref);
-    }
-
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const foundRef = await executeKv(['GET', `order_pay:${paymentId}`]);
-        if (foundRef) {
-          return this.getOrderByReference(String(foundRef));
+        const ref = await redis.get<string>(`idx:pay:${paymentId}`);
+        if (ref) {
+          return this.getOrderByReference(ref);
         }
       } catch (err: any) {
-        console.warn('[Database] KV lookup error:', err?.message || err);
+        console.warn('[Database:Redis] getOrderByPaymentId error:', err?.message || err);
       }
     }
 
-    // In-memory scan fallback
+    const ref = this.ordersByPaymentId.get(paymentId);
+    if (ref) return this.orders.get(ref);
+
     for (const order of this.orders.values()) {
-      if (order.razorpay?.paymentId === paymentId) {
-        return order;
-      }
+      if (order.razorpay?.paymentId === paymentId) return order;
     }
-
     return undefined;
   }
 
   public async getAllOrders(): Promise<InternalOrder[]> {
+    const redis = getRedisClient();
+    if (redis) {
+      try {
+        const refs = await redis.smembers('orders:all');
+        if (refs && refs.length > 0) {
+          const orders: InternalOrder[] = [];
+          for (const ref of refs) {
+            const ord = await this.getOrderByReference(String(ref));
+            if (ord) orders.push(ord);
+          }
+          return orders;
+        }
+      } catch (err: any) {
+        console.warn('[Database:Redis] getAllOrders error:', err?.message || err);
+      }
+    }
+
     return Array.from(this.orders.values());
   }
 
-  // ─── Webhook Idempotency API ────────────────────────────────────────────────
+  // ─── Webhook Deduplication API (Atomic SETNX) ───────────────────────────────
 
   public async hasWebhookEvent(eventId: string): Promise<boolean> {
-    this.logStorageNoticeOnce();
     if (!eventId) return false;
 
-    if (this.webhookEvents.has(eventId)) return true;
-
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        const res = await executeKv(['GET', `webhook:${eventId}`]);
-        if (res) {
-          this.webhookEvents.add(eventId);
-          return true;
-        }
+        const exists = await redis.exists(`webhook:event:${eventId}`);
+        if (exists === 1) return true;
       } catch (err: any) {
-        console.warn('[Database] KV webhook lookup error:', err?.message || err);
+        console.warn('[Database:Redis] hasWebhookEvent error:', err?.message || err);
       }
     }
 
-    return false;
+    return this.webhookEvents.has(eventId);
   }
 
-  public async recordWebhookEvent(record: WebhookEventRecord): Promise<void> {
-    this.logStorageNoticeOnce();
-    if (!record?.eventId) return;
+  /**
+   * Atomically records a webhook event. Returns true if this is a NEW event,
+   * or false if it was already recorded by another concurrent request.
+   */
+  public async recordWebhookEvent(record: WebhookEventRecord): Promise<boolean> {
+    if (!record?.eventId) return false;
 
-    this.webhookEvents.add(record.eventId);
-
-    if (getKvConfig()) {
+    const redis = getRedisClient();
+    if (redis) {
       try {
-        // Expire recorded webhook events after 7 days (604800 seconds)
-        await executeKv(['SETEX', `webhook:${record.eventId}`, 604800, JSON.stringify(record)]);
+        // Atomic SET with NX (not exists) and 30-day retention (2592000s)
+        const setResult = await redis.set(
+          `webhook:event:${record.eventId}`,
+          JSON.stringify(record),
+          { nx: true, ex: 2592000 }
+        );
+
+        const isNew = setResult !== null;
+        if (isNew) {
+          this.webhookEvents.add(record.eventId);
+          this.persistWebhookEventToFile(record);
+        }
+        return isNew;
       } catch (err: any) {
-        console.warn('[Database] KV webhook save error:', err?.message || err);
+        console.warn('[Database:Redis] recordWebhookEvent error:', err?.message || err);
       }
     }
 
+    // In-memory fallback
+    if (this.webhookEvents.has(record.eventId)) {
+      return false;
+    }
+    this.webhookEvents.add(record.eventId);
     this.persistWebhookEventToFile(record);
+    return true;
+  }
+
+  // ─── Distributed Lock for Concurrency Safety & Idempotency ───────────────────
+
+  /**
+   * Acquires a distributed lock on order verification to prevent concurrent
+   * executions between customer browser redirects and webhook events.
+   */
+  public async acquireVerificationLock(orderReference: string, ttlSeconds: number = 30): Promise<boolean> {
+    if (!orderReference) return false;
+
+    const redis = getRedisClient();
+    if (redis) {
+      try {
+        const lock = await redis.set(
+          `lock:verify:${orderReference}`,
+          Date.now().toString(),
+          { nx: true, ex: ttlSeconds }
+        );
+        return lock !== null;
+      } catch (err: any) {
+        console.warn('[Database:Redis] acquireVerificationLock error:', err?.message || err);
+      }
+    }
+
+    // In-memory atomic fallback
+    if (this.verificationLocks.has(orderReference)) {
+      return false;
+    }
+    this.verificationLocks.add(orderReference);
+    return true;
+  }
+
+  public async releaseVerificationLock(orderReference: string): Promise<void> {
+    if (!orderReference) return;
+    this.verificationLocks.delete(orderReference);
+
+    const redis = getRedisClient();
+    if (redis) {
+      try {
+        await redis.del(`lock:verify:${orderReference}`);
+      } catch (err: any) {
+        console.warn('[Database:Redis] releaseVerificationLock error:', err?.message || err);
+      }
+    }
   }
 }
 

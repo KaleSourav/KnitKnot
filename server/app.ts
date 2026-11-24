@@ -48,12 +48,22 @@ app.use(express.urlencoded({ extended: true }));
 
 // ─── 1. Health Endpoint ───────────────────────────────────────────────────────
 
-apiRouter.get('/health', (_req: Request, res: Response) => {
+apiRouter.get('/health', async (_req: Request, res: Response) => {
+  const redisHealth = await db.checkHealth();
+  const redisConfigured = db.isConfigured();
+
   res.json({
     status: 'ok',
     store: 'Knotsnco Headless Storefront',
     timestamp: new Date().toISOString(),
     runtime: process.env.VERCEL ? 'vercel-serverless' : 'node-server',
+    redis: {
+      status: redisHealth.ok ? 'connected' : redisConfigured ? 'error' : 'unconfigured',
+      provider: 'Upstash Redis',
+      region: 'ap-south-1 (Mumbai)',
+      latencyMs: redisHealth.latencyMs,
+      error: redisHealth.error,
+    },
   });
 });
 
@@ -254,70 +264,92 @@ apiRouter.post('/checkout/verify-payment', async (req: Request, res: Response): 
       return;
     }
 
-    // Verify HMAC-SHA256 signature
-    const isSignatureValid = verifyStandardCheckoutSignature({
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      signature: razorpay_signature,
-    });
-
-    if (!isSignatureValid) {
-      console.error(`[VerifyPayment] Invalid signature for order ${orderReference}.`);
-      res.status(400).json({ error: 'Payment verification failed: Invalid cryptographic signature.' });
-      return;
+    // Acquire distributed lock to prevent concurrent double-processing
+    const lockAcquired = await db.acquireVerificationLock(orderReference);
+    if (!lockAcquired) {
+      // Another concurrent verification request is already processing this order!
+      await new Promise((r) => setTimeout(r, 1500));
+      const refreshedOrder = await db.getOrderByReference(orderReference);
+      if (refreshedOrder?.status === 'PAID' && refreshedOrder.shopify?.orderNumber) {
+        res.json({
+          success: true,
+          orderReference: refreshedOrder.orderReference,
+          shopifyOrderNumber: refreshedOrder.shopify.orderNumber,
+          shopifyOrderId: refreshedOrder.shopify.orderId,
+          message: 'Order was verified concurrently and confirmed in Shopify.',
+        });
+        return;
+      }
     }
 
-    // Verify payment status with Razorpay
-    const payment = await fetchRazorpayPayment(razorpay_payment_id);
-    if (payment.status !== 'captured' && payment.status !== 'authorized') {
-      console.warn(`[VerifyPayment] Payment ${razorpay_payment_id} status is ${payment.status}, expected captured.`);
-      res.status(400).json({ error: `Payment is not captured. Current status: ${payment.status}` });
-      return;
-    }
-
-    // Record capture in internal DB
-    order.status = 'PAYMENT_CAPTURED_SHOPIFY_PENDING';
-    order.razorpay = {
-      ...(order.razorpay || {}),
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      signature: razorpay_signature,
-      method: payment.method || 'online',
-      paidAt: new Date().toISOString(),
-    };
-    await db.saveOrder(order);
-
-    // Call Shopify Admin GraphQL API to create the order
     try {
-      const shopifyOrder = await createShopifyAdminOrder(order, razorpay_payment_id);
-      order.status = 'PAID';
-      order.shopify = {
-        orderId: shopifyOrder.orderId,
-        orderNumber: shopifyOrder.orderNumber,
-        createdAt: shopifyOrder.createdAt,
+      // Verify HMAC-SHA256 signature
+      const isSignatureValid = verifyStandardCheckoutSignature({
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+        signature: razorpay_signature,
+      });
+
+      if (!isSignatureValid) {
+        console.error(`[VerifyPayment] Invalid signature for order ${orderReference}.`);
+        res.status(400).json({ error: 'Payment verification failed: Invalid cryptographic signature.' });
+        return;
+      }
+
+      // Verify payment status with Razorpay
+      const payment = await fetchRazorpayPayment(razorpay_payment_id);
+      if (payment.status !== 'captured' && payment.status !== 'authorized') {
+        console.warn(`[VerifyPayment] Payment ${razorpay_payment_id} status is ${payment.status}, expected captured.`);
+        res.status(400).json({ error: `Payment is not captured. Current status: ${payment.status}` });
+        return;
+      }
+
+      // Record capture in internal DB
+      order.status = 'PAYMENT_CAPTURED_SHOPIFY_PENDING';
+      order.razorpay = {
+        ...(order.razorpay || {}),
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+        signature: razorpay_signature,
+        method: payment.method || 'online',
+        paidAt: new Date().toISOString(),
       };
       await db.saveOrder(order);
 
-      res.json({
-        success: true,
-        orderReference: order.orderReference,
-        shopifyOrderNumber: shopifyOrder.orderNumber,
-        shopifyOrderId: shopifyOrder.orderId,
-      });
-    } catch (shopifyError: any) {
-      console.error(`[VerifyPayment] Payment verified, but Shopify order creation failed for ${orderReference}:`, shopifyError);
-      order.shopify = {
-        error: shopifyError.message,
-      };
-      await db.saveOrder(order);
+      // Call Shopify Admin GraphQL API to create the order
+      try {
+        const shopifyOrder = await createShopifyAdminOrder(order, razorpay_payment_id);
+        order.status = 'PAID';
+        order.shopify = {
+          orderId: shopifyOrder.orderId,
+          orderNumber: shopifyOrder.orderNumber,
+          createdAt: shopifyOrder.createdAt,
+        };
+        await db.saveOrder(order);
 
-      // Return success with pending sync so customer still gets a friendly confirmation
-      res.json({
-        success: true,
-        orderReference: order.orderReference,
-        pendingSync: true,
-        message: 'Payment received. Your order is finalizing in Shopify.',
-      });
+        res.json({
+          success: true,
+          orderReference: order.orderReference,
+          shopifyOrderNumber: shopifyOrder.orderNumber,
+          shopifyOrderId: shopifyOrder.orderId,
+        });
+      } catch (shopifyError: any) {
+        console.error(`[VerifyPayment] Payment verified, but Shopify order creation failed for ${orderReference}:`, shopifyError);
+        order.shopify = {
+          error: shopifyError.message,
+        };
+        await db.saveOrder(order);
+
+        // Return success with pending sync so customer still gets a friendly confirmation
+        res.json({
+          success: true,
+          orderReference: order.orderReference,
+          pendingSync: true,
+          message: 'Payment received. Your order is finalizing in Shopify.',
+        });
+      }
+    } finally {
+      await db.releaseVerificationLock(orderReference);
     }
   } catch (error: any) {
     console.error('[VerifyPayment] Error during payment verification:', error);
@@ -447,11 +479,19 @@ apiRouter.post('/webhooks/razorpay', async (req: ExtendedRequest, res: Response)
       return;
     }
 
-    // Deduplication check: if eventId was already processed, ignore
-    if (eventId && (await db.hasWebhookEvent(eventId))) {
-      console.log(`[Webhook] Duplicate event ${eventId} received. Skipping.`);
-      res.status(200).json({ status: 'duplicate_ignored', eventId });
-      return;
+    // Deduplication check: atomic SETNX in Redis ensures true concurrency safety
+    if (eventId) {
+      const isNew = await db.recordWebhookEvent({
+        eventId,
+        eventType: typeof req.body?.event === 'string' ? req.body.event : 'unknown',
+        processedAt: new Date().toISOString(),
+        status: 'PROCESSING',
+      });
+      if (!isNew) {
+        console.log(`[Webhook] Duplicate event ${eventId} received. Skipping.`);
+        res.status(200).json({ status: 'duplicate_ignored', eventId });
+        return;
+      }
     }
 
     const event = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
