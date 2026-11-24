@@ -18,6 +18,8 @@ import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderP
 import { MakeYourOwnBouquetBanner } from './components/MakeYourOwnBouquetBanner';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
+import { CheckoutModal } from './components/CheckoutModal';
+import { OrderConfirmationPage } from './components/OrderConfirmationPage';
 import { Footer } from './components/Footer';
 import { DynamicScrollBackground } from './components/DynamicScrollBackground';
 import { ScrollReveal } from './components/ScrollReveal';
@@ -40,11 +42,12 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
+      if (hash.startsWith('#order-confirmation') || hash.startsWith('#/order-confirmation')) return 'order-confirmation';
       if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
       if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
@@ -137,6 +140,9 @@ function AppInner() {
       } else if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || hash.startsWith('#/bouquet-builder')) {
         setCurrentPage('bouquet-builder');
         setSelectedProductId(null);
+      } else if (hash.startsWith('#order-confirmation') || hash.startsWith('#/order-confirmation')) {
+        setCurrentPage('order-confirmation');
+        setSelectedProductId(null);
       } else {
         setCurrentPage('home');
         setSelectedProductId(null);
@@ -148,7 +154,7 @@ function AppInner() {
   }, []);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -157,6 +163,8 @@ function AppInner() {
       if (window.location.hash) {
         window.history.pushState(null, '', window.location.pathname);
       }
+    } else if (page === 'order-confirmation') {
+      window.location.hash = param ? `/order-confirmation?orderRef=${encodeURIComponent(param)}` : '/order-confirmation';
     } else if (page === 'shop') {
       setSelectedCategory(param || 'all');
       setSelectedProductId(null);
@@ -330,6 +338,15 @@ function AppInner() {
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
           />
+        ) : currentPage === 'order-confirmation' ? (
+          /* =========================================================================
+             DEDICATED ORDER CONFIRMATION VIEW
+             Displays verified Razorpay payment, Shopify order number, & item breakdown
+             ========================================================================= */
+          <OrderConfirmationPage
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={() => navigateTo('shop', 'all')}
+          />
         ) : currentPage === 'bouquet-builder' ? (
           /* =========================================================================
              DEDICATED BOUQUET BUILDER EXPERIENCE VIEW
@@ -360,7 +377,12 @@ function AppInner() {
               }}
               onBuyNow={async (product, qty) => {
                 if (product.variantId) {
-                  await buyNow(product.variantId, qty);
+                  await buyNow(product.variantId, qty, {
+                    title: product.name,
+                    subtitle: product.category,
+                    price: product.price,
+                    image: product.image,
+                  });
                 } else {
                   // Fallback: open Shopify store in new tab if no variantId
                   window.open('https://knotsnco.myshopify.com', '_blank', 'noopener');
@@ -390,6 +412,9 @@ function AppInner() {
 
       {/* 5. Slide-Over Shopify Cart Drawer */}
       <CartDrawer onNavigateShop={(cat) => navigateTo('shop', cat || 'all')} />
+
+      {/* 6. Knotsnco Razorpay Checkout Modal */}
+      <CheckoutModal />
     </div>
   );
 }

@@ -33,8 +33,13 @@ interface CartContextValue {
   cost: CartCost;
   isLoading: boolean;
   isCartOpen: boolean;
+  isCheckoutOpen: boolean;
+  checkoutItems: CartItemDetails[];
   openCart: () => void;
   closeCart: () => void;
+  openCheckout: (customItems?: CartItemDetails[]) => void;
+  closeCheckout: () => void;
+  clearCart: () => void;
   addToShopifyCart: (variantId: string, quantity: number) => Promise<number>;
   addBouquetToShopifyCart: (
     lines: Array<{
@@ -45,7 +50,7 @@ interface CartContextValue {
   ) => Promise<number>;
   updateLineQuantity: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
-  buyNow: (variantId: string, quantity: number) => Promise<void>;
+  buyNow: (variantId: string, quantity: number, details?: Partial<CartItemDetails>) => Promise<void>;
   proceedToCheckout: () => void;
   incrementCount: (qty?: number) => void;
 }
@@ -229,9 +234,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cost, setCost] = useState<CartCost>({ subtotal: 0, total: 0, currencyCode: 'INR' });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
+  const [checkoutItems, setCheckoutItems] = useState<CartItemDetails[]>([]);
 
   const openCart = useCallback(() => setIsCartOpen(true), []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
+
+  const openCheckout = useCallback(
+    (customItems?: CartItemDetails[]) => {
+      setIsCartOpen(false);
+      if (customItems && customItems.length > 0) {
+        setCheckoutItems(customItems);
+      } else {
+        setCheckoutItems(items);
+      }
+      setIsCheckoutOpen(true);
+    },
+    [items]
+  );
+
+  const closeCheckout = useCallback(() => {
+    setIsCheckoutOpen(false);
+  }, []);
 
   const saveCartToStorage = useCallback((raw: RawShopifyCart) => {
     try {
@@ -441,34 +465,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [cartId, applyCart]
   );
 
-  /** Buy Now: creates a dedicated single-checkout cart and directly redirects */
-  const buyNow = useCallback(async (variantId: string, quantity: number) => {
-    setIsLoading(true);
-    try {
-      const res = await shopifyFetch<{
-        cartCreate: { cart: RawShopifyCart | null; userErrors: Array<{ message: string }> };
-      }>(CART_CREATE_MUTATION, {
-        lines: [{ merchandiseId: variantId, quantity }],
-      });
-
-      const freshCart = res.cartCreate?.cart;
-      if (!freshCart || !freshCart.checkoutUrl) {
-        throw new Error('Failed to generate Shopify checkout URL');
+  /** Buy Now: opens checkout modal immediately for the single item */
+  const buyNow = useCallback(
+    async (variantId: string, quantity: number, details?: Partial<CartItemDetails>) => {
+      setIsLoading(true);
+      try {
+        const buyItem: CartItemDetails = {
+          lineId: `line_${Date.now()}`,
+          variantId,
+          title: details?.title || 'Handcrafted Crochet Item',
+          subtitle: details?.subtitle,
+          price: details?.price || 0,
+          quantity,
+          image: details?.image || '',
+        };
+        openCheckout([buyItem]);
+      } finally {
+        setIsLoading(false);
       }
+    },
+    [openCheckout]
+  );
 
-      // Direct redirection to Shopify's secure hosted payment page
-      window.location.href = freshCart.checkoutUrl;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  /** Redirect to checkout URL for current active cart */
+  /** Open checkout modal for current active cart items */
   const proceedToCheckout = useCallback(() => {
-    if (checkoutUrl) {
-      window.location.href = checkoutUrl;
+    if (items.length > 0) {
+      openCheckout(items);
     }
-  }, [checkoutUrl]);
+  }, [items, openCheckout]);
+
+  /** Clear entire cart after successful payment */
+  const clearCart = useCallback(() => {
+    clearCartFromStorage();
+  }, [clearCartFromStorage]);
 
   /** Fallback count increment */
   const incrementCount = useCallback((qty = 1) => {
@@ -491,8 +520,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cost,
         isLoading,
         isCartOpen,
+        isCheckoutOpen,
+        checkoutItems,
         openCart,
         closeCart,
+        openCheckout,
+        closeCheckout,
+        clearCart,
         addToShopifyCart,
         addBouquetToShopifyCart,
         updateLineQuantity,

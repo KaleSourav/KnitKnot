@@ -12,7 +12,7 @@ function getEnv() {
   const env = {
     domain: '04wv6h-ut.myshopify.com',
     token: '0c626353bdea1d2a4c8f32890eb14565',
-    version: '2024-01',
+    version: '2026-10',
   };
 
   if (fs.existsSync(envPath)) {
