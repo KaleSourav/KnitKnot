@@ -280,7 +280,7 @@ export const TheHandsBehindEveryStitchSection: React.FC<TheHandsBehindEveryStitc
 
         {/* ── MOBILE: horizontal scrollable chapter tabs ── */}
         <div className="lg:hidden mb-5">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+          <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar snap-x snap-proximity">
             {CHAPTERS.map((c, i) => (
               <button
                 key={c.id}

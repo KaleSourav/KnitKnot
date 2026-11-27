@@ -49,7 +49,7 @@ function AppInner() {
       if (hash.startsWith('#order-confirmation') || hash.startsWith('#/order-confirmation')) return 'order-confirmation';
       if (hash.startsWith('#product') || hash.startsWith('#/product')) return 'product';
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
-      if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
+      if (hash.startsWith('#nani') || hash.startsWith('#/nani') || hash.startsWith('#meet-nani') || hash.startsWith('#/meet-nani') || hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
       if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) return 'b2b';
       if (hash.startsWith('#shipping') || hash.startsWith('#/shipping') || hash.startsWith('#return') || hash.startsWith('#/return') || hash.startsWith('#policy') || hash.startsWith('#/policy')) return 'policy';
       if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || path.includes('build-your-bouquet') || path.includes('bouquet-builder')) return 'bouquet-builder';
@@ -122,7 +122,7 @@ function AppInner() {
         } else {
           setSelectedCategory('all');
         }
-      } else if (hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) {
+      } else if (hash.startsWith('#nani') || hash.startsWith('#/nani') || hash.startsWith('#meet-nani') || hash.startsWith('#/meet-nani') || hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) {
         setCurrentPage('artisans');
         setSelectedProductId(null);
       } else if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) {
@@ -152,6 +152,21 @@ function AppInner() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  // Keep document title synchronized with the active page view
+  useEffect(() => {
+    const titles: Record<typeof currentPage, string> = {
+      home: 'Knotsnco - Everything Crochet',
+      shop: 'Shop Collection | Knotsnco',
+      product: 'Product Details | Knotsnco',
+      artisans: 'Meet Nani — Artisan Story | Knotsnco',
+      'bouquet-builder': 'Build Your Bouquet | Knotsnco',
+      b2b: 'B2B & Corporate Gifting | Knotsnco',
+      policy: 'Shipping & Return Policy | Knotsnco',
+      'order-confirmation': 'Order Confirmed | Knotsnco',
+    };
+    document.title = titles[currentPage] || 'Knotsnco - Everything Crochet';
+  }, [currentPage]);
+
   // Central page navigator
   const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', param: string = 'all') => {
     setCurrentPage(page);
@@ -177,7 +192,7 @@ function AppInner() {
       window.location.hash = `/product?id=${encodeURIComponent(param)}`;
     } else if (page === 'artisans') {
       setSelectedProductId(null);
-      window.location.hash = '/behind-the-stitches';
+      window.location.hash = '/nani';
     } else if (page === 'b2b') {
       setSelectedProductId(null);
       window.location.hash = '/b2b';
@@ -330,7 +345,7 @@ function AppInner() {
           />
         ) : currentPage === 'artisans' ? (
           /* =========================================================================
-             DEDICATED BEHIND THE STITCHES PAGE VIEW
+             DEDICATED NANI PAGE VIEW
              Celebrating Nanis, Daadis, Aunties & Artisans ("Every stitch has a story.")
              ========================================================================= */
           <BehindTheStitchesPage

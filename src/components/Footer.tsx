@@ -350,7 +350,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       onClick={() => onNavigate?.('artisans')}
                       className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
                     >
-                      behind the stitches (200+)
+                      nani (200+)
                     </button>
                   </li>
                   <li>

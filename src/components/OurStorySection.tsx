@@ -46,13 +46,13 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                 It all began in 2019 with a 16-year-old and a big dream &mdash; to build something beautiful with crochet.
               </p>
               <p>
-                What started as a love for yarn soon became something bigger. We met talented daadis and aunties who had incredible skills but few opportunities to showcase them.
+                What started as a love for yarn soon became something bigger. We met talented nanis, daadis and aunties who had incredible skills but few opportunities to showcase them.
               </p>
               <p>
                 So, we brought our worlds together, creating opportunities for them to work from home, earn independently and turn their passion into something special.
               </p>
               <p>
-                Today, we&apos;re a family of <strong className="font-bold text-[#641623]">200+ daadis, aunties and artisans</strong>, creating everything from colourful bouquets and plushies to bags and little handmade treasures.
+                Today, we&apos;re a family of <strong className="font-bold text-[#641623]">200+ nanis, daadis, aunties and artisans</strong>, creating everything from colourful bouquets and plushies to bags and little handmade treasures.
               </p>
               <p>
                 And we&apos;re just getting started.
@@ -70,7 +70,7 @@ export const OurStorySection: React.FC<OurStorySectionProps> = ({ onStoryClick }
                 onClick={onStoryClick}
                 className="inline-flex items-center justify-center min-w-[170px] sm:min-w-[220px] py-2.5 sm:py-3.5 px-6 sm:px-7 rounded-full border-[2.2px] border-[#641623] text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-lg tracking-wide hover:bg-[#641623] hover:text-[#FBF8CF] transition-all duration-200 cursor-pointer text-center"
               >
-                our story
+                meet nani ♡
               </button>
             </div>
 

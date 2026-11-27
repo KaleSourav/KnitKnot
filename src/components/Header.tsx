@@ -256,7 +256,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
           */}
 
-          {/* 3. Behind The Stitches (Dedicated Artisan Story Page) */}
+          {/* 3. Nani (Dedicated Artisan Story Page) */}
           <button
             type="button"
             onClick={() => onNavigate?.('artisans')}
@@ -265,9 +265,10 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'bg-[#811B2B] text-white shadow-xs scale-102'
                 : 'text-[#641623] hover:bg-[#FFF5CC] hover:text-[#811B2B] hover:-translate-y-0.5 hover:shadow-xs active:translate-y-0 active:scale-95'
             }`}
-            title="Behind The Stitches - Our Artisans (200+)"
+            title="Nani - Our Artisans (200+)"
           >
             <svg
+              aria-hidden="true"
               className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-120 group-hover:rotate-12 ${
                 currentPage === 'artisans' ? 'text-white' : 'text-[#811B2B]'
               }`}
@@ -276,7 +277,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>Behind The Stitches</span>
+            <span>Nani</span>
           </button>
 
           {/* 3. B2B Corporate Gifting */}
@@ -489,7 +490,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               */}
 
-              {/* Behind The Stitches (Dedicated Artisan Story Page) */}
+              {/* Nani (Dedicated Artisan Story Page) */}
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -503,6 +504,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <span className="flex items-center gap-2.5">
                   <svg
+                    aria-hidden="true"
                     className={`w-5 h-5 transition-transform duration-200 group-hover:scale-120 group-hover:rotate-12 ${
                       currentPage === 'artisans' ? 'text-white' : 'text-[#811B2B]'
                     }`}
@@ -511,7 +513,7 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
-                  <span>behind the stitches</span>
+                  <span>nani</span>
                 </span>
                 <span className="text-xs text-[#811B2B] font-bold bg-[#FFF5CC] px-2 py-0.5 rounded-full border border-[#811B2B]/20">200+ ♡</span>
               </button>
@@ -659,7 +661,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Drawer Footer */}
             <div className="pt-4 border-t border-[#EFE4D6] space-y-1.5 text-center text-xs text-[#641623]/75 font-['Fredoka']">
               <p className="font-bold text-[#641623]">knotsnco. • everything crochet</p>
-              <p className="text-[11px]">Handcrafted with love by our dadis in Surat.</p>
+              <p className="text-[11px]">Handcrafted with love by our nanis in Surat.</p>
             </div>
           </div>
         </div>
