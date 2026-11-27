@@ -1,1125 +1,1111 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from 'motion/react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import {
   ArrowLeft,
   ArrowRight,
-  Heart,
-  Sparkles,
-  ShoppingBag,
+  ChevronLeft,
+  ChevronRight,
   ZoomIn,
   X,
-  ChevronDown,
-  LayoutList,
-  Layers,
+  ShoppingBag,
 } from 'lucide-react';
+import { useProducts } from '../context/ProductContext';
+import { ShopProduct } from '../data/allProductsData';
 
 interface BehindTheStitchesPageProps {
   onNavigateHome: () => void;
   onNavigateShop: (category?: string) => void;
+  onNavigateProduct?: (id: string) => void;
 }
 
-interface StoryChapter {
+interface CraftHotspot {
   id: string;
-  step: string;
-  badge: string;
-  shortLabel: string;
-  emoji: string;
+  xPercent: number;
+  yPercent: number;
+  label: string;
+  detail: string;
+}
+
+interface AlbumFrame {
+  id: string;
+  frameNo: string;
+  timeStamp: string;
   title: string;
-  headline: string;
-  quote: string;
-  body: string[];
-  craftNoteTitle: string;
-  craftNote: string;
-  yarnColors: Array<{ name: string; hex: string }>;
-  caption: string;
+  subtitle: string;
+  story: string[];
+  whisper: string;
   imagePng: string;
   imageWebp: string;
   alt: string;
-  accentBg: string;
-  accentBorder: string;
+  tiltClass: string;
+  hotspots: CraftHotspot[];
 }
 
-interface PostcardNote {
+interface TransformationPair {
   id: string;
-  emoji: string;
-  title: string;
-  teaser: string;
-  secretNote: string;
-  artisanTag: string;
-  bgClass: string;
+  label: string;
+  hoursSpent: string;
+  stitchEstimate: string;
+  beforeImage: string;
+  beforeAlt: string;
+  afterImage: string;
+  afterAlt: string;
+  stages: {
+    early: string;
+    middle: string;
+    finished: string;
+  };
 }
 
-const CHAPTERS: StoryChapter[] = [
+interface PerspectiveVoice {
+  id: string;
+  tab: string;
+  salutation: string;
+  paragraphs: string[];
+  signOff: string;
+}
+
+const TRANSFORMATION_PAIRS: TransformationPair[] = [
   {
-    id: 'craft-begins',
-    step: '01',
-    badge: 'The Beginning',
-    shortLabel: 'Where It Started',
-    emoji: '🧶',
-    title: 'Where Nani’s Craft Meets the World',
-    headline: 'Every beautiful thing begins with a single stitch.',
-    quote:
-      'In 2019, a 16-year-old with a dream met a nani with golden hands — and together they spun a movement.',
-    body: [
-      'We met talented nanis, daadis, and aunties across our neighbourhoods who had spent lifetimes perfecting crochet, yet rarely had a platform to share their artistry beyond family gifts.',
-      'So we began bringing soft milk-cotton yarn straight to their doorsteps, turning cherished heirloom skills into joyful, dignified home-based livelihoods.',
+    id: 'sunflower-bouquet',
+    label: 'Sunflowers',
+    hoursSpent: '3–4 unhurried hours',
+    stitchEstimate: '680+ hand-hooked loops',
+    beforeImage: '/stories/artisan-3-creative-process.webp',
+    beforeAlt: 'Nani seated at home in an indigo floral kurta crocheting marigold yellow wool',
+    afterImage: '/story/story-lifestyle-table.jpg',
+    afterAlt: 'Finished crochet sunflower bouquet wrapped in kraft paper with a maroon ribbon',
+    stages: {
+      early: 'Hour 01 — Soft cotton yarn rests over cushions as she builds the brown spiral center loop by loop.',
+      middle: 'Hour 02 — Afternoon chai pauses beside her; 18 golden petals are shaped carefully with finger tension alone.',
+      finished: 'Hour 04 — Wire-wrapped stems, stitched leaves, and tied in maroon satin. Flowers that never lose a single petal.',
+    },
+  },
+  {
+    id: 'daisy-pot',
+    label: 'Daisy Pot',
+    hoursSpent: '2.5 calm hours',
+    stitchEstimate: '520+ neat slip-knots',
+    beforeImage: '/stories/artisan-1-craft-begins.webp',
+    beforeAlt: 'Nani wearing glasses crocheting red wool near morning window sunlight',
+    afterImage: '/story/story-crochet-daisies.jpg',
+    afterAlt: 'Handmade white daisy blooms arranged inside a braided yarn pot with wooden button',
+    stages: {
+      early: 'Hour 01 — Choosing her slender 3mm hook by the window before the afternoon sun warms the room.',
+      middle: 'Hour 02 — Alternating dense stitches so the braided basket stands sturdy on its own without plastic inserts.',
+      finished: 'Hour 2.5 — Finished with a little wooden button bow — quiet morning cheer for a study desk or kitchen shelf.',
+    },
+  },
+  {
+    id: 'peach-tulips',
+    label: 'Peach Tulips',
+    hoursSpent: '3 quiet hours',
+    stitchEstimate: '610+ tight petal rows',
+    beforeImage: '/stories/artisan-2-hands-magic.webp',
+    beforeAlt: 'Close-up of Nani hands wearing an emerald stone ring while working yarn cleanly',
+    afterImage: '/story/story-tulip-arch.jpg',
+    afterAlt: 'Coral and blush crochet tulip stems tied with an ivory crocheted bow',
+    stages: {
+      early: 'Hour 01 — Thread looped twice over her forefinger so every cup-shaped tulip bud blooms uniformly.',
+      middle: 'Hour 02 — Stuffed lightly with soft fibre-fill and closed at the crown by intuition alone.',
+      finished: 'Hour 03 — Gathered into soft pastel stems with an ivory hand-crocheted ribbon ready to unwrap.',
+    },
+  },
+];
+
+const ALBUM_FRAMES: AlbumFrame[] = [
+  {
+    id: 'morning-window',
+    frameNo: '01 / 04',
+    timeStamp: 'Morning · Near the Window',
+    title: 'Before the House Wakes Up',
+    subtitle: 'Quiet sunlight, a denim lap apron, and her light blue hook.',
+    story: [
+      'Before the kitchen gets busy, she likes half an hour by the window where the daylight falls clean across the wool.',
+      'She never follows a hurried assembly quota. When a flower starts taking shape in red cotton, it moves at the exact speed of calm breathing.',
     ],
-    craftNoteTitle: 'Heirloom Stitches Reimagined',
-    craftNote:
-      'Many of our nanis learned basic chain and single-crochet stitches as young girls. Today, those same foundational loops form blooming petals, amigurumi plushies, and keepsake charms shipped across India.',
-    yarnColors: [
-      { name: 'Crimson', hex: '#A41D31' },
-      { name: 'Warm Butter', hex: '#F7BE44' },
-      { name: 'Blush Cream', hex: '#F4D8CE' },
-    ],
-    caption: 'Every beautiful thing begins with a single stitch.',
+    whisper: 'Every stitch begins at her own pace — never under factory fluorescent lights.',
     imagePng: '/stories/artisan-1-craft-begins.png',
     imageWebp: '/stories/artisan-1-craft-begins.webp',
-    alt: 'Nani artisan wearing glasses crocheting vibrant red yarn with patience and precision',
-    accentBg: '#FFF5CC',
-    accentBorder: '#F7BE44',
+    alt: 'Nani artisan wearing glasses crocheting red yarn with a blue crochet hook in soft window light',
+    tiltClass: '-rotate-1',
+    hotspots: [
+      {
+        id: 'hook',
+        xPercent: 61,
+        yPercent: 60,
+        label: 'Her 3mm Aluminum Hook',
+        detail: 'Light enough for three hours of stitching without tiring her wrists. Most nanis keep one favourite worn hook wrapped safely in a cloth pouch.',
+      },
+      {
+        id: 'sunlight',
+        xPercent: 32,
+        yPercent: 36,
+        label: 'Working by Daylight',
+        detail: 'Working from home lets her pick the brightest hour of morning and pause whenever family needs her.',
+      },
+    ],
   },
   {
-    id: 'hands-magic',
-    step: '02',
-    badge: "Nani's Magic",
-    shortLabel: "Nani's Magic",
-    emoji: '💛',
-    title: 'The Hands Behind Every Loop',
-    headline: 'Years of skill, patience, and intuition in every stitch.',
-    quote:
-      'True handmade tension cannot be programmed — no machine on earth can replicate a Nani’s gentle touch.',
-    body: [
-      'Look closely at these hands: the steady rhythm guiding purple yarn around a hook, decades of muscle memory, and quiet patience poured into every petal fold.',
-      'Each piece carries hours of calm craftsmanship and real human warmth — something you feel the instant you unbox a Knots & Co keepsake.',
+    id: 'emerald-ring',
+    frameNo: '02 / 04',
+    timeStamp: 'Afternoon · Evening Tea Hour',
+    title: 'Thirty Winters in Her Knuckles',
+    subtitle: 'Look closely at the rings and the stillness of her hands.',
+    story: [
+      'A machine stamps identical thread in half a second, and it feels cold the moment you touch it.',
+      'Look at the steady angle of her knuckles holding that lilac strand: the same hands that taught nieces chain-stitches during summer holidays now send warmth across India.',
     ],
-    craftNoteTitle: 'Why Crochet Cannot Be Machine-Made',
-    craftNote:
-      'Unlike woven or knitted fabric, crochet relies on interlocking 3D slip-knots turned in multiple planes. Every flower petal and plushie head at Knotsnco is genuinely 100% hand-hooked.',
-    yarnColors: [
-      { name: 'Plum Iris', hex: '#7A4988' },
-      { name: 'Rosewood', hex: '#811B2B' },
-      { name: 'Soft Sky', hex: '#A8D8EA' },
-    ],
-    caption: 'Years of skill, patience, and creativity in every loop.',
+    whisper: 'That subtle organic curve on a flower petal comes directly from human grip and memory.',
     imagePng: '/stories/artisan-2-hands-magic.png',
     imageWebp: '/stories/artisan-2-hands-magic.webp',
-    alt: 'Close-up photograph of Nani hands adorned with rings crocheting purple yarn',
-    accentBg: '#D9EEF5',
-    accentBorder: '#7BBFD4',
+    alt: 'Macro view of Nani weathered hands wearing an emerald ring and gold band guiding purple yarn',
+    tiltClass: 'rotate-1',
+    hotspots: [
+      {
+        id: 'ring',
+        xPercent: 22,
+        yPercent: 48,
+        label: 'An Heirloom Stone Ring',
+        detail: 'Her everyday gold bands catch the wool as she turns each row — forty years of patience woven directly into your keepsake.',
+      },
+      {
+        id: 'knit',
+        xPercent: 43,
+        yPercent: 79,
+        label: 'Counting Without Charts',
+        detail: 'Experienced artisans track stripe transitions purely by fingertip feel while talking with grandchildren beside them.',
+      },
+    ],
   },
   {
-    id: 'creative-process',
-    step: '03',
-    badge: 'Work With Dignity',
-    shortLabel: 'At Her Own Pace',
-    emoji: '🏡',
-    title: 'Creating Comfortably From Home',
-    headline: 'Turning simple skeins of yarn into financial independence.',
-    quote:
-      'She works with a warm cup of chai nearby, surrounded by family, taking immense pride in earning on her own terms.',
-    body: [
-      'Working from home means our nanis never face rigid factory shifts or grueling commutes. They craft when inspired, rest whenever they choose, and stay present with their children and grandchildren.',
-      'From cheerful sunflower bouquets to pocket keychains and tabletop decor, each creation comes alive in a peaceful living room.',
+    id: 'home-veranda',
+    frameNo: '03 / 04',
+    timeStamp: 'Mid-Day · On Her Own Sofa',
+    title: 'Zero Shifts. Full Dignity.',
+    subtitle: 'Made beside cushions, rugs, and family laughter in Surat.',
+    story: [
+      'In 2019, starting at sixteen, we didn’t rent noisy rooms with rows of machines. We carried bags of yarn up stairs straight to nanis’ living rooms.',
+      'They decide how many pieces to take home each week. When festivals arrive or grandkids visit from school, the wool rests waiting until she chooses.',
     ],
-    craftNoteTitle: 'Flexible, Doorstep Yarn Delivery',
-    craftNote:
-      'Our team drops off combed cotton skeins, stuffing, and brass hooks every week and picks up finished pieces — making earning effortless and completely stress-free.',
-    yarnColors: [
-      { name: 'Marigold', hex: '#EA8C2A' },
-      { name: 'Sunburst', hex: '#F7BE44' },
-      { name: 'Leaf Sage', hex: '#6F8F5C' },
-    ],
-    caption: 'Turning simple yarn into something extraordinary.',
+    whisper: 'Independent income in her own hands — without ever stepping out into a crowded factory.',
     imagePng: '/stories/artisan-3-creative-process.png',
     imageWebp: '/stories/artisan-3-creative-process.webp',
-    alt: 'Nani artisan sitting comfortably at home crafting a vibrant orange crochet piece',
-    accentBg: '#FFF5CC',
-    accentBorder: '#F7BE44',
+    alt: 'Nani sitting comfortably at home in an indigo kurta crafting vibrant marigold crochet',
+    tiltClass: '-rotate-1',
+    hotspots: [
+      {
+        id: 'saffron',
+        xPercent: 54,
+        yPercent: 42,
+        label: 'Warm Marigold Cotton',
+        detail: 'We drop off combed cotton skeins at her doorstep every week and collect finished blooms without charging her a single rupee upfront.',
+      },
+      {
+        id: 'cushion',
+        xPercent: 26,
+        yPercent: 73,
+        label: 'Her Own Living Room',
+        detail: 'Nothing beats crafting on a familiar rug beside afternoon tea rather than punching a clock.',
+      },
+    ],
   },
   {
-    id: 'community-creativity',
-    step: '04',
-    badge: 'One Family',
-    shortLabel: 'One Family',
-    emoji: '🌸',
-    title: 'A Sisterhood Woven Across Surat',
-    headline: 'Different colours. Different hands. One proud handmade family.',
-    quote:
-      'More than a craft collective — a sisterhood of 200+ women cheering for every milestone together.',
-    body: [
-      'What began as one living-room conversation has blossomed into a vibrant network of nanis, daadis, and aunties across Surat and neighbouring towns.',
-      'When you gift a Knots & Co bouquet or charm, you are not gifting mass-produced merchandise — you are celebrating a real Nani’s artistry and story.',
+    id: 'purple-tension',
+    frameNo: '04 / 04',
+    timeStamp: 'Sundown · Sharing Patterns',
+    title: 'Two Hundred Living Rooms, One Family',
+    subtitle: 'Different neighbourhoods across Surat sharing colours and pride.',
+    story: [
+      'See how the purple yarn wraps twice around her left forefinger? Every neighbourhood nani guards tiny tricks like that — passing them to younger women on the street.',
+      'What started with one conversation now sustains more than two hundred women turning simple wool into gifts for birthdays, anniversaries, and homes.',
     ],
-    craftNoteTitle: '200+ Women, Shared Patterns & Joy',
-    craftNote:
-      'Experienced nanis mentor newer artisans on intricate picot borders and floral shaping, keeping traditional needlecraft alive for the next generation.',
-    yarnColors: [
-      { name: 'Ruby Yarn', hex: '#811B2B' },
-      { name: 'Teal Mist', hex: '#5BA4B8' },
-      { name: 'Daffodil', hex: '#F7BE44' },
-    ],
-    caption: 'Different colours. Different hands. One beautiful handmade family.',
+    whisper: 'When you buy one keychain or bouquet, it puts earned pride directly in one woman’s palm.',
     imagePng: '/stories/artisan-4-community-family.png',
     imageWebp: '/stories/artisan-4-community-family.webp',
-    alt: 'Nani artisan hands crocheting a colourful geometric textile with diverse yarn hues',
-    accentBg: '#D9EEF5',
-    accentBorder: '#7BBFD4',
+    alt: 'Nani hands crocheting vibrant rainbow granny squares with lilac thread coiled around her finger',
+    tiltClass: 'rotate-1',
+    hotspots: [
+      {
+        id: 'tension',
+        xPercent: 80,
+        yPercent: 34,
+        label: 'The Two-Wrap Tension Secret',
+        detail: 'Wrapping yarn gently around her forefinger regulates pull smoothly, keeping hundreds of rows crisp and soft instead of stiff.',
+      },
+      {
+        id: 'granny',
+        xPercent: 45,
+        yPercent: 68,
+        label: 'Instinct for Colour',
+        detail: 'Ruby, daffodil, moss, and rosewood rows balance naturally — a palette instinct honed over decades.',
+      },
+    ],
   },
 ];
 
-const POSTCARD_NOTES: PostcardNote[] = [
+const PERSPECTIVE_VOICES: PerspectiveVoice[] = [
   {
-    id: 'chai-stitch',
-    emoji: '☕',
-    title: 'Morning Chai & Yarn Rituals',
-    teaser: 'How a bouquet blooms in Nani’s courtyard',
-    secretNote:
-      'A single forever sunflower bouquet passes through 2 to 4 hours of mindful finger-hook tension — crafted alongside morning bhajans and afternoon tea.',
-    artisanTag: 'Surat Atelier Family',
-    bgClass: 'bg-[#FFF5CC] border-[#F7BE44]/50',
+    id: 'nani',
+    tab: "From Nani's Room",
+    salutation: '“I used to stitch only for grandchildren’s winters.”',
+    paragraphs: [
+      'My eyes aren’t as fast as they were at twenty, so nobody imagines a sixty-something grandmother’s craft still belongs in modern homes. Then a young boy knocked with soft yellow yarn and asked if I could crochet sunflowers.',
+      'Last Diwali, I bought bangles for my granddaughter from money I earned sitting right beside my evening tea. That happiness sits taller than anything else.',
+    ],
+    signOff: '— One of 200+ Nanis in Surat',
   },
   {
-    id: 'zero-factories',
-    emoji: '✨',
-    title: 'Zero Machines, 100% Heartbeat',
-    teaser: 'Why subtle stitch variations are precious',
-    secretNote:
-      'Every Nani holds her crochet hook slightly differently. Those tiny organic curves in petal tilt mean your gift is genuinely one of a kind.',
-    artisanTag: 'Hand-Hooked Heritage',
-    bgClass: 'bg-[#D9EEF5] border-[#7BBFD4]/55',
+    id: 'family',
+    tab: 'From Her Daughter',
+    salutation: '“We never knew her quiet hobby meant so much to strangers.”',
+    paragraphs: [
+      'For thirty years, Maa fixed torn sweaters and made baby booties whenever anyone in the building had a child — never thinking twice about charging for her time.',
+      'Now when an order message arrives, she puts on her spectacles with pride, spreads the skeins across the diwan, and asks where this bouquet is travelling next.',
+    ],
+    signOff: '— Family of a Knots & Co. Artisan',
   },
   {
-    id: 'pride-earned',
-    emoji: '💝',
-    title: 'Independent Pocket Money & Pride',
-    teaser: 'Where every order truly travels',
-    secretNote:
-      'Nanis tell us their favourite moment is buying sweets for their grandkids or gifting sarees with money earned straight from their own crochet hands.',
-    artisanTag: '200+ Empowered Homes',
-    bgClass: 'bg-[#FCE8EC] border-[#811B2B]/25',
+    id: 'knots',
+    tab: 'From Knots & Co.',
+    salutation: '“Started at sixteen. Built on doorstep deliveries.”',
+    paragraphs: [
+      'When Knots & Co. began in 2019, we realized the finest crochet hands weren’t inside commercial workshops — they were resting quietly at home in neighbourhoods all around us.',
+      'Today, more than two hundred nanis, daadis, and aunties form the backbone of everything on this website. Every slight tilt in a petal is proof a human made it with patience.',
+    ],
+    signOff: '— The Knots & Co. Team, Surat',
   },
 ];
-
-const STATS = [
-  { number: '200+', label: 'Nani Artisans', emoji: '👵' },
-  { number: '2019', label: 'Year Started', emoji: '🧶' },
-  { number: '100%', label: 'Hand-Hooked', emoji: '💛' },
-  { number: 'Surat', label: 'Homegrown Roots', emoji: '🏡' },
-];
-
-const BASE_LOVE_COUNT = 1248;
-const LS_LOVE_KEY = 'knotsnco_nani_love_count';
-const LS_USER_LOVED_KEY = 'knotsnco_nani_user_hearts';
-
-interface FloatingHeart {
-  id: number;
-  x: number;
-  y: number;
-}
 
 export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   onNavigateHome,
   onNavigateShop,
+  onNavigateProduct,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const heartIdRef = useRef(0);
-
+  const { products } = useProducts();
   const prefersReduced = useReducedMotion();
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'interactive' | 'timeline'>('interactive');
-  const [craftExpanded, setCraftExpanded] = useState<Record<string, boolean>>({});
-  const [openPostcard, setOpenPostcard] = useState<string | null>('chai-stitch');
-  const [lightboxChapter, setLightboxChapter] = useState<StoryChapter | null>(null);
-  const [hearts, setHearts] = useState<FloatingHeart[]>([]);
-  const [loveAnnouncement, setLoveAnnouncement] = useState('');
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const albumTabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const swipeStartX = useRef<number | null>(null);
+  const swipeStartY = useRef<number | null>(null);
 
-  const [loveCount, setLoveCount] = useState<number>(() => {
-    if (typeof window === 'undefined') return BASE_LOVE_COUNT;
-    try {
-      const saved = localStorage.getItem(LS_LOVE_KEY);
-      const parsed = saved ? parseInt(saved, 10) : NaN;
-      return Number.isFinite(parsed) && parsed >= BASE_LOVE_COUNT ? parsed : BASE_LOVE_COUNT;
-    } catch {
-      return BASE_LOVE_COUNT;
+  // Interactive State
+  const [selectedPairIndex, setSelectedPairIndex] = useState(0);
+  const [sliderPercent, setSliderPercent] = useState(52);
+  const [activeFrameIndex, setActiveFrameIndex] = useState(1); // Start with iconic emerald-ring macro photo
+  const [activeHotspotId, setActiveHotspotId] = useState<string>(ALBUM_FRAMES[1].hotspots[0].id);
+  const [activeVoiceIndex, setActiveVoiceIndex] = useState(0);
+  const [lightboxFrame, setLightboxFrame] = useState<AlbumFrame | null>(null);
+
+  const currentPair = TRANSFORMATION_PAIRS[selectedPairIndex];
+  const currentFrame = ALBUM_FRAMES[activeFrameIndex];
+  const currentHotspot =
+    currentFrame.hotspots.find((h) => h.id === activeHotspotId) || currentFrame.hotspots[0];
+  const currentVoice = PERSPECTIVE_VOICES[activeVoiceIndex];
+
+  // Pick 4 real handmade Shopify items to showcase "Fresh off her table"
+  const handpickedPieces = useMemo<ShopProduct[]>(() => {
+    const inStock = products.filter((p) => p.inStock && p.image);
+    const categoriesPriority = ['Bouquets', 'Flower Pots', 'Keychains', 'Plushies'];
+    const picked: ShopProduct[] = [];
+    const seenIds = new Set<string>();
+
+    for (const cat of categoriesPriority) {
+      const match = inStock.find(
+        (p) =>
+          p.category.toLowerCase().includes(cat.toLowerCase()) && !seenIds.has(p.id)
+      );
+      if (match) {
+        picked.push(match);
+        seenIds.add(match.id);
+      }
     }
-  });
-
-  const [userHeartsSent, setUserHeartsSent] = useState<number>(() => {
-    if (typeof window === 'undefined') return 0;
-    try {
-      const saved = localStorage.getItem(LS_USER_LOVED_KEY);
-      const parsed = saved ? parseInt(saved, 10) : 0;
-      return Number.isFinite(parsed) ? parsed : 0;
-    } catch {
-      return 0;
+    for (const p of inStock) {
+      if (picked.length >= 4) break;
+      if (!seenIds.has(p.id)) {
+        picked.push(p);
+        seenIds.add(p.id);
+      }
     }
-  });
+    return picked;
+  }, [products]);
 
-  const activeChapter = CHAPTERS[activeIndex];
-
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  // Keep active tab pill scrolled into view on narrow mobile viewports
+  // Reset active hotspot cleanly whenever photo changes
   useEffect(() => {
-    const activeTabEl = tabRefs.current[activeIndex];
-    if (activeTabEl && typeof activeTabEl.scrollIntoView === 'function') {
-      activeTabEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    }
-  }, [activeIndex]);
+    setActiveHotspotId(ALBUM_FRAMES[activeFrameIndex].hotspots[0].id);
+  }, [activeFrameIndex]);
 
-  // Manage native <dialog> lifecycle for photo lightbox
+  // Native <dialog> lightbox sync
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (lightboxChapter && !dialog.open) {
-      dialog.showModal();
-    } else if (!lightboxChapter && dialog.open) {
-      dialog.close();
-    }
-  }, [lightboxChapter]);
+    if (lightboxFrame && !dialog.open) dialog.showModal();
+    else if (!lightboxFrame && dialog.open) dialog.close();
+  }, [lightboxFrame]);
 
-  // Smooth scroll tracking for timeline yarn thread
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 65%', 'end 90%'],
-  });
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  const pathLength = prefersReduced ? 1 : smoothProgress;
+  // Slider stage narrative copy based on sliderPercent
+  const currentStageCopy =
+    sliderPercent < 34
+      ? currentPair.stages.early
+      : sliderPercent < 70
+      ? currentPair.stages.middle
+      : currentPair.stages.finished;
 
-  const sendLoveToNani = useCallback(
-    (clientX?: number, clientY?: number) => {
-      setLoveCount((prev) => {
-        const next = prev + 1;
-        try {
-          localStorage.setItem(LS_LOVE_KEY, String(next));
-        } catch {}
-        setLoveAnnouncement(`Sent love to Nani! Total hearts: ${next.toLocaleString('en-IN')}`);
-        return next;
-      });
-      setUserHeartsSent((prev) => {
-        const next = prev + 1;
-        try {
-          localStorage.setItem(LS_USER_LOVED_KEY, String(next));
-        } catch {}
-        return next;
-      });
+  const currentStageLabel =
+    sliderPercent < 34
+      ? 'Stage 1 · Skein & Tension'
+      : sliderPercent < 70
+      ? 'Stage 2 · Afternoon Patience'
+      : 'Stage 3 · Ready to Keep';
 
-      if (!prefersReduced && typeof clientX === 'number' && typeof clientY === 'number' && clientX > 0 && clientY > 0) {
-        const id = heartIdRef.current++;
-        setHearts((prev) => [...prev.slice(-10), { id, x: clientX, y: clientY }]);
-      }
-    },
-    [prefersReduced]
-  );
+  const scrollToTransform = () => {
+    sliderContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
-  const removeHeart = useCallback((id: number) => {
-    setHearts((prev) => prev.filter((h) => h.id !== id));
-  }, []);
+  // Keyboard navigation for album tabs
+  const handleAlbumTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const len = ALBUM_FRAMES.length;
+    let next: number | null = null;
+    if (e.key === 'ArrowRight') next = (activeFrameIndex + 1) % len;
+    else if (e.key === 'ArrowLeft') next = (activeFrameIndex - 1 + len) % len;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = len - 1;
 
-  const toggleCraftNote = useCallback((chapterId: string) => {
-    setCraftExpanded((prev) => ({ ...prev, [chapterId]: !prev[chapterId] }));
-  }, []);
-
-  // Keyboard navigation following WAI-ARIA tablist guidelines
-  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const count = CHAPTERS.length;
-    let nextIndex: number | null = null;
-    if (e.key === 'ArrowRight') nextIndex = (activeIndex + 1) % count;
-    else if (e.key === 'ArrowLeft') nextIndex = (activeIndex - 1 + count) % count;
-    else if (e.key === 'Home') nextIndex = 0;
-    else if (e.key === 'End') nextIndex = count - 1;
-
-    if (nextIndex !== null) {
+    if (next !== null) {
       e.preventDefault();
-      setActiveIndex(nextIndex);
-      tabRefs.current[nextIndex]?.focus();
+      setActiveFrameIndex(next);
+      albumTabRefs.current[next]?.focus();
     }
   };
 
-  // Horizontal touch swipe between chapters without blocking vertical scroll
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
+  // Mobile horizontal swipe on album deck without blocking vertical page scroll
+  const handleDeckTouchStart = (e: React.TouchEvent) => {
+    swipeStartX.current = e.touches[0].clientX;
+    swipeStartY.current = e.touches[0].clientY;
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const dy = e.changedTouches[0].clientY - touchStartY.current;
-    touchStartX.current = null;
-    touchStartY.current = null;
+  const handleDeckTouchEnd = (e: React.TouchEvent) => {
+    if (swipeStartX.current === null || swipeStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - swipeStartX.current;
+    const dy = e.changedTouches[0].clientY - swipeStartY.current;
+    swipeStartX.current = null;
+    swipeStartY.current = null;
 
-    // Only trigger swipe when horizontal drag clearly dominates vertical scroll
-    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
-      if (dx < 0 && activeIndex < CHAPTERS.length - 1) {
-        setActiveIndex((i) => i + 1);
-      } else if (dx > 0 && activeIndex > 0) {
-        setActiveIndex((i) => i - 1);
+    if (Math.abs(dx) > 42 && Math.abs(dx) > Math.abs(dy) * 1.25) {
+      if (dx < 0) {
+        setActiveFrameIndex((i) => (i + 1) % ALBUM_FRAMES.length);
+      } else {
+        setActiveFrameIndex((i) => (i - 1 + ALBUM_FRAMES.length) % ALBUM_FRAMES.length);
       }
     }
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full min-h-screen bg-[#FBF8CF] text-[#2D2424] font-['Fredoka'] overflow-x-hidden"
-    >
-      {/* Floating heart burst animations (decorative) */}
-      <div aria-hidden="true" className="pointer-events-none">
-        {hearts.map((h) => (
-          <motion.div
-            key={h.id}
-            className="fixed z-50 text-2xl text-[#811B2B] select-none"
-            style={{ left: h.x - 12, top: h.y - 14 }}
-            initial={{ opacity: 1, scale: 0.6, y: 0 }}
-            animate={{ opacity: 0, scale: 1.7, y: -64 }}
-            transition={{ duration: 0.75, ease: 'easeOut' }}
-            onAnimationComplete={() => removeHeart(h.id)}
-          >
-            ♡
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Screen-reader live announcement for appreciation counter */}
-      <div className="sr-only" aria-live="polite" aria-atomic="true">
-        {loveAnnouncement}
-      </div>
-
+    <div className="relative w-full min-h-screen bg-[#FBF8CF] text-[#2D2424] font-['Fredoka'] overflow-x-hidden">
       {/* =====================================================================
-          1. TOP BREADCRUMB BAR
+          1. QUIET ARCHIVE TOP BAR
           ===================================================================== */}
       <div className="w-full bg-[#FFFDF8] border-b border-[#641623]/10 py-2.5 px-4 sm:px-8 lg:px-12">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <button
             type="button"
             onClick={onNavigateHome}
             className="inline-flex items-center gap-2 min-h-[40px] px-2 -ml-2 rounded-lg text-xs sm:text-sm font-bold text-[#641623] hover:text-[#811B2B] hover:-translate-x-0.5 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] focus-visible:outline-offset-2"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            <span>Back to Home</span>
+            <span>Home</span>
           </button>
 
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm text-[#641623]/65 font-medium">
-            <button
-              type="button"
-              onClick={onNavigateHome}
-              className="hover:text-[#641623] hover:underline cursor-pointer min-h-[36px] px-1 rounded focus-visible:outline-3 focus-visible:outline-[#811B2B]"
-            >
-              Home
-            </button>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#811B2B] font-bold" aria-current="page">
-              Nani
-            </span>
+          <nav aria-label="Breadcrumb" className="text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase text-[#641623]/60">
+            <span>Knots &amp; Co. Archive</span>
+            <span className="mx-2 text-[#811B2B]/40" aria-hidden="true">/</span>
+            <span className="text-[#811B2B]" aria-current="page">Nani</span>
           </nav>
         </div>
       </div>
 
       {/* =====================================================================
-          2. EDITORIAL HERO HEADER ("Meet Nani")
+          2. ACT 1 — INTIMATE EDITORIAL COVER
           ===================================================================== */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-8 sm:pt-14 pb-8 sm:pb-12">
-        {/* Eyebrow Pill */}
-        <motion.div
-          initial={prefersReduced ? false : { opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF5CC] border border-[#811B2B]/20 text-[#811B2B] text-xs sm:text-sm font-bold tracking-wider uppercase mb-4 shadow-xs"
-        >
-          <span aria-hidden="true">👵</span>
-          <span>THE HEART BEHIND THE HANDMADE</span>
-          <span aria-hidden="true">🧶</span>
-        </motion.div>
+      <section className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 pt-10 sm:pt-16 lg:pt-20 pb-14 sm:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Left Editorial Typography */}
+          <div className="lg:col-span-6 text-left space-y-5 sm:space-y-6">
+            <p className="font-script text-xl sm:text-2xl text-[#811B2B] -rotate-1 inline-block">
+              before a flower blooms in your room
+            </p>
 
-        {/* Main Page Title */}
-        <motion.h1
-          initial={prefersReduced ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl sm:text-6xl md:text-7xl font-black text-[#641623] tracking-tight leading-[1.1]"
-        >
-          <span>Meet </span>
-          <span className="font-script font-normal text-[1.22em] text-[#811B2B] inline-block -rotate-2 px-1">
-            Nani
-          </span>
-        </motion.h1>
-
-        {/* Warm Sub-headline */}
-        <motion.h2
-          initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-2.5 sm:mt-4 text-xl sm:text-3xl font-bold text-[#811B2B] tracking-tight"
-        >
-          <span>Every </span>
-          <span className="font-script font-normal text-[1.16em] inline-block -rotate-2 px-0.5">
-            stitch
-          </span>
-          <span> has her story.</span>
-        </motion.h2>
-
-        {/* Quote Intro */}
-        <motion.p
-          initial={prefersReduced ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-3.5 sm:mt-5 text-sm sm:text-lg md:text-xl text-[#2D2424]/85 font-normal max-w-2xl mx-auto leading-relaxed italic"
-        >
-          &ldquo;Behind every crochet bouquet and plushie are the patient, loving hands of our 200+ Nanis.&rdquo;
-        </motion.p>
-
-        {/* Hero Interactive Actions: Send Love + View Mode Switch */}
-        <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button
-            type="button"
-            onClick={(e) => sendLoveToNani(e.clientX, e.clientY)}
-            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 sm:px-6 py-2.5 rounded-full bg-[#811B2B] text-white font-bold text-sm sm:text-base shadow-md hover:bg-[#641623] active:scale-95 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#641623] focus-visible:outline-offset-2"
-          >
-            <Heart
-              aria-hidden="true"
-              className={`w-4 h-4 ${userHeartsSent > 0 ? 'fill-[#F7BE44] text-[#F7BE44]' : 'fill-white/25'}`}
-            />
-            <span>Send Love to Nani</span>
-            <span className="ml-0.5 px-2 py-0.5 rounded-full bg-white/18 text-xs font-extrabold tabular-nums">
-              {loveCount.toLocaleString('en-IN')}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onNavigateShop('all')}
-            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full bg-[#FFFDF8] border-2 border-[#641623]/30 text-[#641623] font-bold text-sm sm:text-base hover:border-[#641623] hover:bg-[#FFF5CC] active:scale-95 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] focus-visible:outline-offset-2"
-          >
-            <ShoppingBag aria-hidden="true" className="w-4 h-4" />
-            <span>Shop Nani&apos;s Crafts</span>
-          </button>
-        </div>
-
-        {/* 2x2 Mobile / 4-col Desktop Stats Ribbon */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-w-3xl mx-auto">
-          {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl bg-[#FFFDF8] border border-[#811B2B]/15 px-3 py-3 sm:py-4 shadow-2xs flex flex-col items-center justify-center"
+            <h1
+              className="font-black text-[#641623] tracking-tight leading-[1.05]"
+              style={{ fontSize: 'clamp(2.55rem, 1.4rem + 4.4vw, 4.75rem)' }}
             >
-              <span className="text-xl sm:text-2xl mb-1" aria-hidden="true">
-                {stat.emoji}
+              <span>It rested in </span>
+              <span className="font-script font-normal text-[1.18em] text-[#811B2B] inline-block -rotate-2 px-1">
+                Nani&apos;s
               </span>
-              <span className="font-black text-xl sm:text-2xl text-[#811B2B] leading-none">
-                {stat.number}
-              </span>
-              <span className="mt-1 text-[11px] sm:text-xs font-semibold text-[#641623]/75 uppercase tracking-wide">
-                {stat.label}
-              </span>
+              <span> lap.</span>
+            </h1>
+
+            <div className="space-y-3.5 text-base sm:text-lg text-[#2D2424]/85 leading-relaxed max-w-xl font-normal">
+              <p>
+                Everyone remembers a grandmother sitting quietly near an afternoon window, hands busy long after everyone else grew restless.
+              </p>
+              <p>
+                Across Surat, more than <strong className="font-bold text-[#641623]">200 nanis, daadis, and neighbourhood aunties</strong> turn simple cotton skeins into keepsakes you can actually hold onto for years.
+              </p>
             </div>
-          ))}
+
+            <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
+              <button
+                type="button"
+                onClick={scrollToTransform}
+                className="inline-flex items-center justify-center gap-2 min-h-[46px] px-6 py-3 rounded-full bg-[#641623] text-[#FBF8CF] font-bold text-sm sm:text-base shadow-sm hover:bg-[#811B2B] active:scale-97 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] focus-visible:outline-offset-2"
+              >
+                <span>See how yarn becomes art</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigateShop('all')}
+                className="inline-flex items-center justify-center min-h-[46px] px-5 py-3 rounded-full border-2 border-[#641623]/30 text-[#641623] font-bold text-sm sm:text-base hover:border-[#641623] hover:bg-[#FFF5CC] transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] focus-visible:outline-offset-2"
+              >
+                Shop her collection
+              </button>
+            </div>
+          </div>
+
+          {/* Right Paper-Taped Darkroom Print of Iconic Hands */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end">
+            <motion.figure
+              initial={prefersReduced ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-[440px] bg-[#FFFDF8] p-3.5 sm:p-5 pb-7 sm:pb-9 rounded-[4px] sm:rounded-[6px] border border-[#641623]/12 shadow-[0_24px_55px_rgba(100,22,35,0.13)] -rotate-1"
+            >
+              {/* Tactile kraft paper masking tape corners */}
+              <span
+                aria-hidden="true"
+                className="absolute -top-3 left-6 w-20 h-6 bg-[#F3DF99]/85 border border-[#D4B86A]/40 -rotate-12 shadow-2xs pointer-events-none"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute -top-2.5 right-6 w-16 h-6 bg-[#F3DF99]/85 border border-[#D4B86A]/40 rotate-12 shadow-2xs pointer-events-none"
+              />
+
+              <div className="overflow-hidden bg-[#EFE6DC] aspect-[4/4.3]">
+                <picture>
+                  <source srcSet="/stories/artisan-2-hands-magic.webp" type="image/webp" />
+                  <img
+                    src="/stories/artisan-2-hands-magic.png"
+                    alt="Macro portrait of Nani hands wearing an emerald gold ring guiding purple yarn over striped wool"
+                    loading="eager"
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              </div>
+
+              <figcaption className="mt-4 sm:mt-5 px-1 flex items-baseline justify-between gap-3">
+                <span className="font-script text-xl sm:text-2xl text-[#641623]">
+                  One emerald ring, forty years of memory.
+                </span>
+                <span className="text-[11px] font-bold tracking-widest uppercase text-[#811B2B]/60 flex-shrink-0">
+                  Surat
+                </span>
+              </figcaption>
+            </motion.figure>
+          </div>
         </div>
+      </section>
+
+      {/* Subtle golden wavy thread transition */}
+      <div className="w-full overflow-hidden flex justify-center mb-12 sm:mb-20" aria-hidden="true">
+        <svg viewBox="0 0 1440 24" fill="none" preserveAspectRatio="none" className="w-full h-4 sm:h-5 text-[#F7BE44]">
+          <path
+            d="M0 12 C 30 0, 60 24, 90 12 C 120 0, 150 24, 180 12 C 210 0, 240 24, 270 12 C 300 0, 330 24, 360 12 C 390 0, 420 24, 450 12 C 480 0, 510 24, 540 12 C 570 0, 600 24, 630 12 C 660 0, 690 24, 720 12 C 750 0, 780 24, 810 12 C 840 0, 870 24, 900 12 C 930 0, 960 24, 990 12 C 1020 0, 1050 24, 1080 12 C 1110 0, 1140 24, 1170 12 C 1200 0, 1230 24, 1260 12 C 1290 0, 1320 24, 1350 12 C 1380 0, 1410 24, 1440 12"
+            stroke="currentColor"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+          />
+        </svg>
       </div>
 
       {/* =====================================================================
-          3. CHAPTER EXPLORER (Interactive Cards vs. Full Timeline)
+          3. ACT 2 — PULL THE THREAD: INTERACTIVE YARN -> TREASURE REVEAL
           ===================================================================== */}
-      <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-10">
-        {/* Controls Toolbar: Chapter Switcher Tabs + Reading Mode Toggle */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6 sm:mb-8">
-          {/* Scrollable Single-Row Chapter Tablist */}
-          {viewMode === 'interactive' ? (
-            <div className="w-full md:w-auto overflow-hidden">
-              <div
-                role="tablist"
-                aria-label="Nani Story Chapters"
-                onKeyDown={handleTabKeyDown}
-                className="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-1.5 snap-x snap-proximity"
-              >
-                {CHAPTERS.map((chap, idx) => {
-                  const isSelected = idx === activeIndex;
-                  return (
-                    <button
-                      key={chap.id}
-                      ref={(el) => {
-                        tabRefs.current[idx] = el;
-                      }}
-                      id={`nani-tab-${chap.id}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={isSelected}
-                      tabIndex={isSelected ? 0 : -1}
-                      onClick={() => setActiveIndex(idx)}
-                      className={`flex-none snap-start inline-flex items-center gap-2 min-h-[44px] px-3.5 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold border-x border-t transition-colors duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-3 focus-visible:outline-[#811B2B] focus-visible:outline-offset-2 ${
-                        isSelected
-                          ? 'bg-[#641623] text-[#FBF8CF] border-[#641623] border-b-[4px] border-b-[#F7BE44] shadow-sm'
-                          : 'bg-[#FFFDF8] text-[#641623] border-[#811B2B]/20 border-b-[4px] border-b-transparent hover:bg-[#FFF5CC]'
-                      }`}
-                    >
-                      <span aria-hidden="true">{chap.emoji}</span>
-                      <span>
-                        {chap.step} · {chap.shortLabel}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="text-sm font-bold text-[#641623] flex items-center gap-2">
-              <Sparkles aria-hidden="true" className="w-4 h-4 text-[#811B2B]" />
-              <span>Reading Complete 4-Chapter Story</span>
-            </div>
-          )}
-
-          {/* Reading Mode Segmented Toggle */}
-          <div
-            role="group"
-            aria-label="Story layout mode"
-            className="inline-flex items-center self-start sm:self-auto p-1 rounded-full bg-[#FFF5CC] border border-[#811B2B]/25"
-          >
-            <button
-              type="button"
-              aria-pressed={viewMode === 'interactive'}
-              onClick={() => setViewMode('interactive')}
-              className={`inline-flex items-center gap-1.5 min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-colors cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] ${
-                viewMode === 'interactive'
-                  ? 'bg-[#641623] text-[#FBF8CF] shadow-xs'
-                  : 'text-[#641623] hover:bg-[#FFFDF8]/70'
-              }`}
-            >
-              <Layers aria-hidden="true" className="w-3.5 h-3.5" />
-              <span>Chapter Cards</span>
-            </button>
-            <button
-              type="button"
-              aria-pressed={viewMode === 'timeline'}
-              onClick={() => setViewMode('timeline')}
-              className={`inline-flex items-center gap-1.5 min-h-[38px] px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-colors cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] ${
-                viewMode === 'timeline'
-                  ? 'bg-[#641623] text-[#FBF8CF] shadow-xs'
-                  : 'text-[#641623] hover:bg-[#FFFDF8]/70'
-              }`}
-            >
-              <LayoutList aria-hidden="true" className="w-3.5 h-3.5" />
-              <span>Full Timeline</span>
-            </button>
-          </div>
+      <section ref={sliderContainerRef} className="max-w-5xl mx-auto px-4 sm:px-8 lg:px-10 pb-20 sm:pb-28">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 space-y-2.5">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#811B2B]">
+            Slide Across to Uncover the Craft
+          </p>
+          <h2 className="font-black text-2xl sm:text-4xl lg:text-[42px] text-[#641623] tracking-tight leading-tight">
+            <span>From loose cotton thread to </span>
+            <span className="font-script font-normal text-[1.2em] text-[#811B2B] inline-block -rotate-1">
+              forever
+            </span>
+            <span> keepsake</span>
+          </h2>
+          <p className="text-sm sm:text-base text-[#2D2424]/75">
+            Drag left or right — watch hours of quiet fingerwork turn into the piece on your shelf.
+          </p>
         </div>
 
-        {/* ── MODE A: INTERACTIVE SPOTLIGHT CHAPTER VIEW (Mobile-First + Rich Desktop) ── */}
-        {viewMode === 'interactive' && (
-          <div
-            role="tabpanel"
-            id={`nani-panel-${activeChapter.id}`}
-            aria-labelledby={`nani-tab-${activeChapter.id}`}
-            tabIndex={0}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="touch-pan-y rounded-[28px] sm:rounded-[38px] bg-[#FFFDF8] border-2 border-[#811B2B]/15 p-4 sm:p-7 lg:p-10 shadow-[0_16px_48px_rgba(100,22,35,0.08)] focus-visible:outline-3 focus-visible:outline-[#811B2B]"
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeChapter.id}
-                initial={prefersReduced ? false : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={prefersReduced ? undefined : { opacity: 0, y: -8 }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center"
+        {/* Pair Selector */}
+        <div className="flex flex-wrap justify-center gap-2 mb-6 pb-1">
+          {TRANSFORMATION_PAIRS.map((pair, idx) => {
+            const active = idx === selectedPairIndex;
+            return (
+              <button
+                key={pair.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setSelectedPairIndex(idx)}
+                className={`flex-none min-h-[40px] px-3.5 sm:px-4.5 py-2 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-3 focus-visible:outline-[#811B2B] ${
+                  active
+                    ? 'bg-[#641623] text-[#FBF8CF] border-[#641623]'
+                    : 'bg-[#FFFDF8] text-[#641623] border-[#641623]/20 hover:bg-[#FFF5CC]'
+                }`}
               >
-                {/* Left Photo Column */}
-                <div className="lg:col-span-6 relative">
-                  <div
-                    className="relative rounded-[22px] sm:rounded-[28px] p-2 sm:p-3 transition-colors duration-300"
-                    style={{ backgroundColor: activeChapter.accentBg }}
-                  >
-                    <div className="relative overflow-hidden rounded-[18px] sm:rounded-[22px] border-2 border-[#811B2B]/15 bg-[#EFE6DC] shadow-md group">
-                      <picture>
-                        <source srcSet={activeChapter.imageWebp} type="image/webp" />
-                        <img
-                          src={activeChapter.imagePng}
-                          alt={activeChapter.alt}
-                          loading="eager"
-                          className="w-full h-[270px] sm:h-[380px] lg:h-[440px] object-cover select-none transition-transform duration-500 group-hover:scale-[1.03]"
-                        />
-                      </picture>
+                {pair.label}
+              </button>
+            );
+          })}
+        </div>
 
-                      {/* Chapter Badge Stamp */}
-                      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#FFFDF8]/92 backdrop-blur-sm border border-[#811B2B]/20 shadow-xs flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-[#811B2B]" />
-                        <span className="text-xs font-bold text-[#641623]">
-                          {activeChapter.step} · {activeChapter.badge}
-                        </span>
-                      </div>
+        {/* Comparison Viewport */}
+        <div className="max-w-3xl mx-auto bg-[#FFFDF8] p-3 sm:p-5 rounded-[28px] sm:rounded-[36px] border border-[#641623]/12 shadow-[0_20px_52px_rgba(100,22,35,0.1)]">
+          <div className="relative w-full aspect-[4/4] sm:aspect-[16/11] rounded-[20px] sm:rounded-[26px] overflow-hidden bg-[#EFE6DC] select-none has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#641623] has-[:focus-visible]:outline-offset-2">
+            {/* Underlayer: Finished Piece (Right side revealed) */}
+            <img
+              src={currentPair.afterImage}
+              alt={currentPair.afterAlt}
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              loading="lazy"
+            />
 
-                      {/* Photo Quick Actions: Tap Love + Zoom Inspect */}
-                      <div className="absolute bottom-3 right-3 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={(e) => sendLoveToNani(e.clientX, e.clientY)}
-                          aria-label={`Send heart to ${activeChapter.badge}`}
-                          className="min-h-[40px] min-w-[40px] px-3 py-1.5 rounded-full bg-[#FFFDF8]/95 backdrop-blur-sm border border-[#811B2B]/25 text-[#811B2B] font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-[#811B2B] hover:text-white active:scale-90 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B]"
-                        >
-                          <Heart aria-hidden="true" className="w-3.5 h-3.5 fill-current" />
-                          <span>♡</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setLightboxChapter(activeChapter)}
-                          aria-label={`Inspect photo for ${activeChapter.title} closely`}
-                          className="min-h-[40px] min-w-[40px] px-3 py-1.5 rounded-full bg-[#641623]/90 backdrop-blur-sm text-[#FBF8CF] font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-[#811B2B] active:scale-95 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#F7BE44]"
-                        >
-                          <ZoomIn aria-hidden="true" className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">Inspect</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Caption + Yarn Swatches */}
-                    <div className="mt-3 px-1.5 flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs sm:text-sm font-semibold text-[#641623]/80 italic">
-                        &ldquo;{activeChapter.caption}&rdquo;
-                      </p>
-                      <div className="flex items-center gap-1.5" aria-label="Chapter yarn colour palette">
-                        {activeChapter.yarnColors.map((yc) => (
-                          <span
-                            key={yc.name}
-                            title={yc.name}
-                            className="w-4 h-4 rounded-full border border-[#641623]/25 shadow-2xs"
-                            style={{ backgroundColor: yc.hex }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Editorial Content Column */}
-                <div className="lg:col-span-6 flex flex-col justify-center text-left space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl" aria-hidden="true">
-                      {activeChapter.emoji}
-                    </span>
-                    <span className="font-bold text-xs sm:text-sm text-[#811B2B] uppercase tracking-wider">
-                      Chapter {activeChapter.step}
-                    </span>
-                    <span className="flex-1 h-px bg-[#811B2B]/20" />
-                  </div>
-
-                  <h3 className="font-black text-2xl sm:text-3xl text-[#641623] tracking-tight leading-snug">
-                    {activeChapter.title}
-                  </h3>
-
-                  {/* Nani Quote Card */}
-                  <div className="rounded-2xl bg-[#FFF5CC] px-4 py-3.5 border-l-4 border-[#F7BE44]">
-                    <p className="font-semibold text-sm sm:text-base text-[#811B2B] italic leading-relaxed">
-                      &ldquo;{activeChapter.quote}&rdquo;
-                    </p>
-                  </div>
-
-                  {/* Story Paragraphs */}
-                  <div className="space-y-3 text-sm sm:text-base text-[#2D2424]/85 leading-relaxed">
-                    {activeChapter.body.map((para, idx) => (
-                      <p key={idx}>{para}</p>
-                    ))}
-                  </div>
-
-                  {/* Interactive Disclosure: "Behind Nani's Stitch" */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      aria-expanded={Boolean(craftExpanded[activeChapter.id])}
-                      onClick={() => toggleCraftNote(activeChapter.id)}
-                      className="w-full flex items-center justify-between gap-3 min-h-[44px] px-4 py-2.5 rounded-2xl bg-[#FBF8CF] border border-[#811B2B]/20 text-left text-xs sm:text-sm font-bold text-[#641623] hover:bg-[#FFF5CC] cursor-pointer transition-colors focus-visible:outline-3 focus-visible:outline-[#811B2B]"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Sparkles aria-hidden="true" className="w-4 h-4 text-[#811B2B] flex-shrink-0" />
-                        <span>Nani&apos;s Craft Detail: {activeChapter.craftNoteTitle}</span>
-                      </span>
-                      <ChevronDown
-                        aria-hidden="true"
-                        className={`w-4 h-4 text-[#811B2B] transition-transform duration-200 ${
-                          craftExpanded[activeChapter.id] ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </button>
-
-                    {craftExpanded[activeChapter.id] && (
-                      <div className="mt-2 px-4 py-3 rounded-2xl bg-[#D9EEF5]/55 border border-[#7BBFD4]/45 text-xs sm:text-sm text-[#2D2424]/85 leading-relaxed">
-                        {activeChapter.craftNote}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Prev / Dots / Next Stepper */}
-                  <div className="pt-3 border-t border-[#811B2B]/12 flex items-center justify-between gap-2">
-                    <button
-                      type="button"
-                      aria-disabled={activeIndex === 0}
-                      onClick={() => activeIndex > 0 && setActiveIndex((i) => i - 1)}
-                      className={`inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-full border border-[#641623]/25 font-bold text-xs sm:text-sm transition-all ${
-                        activeIndex === 0
-                          ? 'opacity-40 cursor-not-allowed text-[#641623]'
-                          : 'text-[#641623] hover:bg-[#FFF5CC] active:scale-95 cursor-pointer'
-                      }`}
-                    >
-                      <ArrowLeft aria-hidden="true" className="w-4 h-4" />
-                      <span>Previous</span>
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                      {CHAPTERS.map((c, idx) => (
-                        <button
-                          key={c.id}
-                          type="button"
-                          onClick={() => setActiveIndex(idx)}
-                          aria-label={`Jump to chapter ${idx + 1}: ${c.shortLabel}`}
-                          className={`min-h-[24px] min-w-[24px] flex items-center justify-center cursor-pointer rounded-full`}
-                        >
-                          <span
-                            className={`block rounded-full transition-all duration-200 ${
-                              idx === activeIndex
-                                ? 'w-6 h-2.5 bg-[#811B2B]'
-                                : 'w-2.5 h-2.5 bg-[#811B2B]/25 hover:bg-[#811B2B]/50'
-                            }`}
-                          />
-                        </button>
-                      ))}
-                    </div>
-
-                    <button
-                      type="button"
-                      aria-disabled={activeIndex === CHAPTERS.length - 1}
-                      onClick={() =>
-                        activeIndex < CHAPTERS.length - 1 && setActiveIndex((i) => i + 1)
-                      }
-                      className={`inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-full font-bold text-xs sm:text-sm transition-all ${
-                        activeIndex === CHAPTERS.length - 1
-                          ? 'opacity-40 cursor-not-allowed bg-[#641623]/10 text-[#641623]'
-                          : 'bg-[#641623] text-[#FBF8CF] hover:bg-[#811B2B] active:scale-95 cursor-pointer shadow-xs'
-                      }`}
-                    >
-                      <span>Next</span>
-                      <ArrowRight aria-hidden="true" className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        )}
-
-        {/* ── MODE B: FULL TIMELINE SCROLL VIEW ── */}
-        {viewMode === 'timeline' && (
-          <div className="relative">
-            {/* Desktop animated yarn thread */}
-            <div className="hidden lg:block absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-              <svg className="w-full h-full" viewBox="0 0 1152 2400" fill="none" preserveAspectRatio="none">
-                <path
-                  d="M 576 0 C 576 140, 240 240, 240 460 C 240 680, 900 780, 900 1050 C 900 1320, 250 1420, 250 1700 C 250 1980, 880 2060, 880 2250"
-                  stroke="#811B2B"
-                  strokeWidth="3.5"
-                  strokeOpacity="0.08"
-                  strokeLinecap="round"
-                />
-                <motion.path
-                  d="M 576 0 C 576 140, 240 240, 240 460 C 240 680, 900 780, 900 1050 C 900 1320, 250 1420, 250 1700 C 250 1980, 880 2060, 880 2250"
-                  stroke="#811B2B"
-                  strokeWidth="2.8"
-                  strokeLinecap="round"
-                  strokeDasharray="8 6"
-                  style={{ pathLength }}
-                />
-              </svg>
+            {/* Overlayer: Nani Crafting Yarn (Clipped dynamically) */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ clipPath: `inset(0 ${100 - sliderPercent}% 0 0)` }}
+            >
+              <img
+                src={currentPair.beforeImage}
+                alt={currentPair.beforeAlt}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
             </div>
 
-            <div className="relative z-10 space-y-14 sm:space-y-24">
-              {CHAPTERS.map((item, index) => {
-                const isEven = index % 2 === 1;
-                return (
-                  <div
-                    key={item.id}
-                    className={`flex flex-col ${
-                      isEven ? 'lg:flex-row-reverse' : 'lg:flex-row'
-                    } items-center gap-6 sm:gap-10 lg:gap-14 bg-[#FFFDF8]/75 lg:bg-transparent rounded-[28px] p-4 sm:p-6 lg:p-0 border border-[#811B2B]/10 lg:border-0`}
-                  >
-                    {/* Photo */}
-                    <div className="w-full lg:w-[55%] flex-shrink-0">
-                      <div
-                        className="rounded-[24px] p-2.5 sm:p-3"
-                        style={{ backgroundColor: item.accentBg }}
-                      >
-                        <div className="relative overflow-hidden rounded-[18px] sm:rounded-[22px] border border-[#811B2B]/15">
-                          <picture>
-                            <source srcSet={item.imageWebp} type="image/webp" />
-                            <img
-                              src={item.imagePng}
-                              alt={item.alt}
-                              loading="lazy"
-                              className="w-full h-64 sm:h-96 lg:h-[430px] object-cover"
-                            />
-                          </picture>
-                          <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#FFFDF8]/92 border border-[#811B2B]/20 text-xs font-bold text-[#641623]">
-                            {item.step} · {item.badge}
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setLightboxChapter(item)}
-                            aria-label={`Inspect photo for ${item.title}`}
-                            className="absolute bottom-3 right-3 min-h-[38px] px-3 py-1.5 rounded-full bg-[#641623]/90 text-[#FBF8CF] text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer hover:bg-[#811B2B]"
-                          >
-                            <ZoomIn aria-hidden="true" className="w-3.5 h-3.5" />
-                            <span>Inspect</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+            {/* Subtle Corner Labels */}
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1 rounded-full bg-[#2D2424]/75 backdrop-blur-xs text-[#FBF8CF] text-[11px] sm:text-xs font-bold pointer-events-none">
+              In Nani&apos;s Hands
+            </div>
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1 rounded-full bg-[#FFFDF8]/90 backdrop-blur-xs text-[#641623] text-[11px] sm:text-xs font-bold pointer-events-none shadow-2xs">
+              In Your Room
+            </div>
 
-                    {/* Text */}
-                    <div className="w-full lg:w-[45%] space-y-3.5 text-left">
-                      <div className="flex items-center gap-2">
-                        <span aria-hidden="true">{item.emoji}</span>
-                        <span className="font-bold text-xs sm:text-sm text-[#811B2B] uppercase tracking-wider">
-                          Chapter {item.step}
-                        </span>
-                      </div>
-                      <h3 className="font-black text-2xl sm:text-3xl text-[#641623]">{item.title}</h3>
-                      <p className="font-bold text-base sm:text-lg text-[#811B2B] pl-3.5 border-l-4 border-[#F7BE44] italic">
-                        &ldquo;{item.quote}&rdquo;
-                      </p>
-                      <div className="space-y-2.5 text-sm sm:text-base text-[#2D2424]/85 leading-relaxed">
-                        {item.body.map((para, pIdx) => (
-                          <p key={pIdx}>{para}</p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+            {/* Vertical Seam Line + Circular Yarn Knob */}
+            <div
+              aria-hidden="true"
+              className="absolute top-0 bottom-0 w-[2.5px] bg-[#FFFDF8] shadow-[0_0_12px_rgba(45,36,36,0.35)] pointer-events-none"
+              style={{ left: `${sliderPercent}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#FFFDF8] border-2 border-[#641623] shadow-lg flex items-center justify-center text-[#641623]">
+                <ChevronLeft className="w-4 h-4 -mr-1" />
+                <ChevronRight className="w-4 h-4 -ml-1" />
+              </div>
+            </div>
+
+            {/* Native Range Input overlay: preserves keyboard arrows, touch drag & accessibility */}
+            <input
+              type="range"
+              min={5}
+              max={95}
+              step={1}
+              value={sliderPercent}
+              aria-label={`Compare raw yarn crafting and finished ${currentPair.label}`}
+              aria-valuetext={`${sliderPercent}% — ${currentStageLabel}`}
+              onChange={(e) => setSliderPercent(Number(e.target.value))}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20 m-0"
+            />
+          </div>
+
+          {/* Interactive Stage Readout + Quick Jump Tap Pills */}
+          <div className="mt-4 sm:mt-5 px-1 sm:px-2 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-[#811B2B]">
+              <span>{currentStageLabel}</span>
+              <span className="text-[#641623]/70">
+                {currentPair.hoursSpent} · {currentPair.stitchEstimate}
+              </span>
+            </div>
+
+            <p className="text-sm sm:text-base text-[#2D2424]/85 leading-relaxed min-h-[3.2rem]">
+              {currentStageCopy}
+            </p>
+
+            {/* Stage jump buttons for users who prefer tapping on small screens */}
+            <div className="grid grid-cols-3 gap-2 pt-1">
+              {[
+                { label: '01 · Yarn', val: 18, active: sliderPercent < 34 },
+                { label: '02 · Looping', val: 52, active: sliderPercent >= 34 && sliderPercent < 70 },
+                { label: '03 · Keepsake', val: 88, active: sliderPercent >= 70 },
+              ].map((st) => (
+                <button
+                  key={st.label}
+                  type="button"
+                  aria-pressed={st.active}
+                  onClick={() => setSliderPercent(st.val)}
+                  className={`min-h-[40px] rounded-xl border text-[11px] sm:text-xs font-bold cursor-pointer transition-colors ${
+                    st.active
+                      ? 'bg-[#FFF5CC] border-[#641623]/45 text-[#641623]'
+                      : 'bg-[#FBF8CF]/60 hover:bg-[#FFF5CC] border-[#641623]/15 text-[#641623]/75'
+                  }`}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          4. ACT 3 — HER PHOTOGRAPH STACK & LOUPE DETAIL PINS
+          ===================================================================== */}
+      <section className="w-full bg-[#D9EEF5]/55 border-y border-[#7BBFD4]/35 py-14 sm:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-12">
+            <div className="space-y-1.5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#811B2B]">
+                Swipe Photos · Tap the Circles to Inspect
+              </p>
+              <h2 className="font-black text-2xl sm:text-4xl text-[#641623] tracking-tight">
+                <span>Four quiet moments from </span>
+                <span className="font-script font-normal text-[1.2em] text-[#811B2B]">
+                  her day
+                </span>
+              </h2>
+            </div>
+
+            {/* Accessible Single-Row Album Index Tabs */}
+            <div
+              role="tablist"
+              aria-label="Nani Photo Album Moments"
+              onKeyDown={handleAlbumTabKeyDown}
+              className="flex flex-nowrap items-center gap-1.5 overflow-x-auto no-scrollbar pb-1"
+            >
+              {ALBUM_FRAMES.map((frame, idx) => {
+                const selected = idx === activeFrameIndex;
+                return (
+                  <button
+                    key={frame.id}
+                    ref={(el) => {
+                      albumTabRefs.current[idx] = el;
+                    }}
+                    id={`album-tab-${frame.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setActiveFrameIndex(idx)}
+                    className={`flex-none min-h-[42px] px-4 py-2 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-3 focus-visible:outline-[#811B2B] ${
+                      selected
+                        ? 'bg-[#641623] text-[#FBF8CF] border-[#641623] border-b-[3px] border-b-[#F7BE44]'
+                        : 'bg-[#FFFDF8] text-[#641623] border-[#641623]/20 border-b-[3px] border-b-transparent hover:bg-[#FFF5CC]'
+                    }`}
+                  >
+                    0{idx + 1}
+                  </button>
                 );
               })}
             </div>
           </div>
-        )}
-      </div>
 
-      {/* =====================================================================
-          4. INTERACTIVE ARTISAN POSTCARDS (Tap-to-Open Notes from Nani's Room)
-          ===================================================================== */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 mt-14 sm:mt-24">
-        <div className="text-center mb-7 sm:mb-10">
-          <span className="inline-block text-xs font-bold uppercase tracking-widest text-[#811B2B] mb-1.5">
-            Tap a postcard to open ♡
-          </span>
-          <h2 className="font-black text-2xl sm:text-4xl text-[#641623] tracking-tight">
-            <span>Notes from </span>
-            <span className="font-script font-normal text-[1.2em] text-[#811B2B] inline-block -rotate-2">
-              Nani&apos;s
-            </span>
-            <span> Craft Table</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          {POSTCARD_NOTES.map((card) => {
-            const isOpen = openPostcard === card.id;
-            return (
+          <div
+            role="tabpanel"
+            id={`album-panel-${currentFrame.id}`}
+            aria-labelledby={`album-tab-${currentFrame.id}`}
+            tabIndex={0}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center focus-visible:outline-3 focus-visible:outline-[#811B2B] rounded-2xl"
+          >
+            {/* Left: Stacked Polaroid Frame with Direct Craft Pins */}
+            <div
+              onTouchStart={handleDeckTouchStart}
+              onTouchEnd={handleDeckTouchEnd}
+              className="lg:col-span-6 relative max-w-[460px] w-full mx-auto touch-pan-y pt-2 pb-4"
+            >
+              {/* Subtle peeking backing photos to feel like physical prints on a table */}
+              <button
+                type="button"
+                aria-label="Next photograph in stack"
+                onClick={() => setActiveFrameIndex((i) => (i + 1) % ALBUM_FRAMES.length)}
+                className="hidden sm:block absolute inset-x-4 top-5 bottom-1 bg-[#FFFDF8] rounded-[6px] border border-[#641623]/12 shadow-md rotate-[3.5deg] cursor-pointer hover:rotate-[5deg] transition-transform"
+              />
               <div
-                key={card.id}
-                className={`rounded-[26px] border-2 p-5 sm:p-6 shadow-sm transition-shadow ${card.bgClass}`}
-              >
-                <button
-                  type="button"
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenPostcard(isOpen ? null : card.id)}
-                  className="w-full text-left flex flex-col gap-2 cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] rounded-xl"
+                aria-hidden="true"
+                className="hidden sm:block absolute inset-x-6 top-6 bottom-0 bg-[#FFF5CC] rounded-[6px] border border-[#641623]/10 shadow-sm -rotate-[2.5deg]"
+              />
+
+              {/* Active Front Print */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentFrame.id}
+                  initial={prefersReduced ? false : { opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={prefersReduced ? undefined : { opacity: 0, x: -16 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className={`relative z-10 bg-[#FFFDF8] p-3 sm:p-4 pb-5 rounded-[6px] border border-[#641623]/15 shadow-[0_22px_50px_rgba(100,22,35,0.14)] ${currentFrame.tiltClass}`}
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-2xl sm:text-3xl" aria-hidden="true">
-                      {card.emoji}
+                  <div className="relative overflow-hidden aspect-[4/4.3] bg-[#EFE6DC]">
+                    <picture>
+                      <source srcSet={currentFrame.imageWebp} type="image/webp" />
+                      <img
+                        src={currentFrame.imagePng}
+                        alt={currentFrame.alt}
+                        className="w-full h-full object-cover select-none"
+                      />
+                    </picture>
+
+                    {/* Loupe Stitch Pins positioned over real visual details in each photo */}
+                    {currentFrame.hotspots.map((spot) => {
+                      const isOpen = spot.id === currentHotspot.id;
+                      return (
+                        <button
+                          key={spot.id}
+                          type="button"
+                          aria-pressed={isOpen}
+                          aria-label={`Inspect detail: ${spot.label}`}
+                          onClick={() => setActiveHotspotId(spot.id)}
+                          style={{
+                            left: `${spot.xPercent}%`,
+                            top: `${spot.yPercent}%`,
+                          }}
+                          className="absolute -translate-x-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center cursor-pointer group focus-visible:outline-3 focus-visible:outline-[#FFFDF8] rounded-full"
+                        >
+                          <span
+                            className={`w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200 border-2 shadow-md ${
+                              isOpen
+                                ? 'bg-[#811B2B] border-[#FFFDF8] scale-115'
+                                : 'bg-[#FFFDF8]/90 border-[#641623] group-hover:scale-110'
+                            }`}
+                          >
+                            <span
+                              className={`w-2 h-2 rounded-full ${
+                                isOpen ? 'bg-[#F7BE44]' : 'bg-[#641623]'
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    {/* Fullscreen inspect button */}
+                    <button
+                      type="button"
+                      onClick={() => setLightboxFrame(currentFrame)}
+                      aria-label={`Expand photograph: ${currentFrame.title}`}
+                      className="absolute bottom-3 right-3 min-h-[38px] px-3 py-1.5 rounded-full bg-[#2D2424]/75 backdrop-blur-xs text-[#FFFDF8] text-xs font-bold inline-flex items-center gap-1.5 hover:bg-[#641623] transition-colors cursor-pointer"
+                    >
+                      <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Close-up</span>
+                    </button>
+                  </div>
+
+                  {/* Polaroid Bottom Margin Note */}
+                  <div className="mt-3.5 px-1 flex items-baseline justify-between gap-2">
+                    <span className="font-script text-lg sm:text-xl text-[#641623]">
+                      {currentFrame.timeStamp}
                     </span>
-                    <span className="px-2.5 py-1 rounded-full bg-white/75 border border-[#641623]/15 text-[11px] font-bold text-[#641623]">
-                      {isOpen ? 'Close note' : 'Open note ✨'}
+                    <span className="text-[11px] font-bold tracking-widest text-[#811B2B]/65">
+                      {currentFrame.frameNo}
                     </span>
                   </div>
-                  <h3 className="font-black text-lg sm:text-xl text-[#641623] mt-1">
-                    {card.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm font-medium text-[#641623]/75">
-                    {card.teaser}
-                  </p>
-                </button>
-
-                {isOpen && (
-                  <div className="mt-4 pt-3.5 border-t border-[#641623]/15 space-y-2.5">
-                    <p className="text-sm text-[#2D2424]/90 leading-relaxed">
-                      &ldquo;{card.secretNote}&rdquo;
-                    </p>
-                    <p className="text-xs font-bold text-[#811B2B] uppercase tracking-wider">
-                      — {card.artisanTag}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* =====================================================================
-          5. COMMUNITY IMPACT CARD (200+ Nanis + Mascot)
-          ===================================================================== */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 sm:mt-24">
-        <div className="relative overflow-hidden rounded-[30px] sm:rounded-[42px] bg-[#FFF5CC] border-[2.5px] border-[#811B2B]/20 p-6 sm:p-12 shadow-[0_16px_48px_rgba(100,22,35,0.08)]">
-          <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 rounded-full bg-[#FBF8CF]/60 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 rounded-full bg-[#D9EEF5]/45 pointer-events-none" />
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FFFDF8] border border-[#811B2B]/20 text-[#811B2B] text-xs sm:text-sm font-bold tracking-wide uppercase mb-3">
-                <span>✦ Since 2019, made with love ✦</span>
-              </div>
-
-              <div className="font-black text-5xl sm:text-7xl lg:text-8xl text-[#811B2B] tracking-tight leading-none mb-2">
-                200+
-              </div>
-
-              <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-[#641623] tracking-tight leading-tight mb-3">
-                Nanis, daadis, aunties and artisans
-              </h2>
-
-              <p className="font-normal text-sm sm:text-base lg:text-lg text-[#2D2424]/85 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                What began as one dream has blossomed into 200+ talented women earning independently from home — one careful stitch at a time.
-              </p>
-
-              <div className="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                <button
-                  type="button"
-                  onClick={(e) => sendLoveToNani(e.clientX, e.clientY)}
-                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full bg-[#FFFDF8] border-2 border-[#811B2B] text-[#811B2B] font-bold text-sm hover:bg-[#811B2B] hover:text-white active:scale-95 transition-all cursor-pointer"
-                >
-                  <Heart aria-hidden="true" className="w-4 h-4 fill-current" />
-                  <span>Cheer for Our Nanis ({loveCount.toLocaleString('en-IN')})</span>
-                </button>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col items-center justify-center">
-              <div className="relative w-32 h-32 sm:w-44 sm:h-44 flex items-center justify-center">
-                <img
-                  src="/knotsnco_mascot_transparent.gif"
-                  alt="Official Knots & Co yarn ball mascot smiling with a crochet hook"
-                  className="w-full h-full object-contain select-none drop-shadow-md"
-                  loading="lazy"
-                />
+            {/* Right: Narrative & Active Loupe Callout */}
+            <div className="lg:col-span-6 space-y-5 text-left">
+              <div>
+                <h3 className="font-black text-2xl sm:text-3xl lg:text-4xl text-[#641623] tracking-tight leading-snug">
+                  {currentFrame.title}
+                </h3>
+                <p className="mt-1.5 font-semibold text-base sm:text-lg text-[#811B2B]">
+                  {currentFrame.subtitle}
+                </p>
               </div>
-              <span className="mt-2 text-xs font-bold text-[#811B2B] uppercase tracking-wider text-center">
-                Handmade with Pride in Surat
-              </span>
+
+              <div className="space-y-3 text-sm sm:text-base text-[#2D2424]/85 leading-relaxed">
+                {currentFrame.story.map((para, idx) => (
+                  <p key={idx}>{para}</p>
+                ))}
+              </div>
+
+              {/* Active Photo Pin Detail Card */}
+              <div className="rounded-2xl bg-[#FFFDF8] border border-[#641623]/15 p-4 sm:p-5 shadow-2xs space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#811B2B]">
+                    Inside This Photograph
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {currentFrame.hotspots.map((spot, sIdx) => (
+                      <button
+                        key={spot.id}
+                        type="button"
+                        onClick={() => setActiveHotspotId(spot.id)}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors cursor-pointer ${
+                          spot.id === currentHotspot.id
+                            ? 'bg-[#641623] text-[#FBF8CF]'
+                            : 'bg-[#FFF5CC] text-[#641623] hover:bg-[#F7BE44]/50'
+                        }`}
+                      >
+                        Detail {sIdx + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <p className="font-bold text-sm sm:text-base text-[#641623]">
+                  {currentHotspot.label}
+                </p>
+                <p className="text-xs sm:text-sm text-[#2D2424]/80 leading-relaxed">
+                  {currentHotspot.detail}
+                </p>
+              </div>
+
+              {/* Clean Album Stepper Controls */}
+              <div className="pt-2 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveFrameIndex((i) => (i - 1 + ALBUM_FRAMES.length) % ALBUM_FRAMES.length)
+                  }
+                  className="flex-shrink-0 whitespace-nowrap inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-full bg-[#FFFDF8] border border-[#641623]/25 text-xs sm:text-sm font-bold text-[#641623] hover:bg-[#FFF5CC] cursor-pointer transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                  <span>Previous</span>
+                </button>
+
+                <span className="text-xs font-semibold text-[#641623]/65 hidden xl:inline text-center">
+                  {currentFrame.whisper}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveFrameIndex((i) => (i + 1) % ALBUM_FRAMES.length)}
+                  className="flex-shrink-0 whitespace-nowrap inline-flex items-center gap-2 min-h-[44px] px-5 py-2 rounded-full bg-[#641623] text-[#FBF8CF] text-xs sm:text-sm font-bold hover:bg-[#811B2B] cursor-pointer transition-colors shadow-xs"
+                >
+                  <span>Next photo</span>
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* =====================================================================
-          6. CLOSING STORY CTA
+          5. ACT 4 — THE STATIONERY LETTER & REAL VOICES
           ===================================================================== */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-14 sm:mt-20 pb-16 sm:pb-24">
-        <div className="space-y-4 sm:space-y-5">
-          <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-[#641623] tracking-tight">
-            <span>More than crochet. It&apos;s Nani&apos;s </span>
-            <span className="font-script font-normal text-[1.22em] text-[#811B2B] inline-block -rotate-2">
-              legacy.
-            </span>
-          </h2>
+      <section className="max-w-4xl mx-auto px-4 sm:px-8 py-16 sm:py-24">
+        <div className="relative bg-[#FFFDF8] rounded-[24px] sm:rounded-[32px] border-2 border-[#641623]/15 p-6 sm:p-10 lg:p-12 shadow-[0_18px_45px_rgba(100,22,35,0.07)]">
+          {/* Mascot stamp in corner */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#641623]/12">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#811B2B]">
+                In Three Voices · Surat, India
+              </p>
+              <h2 className="mt-1 font-black text-2xl sm:text-3xl text-[#641623]">
+                Why we never built a factory
+              </h2>
+            </div>
 
-          <p className="font-normal text-sm sm:text-base md:text-lg text-[#2D2424]/85 leading-relaxed max-w-2xl mx-auto">
-            Every bouquet, plushie, and little treasure carries the care of the nani who stitched it.
-            When you choose handmade, you become a part of her story.
-          </p>
+            <div className="flex items-center gap-3 self-start sm:self-auto">
+              <img
+                src="/knotsnco_mascot_transparent.gif"
+                alt="Knots & Co mascot illustration"
+                className="w-14 h-14 object-contain"
+                loading="lazy"
+              />
+            </div>
+          </div>
 
-          <p className="text-lg sm:text-2xl font-bold text-[#811B2B] pt-1">
-            <span>A little yarn. A lot of </span>
-            <span className="font-script font-normal text-[1.25em]">love</span>
-            <span>. ♡</span>
-          </p>
+          {/* Perspective Switcher Pills */}
+          <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-2 py-5 border-b border-[#641623]/8">
+            {PERSPECTIVE_VOICES.map((voice, idx) => {
+              const selected = idx === activeVoiceIndex;
+              return (
+                <button
+                  key={voice.id}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => setActiveVoiceIndex(idx)}
+                  className={`flex-none min-h-[40px] px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer whitespace-nowrap ${
+                    selected
+                      ? 'bg-[#FFF5CC] text-[#641623] border-[#641623] border-b-[3px]'
+                      : 'bg-transparent text-[#641623]/70 border-[#641623]/15 hover:text-[#641623]'
+                  }`}
+                >
+                  {voice.tab}
+                </button>
+              );
+            })}
+          </div>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          {/* Voice Letter Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentVoice.id}
+              initial={prefersReduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={prefersReduced ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.22 }}
+              className="pt-6 space-y-4 text-left"
+            >
+              <p className="font-script text-2xl sm:text-3xl text-[#811B2B] leading-snug">
+                {currentVoice.salutation}
+              </p>
+              <div className="space-y-3 text-sm sm:text-base text-[#2D2424]/85 leading-relaxed">
+                {currentVoice.paragraphs.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+              <p className="pt-2 text-xs sm:text-sm font-bold text-[#641623]/75 tracking-wide">
+                {currentVoice.signOff}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          6. ACT 5 — FRESH OFF NANI'S TABLE TODAY (Live Shopify Products)
+          ===================================================================== */}
+      {handpickedPieces.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 pb-18 sm:pb-28">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-7 sm:mb-10">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#811B2B]">
+                Live From Their Craft Tables
+              </p>
+              <h2 className="mt-1 font-black text-2xl sm:text-4xl text-[#641623]">
+                <span>Stitched by these hands, </span>
+                <span className="font-script font-normal text-[1.2em] text-[#811B2B]">
+                  ready to keep
+                </span>
+              </h2>
+            </div>
+
             <button
               type="button"
               onClick={() => onNavigateShop('all')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[48px] sm:min-w-[240px] py-3.5 px-7 rounded-full bg-[#811B2B] text-white font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] shadow-md hover:shadow-lg transition-all active:scale-97 cursor-pointer"
+              className="self-start sm:self-auto inline-flex items-center gap-1.5 text-sm font-bold text-[#811B2B] hover:text-[#641623] underline underline-offset-4 cursor-pointer"
             >
-              <ShoppingBag aria-hidden="true" className="w-4 h-4" />
-              <span>Explore Nani&apos;s Collection</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={onNavigateHome}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[48px] sm:min-w-[170px] py-3.5 px-6 rounded-full border-2 border-[#641623] text-[#641623] font-bold text-sm sm:text-base tracking-wide hover:bg-[#641623] hover:text-[#FBF8CF] transition-all cursor-pointer"
-            >
-              <span>Back to Home</span>
+              <span>Browse all pieces</span>
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
-        </div>
-      </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
+            {handpickedPieces.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() =>
+                  onNavigateProduct ? onNavigateProduct(item.handle || item.id) : onNavigateShop(item.category)
+                }
+                className="group text-left bg-[#FFFDF8] rounded-[20px] sm:rounded-[26px] border border-[#641623]/12 p-2.5 sm:p-3.5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B]"
+              >
+                <div className="aspect-square rounded-[14px] sm:rounded-[18px] overflow-hidden bg-[#EFE6DC]">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="pt-2.5 sm:pt-3 px-1 space-y-1">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#811B2B]/75 truncate">
+                    {item.category}
+                  </p>
+                  <h3 className="font-bold text-sm sm:text-base text-[#641623] leading-snug line-clamp-1">
+                    {item.name}
+                  </h3>
+                  <div className="flex items-center justify-between pt-0.5">
+                    <span className="font-extrabold text-sm sm:text-base text-[#2D2424]">
+                      ₹{item.price.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[11px] font-bold text-[#811B2B] group-hover:underline">
+                      View →
+                    </span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <button
+              type="button"
+              onClick={() => onNavigateShop('all')}
+              className="inline-flex items-center justify-center gap-2 min-h-[48px] px-8 py-3.5 rounded-full bg-[#811B2B] text-white font-bold text-sm sm:text-base shadow-md hover:bg-[#641623] active:scale-97 transition-all cursor-pointer"
+            >
+              <ShoppingBag className="w-4 h-4" aria-hidden="true" />
+              <span>Explore Everything Handmade</span>
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* =====================================================================
-          7. NATIVE <dialog> PHOTO LIGHTBOX (Esc + Backdrop Light Dismiss)
+          7. NATIVE <dialog> FULLSCREEN PHOTO INSPECTOR
           ===================================================================== */}
       <dialog
         ref={dialogRef}
-        aria-labelledby="nani-lightbox-title"
-        onClose={() => setLightboxChapter(null)}
+        aria-labelledby="nani-photo-modal-title"
+        onClose={() => setLightboxFrame(null)}
         onClick={(e) => {
-          if (e.target === dialogRef.current) {
-            setLightboxChapter(null);
-          }
+          if (e.target === dialogRef.current) setLightboxFrame(null);
         }}
-        className="m-auto w-[92vw] max-w-3xl rounded-[28px] bg-[#FFFDF8] p-0 border-2 border-[#641623]/20 shadow-2xl backdrop:bg-[#2D2424]/70 backdrop:backdrop-blur-xs"
+        className="m-auto w-[92vw] max-w-3xl rounded-[24px] bg-[#FFFDF8] p-0 border border-[#641623]/20 shadow-2xl backdrop:bg-[#2D2424]/75 backdrop:backdrop-blur-xs"
       >
-        {lightboxChapter && (
+        {lightboxFrame && (
           <div className="p-4 sm:p-6">
             <div className="flex items-center justify-between gap-3 mb-3">
-              <h2 id="nani-lightbox-title" className="font-black text-lg sm:text-xl text-[#641623]">
-                {lightboxChapter.step} · {lightboxChapter.title}
-              </h2>
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#811B2B]">
+                  {lightboxFrame.frameNo} · {lightboxFrame.timeStamp}
+                </p>
+                <h2 id="nani-photo-modal-title" className="font-black text-lg sm:text-xl text-[#641623]">
+                  {lightboxFrame.title}
+                </h2>
+              </div>
               <button
                 type="button"
-                onClick={() => setLightboxChapter(null)}
-                aria-label="Close photo zoom"
-                className="min-h-[40px] min-w-[40px] rounded-full bg-[#FFF5CC] text-[#641623] flex items-center justify-center hover:bg-[#811B2B] hover:text-white transition-colors cursor-pointer"
+                onClick={() => setLightboxFrame(null)}
+                aria-label="Close photograph"
+                className="min-h-[42px] min-w-[42px] rounded-full bg-[#FFF5CC] text-[#641623] flex items-center justify-center hover:bg-[#811B2B] hover:text-white transition-colors cursor-pointer"
               >
-                <X aria-hidden="true" className="w-5 h-5" />
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="overflow-hidden rounded-[20px] bg-[#EFE6DC]">
+            <div className="overflow-hidden rounded-[16px] bg-[#EFE6DC]">
               <picture>
-                <source srcSet={lightboxChapter.imageWebp} type="image/webp" />
+                <source srcSet={lightboxFrame.imageWebp} type="image/webp" />
                 <img
-                  src={lightboxChapter.imagePng}
-                  alt={lightboxChapter.alt}
-                  className="w-full max-h-[70vh] object-contain"
+                  src={lightboxFrame.imagePng}
+                  alt={lightboxFrame.alt}
+                  className="w-full max-h-[70dvh] object-contain"
                 />
               </picture>
             </div>
-            <p className="mt-3 text-sm text-[#641623]/80 italic text-center">
-              &ldquo;{lightboxChapter.caption}&rdquo;
+            <p className="mt-3 text-xs sm:text-sm text-[#641623]/80 italic text-center">
+              {lightboxFrame.whisper}
             </p>
           </div>
         )}

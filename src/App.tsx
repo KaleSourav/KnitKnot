@@ -351,6 +351,7 @@ function AppInner() {
           <BehindTheStitchesPage
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onNavigateProduct={(id) => navigateTo('product', id)}
           />
         ) : currentPage === 'order-confirmation' ? (
           /* =========================================================================
