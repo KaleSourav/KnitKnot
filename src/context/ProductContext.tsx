@@ -6,7 +6,7 @@
  * - Instant Initial Render: Uses local JSON/localStorage cache so page loads in 0ms.
  * - Background Auto-Sync: Fetches live products from Shopify Storefront API on mount.
  * - Tab-Focus Auto-Sync: Automatically re-checks Shopify whenever the user switches back to this tab.
- * - Periodic Auto-Sync: Polls Shopify every 60 seconds while the page is active.
+ * - Periodic Auto-Sync: Polls Shopify every 5 minutes while the page is active.
  * - Real-Time Single Product Query: Queries individual products for instant real-time price & stock updates.
  */
 
@@ -19,8 +19,14 @@ import { mapToMainCategory } from '../data/categories';
 
 const LS_CATALOG_KEY = 'knotsnco_live_catalog';
 const LS_CATALOG_TS_KEY = 'knotsnco_catalog_timestamp';
-const LS_CATALOG_VERSION_KEY = 'knotsnco_catalog_version';
-const CURRENT_CATALOG_VERSION = 'v_2026_11_23_351_collections';
+
+/**
+ * Maximum age (ms) for the localStorage catalog cache.
+ * After this, the stale cache is ignored on page load and a fresh Shopify
+ * fetch begins immediately (the page still renders instantly using allProductsData
+ * as a placeholder).  5 minutes balances freshness with API request volume.
+ */
+const CACHE_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes
 
 // ─── Context Interface ───────────────────────────────────────────────────────
 
@@ -229,21 +235,30 @@ function transformShopifyNode(
 
 // ─── Initial Hydration Helper ────────────────────────────────────────────────
 
+/**
+ * Returns the best available initial product list for instant render:
+ *  1. Valid localStorage cache that is fresher than CACHE_MAX_AGE_MS → use it.
+ *  2. Otherwise fall back to the bundled allProductsData snapshot so the page
+ *     is never blank; ProductProvider will immediately fetch live data in the
+ *     background and replace it.
+ */
 function getInitialProducts(): ShopProduct[] {
   if (typeof window === 'undefined') return ALL_PRODUCTS;
   try {
-    const cachedVer = localStorage.getItem(LS_CATALOG_VERSION_KEY);
-    // Prefer fresh build catalog if version does not match
-    if (cachedVer === CURRENT_CATALOG_VERSION) {
+    const ts = localStorage.getItem(LS_CATALOG_TS_KEY);
+    const age = ts ? Date.now() - parseInt(ts, 10) : Infinity;
+    if (age < CACHE_MAX_AGE_MS) {
       const cached = localStorage.getItem(LS_CATALOG_KEY);
       if (cached) {
-        const parsed = JSON.parse(cached);
+        const parsed = JSON.parse(cached) as ShopProduct[];
         if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
     }
   } catch {}
+  // Cache is stale or missing — fall back to bundled snapshot.
+  // ProductProvider fires refreshProducts() immediately on mount.
   return ALL_PRODUCTS;
 }
 
@@ -319,7 +334,8 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         try {
           localStorage.setItem(LS_CATALOG_KEY, JSON.stringify(transformed));
           localStorage.setItem(LS_CATALOG_TS_KEY, String(now.getTime()));
-          localStorage.setItem(LS_CATALOG_VERSION_KEY, CURRENT_CATALOG_VERSION);
+          // Remove any stale version-lock key left from previous deployments
+          localStorage.removeItem('knotsnco_catalog_version');
         } catch {}
 
         console.log(`[Shopify Auto-Sync] Successfully synchronized ${transformed.length} live products.`);
@@ -402,13 +418,13 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
   }, [refreshProducts]);
 
-  // Periodic auto-sync: every 60 seconds
+  // Periodic auto-sync: every 5 minutes (aligns with CACHE_MAX_AGE_MS)
   useEffect(() => {
     const interval = setInterval(() => {
       if (document.visibilityState === 'visible') {
         refreshProducts();
       }
-    }, 60000);
+    }, CACHE_MAX_AGE_MS);
 
     return () => clearInterval(interval);
   }, [refreshProducts]);
