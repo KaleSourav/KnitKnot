@@ -31,6 +31,7 @@ import {
 interface CorporateGiftingPageProps {
   onNavigateHome: () => void;
   onNavigateShop?: (category?: string) => void;
+  onNavigateFaq?: () => void;
 }
 
 interface QuoteFormData {
@@ -123,6 +124,18 @@ const QUANTITY_PRESETS = ['25-50 pcs', '50-100 pcs', '100-250 pcs', '250-500 pcs
 
 const FAQ_ITEMS = [
   {
+    q: 'Do you accept bulk orders?',
+    a: 'Yes, we take enquiries for bulk gifting, events, weddings and special projects. Share the product or idea, quantity, budget range and required delivery date with our team so we can discuss the possibilities.',
+  },
+  {
+    q: 'Do you offer corporate gifting?',
+    a: 'Yes. We work with businesses and brands on gifting requirements and customised projects. Please email knotsnco101@gmail.com with your brief, estimated quantity and timeline.',
+  },
+  {
+    q: 'How early should I place a bulk order?',
+    a: 'Please get in touch as early as possible. Handmade bulk orders need additional planning and production time. Once we understand your quantity and requirements, our team can confirm a feasible timeline.',
+  },
+  {
     q: 'What is the minimum order quantity (MOQ) for corporate orders?',
     a: 'Our corporate gifting begins at just 25 pieces per order. For bespoke 3D custom mascots and new character designs, our prototype threshold is 50 pieces.',
   },
@@ -147,6 +160,7 @@ const FAQ_ITEMS = [
 export const CorporateGiftingPage: React.FC<CorporateGiftingPageProps> = ({
   onNavigateHome,
   onNavigateShop,
+  onNavigateFaq,
 }) => {
   const [selectedOccasion, setSelectedOccasion] = useState<string>('onboarding');
   const [formData, setFormData] = useState<QuoteFormData>({
@@ -835,6 +849,18 @@ export const CorporateGiftingPage: React.FC<CorporateGiftingPageProps> = ({
               );
             })}
           </div>
+
+          {onNavigateFaq && (
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={onNavigateFaq}
+                className="text-xs sm:text-sm font-bold text-[#811B2B] hover:text-[#641623] underline underline-offset-4 cursor-pointer"
+              >
+                Explore all Knots &amp; Co. store FAQs →
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

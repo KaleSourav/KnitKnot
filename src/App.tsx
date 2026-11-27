@@ -14,6 +14,8 @@ import { ReelsSection } from './components/ReelsSection';
 import { WhyChooseSection } from './components/WhyChooseSection';
 import { CorporateGiftingPage } from './components/CorporateGiftingPage';
 import { PolicyPage } from './components/PolicyPage';
+import { FaqSection } from './components/FaqSection';
+import { FaqPage } from './components/FaqPage';
 import { BouquetBuilderPage } from './components/bouquet-builder/BouquetBuilderPage';
 import { AllProductsShopSection } from './components/AllProductsShopSection';
 import { ProductDetailsPage } from './components/ProductDetailsPage';
@@ -41,8 +43,8 @@ function AppInner() {
   const { cartCount, addToShopifyCart, buyNow, incrementCount, openCart } = useCart();
   const { products } = useProducts();
 
-  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation'
-  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation'>(() => {
+  // Client-side page routing: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation'
+  const [currentPage, setCurrentPage] = useState<'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       const path = window.location.pathname.toLowerCase();
@@ -51,6 +53,7 @@ function AppInner() {
       if (hash.startsWith('#shop') || hash.startsWith('#/shop')) return 'shop';
       if (hash.startsWith('#nani') || hash.startsWith('#/nani') || hash.startsWith('#meet-nani') || hash.startsWith('#/meet-nani') || hash.startsWith('#behind-the-stitches') || hash.startsWith('#/behind-the-stitches') || hash.startsWith('#artisans') || hash.startsWith('#/artisans')) return 'artisans';
       if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) return 'b2b';
+      if (hash.startsWith('#faq') || hash.startsWith('#/faq')) return 'faq';
       if (hash.startsWith('#shipping') || hash.startsWith('#/shipping') || hash.startsWith('#return') || hash.startsWith('#/return') || hash.startsWith('#policy') || hash.startsWith('#/policy')) return 'policy';
       if (hash.startsWith('#build-your-bouquet') || hash.startsWith('#/build-your-bouquet') || hash.startsWith('#bouquet-builder') || path.includes('build-your-bouquet') || path.includes('bouquet-builder')) return 'bouquet-builder';
       return 'home';
@@ -128,6 +131,9 @@ function AppInner() {
       } else if (hash.startsWith('#b2b') || hash.startsWith('#/b2b') || hash.startsWith('#corporate-gifting') || hash.startsWith('#/corporate-gifting')) {
         setCurrentPage('b2b');
         setSelectedProductId(null);
+      } else if (hash.startsWith('#faq') || hash.startsWith('#/faq')) {
+        setCurrentPage('faq');
+        setSelectedProductId(null);
       } else if (hash.startsWith('#shipping') || hash.startsWith('#/shipping') || hash.startsWith('#shipping-policy')) {
         setCurrentPage('policy');
         setPolicyTab('shipping');
@@ -162,13 +168,14 @@ function AppInner() {
       'bouquet-builder': 'Build Your Bouquet | Knotsnco',
       b2b: 'B2B & Corporate Gifting | Knotsnco',
       policy: 'Shipping & Return Policy | Knotsnco',
+      faq: 'Frequently Asked Questions | Knotsnco',
       'order-confirmation': 'Order Confirmed | Knotsnco',
     };
     document.title = titles[currentPage] || 'Knotsnco - Everything Crochet';
   }, [currentPage]);
 
   // Central page navigator
-  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', param: string = 'all') => {
+  const navigateTo = (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation', param: string = 'all') => {
     setCurrentPage(page);
 
     if (page === 'home') {
@@ -201,6 +208,9 @@ function AppInner() {
       const tab = param === 'shipping' ? 'shipping' : 'returns';
       setPolicyTab(tab);
       window.location.hash = tab === 'shipping' ? '/shipping-policy' : '/return-policy';
+    } else if (page === 'faq') {
+      setSelectedProductId(null);
+      window.location.hash = '/faq';
     } else if (page === 'bouquet-builder') {
       setSelectedProductId(null);
       window.location.hash = '/build-your-bouquet';
@@ -307,6 +317,16 @@ function AppInner() {
             <ScrollReveal id="section-why-choose" yOffset={24} duration={0.45}>
               <WhyChooseSection />
             </ScrollReveal>
+
+            {/* Frequently Asked Questions Showcase */}
+            <ScrollReveal id="section-faq" yOffset={24} duration={0.45}>
+              <FaqSection
+                onViewAllFaq={() => navigateTo('faq')}
+                onNavigatePolicy={(tab) => navigateTo('policy', tab)}
+                onNavigateB2B={() => navigateTo('b2b')}
+                onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+              />
+            </ScrollReveal>
           </div>
         ) : currentPage === 'b2b' ? (
           /* =========================================================================
@@ -316,6 +336,18 @@ function AppInner() {
           <CorporateGiftingPage
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onNavigateFaq={() => navigateTo('faq')}
+          />
+        ) : currentPage === 'faq' ? (
+          /* =========================================================================
+             DEDICATED FREQUENTLY ASKED QUESTIONS PAGE VIEW (#/faq)
+             Searchable 6-Category Storefront FAQ Hub
+             ========================================================================= */
+          <FaqPage
+            onNavigateHome={() => navigateTo('home')}
+            onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onNavigatePolicy={(tab) => navigateTo('policy', tab)}
+            onNavigateB2B={() => navigateTo('b2b')}
           />
         ) : currentPage === 'policy' ? (
           /* =========================================================================
@@ -325,6 +357,7 @@ function AppInner() {
             initialTab={policyTab}
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
+            onNavigateFaq={() => navigateTo('faq')}
           />
         ) : currentPage === 'shop' ? (
           /* =========================================================================
@@ -352,6 +385,7 @@ function AppInner() {
             onNavigateHome={() => navigateTo('home')}
             onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
             onNavigateProduct={(id) => navigateTo('product', id)}
+            onNavigateFaq={() => navigateTo('faq')}
           />
         ) : currentPage === 'order-confirmation' ? (
           /* =========================================================================
@@ -383,6 +417,7 @@ function AppInner() {
               onNavigateShop={(cat) => navigateTo('shop', cat || 'all')}
               onNavigateProduct={(id) => navigateTo('product', id)}
               onNavigatePolicy={(tab) => navigateTo('policy', tab)}
+              onNavigateFaq={() => navigateTo('faq')}
               onAddToCart={async (product, qty) => {
                 if (product.variantId) {
                   await addToShopifyCart(product.variantId, qty);

@@ -17,11 +17,13 @@ import {
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
+import { ALL_FAQ_ITEMS } from '../data/faqData';
 
 interface BehindTheStitchesPageProps {
   onNavigateHome: () => void;
   onNavigateShop: (category?: string) => void;
   onNavigateProduct?: (id: string) => void;
+  onNavigateFaq?: () => void;
 }
 
 interface CraftHotspot {
@@ -301,37 +303,28 @@ const PERSPECTIVE_VOICES: PerspectiveVoice[] = [
   },
 ];
 
-const PRACTICAL_FAQS: PracticalFaqItem[] = [
-  {
-    id: 'dispatch',
-    question: 'How fast do Nani’s handmade orders dispatch & arrive?',
-    answer:
-      'In-stock bouquets, pots, and charms dispatch within 24–48 hours from Surat and arrive in 4–6 business days across India. Orders above ₹1,999 ship free.',
-  },
-  {
-    id: 'reshape',
-    question: 'Can stems and petals be adjusted after delivery?',
-    answer:
-      'Yes! Bouquets use soft insulated floral wire inside crochet stems. When you unbox, gently bend stems and curve petals with your fingers to match any vase or angle.',
-  },
-  {
-    id: 'care',
-    question: 'How do I clean crochet flowers or plushies?',
-    answer:
-      'All blooms and plushies use combed milk-cotton yarn. Dust gently with a soft brush or spot-clean using cold water + mild soap, then air-dry flat away from direct heat.',
-  },
-  {
-    id: 'custom',
-    question: 'Can I request a gift note or bulk event colours?',
-    answer:
-      'You can add a free gift message note at checkout. For weddings, birthdays, or bulk corporate gifting (20+ units) with custom ribbon shades, use B2B Gifting.',
-  },
-];
+const NANI_FAQ_IDS = [
+  'delivery-timeline',
+  'look-like-photo',
+  'do-flowers-last',
+  'how-to-care',
+  'custom-bouquet',
+] as const;
+
+const PRACTICAL_FAQS: PracticalFaqItem[] = NANI_FAQ_IDS.map((faqId) => {
+  const match = ALL_FAQ_ITEMS.find((item) => item.id === faqId);
+  return {
+    id: faqId,
+    question: match?.question ?? '',
+    answer: match?.answer ?? '',
+  };
+}).filter((item) => item.question.length > 0);
 
 export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   onNavigateHome,
   onNavigateShop,
   onNavigateProduct,
+  onNavigateFaq,
 }) => {
   const { products } = useProducts();
   const { addToShopifyCart, incrementCount, openCart } = useCart();
@@ -357,7 +350,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   const [activeFrameIndex, setActiveFrameIndex] = useState(1);
   const [activeHotspotId, setActiveHotspotId] = useState<string>(ALBUM_FRAMES[1].hotspots[0].id);
   const [activeVoiceIndex, setActiveVoiceIndex] = useState(0);
-  const [openFaqId, setOpenFaqId] = useState<string | null>('dispatch');
+  const [openFaqId, setOpenFaqId] = useState<string | null>('delivery-timeline');
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
   const [lightboxFrame, setLightboxFrame] = useState<AlbumFrame | null>(null);
 
@@ -560,14 +553,14 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
             </h1>
 
             <p className="text-sm sm:text-lg text-[#2D2424]/85 leading-relaxed max-w-xl">
-              Instead of factory floors, we deliver soft cotton wool straight to grandmothers and home artisans across Surat — handcrafted from home and dispatched in 24–48 hours.
+              Instead of factory floors, we deliver soft cotton wool straight to grandmothers and home artisans across Surat — handcrafted stitch by stitch and delivered in approximately 7–10 days.
             </p>
 
             {/* Practical Trust Badges */}
             <div className="flex flex-wrap gap-2 pt-1 text-[11px] sm:text-xs font-bold text-[#641623]">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFFDF8] border border-[#641623]/15">
                 <Clock className="w-3.5 h-3.5 text-[#811B2B]" aria-hidden="true" />
-                <span>24–48 hr Dispatch</span>
+                <span>7–10 Days Delivery</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFFDF8] border border-[#641623]/15">
                 <Sparkles className="w-3.5 h-3.5 text-[#811B2B]" aria-hidden="true" />
@@ -1085,6 +1078,19 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
                 );
               })}
             </div>
+
+            {onNavigateFaq && (
+              <div className="pt-3 mt-2 border-t border-[#641623]/10">
+                <button
+                  type="button"
+                  onClick={onNavigateFaq}
+                  className="inline-flex items-center gap-1.5 min-h-[44px] text-xs sm:text-sm font-bold text-[#811B2B] hover:text-[#641623] hover:underline cursor-pointer"
+                >
+                  <span>Read all 26 FAQs</span>
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Right: Compact Three-Voice Letter */}

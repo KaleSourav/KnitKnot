@@ -24,7 +24,7 @@ const FOOTER_SCALLOP_WAVE =
   'L 1440,60 Z';
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', categoryOrTab?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation', categoryOrTab?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
@@ -413,9 +413,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     </button>
                   </li>
                   <li>
-                    <a href="#faq" className="hover:text-white transition-colors duration-150">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('faq')}
+                      className="hover:text-white transition-colors duration-150 cursor-pointer text-left"
+                    >
                       faq
-                    </a>
+                    </button>
                   </li>
                   <li>
                     <a href="#track" className="hover:text-white transition-colors duration-150">

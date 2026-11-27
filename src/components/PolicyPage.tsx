@@ -21,12 +21,14 @@ interface PolicyPageProps {
   initialTab?: 'returns' | 'shipping';
   onNavigateHome: () => void;
   onNavigateShop?: (category?: string) => void;
+  onNavigateFaq?: () => void;
 }
 
 export const PolicyPage: React.FC<PolicyPageProps> = ({
   initialTab = 'returns',
   onNavigateHome,
   onNavigateShop,
+  onNavigateFaq,
 }) => {
   const [activeTab, setActiveTab] = useState<'returns' | 'shipping'>(initialTab);
 
@@ -484,6 +486,28 @@ export const PolicyPage: React.FC<PolicyPageProps> = ({
           </div>
         )}
       </div>
+      {/* Quick FAQ Jump Strip right at bottom of policies */}
+      {onNavigateFaq && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <div className="bg-[#FFF5CC] rounded-3xl p-6 sm:p-8 border-2 border-[#811B2B]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+              <h3 className="font-['Fredoka'] text-lg sm:text-xl font-bold text-[#641623]">
+                Still have questions about shipping, customisation, or returns?
+              </h3>
+              <p className="text-xs sm:text-sm text-[#2D2424]/80 mt-1">
+                Read all 26 quick answers in our Frequently Asked Questions hub.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onNavigateFaq}
+              className="px-6 py-2.5 rounded-full bg-[#641623] hover:bg-[#811B2B] text-[#FBF8CF] font-bold text-xs sm:text-sm whitespace-nowrap cursor-pointer transition-colors"
+            >
+              Browse All FAQs →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

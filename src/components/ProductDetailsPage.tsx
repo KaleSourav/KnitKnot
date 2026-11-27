@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useCart } from '../context/CartContext';
 import { useProducts } from '../context/ProductContext';
 import { ShopProduct } from '../data/allProductsData';
+import { ALL_FAQ_ITEMS } from '../data/faqData';
 import {
   SparkleIcon,
   DaisyIcon,
@@ -36,6 +37,7 @@ interface ProductDetailsPageProps {
   onNavigateShop?: (category?: string) => void;
   onNavigateProduct?: (productId: string) => void;
   onNavigatePolicy?: (tab: 'returns' | 'shipping') => void;
+  onNavigateFaq?: () => void;
   onAddToCart?: (product: ShopProduct, quantity: number) => void | Promise<void>;
   onBuyNow?: (product: ShopProduct, quantity: number) => void | Promise<void>;
 }
@@ -173,6 +175,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
   onNavigateShop,
   onNavigateProduct,
   onNavigatePolicy,
+  onNavigateFaq,
   onAddToCart,
   onBuyNow,
 }) => {
@@ -418,19 +421,35 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     care: boolean;
     shipping: boolean;
     returns: boolean;
+    faq: boolean;
   }>({
     details: false,
     care: false,
     shipping: false,
     returns: false,
+    faq: false,
   });
 
-  const toggleAccordion = (section: 'details' | 'care' | 'shipping' | 'returns') => {
+  const toggleAccordion = (section: 'details' | 'care' | 'shipping' | 'returns' | 'faq') => {
     setOpenAccordions((prev) => ({
       ...prev,
       [section]: !prev[section],
     }));
   };
+
+  const productQuickFaqs = useMemo(
+    () =>
+      [
+        'customise-product',
+        'custom-bouquet',
+        'look-like-photo',
+        'do-flowers-last',
+        'delivery-timeline',
+      ]
+        .map((faqId) => ALL_FAQ_ITEMS.find((item) => item.id === faqId))
+        .filter((item): item is (typeof ALL_FAQ_ITEMS)[number] => Boolean(item)),
+    []
+  );
 
   // Interactive Badges tab (0: Handmade with love, 1: Soft & Long-lasting, 2: Gift-Ready Packaging, 3: Made by our Dadis)
   const [activeBadgeStory, setActiveBadgeStory] = useState<number | null>(null);
@@ -2044,6 +2063,65 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                           className="text-xs font-bold text-[#811B2B] hover:underline cursor-pointer"
                         >
                           Read full Return &amp; Exchange Policy →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 5. Customisation & Quick FAQs Accordion */}
+              <div className="rounded-[18px] sm:rounded-[20px] bg-[#FFF8FA] border border-[#641623]/15 overflow-hidden transition-all shadow-2xs">
+                <button
+                  onClick={() => toggleAccordion('faq')}
+                  type="button"
+                  aria-expanded={openAccordions.faq}
+                  className="w-full py-3 sm:py-3.5 px-4 sm:px-5 flex items-center justify-between text-[#641623] font-['Fredoka'] font-bold text-sm sm:text-base cursor-pointer hover:bg-[#FCEEF3] transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-[#FCE2EB] flex items-center justify-center text-[#811B2B] text-xs font-extrabold">
+                      ?
+                    </span>
+                    <span>Customisation &amp; Quick FAQs</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-[#FCE2EB] text-[#811B2B] font-medium">
+                      26 FAQs
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-[#641623] transition-transform duration-200 ${
+                        openAccordions.faq ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </button>
+                {openAccordions.faq && (
+                  <div className="px-4 sm:px-5 pb-4 pt-3 text-xs sm:text-[13px] text-[#2D2424]/85 leading-relaxed space-y-3 border-t border-[#641623]/10">
+                    <div className="space-y-2.5">
+                      {productQuickFaqs.map((faq) => (
+                        <div key={faq.id} className="rounded-xl bg-[#FFFDF8] border border-[#641623]/10 p-3 space-y-1">
+                          <p className="font-bold text-[#641623] text-xs">{faq.question}</p>
+                          <p className="text-[12px] text-[#2D2424]/85 leading-relaxed">{faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {onNavigateFaq && (
+                      <div className="pt-1">
+                        <button
+                          type="button"
+                          onClick={onNavigateFaq}
+                          className="text-xs font-bold text-[#811B2B] hover:underline cursor-pointer"
+                        >
+                          View all 26 Frequently Asked Questions →
                         </button>
                       </div>
                     )}

@@ -6,9 +6,9 @@ interface HeaderProps {
   onSearchClick?: () => void;
   onCartClick?: () => void;
   cartCount?: number;
-  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation';
+  currentPage?: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation';
   activeCategory?: string;
-  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'order-confirmation', categoryId?: string) => void;
+  onNavigate?: (page: 'home' | 'shop' | 'product' | 'artisans' | 'bouquet-builder' | 'b2b' | 'policy' | 'faq' | 'order-confirmation', categoryId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -620,6 +620,35 @@ export const Header: React.FC<HeaderProps> = ({
                     : 'text-[#811B2B] bg-[#FFF5CC] border-[#811B2B]/20'
                 }`}>
                   policies ♡
+                </span>
+              </button>
+
+              {/* Frequently Asked Questions */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigate?.('faq');
+                }}
+                className={`w-full text-left px-4 py-3 rounded-xl font-['Fredoka'] font-semibold text-base transition-all flex items-center justify-between cursor-pointer group ${
+                  currentPage === 'faq'
+                    ? 'bg-[#811B2B] text-white shadow-xs'
+                    : 'text-[#641623] hover:bg-[#FFF5CC]'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  </svg>
+                  <span>frequently asked questions</span>
+                </span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                  currentPage === 'faq'
+                    ? 'bg-white/20 text-white border-white/30'
+                    : 'text-[#811B2B] bg-[#FFF5CC] border-[#811B2B]/20'
+                }`}>
+                  FAQ
                 </span>
               </button>
 
