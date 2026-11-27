@@ -44,6 +44,7 @@ interface AlbumFrame {
 interface TransformationPair {
   id: string;
   label: string;
+  shopifyHandle: string;
   hoursSpent: string;
   stitchEstimate: string;
   beforeImage: string;
@@ -67,48 +68,51 @@ interface PerspectiveVoice {
 
 const TRANSFORMATION_PAIRS: TransformationPair[] = [
   {
-    id: 'sunflower-bouquet',
-    label: 'Sunflowers',
+    id: 'full-of-sunshine',
+    label: 'Full Of Sunshine',
+    shopifyHandle: 'flowers-bouquet-full-of-sunshine',
     hoursSpent: '3–4 unhurried hours',
     stitchEstimate: '680+ hand-hooked loops',
     beforeImage: '/stories/artisan-3-creative-process.webp',
     beforeAlt: 'Nani seated at home in an indigo floral kurta crocheting marigold yellow wool',
-    afterImage: '/story/story-lifestyle-table.jpg',
-    afterAlt: 'Finished crochet sunflower bouquet wrapped in kraft paper with a maroon ribbon',
+    afterImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/zpc9P5wW_ZNM0MJ7TRS_2026-09-29_1.jpg?v=1793949872',
+    afterAlt: 'Actual Knots & Co Bouquet Full Of Sunshine crocheted with sunflowers and daisies',
     stages: {
       early: 'Hour 01 — Soft cotton yarn rests over cushions as she builds the brown spiral center loop by loop.',
-      middle: 'Hour 02 — Afternoon chai pauses beside her; 18 golden petals are shaped carefully with finger tension alone.',
-      finished: 'Hour 04 — Wire-wrapped stems, stitched leaves, and tied in maroon satin. Flowers that never lose a single petal.',
+      middle: 'Hour 02 — Afternoon chai pauses beside her; 18 golden petals and white daisies are shaped carefully by touch.',
+      finished: 'Hour 04 — Wire-wrapped stems gathered with paper and tied in satin. This exact Shopify bouquet never wilts.',
     },
   },
   {
-    id: 'daisy-pot',
-    label: 'Daisy Pot',
+    id: 'golden-glow',
+    label: 'Golden Glow',
+    shopifyHandle: 'flowers-golden-glow',
     hoursSpent: '2.5 calm hours',
     stitchEstimate: '520+ neat slip-knots',
     beforeImage: '/stories/artisan-1-craft-begins.webp',
-    beforeAlt: 'Nani wearing glasses crocheting red wool near morning window sunlight',
-    afterImage: '/story/story-crochet-daisies.jpg',
-    afterAlt: 'Handmade white daisy blooms arranged inside a braided yarn pot with wooden button',
+    beforeAlt: 'Nani wearing glasses crocheting warm cotton yarn near morning window sunlight',
+    afterImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_HlaGdz4d_1791261152985_uvfj3vvo6fyywq7.jpg?v=1793949877',
+    afterAlt: 'Actual Knots & Co Golden Glow sunflower bouquet photographed in sunlight',
     stages: {
-      early: 'Hour 01 — Choosing her slender 3mm hook by the window before the afternoon sun warms the room.',
-      middle: 'Hour 02 — Alternating dense stitches so the braided basket stands sturdy on its own without plastic inserts.',
-      finished: 'Hour 2.5 — Finished with a little wooden button bow — quiet morning cheer for a study desk or kitchen shelf.',
+      early: 'Hour 01 — Choosing her slender 3mm hook by the window before afternoon sunlight warms the room.',
+      middle: 'Hour 02 — Alternating dense loops around tiny daisy centers and leaf veins purely from muscle memory.',
+      finished: 'Hour 2.5 — Wrapped crisp for gifting in the Golden Glow bouquet — bright all year round.',
     },
   },
   {
-    id: 'peach-tulips',
-    label: 'Peach Tulips',
+    id: 'tulip-valley',
+    label: 'Tulip Valley',
+    shopifyHandle: 'flowers-mini-crochet-tulip-valley',
     hoursSpent: '3 quiet hours',
     stitchEstimate: '610+ tight petal rows',
     beforeImage: '/stories/artisan-2-hands-magic.webp',
     beforeAlt: 'Close-up of Nani hands wearing an emerald stone ring while working yarn cleanly',
-    afterImage: '/story/story-tulip-arch.jpg',
-    afterAlt: 'Coral and blush crochet tulip stems tied with an ivory crocheted bow',
+    afterImage: 'https://cdn.shopify.com/s/files/1/0688/9829/1775/files/website_refTGTSD_1791261172997_ip1i5z5roefp22w.jpg?v=1793949970',
+    afterAlt: 'Actual Knots & Co Mini Crochet Tulip Valley bouquet in pink and ivory wrap',
     stages: {
       early: 'Hour 01 — Thread looped twice over her forefinger so every cup-shaped tulip bud blooms uniformly.',
       middle: 'Hour 02 — Stuffed lightly with soft fibre-fill and closed at the crown by intuition alone.',
-      finished: 'Hour 03 — Gathered into soft pastel stems with an ivory hand-crocheted ribbon ready to unwrap.',
+      finished: 'Hour 03 — Five blush and cream tulips gathered into kraft paper with an organza bow.',
     },
   },
 ];
@@ -300,6 +304,16 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   const [lightboxFrame, setLightboxFrame] = useState<AlbumFrame | null>(null);
 
   const currentPair = TRANSFORMATION_PAIRS[selectedPairIndex];
+  const liveSliderProduct = useMemo(
+    () =>
+      products.find(
+        (p) =>
+          p.handle === currentPair.shopifyHandle ||
+          p.name.toLowerCase() === currentPair.label.toLowerCase()
+      ),
+    [products, currentPair]
+  );
+  const resolvedSliderAfterImage = liveSliderProduct?.image || currentPair.afterImage;
   const currentFrame = ALBUM_FRAMES[activeFrameIndex];
   const currentHotspot =
     currentFrame.hotspots.find((h) => h.id === activeHotspotId) || currentFrame.hotspots[0];
@@ -580,12 +594,12 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
 
         {/* Comparison Viewport */}
         <div className="max-w-3xl mx-auto bg-[#FFFDF8] p-3 sm:p-5 rounded-[28px] sm:rounded-[36px] border border-[#641623]/12 shadow-[0_20px_52px_rgba(100,22,35,0.1)]">
-          <div className="relative w-full aspect-[4/4] sm:aspect-[16/11] rounded-[20px] sm:rounded-[26px] overflow-hidden bg-[#EFE6DC] select-none has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#641623] has-[:focus-visible]:outline-offset-2">
-            {/* Underlayer: Finished Piece (Right side revealed) */}
+          <div className="relative w-full aspect-[4/4.3] sm:aspect-[16/12] rounded-[20px] sm:rounded-[26px] overflow-hidden bg-[#EFE6DC] select-none has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#641623] has-[:focus-visible]:outline-offset-2">
+            {/* Underlayer: Finished Piece (Actual Shopify Bouquet Image) */}
             <img
-              src={currentPair.afterImage}
-              alt={currentPair.afterAlt}
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              src={resolvedSliderAfterImage}
+              alt={liveSliderProduct?.name || currentPair.afterAlt}
+              className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
               loading="lazy"
             />
 
@@ -640,9 +654,20 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
           <div className="mt-4 sm:mt-5 px-1 sm:px-2 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-[#811B2B]">
               <span>{currentStageLabel}</span>
-              <span className="text-[#641623]/70">
-                {currentPair.hoursSpent} · {currentPair.stitchEstimate}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-[#641623]/70">
+                  {currentPair.hoursSpent} · {currentPair.stitchEstimate}
+                </span>
+                {onNavigateProduct && (
+                  <button
+                    type="button"
+                    onClick={() => onNavigateProduct(liveSliderProduct?.handle || currentPair.shopifyHandle)}
+                    className="text-[#811B2B] underline underline-offset-4 hover:text-[#641623] cursor-pointer"
+                  >
+                    View bouquet →
+                  </button>
+                )}
+              </div>
             </div>
 
             <p className="text-sm sm:text-base text-[#2D2424]/85 leading-relaxed min-h-[3.2rem]">
