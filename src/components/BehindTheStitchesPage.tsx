@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
-import { ShopProduct } from '../data/allProductsData';
 
 interface BehindTheStitchesPageProps {
   onNavigateHome: () => void;
@@ -329,16 +328,6 @@ const PRACTICAL_FAQS: PracticalFaqItem[] = [
   },
 ];
 
-const SHOP_FILTERS = [
-  { id: 'all', label: 'All Crafts' },
-  { id: 'bouquets', label: 'Bouquets' },
-  { id: 'pots', label: 'Flower Pots' },
-  { id: 'keychains', label: 'Keychains' },
-  { id: 'under500', label: 'Under ₹500' },
-] as const;
-
-type ShopFilterId = (typeof SHOP_FILTERS)[number]['id'];
-
 export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   onNavigateHome,
   onNavigateShop,
@@ -353,7 +342,6 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   const sectionRefs = {
     craft: useRef<HTMLElement>(null),
     album: useRef<HTMLElement>(null),
-    shop: useRef<HTMLElement>(null),
     faq: useRef<HTMLElement>(null),
   };
 
@@ -370,7 +358,6 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
   const [activeHotspotId, setActiveHotspotId] = useState<string>(ALBUM_FRAMES[1].hotspots[0].id);
   const [activeVoiceIndex, setActiveVoiceIndex] = useState(0);
   const [openFaqId, setOpenFaqId] = useState<string | null>('dispatch');
-  const [shopFilter, setShopFilter] = useState<ShopFilterId>('all');
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
   const [lightboxFrame, setLightboxFrame] = useState<AlbumFrame | null>(null);
 
@@ -394,42 +381,6 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
     currentFrame.hotspots.find((h) => h.id === activeHotspotId) || currentFrame.hotspots[0];
   const currentVoice = PERSPECTIVE_VOICES[activeVoiceIndex];
 
-  // Live filtered practical craft catalog
-  const filteredCrafts = useMemo<ShopProduct[]>(() => {
-    const valid = products.filter((p) => p.inStock && p.image);
-    const list = valid.filter((p) => {
-      const cat = (p.category || '').toLowerCase().trim();
-      if (shopFilter === 'bouquets') return cat === 'bouquets';
-      if (shopFilter === 'pots') return cat === 'flower pots' || cat === 'home decor';
-      if (shopFilter === 'keychains') return cat === 'keychains' || cat === 'bag charms';
-      if (shopFilter === 'under500') return p.price > 0 && p.price <= 500 && cat !== 'bouquet stems';
-      return cat !== 'bouquet stems';
-    });
-
-    if (shopFilter === 'all') {
-      const priorityCats = ['bouquets', 'flower pots', 'keychains', 'plushies', 'bags', 'accessories'];
-      const ordered: ShopProduct[] = [];
-      const seen = new Set<string>();
-      for (const c of priorityCats) {
-        const match = list.find((item) => (item.category || '').toLowerCase().trim() === c && !seen.has(item.id));
-        if (match) {
-          ordered.push(match);
-          seen.add(match.id);
-        }
-      }
-      for (const item of list) {
-        if (ordered.length >= 8) break;
-        if (!seen.has(item.id)) {
-          ordered.push(item);
-          seen.add(item.id);
-        }
-      }
-      return ordered;
-    }
-
-    return list.slice(0, 8);
-  }, [products, shopFilter]);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
@@ -447,7 +398,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
 
   // Quick Add handler connected directly to Shopify Cart
   const handleQuickAdd = useCallback(
-    async (item: ShopProduct, e?: React.MouseEvent) => {
+    async (item: { id: string; variantId?: string }, e?: React.MouseEvent) => {
       e?.stopPropagation();
       setAddedIds((prev) => ({ ...prev, [item.id]: true }));
       setTimeout(() => {
@@ -569,7 +520,6 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
             className="flex flex-nowrap items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar"
           >
             {[
-              { key: 'shop' as const, label: 'Shop Her Work' },
               { key: 'craft' as const, label: 'Yarn to Bouquet' },
               { key: 'album' as const, label: 'Photo Story' },
               { key: 'faq' as const, label: 'Delivery & Care' },
@@ -610,7 +560,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
             </h1>
 
             <p className="text-sm sm:text-lg text-[#2D2424]/85 leading-relaxed max-w-xl">
-              Instead of factory floors, we deliver soft cotton wool straight to grandmothers and home artisans across Surat. Pick what you love below — dispatched to you in 24–48 hours.
+              Instead of factory floors, we deliver soft cotton wool straight to grandmothers and home artisans across Surat — handcrafted from home and dispatched in 24–48 hours.
             </p>
 
             {/* Practical Trust Badges */}
@@ -632,7 +582,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
             <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
               <button
                 type="button"
-                onClick={() => scrollToSection('shop')}
+                onClick={() => onNavigateShop('all')}
                 className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 sm:px-6 py-2.5 rounded-full bg-[#811B2B] text-white font-bold text-sm sm:text-base shadow-sm hover:bg-[#641623] active:scale-97 transition-all cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4" aria-hidden="true" />
@@ -691,136 +641,9 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
       </section>
 
       {/* =====================================================================
-          3. ACT 2 — PRACTICAL FILTERABLE SHOP STRIP ("Order Straight From Her Table")
+          3. ACT 2 — LIVE SHOPIFY BOUQUET TRANSFORMATION SLIDER (No Touch Scroll Hijack!)
           ===================================================================== */}
-      <section
-        ref={sectionRefs.shop}
-        className="w-full bg-[#FFFDF8]/75 border-y border-[#641623]/10 py-10 sm:py-16 scroll-mt-14"
-      >
-        <div className="max-w-6xl mx-auto px-3.5 sm:px-8 lg:px-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-5 sm:mb-7">
-            <div>
-              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] text-[#811B2B]">
-                Live Inventory · Ready to Gift
-              </p>
-              <h2 className="mt-0.5 font-black text-2xl sm:text-3xl lg:text-4xl text-[#641623]">
-                <span>Order what </span>
-                <span className="font-script font-normal text-[1.18em] text-[#811B2B]">
-                  Nani
-                </span>
-                <span> just finished</span>
-              </h2>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => onNavigateShop('all')}
-              className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#811B2B] hover:text-[#641623] underline underline-offset-4 cursor-pointer"
-            >
-              <span>View full 300+ catalog</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </button>
-          </div>
-
-          {/* Practical Category / Budget Filter Pills */}
-          <div
-            role="group"
-            aria-label="Filter Nani handmade crafts"
-            className="flex flex-nowrap overflow-x-auto no-scrollbar gap-2 pb-4 sm:pb-6"
-          >
-            {SHOP_FILTERS.map((f) => {
-              const active = shopFilter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setShopFilter(f.id)}
-                  className={`flex-none min-h-[38px] px-3.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer whitespace-nowrap ${
-                    active
-                      ? 'bg-[#641623] text-[#FBF8CF] border-[#641623]'
-                      : 'bg-[#FBF8CF] text-[#641623] border-[#641623]/20 hover:bg-[#FFF5CC]'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Responsive Product Grid with Immediate Quick Add to Bag */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-            {filteredCrafts.map((item) => {
-              const isAdded = Boolean(addedIds[item.id]);
-              return (
-                <div
-                  key={item.id}
-                  className="bg-[#FFFDF8] rounded-[18px] sm:rounded-[24px] border border-[#641623]/12 p-2.5 sm:p-3.5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onNavigateProduct ? onNavigateProduct(item.handle || item.id) : onNavigateShop(item.category)
-                    }
-                    className="group text-left cursor-pointer focus-visible:outline-3 focus-visible:outline-[#811B2B] rounded-[14px]"
-                  >
-                    <div className="aspect-square rounded-[13px] sm:rounded-[17px] overflow-hidden bg-[#EFE6DC]">
-                      <img
-                        src={optimizeShopifyUrl(item.image, 520)}
-                        alt={item.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="pt-2.5 px-0.5 space-y-0.5">
-                      <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#811B2B]/75 truncate">
-                        {item.category}
-                      </p>
-                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-[#641623] leading-snug line-clamp-1">
-                        {item.name}
-                      </h3>
-                    </div>
-                  </button>
-
-                  <div className="pt-2.5 px-0.5 flex items-center justify-between gap-2 mt-auto">
-                    <span className="font-black text-sm sm:text-base text-[#2D2424] tabular-nums">
-                      ₹{item.price.toLocaleString('en-IN')}
-                    </span>
-
-                    <button
-                      type="button"
-                      onClick={(e) => handleQuickAdd(item, e)}
-                      aria-label={`Add ${item.name} to cart`}
-                      className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[38px] px-3 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer ${
-                        isAdded
-                          ? 'bg-[#2E7D32] text-white'
-                          : 'bg-[#FFF5CC] hover:bg-[#641623] text-[#641623] hover:text-[#FBF8CF] border border-[#641623]/20'
-                      }`}
-                    >
-                      {isAdded ? (
-                        <>
-                          <Check className="w-3.5 h-3.5" aria-hidden="true" />
-                          <span>Added</span>
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="w-3.5 h-3.5" aria-hidden="true" />
-                          <span>Add</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          4. ACT 3 — LIVE SHOPIFY BOUQUET TRANSFORMATION SLIDER (No Touch Scroll Hijack!)
-          ===================================================================== */}
-      <section ref={sectionRefs.craft} className="max-w-5xl mx-auto px-3.5 sm:px-8 lg:px-10 py-12 sm:py-20 scroll-mt-14">
+      <section ref={sectionRefs.craft} className="max-w-5xl mx-auto px-3.5 sm:px-8 lg:px-10 py-10 sm:py-16 border-t border-[#641623]/10 scroll-mt-14">
         <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 space-y-2">
           <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] text-[#811B2B]">
             Real Yarn vs. Finished Shopify Bouquet
@@ -1004,7 +827,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
       </section>
 
       {/* =====================================================================
-          5. ACT 4 — FOUR MOMENTS ALBUM & INTERACTIVE PINS
+          4. ACT 3 — FOUR MOMENTS ALBUM & INTERACTIVE PINS
           ===================================================================== */}
       <section ref={sectionRefs.album} className="w-full bg-[#D9EEF5]/55 border-y border-[#7BBFD4]/35 py-12 sm:py-20 scroll-mt-14">
         <div className="max-w-6xl mx-auto px-3.5 sm:px-8 lg:px-12">
@@ -1221,7 +1044,7 @@ export const BehindTheStitchesPage: React.FC<BehindTheStitchesPageProps> = ({
       </section>
 
       {/* =====================================================================
-          6. ACT 5 — PRACTICAL CARE FAQ + THREE-VOICE LETTER SIDE-BY-SIDE ON DESKTOP
+          5. ACT 4 — PRACTICAL CARE FAQ + THREE-VOICE LETTER SIDE-BY-SIDE ON DESKTOP
           ===================================================================== */}
       <section ref={sectionRefs.faq} className="max-w-6xl mx-auto px-3.5 sm:px-8 lg:px-12 py-12 sm:py-20 scroll-mt-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
